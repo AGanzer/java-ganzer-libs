@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.example.uitests.PxPicValidatorSettingsController"
+          hgap="5"
+          vgap="5">
+    <userData>
+        <fx:reference source="controller" />
+    </userData>
+    <columnConstraints>
+        <ColumnConstraints />
+        <ColumnConstraints hgrow="ALWAYS" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+        <RowConstraints />
+    </rowConstraints>
+    <Label GridPane.columnIndex="0"
+           GridPane.rowIndex="0"
+           text="Picture mask to use:" />
+    <TextField fx:id="picture"
+               GridPane.columnIndex="1"
+               GridPane.rowIndex="0" />
+    <Label GridPane.columnIndex="1"
+           GridPane.rowIndex="1"
+           text="${controller.pictureInfo}" />
+</GridPane>
