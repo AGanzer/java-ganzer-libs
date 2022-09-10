@@ -8,28 +8,26 @@
     <artifactId>ui-tests</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>ui-tests</name>
-<!--    <packaging>pom</packaging>-->
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.2</junit.version>
     </properties>
 
-<!--    <modules>-->
-<!--        <module>../core</module>-->
-<!--        <module>../fx</module>-->
-<!--    </modules>-->
-
     <dependencies>
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
+            <scope>system</scope>
+            <systemPath>${HOME}/java-ganzer-libs/core/target/de-ganzer-core-1.0-SNAPSHOT.jar</systemPath>
+       </dependency>
         <dependency>
             <groupId>de.ganzer.fx</groupId>
             <artifactId>de-ganzer-fx</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${HOME}/java-ganzer-libs/fx/target/de-ganzer-fx-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
