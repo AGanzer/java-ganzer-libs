@@ -34,6 +34,7 @@ public class TestController {
             "FilterValidator",
             "NumberValidator",
             "PxPicValidator",
+            "RegularExpressionValidator",
             "Validator"));
     private final BooleanProperty blanksValidEnabled = new SimpleBooleanProperty(true);
     private final BooleanProperty autoFillEnabled = new SimpleBooleanProperty(false);
@@ -110,6 +111,12 @@ public class TestController {
                 setAutoFillEnabled(true);
                 break;
 
+            case "RegularExpressionValidator":
+                setupSettings(new RegularExpressionValidator(), "regular-expression-validator-settings-view.fxml");
+                setBlanksValidEnabled(false);
+                setAutoFillEnabled(false);
+                break;
+
             case "Validator":
                 setupSettings(new CharCountValidator(), "validator-settings-view.fxml");
                 setBlanksValidEnabled(true);
@@ -172,6 +179,9 @@ public class TestController {
         }
 
         alert(message);
+
+        testInput.requestFocus();
+        testInput.selectAll();
     }
 
     private void alert(String message) {
