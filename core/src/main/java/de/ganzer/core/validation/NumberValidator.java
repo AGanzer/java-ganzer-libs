@@ -50,6 +50,7 @@ public class NumberValidator extends Validator {
      *
      * @param minValue The smallest allowed value.
      * @param maxValue The greatest allowed value.
+     * @throws IllegalArgumentException minValue is greater than maxValue.
      */
     public NumberValidator(double minValue, double maxValue) {
         this(ValidatorOptions.NEEDS_INPUT, minValue, maxValue);
@@ -64,6 +65,7 @@ public class NumberValidator extends Validator {
      *                 {@link ValidatorOptions} constants.
      * @param minValue The smallest allowed value.
      * @param maxValue The greatest allowed value.
+     * @throws IllegalArgumentException minValue is greater than maxValue.
      */
     public NumberValidator(int options, double minValue, double maxValue) {
         super(options);
@@ -145,8 +147,8 @@ public class NumberValidator extends Validator {
      * explicitly set by {@link #setMinValue} and {@link #setMaxValue} or by
      * {@link #setRange}.
      *
-     * @param numDecimals The number of post decimal digits to allow. This must
-     *                    not be less than 0.
+     * @param numDecimals The number of post decimal digits to allow.
+     * @throws IllegalArgumentException numDecimals is less than zero.
      */
     public void setNumDecimals(int numDecimals) {
         if (numDecimals < 0)
@@ -160,7 +162,7 @@ public class NumberValidator extends Validator {
      *
      * @param minValue The smallest allowed value.
      * @param maxValue The greatest allowed value.
-     * @throws IllegalArgumentException If minVAlue is greater than maxValue.
+     * @throws IllegalArgumentException If minValue is greater than maxValue.
      */
     public void setRange(double minValue, double maxValue) {
         if (minValue > maxValue)

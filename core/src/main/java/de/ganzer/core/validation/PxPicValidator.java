@@ -460,8 +460,9 @@ public class PxPicValidator extends Validator {
      * is thrown. To avoid this, the picture's syntax can be validated by
      * {@link #checkSyntax(String)}.
      *
-     * @param picture The picture to set. This must not be {@code null}. An empty
-     *                string makes every input valid.
+     * @param picture The picture to set. An empty string makes every input valid.
+     * @throws NullPointerException picture is {@code null}.
+     * @throws IllegalArgumentException picture contains an invalid mask.
      */
     public PxPicValidator(String picture) {
         super(ValidatorOptions.NEEDS_INPUT | ValidatorOptions.AUTO_FILL);
@@ -477,8 +478,9 @@ public class PxPicValidator extends Validator {
      *
      * @param options The options to set. This may be any combination of the
      *                {@link ValidatorOptions} constants.
-     * @param picture The picture to set. This must not be {@code null}. An empty
-     *                string makes every input valid.
+     * @param picture The picture to set. An empty string makes every input valid.
+     * @throws NullPointerException picture is {@code null}.
+     * @throws IllegalArgumentException picture contains an invalid mask.
      */
     public PxPicValidator(int options, String picture) {
         super(options);
@@ -501,11 +503,15 @@ public class PxPicValidator extends Validator {
      * is thrown. To avoid this, the picture's syntax can be validated by
      * {@link #checkSyntax(String)}.
      *
-     * @param picture The picture to set. This must not be {@code null}. An empty
-     *                string makes every input valid.
+     * @param picture The picture to set. An empty string makes every input valid.
+     * @throws NullPointerException picture is {@code null}.
+     * @throws IllegalArgumentException picture contains an invalid mask.
      */
     public void setPicture(String picture) {
-        if (picture == null || !checkSyntax(picture))
+        if (picture == null )
+            throw new NullPointerException("picture");
+
+        if (!checkSyntax(picture))
             throw new IllegalArgumentException("picture");
 
         this.picture = picture;

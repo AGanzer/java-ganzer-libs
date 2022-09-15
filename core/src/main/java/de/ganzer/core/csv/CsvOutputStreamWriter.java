@@ -117,6 +117,7 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
      *                   all values are written. This must not be {@code null}.
      * @param maskAlways If <code>true</code>, the values will always be masked.
      * @throws IOException If an I/O error occurs.
+     * @throws NullPointerException values is {@code null}.
      * @see #getLineDelimiter()
      * @see #getValueDelimiter()
      * @see #setLineDelimiter(char)
@@ -124,7 +125,7 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
      */
     public void writeLine(Collection<String> values, boolean maskAlways) throws IOException {
         if (values == null)
-            throw new IllegalArgumentException("");
+            throw new NullPointerException("values");
 
         boolean separate = false;
 

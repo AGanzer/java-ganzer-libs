@@ -87,6 +87,8 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
      *                  be {@code null}.
      * @param control   The control that's input shall be validated. This must not
      *                  be {@code null}.
+     * @throws NullPointerException validator is {@code null}.
+     * @throws NullPointerException control is {@code null}.
      */
     public ValidatorTextFormatter(Validator validator, TextInputControl control) {
         super(change -> {
@@ -116,10 +118,10 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
         });
 
         if (validator == null)
-            throw new IllegalArgumentException("validator");
+            throw new NullPointerException("validator");
 
         if (control == null)
-            throw new IllegalArgumentException("control");
+            throw new NullPointerException("control");
 
         control.setTextFormatter(this);
 
