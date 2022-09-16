@@ -49,83 +49,84 @@ public class CopyTestController implements TestProvider {
             cancelCopy = false;
 
             new Thread(() -> {
-                FileCopy copy = new FileCopy(progress -> {
-                    switch (progress.getStatus()) {
-                        case INITIALIZING:
-                            Platform.runLater(() -> bytesToCopyLabel.setText(String.format("%1$,d Bytes", progress.getTotalBytesAvail())));
-                            break;
+                FileCopy copy = new FileCopy(
+                        progress -> {
+                            switch (progress.getStatus()) {
+                                case INITIALIZING:
+                                    Platform.runLater(() -> bytesToCopyLabel.setText(String.format("%1$,d Bytes", progress.getTotalBytesAvail())));
+                                    break;
 
-                        case START_DIRECTORY:
-                        case FINISHED_DIRECTORY:
-                            break;
+                                case START_DIRECTORY:
+                                case FINISHED_DIRECTORY:
+                                    break;
 
-                        case START_FILE:
-                            Platform.runLater(() -> workedFileLabel.setText(progress.getSourcePath()));
-                            break;
+                                case START_FILE:
+                                    Platform.runLater(() -> workedFileLabel.setText(progress.getSourcePath()));
+                                    break;
 
-                        case FINISHED_FILE:
-                        case COPYING_FILE:
-                            Platform.runLater(() -> {
-                                progressBar.setProgress(progress.getTotalPercentage() / 100);
-                                progressLabel.setText(String.format("%1$,.2f %%", progress.getTotalPercentage()));
-                                bytesCopiedLabel.setText(String.format("%1$,d Bytes", progress.getTotalBytesCopied()));
-                            });
+                                case FINISHED_FILE:
+                                case COPYING_FILE:
+                                    Platform.runLater(() -> {
+                                        progressBar.setProgress(progress.getTotalPercentage() / 100);
+                                        progressLabel.setText(String.format("%1$,.2f %%", progress.getTotalPercentage()));
+                                        bytesCopiedLabel.setText(String.format("%1$,d Bytes", progress.getTotalBytesCopied()));
+                                    });
 
-                            break;
+                                    break;
 
-                        case FINISHED:
-                            Platform.runLater(() -> workedFileLabel.setText(""));
-                            break;
-                    }
+                                case FINISHED:
+                                    Platform.runLater(() -> workedFileLabel.setText(""));
+                                    break;
+                            }
 
-                    synchronized(this) {
-                        return cancelCopy
-                                ? FileCopy.ProgressContinuation.CANCEL_COPY
-                                : FileCopy.ProgressContinuation.CONTINUE_COPY;
-                    }
-                },
-                (error, description, source, target) -> {
-                    var result = TestApplication.alert(
-                            description,
-                            IGNORE,
-                            IGNORE_ALL,
-                            IGNORE_ALL_THE_SAME,
-                            RETRY,
-                            ButtonType.CANCEL);
+                            synchronized (this) {
+                                return cancelCopy
+                                        ? FileCopy.ProgressContinuation.CANCEL_COPY
+                                        : FileCopy.ProgressContinuation.CONTINUE_COPY;
+                            }
+                        },
+                        (error, description, source, target) -> {
+                            var result = TestApplication.alert(
+                                    description,
+                                    IGNORE,
+                                    IGNORE_ALL,
+                                    IGNORE_ALL_THE_SAME,
+                                    RETRY,
+                                    ButtonType.CANCEL);
 
-                    if (result.isEmpty() || result.get() == ButtonType.CANCEL)
-                        return FileCopy.ErrorAction.ABORT;
+                            if (result.isEmpty() || result.get() == ButtonType.CANCEL)
+                                return FileCopy.ErrorAction.ABORT;
 
-                    if (result.get() == IGNORE)
-                        return FileCopy.ErrorAction.IGNORE;
+                            if (result.get() == IGNORE)
+                                return FileCopy.ErrorAction.IGNORE;
 
-                    if (result.get() == IGNORE_ALL)
-                        return FileCopy.ErrorAction.IGNORE_ALL;
+                            if (result.get() == IGNORE_ALL)
+                                return FileCopy.ErrorAction.IGNORE_ALL;
 
-                    if (result.get() == IGNORE_ALL_THE_SAME)
-                        return FileCopy.ErrorAction.IGNORE_ALL_THIS;
+                            if (result.get() == IGNORE_ALL_THE_SAME)
+                                return FileCopy.ErrorAction.IGNORE_ALL_THIS;
 
-                    return FileCopy.ErrorAction.RETRY;
-                },
-                (source, target) -> {
-                    var result = TestApplication.alert(
-                            String.format("Overwrite \"%s\"?", target),
-                            ButtonType.YES,
-                            YES_TO_ALL,
-                            ButtonType.NO,
-                            NO_TO_ALL);
+                            return FileCopy.ErrorAction.RETRY;
+                        },
+                        (source, target) -> {
+                            var result = TestApplication.alert(
+                                    String.format("Overwrite \"%s\"?", target),
+                                    ButtonType.YES,
+                                    YES_TO_ALL,
+                                    ButtonType.NO,
+                                    NO_TO_ALL);
 
-                    if (result.isEmpty() || result.get() == ButtonType.NO)
-                        return FileCopy.OverwriteAction.OVERWRITE_NOT;
+                            if (result.isEmpty() || result.get() == ButtonType.NO)
+                                return FileCopy.OverwriteAction.OVERWRITE_NOT;
 
-                    if (result.get() == ButtonType.YES)
-                        return FileCopy.OverwriteAction.OVERWRITE_ONE;
+                            if (result.get() == ButtonType.YES)
+                                return FileCopy.OverwriteAction.OVERWRITE_ONE;
 
-                    if (result.get() == YES_TO_ALL)
-                        return FileCopy.OverwriteAction.OVERWRITE_ALL;
+                            if (result.get() == YES_TO_ALL)
+                                return FileCopy.OverwriteAction.OVERWRITE_ALL;
 
-                    return FileCopy.OverwriteAction.OVERWRITE_NONE;
-                });
+                            return FileCopy.OverwriteAction.OVERWRITE_NONE;
+                        });
 
                 copy.start(sourcePath.getText(), targetPath.getText(), suppressInit.isSelected());
             });
@@ -151,7 +152,7 @@ public class CopyTestController implements TestProvider {
     private Window getActiveWindow() {
         List<Window> windows = Stage.getWindows();
 
-        for (Window w: windows)
+        for (Window w : windows)
             if (w.isShowing())
                 return w;
 
@@ -206,7 +207,7 @@ public class CopyTestController implements TestProvider {
     }
 
     public void cancelClicked(ActionEvent actionEvent) {
-        synchronized(this) {
+        synchronized (this) {
             cancelCopy = true;
         }
     }
