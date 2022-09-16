@@ -84,48 +84,48 @@ public class CopyTestController implements TestProvider {
                                 : FileCopy.ProgressContinuation.CONTINUE_COPY;
                     }
                 },
-                        (error, description, source, target) -> {
-                            var result = TestApplication.alert(
-                                    description,
-                                    IGNORE,
-                                    IGNORE_ALL,
-                                    IGNORE_ALL_THE_SAME,
-                                    RETRY,
-                                    ButtonType.CANCEL);
+                (error, description, source, target) -> {
+                    var result = TestApplication.alert(
+                            description,
+                            IGNORE,
+                            IGNORE_ALL,
+                            IGNORE_ALL_THE_SAME,
+                            RETRY,
+                            ButtonType.CANCEL);
 
-                            if (result.isEmpty() || result.get() == ButtonType.CANCEL)
-                                return FileCopy.ErrorAction.ABORT;
+                    if (result.isEmpty() || result.get() == ButtonType.CANCEL)
+                        return FileCopy.ErrorAction.ABORT;
 
-                            if (result.get() == IGNORE)
-                                return FileCopy.ErrorAction.IGNORE;
+                    if (result.get() == IGNORE)
+                        return FileCopy.ErrorAction.IGNORE;
 
-                            if (result.get() == IGNORE_ALL)
-                                return FileCopy.ErrorAction.IGNORE_ALL;
+                    if (result.get() == IGNORE_ALL)
+                        return FileCopy.ErrorAction.IGNORE_ALL;
 
-                            if (result.get() == IGNORE_ALL_THE_SAME)
-                                return FileCopy.ErrorAction.IGNORE_ALL_THIS;
+                    if (result.get() == IGNORE_ALL_THE_SAME)
+                        return FileCopy.ErrorAction.IGNORE_ALL_THIS;
 
-                            return FileCopy.ErrorAction.RETRY;
-                        },
-                        (source, target) -> {
-                            var result = TestApplication.alert(
-                                    String.format("Overwrite \"%s\"?", target),
-                                    ButtonType.YES,
-                                    YES_TO_ALL,
-                                    ButtonType.NO,
-                                    NO_TO_ALL);
+                    return FileCopy.ErrorAction.RETRY;
+                },
+                (source, target) -> {
+                    var result = TestApplication.alert(
+                            String.format("Overwrite \"%s\"?", target),
+                            ButtonType.YES,
+                            YES_TO_ALL,
+                            ButtonType.NO,
+                            NO_TO_ALL);
 
-                            if (result.isEmpty() || result.get() == ButtonType.NO)
-                                return FileCopy.OverwriteAction.OVERWRITE_NOT;
+                    if (result.isEmpty() || result.get() == ButtonType.NO)
+                        return FileCopy.OverwriteAction.OVERWRITE_NOT;
 
-                            if (result.get() == ButtonType.YES)
-                                return FileCopy.OverwriteAction.OVERWRITE_ONE;
+                    if (result.get() == ButtonType.YES)
+                        return FileCopy.OverwriteAction.OVERWRITE_ONE;
 
-                            if (result.get() == YES_TO_ALL)
-                                return FileCopy.OverwriteAction.OVERWRITE_ALL;
+                    if (result.get() == YES_TO_ALL)
+                        return FileCopy.OverwriteAction.OVERWRITE_ALL;
 
-                            return FileCopy.OverwriteAction.OVERWRITE_NONE;
-                        });
+                    return FileCopy.OverwriteAction.OVERWRITE_NONE;
+                });
 
                 copy.start(sourcePath.getText(), targetPath.getText(), suppressInit.isSelected());
             });
