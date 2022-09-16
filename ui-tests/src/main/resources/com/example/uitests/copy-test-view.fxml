@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.uitests.CopyTestController">
+    <userData>
+        <fx:reference source="controller" />
+    </userData>
+    <TitledPane collapsible="false"
+                text="What to Copy">
+        <fx:define>
+            <ToggleGroup fx:id="whatGroup" />
+        </fx:define>
+        <GridPane hgap="5"
+                  vgap="5">
+            <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+            </rowConstraints>
+            <RadioButton GridPane.rowIndex="0"
+                         GridPane.columnIndex="0"
+                         toggleGroup="$whatGroup"
+                         text="Directories"
+                         selected="true" />
+            <RadioButton GridPane.rowIndex="0"
+                         GridPane.columnIndex="1"
+                         toggleGroup="$whatGroup"
+                         text="Files" />
+        </GridPane>
+    </TitledPane>
+    <TitledPane collapsible="false"
+                text="Objects">
+        <GridPane hgap="5"
+                  vgap="5">
+            <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+            </rowConstraints>
+            <Label GridPane.columnIndex="0"
+                   GridPane.rowIndex="0"
+                   text="Source:" />
+            <TextField fx:id="sourcePath"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="0" />
+            <Button GridPane.columnIndex="2"
+                    GridPane.rowIndex="0"
+                    text="..."
+                    onAction="#chooseSourceClicked" />
+            <Label GridPane.columnIndex="0"
+                   GridPane.rowIndex="1"
+                   text="Target:" />
+            <TextField fx:id="targetPath"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="1" />
+            <Button GridPane.columnIndex="2"
+                    GridPane.rowIndex="1"
+                    text="..."
+                    onAction="#chooseTargetClicked" />
+        </GridPane>
+    </TitledPane>
+    <TitledPane collapsible="false"
+                text="Output">
+        <GridPane hgap="5"
+                  vgap="5">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints vgrow="ALWAYS" />
+            </rowConstraints>
+            <ProgressBar fx:id="progressBar"
+                         GridPane.columnIndex="0"
+                         GridPane.rowIndex="0"
+                         prefWidth="300"
+                         progress="0" />
+            <Label fx:id="progressLabel"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="0"
+                   text="0.00 %" />
+            <TextArea fx:id="output"
+                      GridPane.columnIndex="0"
+                      GridPane.rowIndex="1"
+                      GridPane.columnSpan="2"
+                      prefWidth="300"
+                      editable="false" />
+        </GridPane>
+    </TitledPane>
+
+</VBox>

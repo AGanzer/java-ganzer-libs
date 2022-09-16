@@ -13,6 +13,8 @@
         <TabPane fx:id="tabs" tabClosingPolicy="UNAVAILABLE">
             <Tab fx:id="validatorTab"
                  text="Validator Tests" />
+            <Tab fx:id="copyTab"
+                 text="Copy Tests" />
         </TabPane>
         <ButtonBar >
             <buttons>

@@ -12,10 +12,12 @@ public class TestController {
 
     public TabPane tabs;
     public Tab validatorTab;
+    public Tab copyTab;
 
     @FXML
     private void initialize() {
         initializeTab(validatorTab, "validator-test-view.fxml");
+        initializeTab(copyTab, "copy-test-view.fxml");
     }
 
     private void initializeTab(Tab tab, String viewName) {
