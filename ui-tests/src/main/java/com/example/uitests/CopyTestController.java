@@ -85,7 +85,9 @@ public class CopyTestController implements TestProvider {
                                         : FileCopy.ProgressContinuation.CONTINUE_COPY;
                             }
                         },
+                        // TODO: Must be moved to synchronized method:
                         (error, description, source, target) -> {
+                            // TODO: Must be moved to synchronized method:
                             var result = TestApplication.alert(
                                     description,
                                     IGNORE,
@@ -93,6 +95,9 @@ public class CopyTestController implements TestProvider {
                                     IGNORE_ALL_THE_SAME,
                                     RETRY,
                                     ButtonType.CANCEL);
+                            // TODO: notify();
+
+                            // TODO: wait();
 
                             if (result.isEmpty() || result.get() == ButtonType.CANCEL)
                                 return FileCopy.ErrorAction.ABORT;
@@ -108,13 +113,18 @@ public class CopyTestController implements TestProvider {
 
                             return FileCopy.ErrorAction.RETRY;
                         },
+                        // TODO: Must be moved to synchronized method:
                         (source, target) -> {
+                            // TODO: Must be moved to synchronized method:
                             var result = TestApplication.alert(
                                     String.format("Overwrite \"%s\"?", target),
                                     ButtonType.YES,
                                     YES_TO_ALL,
                                     ButtonType.NO,
                                     NO_TO_ALL);
+                            // TODO: notify();
+
+                            // TODO: wait();
 
                             if (result.isEmpty() || result.get() == ButtonType.NO)
                                 return FileCopy.OverwriteAction.OVERWRITE_NOT;
