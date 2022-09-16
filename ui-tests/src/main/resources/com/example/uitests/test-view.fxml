@@ -10,74 +10,9 @@
           AnchorPane.leftAnchor="10"
           AnchorPane.rightAnchor="10"
           AnchorPane.topAnchor="10">
-        <TabPane tabClosingPolicy="UNAVAILABLE">
-            <Tab text="Validator Tests">
-                <VBox>
-                    <TitledPane collapsible="false"
-                                text="Input">
-                        <GridPane hgap="5"
-                                  vgap="5">
-                            <columnConstraints>
-                                <ColumnConstraints />
-                                <ColumnConstraints hgrow="ALWAYS" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints />
-                                <RowConstraints />
-                            </rowConstraints>
-                            <Label GridPane.columnIndex="0"
-                                   GridPane.rowIndex="0"
-                                   text="Choose validator:" />
-                            <ComboBox fx:id="validatorToTest"
-                                      GridPane.columnIndex="1"
-                                      GridPane.rowIndex="0"
-                                      items="${controller.availableValidators}"
-                                      onAction="#onValidatorChanged" />
-                            <Label GridPane.columnIndex="0"
-                                   GridPane.rowIndex="1"
-                                   text="Input something:" />
-                            <TextField fx:id="testInput"
-                                       GridPane.columnIndex="1"
-                                       GridPane.rowIndex="1" />
-                        </GridPane>
-                    </TitledPane>
-                    <TitledPane fx:id="settingsContainer" collapsible="false"
-                                text="Settings">
-                    </TitledPane>
-                    <TitledPane collapsible="false"
-                                text="Options">
-                        <GridPane hgap="5"
-                                  vgap="5">
-                            <columnConstraints>
-                                <ColumnConstraints />
-                                <ColumnConstraints hgrow="ALWAYS" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints />
-                                <RowConstraints />
-                            </rowConstraints>
-                            <CheckBox fx:id="needsInput"
-                                      GridPane.rowIndex="0"
-                                      GridPane.columnIndex="0"
-                                      text="Require input"
-                                      selected="true"
-                                      onAction="#onOptionsChanged" />
-                            <CheckBox fx:id="blanksValid"
-                                      GridPane.rowIndex="0"
-                                      GridPane.columnIndex="1"
-                                      text="Allow blank input"
-                                      disable="${!controller.blanksValidEnabled}"
-                                      onAction="#onOptionsChanged" />
-                            <CheckBox fx:id="autoFill"
-                                      GridPane.rowIndex="1"
-                                      GridPane.columnIndex="0"
-                                      text="Fill input automatically"
-                                      disable="${!controller.autoFillEnabled}"
-                                      onAction="#onOptionsChanged" />
-                        </GridPane>
-                    </TitledPane>
-                </VBox>
-            </Tab>
+        <TabPane fx:id="tabs" tabClosingPolicy="UNAVAILABLE">
+            <Tab fx:id="validatorTab"
+                 text="Validator Tests" />
         </TabPane>
         <ButtonBar >
             <buttons>
