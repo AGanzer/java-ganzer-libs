@@ -20,8 +20,8 @@
             <buttons>
                 <Button ButtonBar.buttonData="OTHER"
                         defaultButton="true"
-                        text="Validate"
-                        onAction="#onValidate" />
+                        text="Start test"
+                        onAction="#startTestClicked" />
             </buttons>
         </ButtonBar>
     </VBox>

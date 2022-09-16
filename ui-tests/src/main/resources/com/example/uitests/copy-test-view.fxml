@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.control.cell.CheckBoxTreeTableCell?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.uitests.CopyTestController">
@@ -46,6 +47,7 @@
             <rowConstraints>
                 <RowConstraints />
                 <RowConstraints />
+                <RowConstraints />
             </rowConstraints>
             <Label GridPane.columnIndex="0"
                    GridPane.rowIndex="0"
@@ -67,36 +69,61 @@
                     GridPane.rowIndex="1"
                     text="..."
                     onAction="#chooseTargetClicked" />
+            <CheckBox fx:id="suppressInit"
+                      GridPane.columnIndex="1"
+                      GridPane.rowIndex="2"
+                      GridPane.columnSpan="2"
+                      text="Supress initialization" />
         </GridPane>
     </TitledPane>
     <TitledPane collapsible="false"
-                text="Output">
+                text="Progress">
         <GridPane hgap="5"
                   vgap="5">
             <columnConstraints>
+                <ColumnConstraints />
                 <ColumnConstraints hgrow="ALWAYS" />
                 <ColumnConstraints />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints />
-                <RowConstraints vgrow="ALWAYS" />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
             </rowConstraints>
             <ProgressBar fx:id="progressBar"
                          GridPane.columnIndex="0"
                          GridPane.rowIndex="0"
+                         GridPane.columnSpan="2"
                          prefWidth="300"
                          progress="0" />
             <Label fx:id="progressLabel"
-                   GridPane.columnIndex="1"
+                   GridPane.columnIndex="2"
                    GridPane.rowIndex="0"
                    text="0.00 %" />
-            <TextArea fx:id="output"
-                      GridPane.columnIndex="0"
-                      GridPane.rowIndex="1"
-                      GridPane.columnSpan="2"
-                      prefWidth="300"
-                      editable="false" />
+            <Label GridPane.columnIndex="0"
+                   GridPane.rowIndex="1"
+                   text="Bytes to copy:" />
+            <Label fx:id="bytesToCopyLabel"
+                   GridPane.columnIndex="2"
+                   GridPane.rowIndex="1" />
+            <Label GridPane.columnIndex="0"
+                   GridPane.rowIndex="2"
+                   text="Bytes copied:" />
+            <Label fx:id="bytesCopiedLabel"
+                   GridPane.columnIndex="2"
+                   GridPane.rowIndex="2" />
+            <Label GridPane.columnIndex="0"
+                   GridPane.rowIndex="3"
+                   text="Worked file:" />
+            <Label fx:id="workedFileLabel"
+                   GridPane.columnIndex="2"
+                   GridPane.rowIndex="3" />
+            <Button GridPane.columnIndex="2"
+                    GridPane.rowIndex="4"
+                    text="Cancel"
+                    onAction="#cancelClicked" />
         </GridPane>
     </TitledPane>
-
 </VBox>

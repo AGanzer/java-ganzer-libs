@@ -4,9 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class TestApplication extends Application {
     @Override
@@ -28,5 +30,12 @@ public class TestApplication extends Application {
         a.setContentText(message);
 
         a.showAndWait();
+    }
+
+    public static Optional<ButtonType> alert(String message, ButtonType... buttons) {
+        var a = new Alert(Alert.AlertType.CONFIRMATION, message, buttons);
+        a.setTitle("Manual UI-Tests (ganzer-libs)");
+
+        return a.showAndWait();
     }
 }

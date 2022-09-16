@@ -31,7 +31,7 @@ public class TestController {
         }
     }
 
-    public void onValidate(ActionEvent actionEvent) {
+    public void startTestClicked(ActionEvent actionEvent) {
         TestProvider provider = (TestProvider)tabs.getSelectionModel().getSelectedItem().getContent().getUserData();
         provider.test();
     }
