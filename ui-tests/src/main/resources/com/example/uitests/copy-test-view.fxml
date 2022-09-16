@@ -24,7 +24,8 @@
             <rowConstraints>
                 <RowConstraints />
             </rowConstraints>
-            <RadioButton GridPane.rowIndex="0"
+            <RadioButton fx:id="copyDirectories"
+                         GridPane.rowIndex="0"
                          GridPane.columnIndex="0"
                          toggleGroup="$whatGroup"
                          text="Directories"

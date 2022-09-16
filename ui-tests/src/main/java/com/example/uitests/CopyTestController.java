@@ -8,6 +8,14 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 
 public class CopyTestController implements TestProvider {
     public TextField sourcePath;
@@ -18,6 +26,7 @@ public class CopyTestController implements TestProvider {
     public Label bytesToCopyLabel;
     public Label bytesCopiedLabel;
     public Label workedFileLabel;
+    public RadioButton copyDirectories;
 
     @FXML
     private void initialize() {
@@ -124,11 +133,61 @@ public class CopyTestController implements TestProvider {
     }
 
     public void chooseSourceClicked(ActionEvent actionEvent) {
+        String path = copyDirectories.isSelected()
+                ? chooseDirectory(sourcePath.getText(), "Choose Source Directory")
+                : chooseFile(sourcePath.getText());
 
+        if (path != null)
+            sourcePath.setText(path);
     }
 
     public void chooseTargetClicked(ActionEvent actionEvent) {
+        String path = chooseDirectory(targetPath.getText(), "Choose Target Directory");
 
+        if (path != null)
+            targetPath.setText(path);
+    }
+
+    private Window getActiveWindow() {
+        List<Window> windows = Stage.getWindows();
+
+        for (Window w: windows)
+            if (w.isShowing())
+                return w;
+
+        return null;
+    }
+
+    private String chooseFile(String initPath) {
+        FileChooser dlg = new FileChooser();
+        File initFile = initPath.isEmpty()
+                ? null
+                : new File(initPath).getParentFile();
+
+        dlg.setInitialDirectory(initFile);
+        dlg.setTitle("Choose Source File");
+
+        File chosen = dlg.showOpenDialog(getActiveWindow());
+
+        return chosen != null
+                ? chosen.getAbsolutePath()
+                : null;
+    }
+
+    private String chooseDirectory(String initPath, String title) {
+        DirectoryChooser dlg = new DirectoryChooser();
+        File initFile = initPath.isEmpty()
+                ? null
+                : new File(initPath).getParentFile();
+
+        dlg.setInitialDirectory(initFile);
+        dlg.setTitle(title);
+
+        File chosen = dlg.showDialog(getActiveWindow());
+
+        return chosen != null
+                ? chosen.getAbsolutePath()
+                : null;
     }
 
     private boolean validate(TextField field) {
