@@ -7,6 +7,7 @@ package de.ganzer.core.files;
  * This class itself cannot be instantiated. Derived classes indicate errors
  * by calling the protected method {@link #setErrorInfo}.
  */
+@SuppressWarnings("unused")
 public abstract class FileErrorProvider {
     /**
      * Describes the errors that may be returned by {@link #getError}.
@@ -38,6 +39,16 @@ public abstract class FileErrorProvider {
         CREATE_FILE,
 
         /**
+         * A file cannot be renamed.
+         */
+        RENAME_FILE,
+
+        /**
+         * A file cannot be removed.
+         */
+        DELETE_FILE,
+
+        /**
          * A directory could not be read.
          */
         READ_DIR,
@@ -48,14 +59,29 @@ public abstract class FileErrorProvider {
         CREATE_DIR,
 
         /**
-         * A file or directory is copied into a file.
+         * A directory cannot be renamed.
+         */
+        DELETE_DIR,
+
+        /**
+         * The target ist not a directory.
          */
         TARGET_TYPE,
+
+        /**
+         * A directory is copied into a file or vice versa.
+         */
+        TARGET_SOURCE_TYPE,
 
         /**
          * A source does not exist.
          */
         SOURCE_NOT_EXIST,
+
+        /**
+         * Permissions or times cannt be set.
+         */
+        SET_ATTRIBUTES,
 
         /**
          * The user has canceled an operation.

@@ -2,14 +2,15 @@ package de.ganzer.core.files;
 
 import de.ganzer.core.CoreMessages;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class FileCopy extends FileErrorProvider {
     /**
      * Defines the possible behaviors on existing files and directories.
@@ -163,32 +164,28 @@ public class FileCopy extends FileErrorProvider {
     /**
      * The ProgressInfo class encapsulates progress information.
      */
-    public class ProgressInfo {
+    public static class ProgressInfo {
         private final FileCopy machine;
-        private final ProgressStatus status;
-        private final String sourcePath;
-        private final String targetPath;
-        private final String rootSourcePath;
-        private final String rootTargetPath;
-        private final long fileBytesAvail;
-        private final long fileBytesCopied;
-        private final long totalBytesAvail;
-        private final long totalBytesCopied;
+        private ProgressStatus status;
+        private String sourcePath;
+        private String targetPath;
+        private String rootSourcePath;
+        private String rootTargetPath;
+        private long fileBytesAvail;
+        private long fileBytesCopied;
+        private long totalBytesAvail;
+        private long totalBytesCopied;
+
+        private OverwriteAction fileOverwriteAction;
+        private OverwriteAction dirOverwriteAction;
+        private boolean ignoreAllErrors;
+        private final Set<Error> ignoredErrors = new HashSet<>();
 
         /**
          * Creates a new instance.
          */
-        public ProgressInfo(FileCopy machine, ProgressStatus status, String sourcePath, String targetPath, String rootSourcePath, String rootTargetPath, long fileBytesAvail, long fileBytesCopied, long totalBytesAvail, long totalBytesCopied) {
+        public ProgressInfo(FileCopy machine) {
             this.machine = machine;
-            this.status = status;
-            this.sourcePath = sourcePath;
-            this.targetPath = targetPath;
-            this.rootSourcePath = rootSourcePath;
-            this.rootTargetPath = rootTargetPath;
-            this.fileBytesAvail = fileBytesAvail;
-            this.fileBytesCopied = fileBytesCopied;
-            this.totalBytesAvail = totalBytesAvail;
-            this.totalBytesCopied = totalBytesCopied;
         }
 
         /**
@@ -307,7 +304,7 @@ public class FileCopy extends FileErrorProvider {
          * as long as {@link #getStatus()} is {@link ProgressStatus#INITIALIZING}.
          * <p>
          * This value is valid only if the initialization is not suppressed via
-         * {@link #start()}.
+         * {@link #start}.
          *
          * @return The number of all available bytes.
          */
@@ -345,7 +342,7 @@ public class FileCopy extends FileErrorProvider {
          * <p>
          * This value is valid only if {@link #getStatus()} is other than
          * {@link ProgressStatus#INITIALIZING} and if the initialization is not
-         * suppressed via {@link #start()}.
+         * suppressed via {@link #start}.
          *
          * @return The percentage [0-100].
          */
@@ -384,7 +381,7 @@ public class FileCopy extends FileErrorProvider {
     }
 
     /**
-     * The interface to a fanction that is called to report the progress.
+     * The interface to a function that is called to report the progress.
      */
     public interface ProgressFunction {
         /**
@@ -420,10 +417,10 @@ public class FileCopy extends FileErrorProvider {
     private final QueryErrorAction queryErrorAction;
     private final QueryOverwriteAction queryOverwriteAction;
     private final AlternativeTargetPathFunction alternativeTargetPathFunction;
+    private final ProgressInfo progress = new ProgressInfo(this);
     private OverwriteAction defaultFileOverwriteAction = OverwriteAction.OVERWRITE_NONE;
     private OverwriteAction defaultDirOverwriteAction = OverwriteAction.OVERWRITE_NONE;
-    private int copyBufferSize = 8 * 1024;
-    private FileFilter fileFilter;
+    private byte[] copyBuffer = new byte[8 * 1024];
     private FilenameFilter filenameFilter;
 
     /**
@@ -576,7 +573,7 @@ public class FileCopy extends FileErrorProvider {
      * @return The size of the buffer in bytes. The default value is 8 KB.
      */
     public int getCopyBufferSize() {
-        return copyBufferSize;
+        return copyBuffer.length;
     }
 
     /**
@@ -591,31 +588,7 @@ public class FileCopy extends FileErrorProvider {
      * @param copyBufferSize The new size to set.
      */
     public void setCopyBufferSize(int copyBufferSize) {
-        this.copyBufferSize = copyBufferSize;
-    }
-
-    /**
-     * Gets the file filter used for iterating through directories.
-     * <p>
-     * The filter is not applied to the entries that are given to
-     * {@link #start} but only for entries in subdirectories.
-     *
-     * @return The used filter or {@code null} if not filter is used.
-     */
-    public FileFilter getFileFilter() {
-        return fileFilter;
-    }
-
-    /**
-     * Sets the file filter used for iterating through directories.
-     * <p>
-     * The filter is not applied to the entries that are given to
-     * {@link #start} but only for entries in subdirectories.
-     *
-     * @param fileFilter The filter to use or {@code null} to use no filter.
-     */
-    public void setFileFilter(FileFilter fileFilter) {
-        this.fileFilter = fileFilter;
+        this.copyBuffer = new byte[copyBufferSize];
     }
 
     /**
@@ -640,30 +613,6 @@ public class FileCopy extends FileErrorProvider {
      */
     public void setFilenameFilter(FilenameFilter filenameFilter) {
         this.filenameFilter = filenameFilter;
-    }
-
-    private class ErrorInfo extends RuntimeException {
-        private final boolean queryHandling;
-        private final Error error;
-
-        public ErrorInfo(Error error, String errorDescription, boolean queryHandling) {
-            super(errorDescription);
-
-            this.queryHandling = queryHandling;
-            this.error = error;
-        }
-
-        public boolean isQueryHandling() {
-            return queryHandling;
-        }
-
-        public Error getError() {
-            return error;
-        }
-
-        public String getErrorDescription() {
-            return getMessage();
-        }
     }
 
     /**
@@ -712,7 +661,32 @@ public class FileCopy extends FileErrorProvider {
         } catch (ErrorInfo info) {
             setErrorInfo(info.getError(), info.getErrorDescription());
         }
+
         return false;
+    }
+
+    private static class ErrorInfo extends RuntimeException {
+        private final boolean queryHandling;
+        private final Error error;
+
+        public ErrorInfo(Error error, String errorDescription, boolean queryHandling) {
+            super(errorDescription);
+
+            this.queryHandling = queryHandling;
+            this.error = error;
+        }
+
+        public boolean doNotQuery() {
+            return !queryHandling;
+        }
+
+        public Error getError() {
+            return error;
+        }
+
+        public String getErrorDescription() {
+            return getMessage();
+        }
     }
 
     private void verifyTargetType(File targetFile) throws ErrorInfo {
@@ -726,7 +700,7 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void verifySourceExistence(File sourceFile) throws ErrorInfo {
-        if( !sourceFile.exists() )
+        if (!sourceFile.exists())
             throw new ErrorInfo(Error.SOURCE_NOT_EXIST, String.format(CoreMessages.get("sourceFileDoesNotExist"), sourceFile.getAbsolutePath()), true);
     }
 
@@ -748,14 +722,414 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void initializeCopy(Stream<File> sourceFiles, File targetFile, boolean suppressInit) throws ErrorInfo {
+        progress.status = ProgressStatus.INITIALIZING;
+        progress.rootTargetPath = targetFile.getAbsolutePath();
+        progress.fileBytesAvail = 0;
+        progress.fileBytesCopied = 0;
+        progress.totalBytesAvail = 0;
+        progress.totalBytesCopied = 0;
+        progress.sourcePath = "";
+        progress.targetPath = "";
+        progress.dirOverwriteAction = defaultDirOverwriteAction;
+        progress.fileOverwriteAction = defaultFileOverwriteAction;
+        progress.ignoreAllErrors = false;
+        progress.ignoredErrors.clear();
 
+        if (suppressInit)
+            return;
+
+        reportProgress();
+
+        sourceFiles.forEach(source -> {
+            if (source.isDirectory())
+                initializeCopy(source);
+            else
+                reportInitializeProgress(source.getAbsolutePath(), source.length());
+        });
+    }
+
+    private boolean reportProgress() {
+        if (progressFunction == null)
+            return true;
+
+        ProgressContinuation result = progressFunction.report(progress);
+
+        if (result == ProgressContinuation.CANCEL_COPY)
+            cancel();
+
+        return result == ProgressContinuation.CONTINUE_COPY;
+    }
+
+    private boolean reportStartDir(String sourcePath, String targetPath) {
+        progress.status = ProgressStatus.START_DIRECTORY;
+        progress.sourcePath = sourcePath;
+        progress.targetPath = targetPath;
+        progress.fileBytesAvail = 0;
+        progress.fileBytesCopied = 0;
+
+        return reportProgress();
+    }
+
+    private void reportFinishedDir(String sourcePath, String targetPath) {
+        progress.status = ProgressStatus.FINISHED_DIRECTORY;
+        progress.sourcePath = sourcePath;
+        progress.targetPath = targetPath;
+        progress.fileBytesAvail = 0;
+        progress.fileBytesCopied = 0;
+
+        reportProgress();
+    }
+
+    private boolean reportStartFile(File source, String targetPath) {
+        progress.status = ProgressStatus.START_FILE;
+        progress.sourcePath = source.getAbsolutePath();
+        progress.targetPath = targetPath;
+        progress.fileBytesAvail = source.length();
+        progress.fileBytesCopied = 0;
+
+        return reportProgress();
+    }
+
+    boolean reportCopyingFile(long addBytesCopied) {
+        progress.status = ProgressStatus.COPYING_FILE;
+        progress.fileBytesCopied += addBytesCopied;
+        progress.totalBytesCopied += addBytesCopied;
+
+        return reportProgress();
+    }
+
+    private void reportFinishedFile() {
+        progress.status = ProgressStatus.FINISHED_FILE;
+        progress.fileBytesCopied = progress.fileBytesAvail;
+
+        reportProgress();
+    }
+
+    private void reportInitializeProgress(String sourcePath, long addTotalBytes) {
+        progress.sourcePath = sourcePath;
+        progress.totalBytesAvail += addTotalBytes;
+
+        reportProgress();
+    }
+
+    private boolean exists(File file) throws ErrorInfo {
+        try {
+            return file.exists();
+        } catch (SecurityException e) {
+            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), file.getAbsolutePath()), true);
+        }
+    }
+
+    private boolean isDirectory(File file) throws ErrorInfo {
+        try {
+            return file.isDirectory();
+        } catch (SecurityException e) {
+            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), file.getAbsolutePath()), true);
+        }
+    }
+
+    private File[] listFiles(File source) {
+        try {
+            return filenameFilter == null
+                    ? source.listFiles()
+                    : source.listFiles(filenameFilter);
+        } catch (SecurityException e) {
+            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), source.getAbsolutePath()), true);
+        }
+    }
+
+    private void initializeCopy(File source) {
+        reportInitializeProgress(source.getAbsolutePath(), 0);
+
+        for (var file : listFiles(source)) {
+            if (isDirectory(file))
+                initializeCopy(file);
+            else
+                reportInitializeProgress(file.getAbsolutePath(), file.length());
+        }
     }
 
     private void copyEntries(Stream<File> sourceFiles, File targetFile) throws ErrorInfo {
+        sourceFiles.forEach(source -> {
+            File target = new File(queryDestPath(source, targetFile));
 
+            if (exists(target))
+                verifyNonRecursive(source, target);
+
+            progress.rootSourcePath = source.getAbsolutePath();
+
+            if (isDirectory(source))
+                copyDir(source, target.getAbsolutePath());
+            else
+                copyFile(source, target.getAbsolutePath());
+        });
+    }
+
+    private String queryDestPath(File source, File target) {
+        Path srcPath = Path.of(source.getAbsolutePath());
+        Path dstPath = Path.of(target.getAbsolutePath(), source.getName());
+
+        if (alternativeTargetPathFunction == null)
+            return dstPath.toString();
+
+        if (dstPath.equals(srcPath) && target.exists())
+            return alternativeTargetPathFunction.alternativePath(dstPath.toString());
+
+        return dstPath.toString();
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    private void copyDir(File source, String targetPath) {
+        if (!reportStartDir(source.getAbsolutePath(), targetPath))
+            return;
+
+        while (true) {
+            try {
+                if (!canWriteDir(source, new File(targetPath)))
+                    return;
+
+                copyDirNoQuery(source, targetPath);
+
+                break;
+            } catch (ErrorInfo info) {
+                if (queryErrorAction == null || info.doNotQuery())
+                    throw info;
+
+                if (progress.ignoreAllErrors || progress.ignoredErrors.contains(info.getError()))
+                    return;
+
+                switch (queryErrorAction.query(info.getError(), info.getErrorDescription(), source, new File(targetPath))) {
+                    case RETRY:
+                        continue;
+
+                    case IGNORE:
+                        return;
+
+                    case IGNORE_ALL_THIS:
+                        progress.ignoredErrors.add(info.getError());
+                        return;
+
+                    case IGNORE_ALL:
+                        progress.ignoreAllErrors = true;
+                        return;
+
+                    default:
+                        throw new ErrorInfo(info.getError(), info.getErrorDescription(), false);
+                }
+            }
+        }
+
+        reportFinishedDir(source.getAbsolutePath(), targetPath);
+    }
+
+    private void copyDirNoQuery(File source, String targetPath) {
+        for (var file : listFiles(source)) {
+            targetPath = Path.of(targetPath, file.getName()).toString();
+
+            if (isDirectory(file))
+                copyDir(file, targetPath);
+            else
+                copyFile(file, targetPath);
+        }
+
+        copyAttributes(source, new File(targetPath));
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    private void copyFile(File source, String targetPath) {
+        if (!reportStartFile(source, targetPath))
+            return;
+
+        while (true) {
+            try {
+                if (!canWriteFile(source, new File(targetPath)))
+                    return;
+
+                copyFileNoQuery(source, targetPath);
+
+                break;
+            } catch (ErrorInfo info) {
+                if (queryErrorAction == null || info.doNotQuery())
+                    throw info;
+
+                if (progress.ignoreAllErrors || progress.ignoredErrors.contains(info.getError()))
+                    return;
+
+                switch (queryErrorAction.query(info.getError(), info.getErrorDescription(), source, new File(targetPath))) {
+                    case RETRY:
+                        continue;
+
+                    case IGNORE:
+                        return;
+
+                    case IGNORE_ALL_THIS:
+                        progress.ignoredErrors.add(info.getError());
+                        return;
+
+                    case IGNORE_ALL:
+                        progress.ignoreAllErrors = true;
+                        return;
+
+                    default:
+                        throw new ErrorInfo(info.getError(), info.getErrorDescription(), false);
+                }
+            }
+        }
+
+        reportFinishedFile();
+    }
+
+    private void copyFileNoQuery(File source, String targetPath) {
+        File orgTarget = new File(targetPath);
+        File target = orgTarget;
+        long totalBytesRead = 0;
+
+        try {
+            if (target.exists())
+                target = new File(targetPath + "~");
+
+            if (!target.createNewFile())
+                throw new ErrorInfo(Error.CREATE_FILE, String.format(CoreMessages.get("cannotCreateFile"), target.getAbsolutePath()), true);
+
+            FileOutputStream out = new FileOutputStream(target);
+            FileInputStream in = new FileInputStream(source);
+
+            int bytesRead;
+
+            while (true) {
+                try {
+                    bytesRead = in.read(copyBuffer);
+                } catch (IOException e) {
+                    cleanup(target);
+                    throw new ErrorInfo(Error.READ_FILE, String.format(CoreMessages.get("cannotReadFile"), source.getAbsolutePath()), true);
+                }
+
+                if (bytesRead == 0)
+                    break;
+
+                try {
+                    out.write(copyBuffer, 0, bytesRead);
+                } catch (IOException e) {
+                    cleanup(target);
+                    throw new ErrorInfo(Error.WRITE_FILE, String.format(CoreMessages.get("cannotWriteFile"), target.getAbsolutePath()), true);
+                }
+
+                totalBytesRead += bytesRead;
+
+                if (!reportCopyingFile(bytesRead)) {
+                    progress.totalBytesCopied -= totalBytesRead;
+                    cleanup(target);
+
+                    return;
+                }
+            }
+
+            in.close();
+            out.close();
+
+            copyAttributes(source, target);
+
+            cleanup(target, orgTarget);
+        } catch (SecurityException e) {
+            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
+        } catch (IOException e) {
+            cleanup(target);
+            throw new ErrorInfo(Error.CREATE_FILE, String.format(CoreMessages.get("cannotCreateFile"), target.getAbsolutePath()), true);
+        }
+    }
+
+    private void cleanup(File target, File orgTarget) {
+        if (orgTarget == target)
+            return;
+
+        cleanup(orgTarget);
+
+        try {
+            if (!target.renameTo(orgTarget)) {
+                cleanup(target);
+                throw new ErrorInfo(Error.RENAME_FILE, String.format(CoreMessages.get("cannotRenameFile"), target.getAbsolutePath()), true);
+            }
+        } catch (SecurityException e) {
+            cleanup(target);
+            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
+        }
+    }
+
+    private void cleanup(File target) {
+        try {
+            if (target.exists() && !target.delete())
+                throw new ErrorInfo(Error.DELETE_FILE, String.format(CoreMessages.get("cannotDeleteFile"), target.getAbsolutePath()), true);
+        } catch (SecurityException e) {
+            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
+        }
+    }
+
+    private void copyAttributes(File source, File target) {
+        if (!target.setExecutable(source.canExecute()) ||
+                !target.setReadable(source.canRead()) ||
+                !target.setWritable(source.canWrite()) ||
+                !target.setLastModified(source.lastModified())) {
+            throw new ErrorInfo(Error.SET_ATTRIBUTES, String.format(CoreMessages.get("cannotSetAttributes"), target.getAbsolutePath()), true);
+        }
+    }
+
+    private boolean canWriteDir(File source, File target) {
+        try {
+            if (!target.exists()) {
+                if (!target.mkdirs())
+                    throw new ErrorInfo(Error.CREATE_DIR, String.format(CoreMessages.get("cannotCreateDir"), target.getAbsolutePath()), true);
+
+                return true;
+            }
+        } catch (SecurityException e) {
+            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
+        }
+
+        if (progress.dirOverwriteAction == OverwriteAction.OVERWRITE_NONE)
+            return false;
+
+        if (!isDirectory(target))
+            throw new ErrorInfo(Error.TARGET_SOURCE_TYPE, String.format(CoreMessages.get("cannotOverwriteFileWithDir"), target.getAbsolutePath()), true);
+
+        if (progress.dirOverwriteAction == OverwriteAction.OVERWRITE_ALL)
+            return true;
+
+        if (queryOverwriteAction == null)
+            return false;
+
+        progress.dirOverwriteAction = queryOverwriteAction.query(source, target);
+
+        if (progress.dirOverwriteAction == OverwriteAction.OVERWRITE_CANCEL)
+            cancel();
+
+        return progress.dirOverwriteAction == OverwriteAction.OVERWRITE_ALL || progress.dirOverwriteAction == OverwriteAction.OVERWRITE_ONE;
+    }
+
+    boolean canWriteFile(File source, File target) {
+        if (!exists(target))
+            return true;
+
+        if (progress.fileOverwriteAction == OverwriteAction.OVERWRITE_NONE)
+            return false;
+
+        if (isDirectory(target))
+            throw new ErrorInfo(Error.TARGET_SOURCE_TYPE, String.format(CoreMessages.get("cannotOverwriteDirWithFile"), target.getAbsolutePath()), true);
+
+        if (progress.fileOverwriteAction == OverwriteAction.OVERWRITE_ALL)
+            return true;
+
+        if (queryOverwriteAction == null)
+            return false;
+
+        progress.fileOverwriteAction = queryOverwriteAction.query(source, target);
+
+        if (progress.fileOverwriteAction == OverwriteAction.OVERWRITE_CANCEL)
+            cancel();
+
+        return progress.fileOverwriteAction == OverwriteAction.OVERWRITE_ALL || progress.fileOverwriteAction == OverwriteAction.OVERWRITE_ONE;
     }
 
     private void cancel() throws ErrorInfo {
-        throw new ErrorInfo(Error.CANCELED, CoreMessages.get("operationCanceld"), true);
+        throw new ErrorInfo(Error.CANCELED, CoreMessages.get("operationCanceled"), true);
     }
 }
