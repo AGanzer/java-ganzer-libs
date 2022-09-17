@@ -1,0 +1,54 @@
+package com.example.uitests;
+
+import de.ganzer.core.files.ErrorAction;
+import de.ganzer.core.files.FileCopy;
+import de.ganzer.core.files.FileErrorProvider;
+import javafx.application.Platform;
+import javafx.scene.control.ButtonType;
+
+import java.io.File;
+
+public class QueryError implements FileCopy.QueryErrorAction {
+    private static final ButtonType RETRY = new ButtonType("Retry");
+    private static final ButtonType IGNORE = new ButtonType("Ignore");
+    private static final ButtonType IGNORE_ALL = new ButtonType("Ignore All");
+    private static final ButtonType IGNORE_ALL_THE_SAME = new ButtonType("Ignore All The Same");
+    private ButtonType result;
+
+    @Override
+    public synchronized ErrorAction query(FileErrorProvider.Error error, String errorDescription, File source, File target) {
+        result = ButtonType.CANCEL;
+
+        Platform.runLater(() -> {
+            result = TestApplication.alert(
+                    errorDescription,
+                    IGNORE,
+                    IGNORE_ALL,
+                    IGNORE_ALL_THE_SAME,
+                    RETRY,
+                    ButtonType.CANCEL).orElse(ButtonType.CANCEL);
+
+            notify();
+        });
+
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            // Ignore.
+        }
+
+        if (result == null || result == ButtonType.CANCEL)
+            return ErrorAction.ABORT;
+
+        if (result == IGNORE)
+            return ErrorAction.IGNORE;
+
+        if (result == IGNORE_ALL)
+            return ErrorAction.IGNORE_ALL;
+
+        if (result == IGNORE_ALL_THE_SAME)
+            return ErrorAction.IGNORE_ALL_THIS;
+
+        return ErrorAction.RETRY;
+    }
+}

@@ -4,47 +4,11 @@ import de.ganzer.core.CoreMessages;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class FileCopy extends FileErrorProvider {
-    /**
-     * Defines the possible behaviors on existing files and directories.
-     */
-    public enum OverwriteAction {
-        /**
-         * The currently queried file or directory is not overwritten. The next
-         * one is queried again.
-         */
-        OVERWRITE_NOT,
-
-        /**
-         * No file or directory is overwritten. No further query will occur.
-         */
-        OVERWRITE_NONE,
-
-        /**
-         * The currently queried file or directory is overwritten. The next one is
-         * queried again.
-         */
-        OVERWRITE_ONE,
-
-        /**
-         * All files or directories are overwritten. No further query will occur.
-         */
-        OVERWRITE_ALL,
-
-        /**
-         * Cancels copying. {@link #getError()} will return {@link Error#CANCELED}
-         * after finishing.
-         */
-        OVERWRITE_CANCEL
-    }
-
     /**
      * The interface to a function that is called to query the user whether an
      * already existing file or directory shall be overwritten.
@@ -58,38 +22,6 @@ public class FileCopy extends FileErrorProvider {
          * @return One of the {@link OverwriteAction} values.
          */
         OverwriteAction query(File source, File target);
-    }
-
-    /**
-     * Defines the possible reaction to perform at an occurred error.
-     */
-    public enum ErrorAction {
-        /**
-         * Copying is aborted completely.
-         */
-        ABORT,
-
-        /**
-         * Copying the file or directory that caused the error is retried.
-         */
-        RETRY,
-
-        /**
-         * The entry that caused the error is ignored and not copied.
-         */
-        IGNORE,
-
-        /**
-         * The entry that caused the error is ignored and not copied as well
-         * as all further entries that will cause the same error.
-         */
-        IGNORE_ALL_THIS,
-
-        /**
-         * The entry that caused the error is ignored and not copied as well
-         * as all further entries that will cause any error.
-         */
-        IGNORE_ALL
     }
 
     /**
@@ -108,57 +40,6 @@ public class FileCopy extends FileErrorProvider {
          * @return One of the {@link ErrorAction} values.
          */
         ErrorAction query(Error error, String errorDescription, File source, File target);
-    }
-
-    /**
-     * Defines the status of the progress.
-     */
-    public enum ProgressStatus {
-        /**
-         * The copying operation is initialized and the total bytes to copy are
-         * counted. The progress function is called once at startup with 0 counted
-         * bytes and later for each directory and file that is worked.
-         * <p>
-         * This status is never reported if the initialization is suppressed via
-         * {@link #start}.
-         */
-        INITIALIZING,
-
-        /**
-         * Reports that a directory is going to be copied. The progress function is
-         * called once for each directory.
-         */
-        START_DIRECTORY,
-
-        /**
-         * Reports that a directory is fully worked. The progress function is called
-         * once for each directory after the directory is copied.
-         */
-        FINISHED_DIRECTORY,
-
-        /**
-         * Reports that a file is going to be copied. The progress function is
-         * called once for each file.
-         */
-        START_FILE,
-
-        /**
-         * Reports that a file is copied completely. The progress function is
-         * called once for each file after the file is copied.
-         */
-        FINISHED_FILE,
-
-        /**
-         * Reports the progress of a file that is currently copied. The progress
-         * function may be called multiple times until the whole file is copied.
-         */
-        COPYING_FILE,
-
-        /**
-         * This status reports that all files are copied or that the operation is
-         * aborted either by the user or by an error.
-         */
-        FINISHED
     }
 
     /**
@@ -352,35 +233,6 @@ public class FileCopy extends FileErrorProvider {
     }
 
     /**
-     * Defines the possible behaviors after progress is reported.
-     */
-    public enum ProgressContinuation {
-        /**
-         * Copying is continued. This should be the default result of the
-         * function that receives progress information.
-         */
-        CONTINUE_COPY,
-
-        /**
-         * If the status of the progress is {@link ProgressStatus#START_DIRECTORY}
-         * or {@link ProgressStatus#START_FILE}, the file or directory is not copied
-         * and ignored. If the status is {@link ProgressStatus#COPYING_FILE}, the
-         * copied file is discarded and the original one (if present) is not
-         * overwritten but restored.
-         */
-        SKIP_ENTRY,
-
-        /**
-         * Copying is completely canceled. The progress function is called with the
-         * status {@link ProgressStatus#FINISHED}. {@link #getError()} will return
-         * {@link Error#CANCELED} after this. If the status of the progress is
-         * {@link ProgressStatus#COPYING_FILE}, the copied file is discarded and
-         * the original one (if present) is not overwritten but restored.
-         */
-        CANCEL_COPY
-    }
-
-    /**
      * The interface to a function that is called to report the progress.
      */
     public interface ProgressFunction {
@@ -418,8 +270,8 @@ public class FileCopy extends FileErrorProvider {
     private final QueryOverwriteAction queryOverwriteAction;
     private final AlternativeTargetPathFunction alternativeTargetPathFunction;
     private final ProgressInfo progress = new ProgressInfo(this);
-    private OverwriteAction defaultFileOverwriteAction = OverwriteAction.OVERWRITE_NONE;
-    private OverwriteAction defaultDirOverwriteAction = OverwriteAction.OVERWRITE_NONE;
+    private OverwriteAction defaultFileOverwriteAction = OverwriteAction.NOT;
+    private OverwriteAction defaultDirOverwriteAction = OverwriteAction.NOT;
     private byte[] copyBuffer = new byte[8 * 1024];
     private FilenameFilter filenameFilter;
 
@@ -448,7 +300,7 @@ public class FileCopy extends FileErrorProvider {
      *                             the target is overwritten only if
      *                             {@link #getDefaultFileOverwriteAction}
      *                             respective {@link #getDefaultDirOverwriteAction}
-     *                             returns {@link OverwriteAction#OVERWRITE_ALL}.
+     *                             returns {@link OverwriteAction#NOT}.
      */
     public FileCopy(ProgressFunction progressFunction, QueryOverwriteAction queryOverwriteAction) {
         this.progressFunction = progressFunction;
@@ -488,7 +340,7 @@ public class FileCopy extends FileErrorProvider {
      *                             the target is overwritten only if
      *                             {@link #getDefaultFileOverwriteAction}
      *                             respective {@link #getDefaultDirOverwriteAction}
-     *                             returns {@link OverwriteAction#OVERWRITE_ALL}.
+     *                             returns {@link OverwriteAction#NOT}.
      */
     public FileCopy(ProgressFunction progressFunction, QueryErrorAction queryErrorAction, QueryOverwriteAction queryOverwriteAction) {
         this.progressFunction = progressFunction;
@@ -511,7 +363,7 @@ public class FileCopy extends FileErrorProvider {
      *                                      the target is overwritten only if
      *                                      {@link #getDefaultFileOverwriteAction}
      *                                      respective {@link #getDefaultDirOverwriteAction}
-     *                                      returns {@link OverwriteAction#OVERWRITE_ALL}.
+     *                                      returns {@link OverwriteAction#NOT}.
      * @param alternativeTargetPathFunction The function to call when an alternative
      *                                      path is requested. If this is {@code null},
      *                                      the original path is used.
@@ -527,7 +379,7 @@ public class FileCopy extends FileErrorProvider {
      * Gets the default overwrite action for files.
      *
      * @return The default overwrite action for files. The constructor
-     * sets this to {@link OverwriteAction#OVERWRITE_NONE}.
+     * sets this to {@link OverwriteAction#NOT}.
      */
     public OverwriteAction getDefaultFileOverwriteAction() {
         return defaultFileOverwriteAction;
@@ -537,8 +389,12 @@ public class FileCopy extends FileErrorProvider {
      * Sets the default overwrite action for file.
      *
      * @param defaultFileOverwriteAction The default action to set.
+     * @throws NullPointerException defaultFileOverwriteAction is {@code null}.
      */
     public void setDefaultFileOverwriteAction(OverwriteAction defaultFileOverwriteAction) {
+        if (defaultDirOverwriteAction == null)
+            throw new NullPointerException("defaultDirOverwriteAction");
+
         this.defaultFileOverwriteAction = defaultFileOverwriteAction;
     }
 
@@ -546,7 +402,7 @@ public class FileCopy extends FileErrorProvider {
      * Gets the default overwrite action for directories.
      *
      * @return The default overwrite action for directories. The constructor
-     * sets this to {@link OverwriteAction#OVERWRITE_NONE}.
+     * sets this to {@link OverwriteAction#NOT}.
      */
     public OverwriteAction getDefaultDirOverwriteAction() {
         return defaultDirOverwriteAction;
@@ -556,8 +412,12 @@ public class FileCopy extends FileErrorProvider {
      * Sets the default overwrite action for directories.
      *
      * @param defaultDirOverwriteAction The default action to set.
+     * @throws NullPointerException defaultFileOverwriteAction is {@code null}.
      */
     public void setDefaultDirOverwriteAction(OverwriteAction defaultDirOverwriteAction) {
+        if (defaultDirOverwriteAction == null)
+            throw new NullPointerException("defaultDirOverwriteAction");
+
         this.defaultDirOverwriteAction = defaultDirOverwriteAction;
     }
 
@@ -646,7 +506,7 @@ public class FileCopy extends FileErrorProvider {
      * @return {@code true} on success; otherwise, {@code false} is returned.
      */
     public boolean start(List<String> sources, String target, boolean suppressInit) {
-        var sourceFiles = sources.stream().map(File::new);
+        var sourceFiles = sources.stream().map(File::new).collect(Collectors.toList());
         var targetFile = new File(target);
 
         clearError();
@@ -694,7 +554,7 @@ public class FileCopy extends FileErrorProvider {
             throw new ErrorInfo(Error.TARGET_TYPE, String.format(CoreMessages.get("invalidCopyTarget"), targetFile.getAbsolutePath()), true);
     }
 
-    private void verifyExistence(Stream<File> sourceFiles, File targetFile) throws ErrorInfo {
+    private void verifyExistence(List<File> sourceFiles, File targetFile) throws ErrorInfo {
         sourceFiles.forEach(this::verifySourceExistence);
         verifyDestExistence(targetFile);
     }
@@ -709,19 +569,19 @@ public class FileCopy extends FileErrorProvider {
             throw new ErrorInfo(Error.CREATE_DIR, String.format(CoreMessages.get("cannotCreateDir"), targetFile.getAbsolutePath()), true);
     }
 
-    private void verifyNonRecursive(Stream<File> sourceFiles, File targetFile) throws ErrorInfo {
+    private void verifyNonRecursive(List<File> sourceFiles, File targetFile) throws ErrorInfo {
         sourceFiles.forEach(file -> verifyNonRecursive(file, targetFile));
     }
 
     private void verifyNonRecursive(File sourceFile, File targetFile) throws ErrorInfo {
         var sourcePath = Path.of(sourceFile.getAbsolutePath());
-        var targetPath = Path.of(sourceFile.getAbsolutePath());
+        var targetPath = Path.of(targetFile.getAbsolutePath());
 
         if (targetPath.equals(sourcePath) || targetPath.startsWith(sourcePath))
             throw new ErrorInfo(Error.CREATE_DIR, String.format(CoreMessages.get("cannotCopyIntoItself"), sourceFile.getAbsolutePath()), true);
     }
 
-    private void initializeCopy(Stream<File> sourceFiles, File targetFile, boolean suppressInit) throws ErrorInfo {
+    private void initializeCopy(List<File> sourceFiles, File targetFile, boolean suppressInit) throws ErrorInfo {
         progress.status = ProgressStatus.INITIALIZING;
         progress.rootTargetPath = targetFile.getAbsolutePath();
         progress.fileBytesAvail = 0;
@@ -754,10 +614,10 @@ public class FileCopy extends FileErrorProvider {
 
         ProgressContinuation result = progressFunction.report(progress);
 
-        if (result == ProgressContinuation.CANCEL_COPY)
+        if (result == ProgressContinuation.CANCEL)
             cancel();
 
-        return result == ProgressContinuation.CONTINUE_COPY;
+        return result == ProgressContinuation.CONTINUE;
     }
 
     private boolean reportStartDir(String sourcePath, String targetPath) {
@@ -849,7 +709,7 @@ public class FileCopy extends FileErrorProvider {
         }
     }
 
-    private void copyEntries(Stream<File> sourceFiles, File targetFile) throws ErrorInfo {
+    private void copyEntries(List<File> sourceFiles, File targetFile) throws ErrorInfo {
         sourceFiles.forEach(source -> {
             File target = new File(queryDestPath(source, targetFile));
 
@@ -1004,7 +864,7 @@ public class FileCopy extends FileErrorProvider {
                     throw new ErrorInfo(Error.READ_FILE, String.format(CoreMessages.get("cannotReadFile"), source.getAbsolutePath()), true);
                 }
 
-                if (bytesRead == 0)
+                if (bytesRead == -1)
                     break;
 
                 try {
@@ -1085,13 +945,13 @@ public class FileCopy extends FileErrorProvider {
             throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
         }
 
-        if (progress.dirOverwriteAction == OverwriteAction.OVERWRITE_NONE)
+        if (progress.dirOverwriteAction == OverwriteAction.NONE)
             return false;
 
         if (!isDirectory(target))
             throw new ErrorInfo(Error.TARGET_SOURCE_TYPE, String.format(CoreMessages.get("cannotOverwriteFileWithDir"), target.getAbsolutePath()), true);
 
-        if (progress.dirOverwriteAction == OverwriteAction.OVERWRITE_ALL)
+        if (progress.dirOverwriteAction == OverwriteAction.ALL)
             return true;
 
         if (queryOverwriteAction == null)
@@ -1099,23 +959,23 @@ public class FileCopy extends FileErrorProvider {
 
         progress.dirOverwriteAction = queryOverwriteAction.query(source, target);
 
-        if (progress.dirOverwriteAction == null || progress.dirOverwriteAction == OverwriteAction.OVERWRITE_CANCEL)
+        if (progress.dirOverwriteAction == null || progress.dirOverwriteAction == OverwriteAction.CANCEL)
             cancel();
 
-        return progress.dirOverwriteAction == OverwriteAction.OVERWRITE_ALL || progress.dirOverwriteAction == OverwriteAction.OVERWRITE_ONE;
+        return progress.dirOverwriteAction == OverwriteAction.ALL || progress.dirOverwriteAction == OverwriteAction.ONE;
     }
 
     boolean canWriteFile(File source, File target) {
         if (!exists(target))
             return true;
 
-        if (progress.fileOverwriteAction == OverwriteAction.OVERWRITE_NONE)
+        if (progress.fileOverwriteAction == OverwriteAction.NONE)
             return false;
 
         if (isDirectory(target))
             throw new ErrorInfo(Error.TARGET_SOURCE_TYPE, String.format(CoreMessages.get("cannotOverwriteDirWithFile"), target.getAbsolutePath()), true);
 
-        if (progress.fileOverwriteAction == OverwriteAction.OVERWRITE_ALL)
+        if (progress.fileOverwriteAction == OverwriteAction.ALL)
             return true;
 
         if (queryOverwriteAction == null)
@@ -1123,10 +983,10 @@ public class FileCopy extends FileErrorProvider {
 
         progress.fileOverwriteAction = queryOverwriteAction.query(source, target);
 
-        if (progress.dirOverwriteAction == null || progress.fileOverwriteAction == OverwriteAction.OVERWRITE_CANCEL)
+        if (progress.dirOverwriteAction == null || progress.fileOverwriteAction == OverwriteAction.CANCEL)
             cancel();
 
-        return progress.fileOverwriteAction == OverwriteAction.OVERWRITE_ALL || progress.fileOverwriteAction == OverwriteAction.OVERWRITE_ONE;
+        return progress.fileOverwriteAction == OverwriteAction.ALL || progress.fileOverwriteAction == OverwriteAction.ONE;
     }
 
     private void cancel() throws ErrorInfo {
