@@ -43,6 +43,7 @@ public class CopyTestController implements TestProvider {
     public void test() {
         if (validate(sourcePath) && validate(targetPath)) {
             cancelCopy = false;
+            bytesCopiedLabel.setText("");
 
             new Thread(() -> {
                 synchronized (this) {
