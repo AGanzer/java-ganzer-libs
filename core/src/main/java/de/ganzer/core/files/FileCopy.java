@@ -1099,7 +1099,7 @@ public class FileCopy extends FileErrorProvider {
 
         progress.dirOverwriteAction = queryOverwriteAction.query(source, target);
 
-        if (progress.dirOverwriteAction == OverwriteAction.OVERWRITE_CANCEL)
+        if (progress.dirOverwriteAction == null || progress.dirOverwriteAction == OverwriteAction.OVERWRITE_CANCEL)
             cancel();
 
         return progress.dirOverwriteAction == OverwriteAction.OVERWRITE_ALL || progress.dirOverwriteAction == OverwriteAction.OVERWRITE_ONE;
@@ -1123,7 +1123,7 @@ public class FileCopy extends FileErrorProvider {
 
         progress.fileOverwriteAction = queryOverwriteAction.query(source, target);
 
-        if (progress.fileOverwriteAction == OverwriteAction.OVERWRITE_CANCEL)
+        if (progress.dirOverwriteAction == null || progress.fileOverwriteAction == OverwriteAction.OVERWRITE_CANCEL)
             cancel();
 
         return progress.fileOverwriteAction == OverwriteAction.OVERWRITE_ALL || progress.fileOverwriteAction == OverwriteAction.OVERWRITE_ONE;
