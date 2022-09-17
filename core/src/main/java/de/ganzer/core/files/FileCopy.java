@@ -522,7 +522,9 @@ public class FileCopy extends FileErrorProvider {
             setErrorInfo(info.getError(), info.getErrorDescription());
         }
 
-        return false;
+        reportFinished();
+
+        return getError() != Error.NONE;
     }
 
     private static class ErrorInfo extends RuntimeException {
@@ -668,6 +670,16 @@ public class FileCopy extends FileErrorProvider {
     private void reportInitializeProgress(String sourcePath, long addTotalBytes) {
         progress.sourcePath = sourcePath;
         progress.totalBytesAvail += addTotalBytes;
+
+        reportProgress();
+    }
+
+    private void reportFinished() {
+        progress.status = ProgressStatus.FINISHED_FILE;
+        progress.fileBytesAvail = 0;
+        progress.fileBytesCopied = 0;
+        progress.sourcePath = "";
+        progress.targetPath = "";
 
         reportProgress();
     }
