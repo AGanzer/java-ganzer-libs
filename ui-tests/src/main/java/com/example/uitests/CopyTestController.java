@@ -1,6 +1,8 @@
 package com.example.uitests;
 
 import de.ganzer.core.files.FileCopy;
+import de.ganzer.core.files.FileErrorProvider;
+import de.ganzer.core.files.ProgressContinuation;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.core.validation.ValidatorException;
 import de.ganzer.fx.validation.ValidatorTextFormatter;
@@ -34,14 +36,8 @@ public class CopyTestController implements TestProvider {
         new ValidatorTextFormatter(new Validator(), targetPath);
     }
 
-    private static final ButtonType YES_TO_ALL = new ButtonType("Yes To All", ButtonBar.ButtonData.YES);
-    private static final ButtonType NO_TO_ALL = new ButtonType("No To All", ButtonBar.ButtonData.NO);
-    private static final ButtonType RETRY = new ButtonType("Retry");
-    private static final ButtonType IGNORE = new ButtonType("Ignore");
-    private static final ButtonType IGNORE_ALL = new ButtonType("Ignore All");
-    private static final ButtonType IGNORE_ALL_THE_SAME = new ButtonType("Ignore All The Same");
-
     private static boolean cancelCopy = false;
+    private static boolean running = false;
 
     @Override
     public void test() {
@@ -49,6 +45,14 @@ public class CopyTestController implements TestProvider {
             cancelCopy = false;
 
             new Thread(() -> {
+                synchronized (this) {
+                    if (running)
+                        return;
+
+                    running = true;
+                }
+                ;
+
                 FileCopy copy = new FileCopy(
                         progress -> {
                             switch (progress.getStatus()) {
@@ -81,65 +85,25 @@ public class CopyTestController implements TestProvider {
 
                             synchronized (this) {
                                 return cancelCopy
-                                        ? FileCopy.ProgressContinuation.CANCEL_COPY
-                                        : FileCopy.ProgressContinuation.CONTINUE_COPY;
+                                        ? ProgressContinuation.CANCEL
+                                        : ProgressContinuation.CONTINUE;
                             }
                         },
-                        // TODO: Must be moved to synchronized method:
-                        (error, description, source, target) -> {
-                            // TODO: Must be moved to synchronized method:
-                            var result = TestApplication.alert(
-                                    description,
-                                    IGNORE,
-                                    IGNORE_ALL,
-                                    IGNORE_ALL_THE_SAME,
-                                    RETRY,
-                                    ButtonType.CANCEL);
-                            // TODO: notify();
-
-                            // TODO: wait();
-
-                            if (result.isEmpty() || result.get() == ButtonType.CANCEL)
-                                return FileCopy.ErrorAction.ABORT;
-
-                            if (result.get() == IGNORE)
-                                return FileCopy.ErrorAction.IGNORE;
-
-                            if (result.get() == IGNORE_ALL)
-                                return FileCopy.ErrorAction.IGNORE_ALL;
-
-                            if (result.get() == IGNORE_ALL_THE_SAME)
-                                return FileCopy.ErrorAction.IGNORE_ALL_THIS;
-
-                            return FileCopy.ErrorAction.RETRY;
-                        },
-                        // TODO: Must be moved to synchronized method:
-                        (source, target) -> {
-                            // TODO: Must be moved to synchronized method:
-                            var result = TestApplication.alert(
-                                    String.format("Overwrite \"%s\"?", target),
-                                    ButtonType.YES,
-                                    YES_TO_ALL,
-                                    ButtonType.NO,
-                                    NO_TO_ALL);
-                            // TODO: notify();
-
-                            // TODO: wait();
-
-                            if (result.isEmpty() || result.get() == ButtonType.NO)
-                                return FileCopy.OverwriteAction.OVERWRITE_NOT;
-
-                            if (result.get() == ButtonType.YES)
-                                return FileCopy.OverwriteAction.OVERWRITE_ONE;
-
-                            if (result.get() == YES_TO_ALL)
-                                return FileCopy.OverwriteAction.OVERWRITE_ALL;
-
-                            return FileCopy.OverwriteAction.OVERWRITE_NONE;
-                        });
+                        new QueryError(),
+                        new QueryOverwrite());
 
                 copy.start(sourcePath.getText(), targetPath.getText(), suppressInit.isSelected());
-            });
+
+                if (copy.getError() != FileErrorProvider.Error.NONE) {
+                    Platform.runLater(() -> {
+                        TestApplication.alert(copy.getErrorDescription());
+                    });
+                }
+
+                synchronized (this) {
+                    running = false;
+                }
+            }).start();
         }
     }
 
