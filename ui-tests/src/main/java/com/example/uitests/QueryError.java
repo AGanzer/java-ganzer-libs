@@ -19,17 +19,7 @@ public class QueryError implements FileCopy.QueryErrorAction {
     public synchronized ErrorAction query(FileErrorProvider.Error error, String errorDescription, File source, File target) {
         result = ButtonType.CANCEL;
 
-        Platform.runLater(() -> {
-            result = TestApplication.alert(
-                    errorDescription,
-                    IGNORE,
-                    IGNORE_ALL,
-                    IGNORE_ALL_THE_SAME,
-                    RETRY,
-                    ButtonType.CANCEL).orElse(ButtonType.CANCEL);
-
-            notify();
-        });
+        Platform.runLater(() -> alert(errorDescription));
 
         try {
             wait();
@@ -50,5 +40,17 @@ public class QueryError implements FileCopy.QueryErrorAction {
             return ErrorAction.IGNORE_ALL_THIS;
 
         return ErrorAction.RETRY;
+    }
+
+    private synchronized void alert(String errorDescription) {
+        result = TestApplication.alert(
+                errorDescription,
+                IGNORE,
+                IGNORE_ALL,
+                IGNORE_ALL_THE_SAME,
+                RETRY,
+                ButtonType.CANCEL).orElse(ButtonType.CANCEL);
+
+        notify();
     }
 }

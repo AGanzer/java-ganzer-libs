@@ -17,16 +17,7 @@ public class QueryOverwrite implements FileCopy.QueryOverwriteAction {
     public synchronized OverwriteAction query(File source, File target) {
         result = NO_TO_ALL;
 
-        Platform.runLater(() -> {
-            result = TestApplication.alert(
-                    String.format("Overwrite \"%s\"?", target),
-                    ButtonType.YES,
-                    YES_TO_ALL,
-                    ButtonType.NO,
-                    NO_TO_ALL).orElse(NO_TO_ALL);
-
-            notify();
-        });
+        Platform.runLater(() -> alert(target));
 
         try {
             wait();
@@ -44,5 +35,16 @@ public class QueryOverwrite implements FileCopy.QueryOverwriteAction {
             return OverwriteAction.ALL;
 
         return OverwriteAction.NONE;
+    }
+
+    private synchronized void alert(File target) {
+        result = TestApplication.alert(
+                String.format("Overwrite \"%s\"?", target),
+                ButtonType.YES,
+                YES_TO_ALL,
+                ButtonType.NO,
+                NO_TO_ALL).orElse(NO_TO_ALL);
+
+        notify();
     }
 }

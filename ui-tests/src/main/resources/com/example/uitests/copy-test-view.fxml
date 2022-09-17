@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.cell.CheckBoxTreeTableCell?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.uitests.CopyTestController">
@@ -74,7 +73,7 @@
                       GridPane.columnIndex="1"
                       GridPane.rowIndex="2"
                       GridPane.columnSpan="2"
-                      text="Supress initialization" />
+                      text="Suppress initialization" />
         </GridPane>
     </TitledPane>
     <TitledPane collapsible="false"
