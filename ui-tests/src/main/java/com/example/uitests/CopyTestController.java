@@ -1,7 +1,7 @@
 package com.example.uitests;
 
 import de.ganzer.core.files.FileCopy;
-import de.ganzer.core.files.FileErrorProvider;
+import de.ganzer.core.files.FileError;
 import de.ganzer.core.files.ProgressContinuation;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.core.validation.ValidatorException;
@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.List;
 
 public class CopyTestController implements TestProvider {
@@ -52,7 +51,6 @@ public class CopyTestController implements TestProvider {
 
                     running = true;
                 }
-                ;
 
                 FileCopy copy = new FileCopy(
                         progress -> {
@@ -95,7 +93,7 @@ public class CopyTestController implements TestProvider {
 
                 copy.start(sourcePath.getText(), targetPath.getText(), suppressInit.isSelected());
 
-                if (copy.getError() != FileErrorProvider.Error.NONE) {
+                if (copy.getError() != FileError.NONE) {
                     Platform.runLater(() -> {
                         TestApplication.alert(copy.getErrorDescription());
                     });

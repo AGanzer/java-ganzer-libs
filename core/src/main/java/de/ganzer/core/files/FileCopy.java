@@ -26,7 +26,7 @@ public class FileCopy extends FileErrorProvider {
 
     /**
      * The interface to a function that is called to query the user what to do
-     * on the specified error.
+     * on the specified FileError.
      */
     public interface QueryErrorAction {
         /**
@@ -39,7 +39,7 @@ public class FileCopy extends FileErrorProvider {
          * @param target           The file or directory to overwrite.
          * @return One of the {@link ErrorAction} values.
          */
-        ErrorAction query(Error error, String errorDescription, File source, File target);
+        ErrorAction query(FileError error, String errorDescription, File source, File target);
     }
 
     /**
@@ -60,7 +60,7 @@ public class FileCopy extends FileErrorProvider {
         private OverwriteAction fileOverwriteAction;
         private OverwriteAction dirOverwriteAction;
         private boolean ignoreAllErrors;
-        private final Set<Error> ignoredErrors = new HashSet<>();
+        private final Set<FileError> ignoredErrors = new HashSet<>();
 
         /**
          * Creates a new instance.
@@ -524,14 +524,14 @@ public class FileCopy extends FileErrorProvider {
 
         reportFinished();
 
-        return getError() != Error.NONE;
+        return getError() != FileError.NONE;
     }
 
     private static class ErrorInfo extends RuntimeException {
         private final boolean queryHandling;
-        private final Error error;
+        private final FileError error;
 
-        public ErrorInfo(Error error, String errorDescription, boolean queryHandling) {
+        public ErrorInfo(FileError error, String errorDescription, boolean queryHandling) {
             super(errorDescription);
 
             this.queryHandling = queryHandling;
@@ -542,7 +542,7 @@ public class FileCopy extends FileErrorProvider {
             return !queryHandling;
         }
 
-        public Error getError() {
+        public FileError getError() {
             return error;
         }
 
@@ -553,7 +553,7 @@ public class FileCopy extends FileErrorProvider {
 
     private void verifyTargetType(File targetFile) throws ErrorInfo {
         if (targetFile.isFile())
-            throw new ErrorInfo(Error.TARGET_TYPE, String.format(CoreMessages.get("invalidCopyTarget"), targetFile.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.TARGET_TYPE, String.format(CoreMessages.get("invalidCopyTarget"), targetFile.getAbsolutePath()), true);
     }
 
     private void verifyExistence(List<File> sourceFiles, File targetFile) throws ErrorInfo {
@@ -563,12 +563,12 @@ public class FileCopy extends FileErrorProvider {
 
     private void verifySourceExistence(File sourceFile) throws ErrorInfo {
         if (!sourceFile.exists())
-            throw new ErrorInfo(Error.SOURCE_NOT_EXIST, String.format(CoreMessages.get("sourceFileDoesNotExist"), sourceFile.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.SOURCE_NOT_EXIST, String.format(CoreMessages.get("sourceFileDoesNotExist"), sourceFile.getAbsolutePath()), true);
     }
 
     private void verifyDestExistence(File targetFile) throws ErrorInfo {
         if (!targetFile.exists() && !targetFile.mkdirs())
-            throw new ErrorInfo(Error.CREATE_DIR, String.format(CoreMessages.get("cannotCreateDir"), targetFile.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.CREATE_DIR, String.format(CoreMessages.get("cannotCreateDir"), targetFile.getAbsolutePath()), true);
     }
 
     private void verifyNonRecursive(List<File> sourceFiles, File targetFile) throws ErrorInfo {
@@ -580,7 +580,7 @@ public class FileCopy extends FileErrorProvider {
         var targetPath = Path.of(targetFile.getAbsolutePath());
 
         if (targetPath.equals(sourcePath) || targetPath.startsWith(sourcePath))
-            throw new ErrorInfo(Error.CREATE_DIR, String.format(CoreMessages.get("cannotCopyIntoItself"), sourceFile.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.CREATE_DIR, String.format(CoreMessages.get("cannotCopyIntoItself"), sourceFile.getAbsolutePath()), true);
     }
 
     private void initializeCopy(List<File> sourceFiles, File targetFile, boolean suppressInit) throws ErrorInfo {
@@ -688,7 +688,7 @@ public class FileCopy extends FileErrorProvider {
         try {
             return file.exists();
         } catch (SecurityException e) {
-            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), file.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), file.getAbsolutePath()), true);
         }
     }
 
@@ -696,7 +696,7 @@ public class FileCopy extends FileErrorProvider {
         try {
             return file.isDirectory();
         } catch (SecurityException e) {
-            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), file.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), file.getAbsolutePath()), true);
         }
     }
 
@@ -706,7 +706,7 @@ public class FileCopy extends FileErrorProvider {
                     ? source.listFiles()
                     : source.listFiles(filenameFilter);
         } catch (SecurityException e) {
-            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), source.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), source.getAbsolutePath()), true);
         }
     }
 
@@ -861,7 +861,7 @@ public class FileCopy extends FileErrorProvider {
                 target = new File(targetPath + "~");
 
             if (!target.createNewFile())
-                throw new ErrorInfo(Error.CREATE_FILE, String.format(CoreMessages.get("cannotCreateFile"), target.getAbsolutePath()), true);
+                throw new ErrorInfo(FileError.CREATE_FILE, String.format(CoreMessages.get("cannotCreateFile"), target.getAbsolutePath()), true);
 
             FileOutputStream out = new FileOutputStream(target);
             FileInputStream in = new FileInputStream(source);
@@ -873,7 +873,7 @@ public class FileCopy extends FileErrorProvider {
                     bytesRead = in.read(copyBuffer);
                 } catch (IOException e) {
                     cleanup(target);
-                    throw new ErrorInfo(Error.READ_FILE, String.format(CoreMessages.get("cannotReadFile"), source.getAbsolutePath()), true);
+                    throw new ErrorInfo(FileError.READ_FILE, String.format(CoreMessages.get("cannotReadFile"), source.getAbsolutePath()), true);
                 }
 
                 if (bytesRead == -1)
@@ -883,7 +883,7 @@ public class FileCopy extends FileErrorProvider {
                     out.write(copyBuffer, 0, bytesRead);
                 } catch (IOException e) {
                     cleanup(target);
-                    throw new ErrorInfo(Error.WRITE_FILE, String.format(CoreMessages.get("cannotWriteFile"), target.getAbsolutePath()), true);
+                    throw new ErrorInfo(FileError.WRITE_FILE, String.format(CoreMessages.get("cannotWriteFile"), target.getAbsolutePath()), true);
                 }
 
                 totalBytesRead += bytesRead;
@@ -903,10 +903,10 @@ public class FileCopy extends FileErrorProvider {
 
             cleanup(target, orgTarget);
         } catch (SecurityException e) {
-            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
         } catch (IOException e) {
             cleanup(target);
-            throw new ErrorInfo(Error.CREATE_FILE, String.format(CoreMessages.get("cannotCreateFile"), target.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.CREATE_FILE, String.format(CoreMessages.get("cannotCreateFile"), target.getAbsolutePath()), true);
         }
     }
 
@@ -919,26 +919,26 @@ public class FileCopy extends FileErrorProvider {
         try {
             if (!target.renameTo(orgTarget)) {
                 cleanup(target);
-                throw new ErrorInfo(Error.RENAME_FILE, String.format(CoreMessages.get("cannotRenameFile"), target.getAbsolutePath()), true);
+                throw new ErrorInfo(FileError.RENAME_FILE, String.format(CoreMessages.get("cannotRenameFile"), target.getAbsolutePath()), true);
             }
         } catch (SecurityException e) {
             cleanup(target);
-            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
         }
     }
 
     private void cleanup(File target) {
         try {
             if (target.exists() && !target.delete())
-                throw new ErrorInfo(Error.DELETE_FILE, String.format(CoreMessages.get("cannotDeleteFile"), target.getAbsolutePath()), true);
+                throw new ErrorInfo(FileError.DELETE_FILE, String.format(CoreMessages.get("cannotDeleteFile"), target.getAbsolutePath()), true);
         } catch (SecurityException e) {
-            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
         }
     }
 
     private void copyAttributes(File source, File target) {
         if (!target.setLastModified(source.lastModified()) || !target.setExecutable(source.canExecute())) {
-            throw new ErrorInfo(Error.SET_ATTRIBUTES, String.format(CoreMessages.get("cannotSetAttributes"), target.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.SET_ATTRIBUTES, String.format(CoreMessages.get("cannotSetAttributes"), target.getAbsolutePath()), true);
         }
     }
 
@@ -946,19 +946,19 @@ public class FileCopy extends FileErrorProvider {
         try {
             if (!target.exists()) {
                 if (!target.mkdirs())
-                    throw new ErrorInfo(Error.CREATE_DIR, String.format(CoreMessages.get("cannotCreateDir"), target.getAbsolutePath()), true);
+                    throw new ErrorInfo(FileError.CREATE_DIR, String.format(CoreMessages.get("cannotCreateDir"), target.getAbsolutePath()), true);
 
                 return true;
             }
         } catch (SecurityException e) {
-            throw new ErrorInfo(Error.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), target.getAbsolutePath()), true);
         }
 
         if (progress.dirOverwriteAction == OverwriteAction.NONE)
             return false;
 
         if (!isDirectory(target))
-            throw new ErrorInfo(Error.TARGET_SOURCE_TYPE, String.format(CoreMessages.get("cannotOverwriteFileWithDir"), target.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.TARGET_SOURCE_TYPE, String.format(CoreMessages.get("cannotOverwriteFileWithDir"), target.getAbsolutePath()), true);
 
         if (progress.dirOverwriteAction == OverwriteAction.ALL)
             return true;
@@ -982,7 +982,7 @@ public class FileCopy extends FileErrorProvider {
             return false;
 
         if (isDirectory(target))
-            throw new ErrorInfo(Error.TARGET_SOURCE_TYPE, String.format(CoreMessages.get("cannotOverwriteDirWithFile"), target.getAbsolutePath()), true);
+            throw new ErrorInfo(FileError.TARGET_SOURCE_TYPE, String.format(CoreMessages.get("cannotOverwriteDirWithFile"), target.getAbsolutePath()), true);
 
         if (progress.fileOverwriteAction == OverwriteAction.ALL)
             return true;
@@ -999,6 +999,6 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void cancel() throws ErrorInfo {
-        throw new ErrorInfo(Error.CANCELED, CoreMessages.get("operationCanceled"), true);
+        throw new ErrorInfo(FileError.CANCELED, CoreMessages.get("operationCanceled"), true);
     }
 }

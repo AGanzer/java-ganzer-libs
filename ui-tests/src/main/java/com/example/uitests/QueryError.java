@@ -2,7 +2,7 @@ package com.example.uitests;
 
 import de.ganzer.core.files.ErrorAction;
 import de.ganzer.core.files.FileCopy;
-import de.ganzer.core.files.FileErrorProvider;
+import de.ganzer.core.files.FileError;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
 
@@ -16,7 +16,7 @@ public class QueryError implements FileCopy.QueryErrorAction {
     private ButtonType result;
 
     @Override
-    public synchronized ErrorAction query(FileErrorProvider.Error error, String errorDescription, File source, File target) {
+    public synchronized ErrorAction query(FileError error, String errorDescription, File source, File target) {
         result = ButtonType.CANCEL;
 
         Platform.runLater(() -> alert(errorDescription));
