@@ -937,10 +937,7 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void copyAttributes(File source, File target) {
-        if (!target.setExecutable(source.canExecute()) ||
-                !target.setReadable(source.canRead()) ||
-                !target.setWritable(source.canWrite()) ||
-                !target.setLastModified(source.lastModified())) {
+        if (!target.setLastModified(source.lastModified()) || !target.setExecutable(source.canExecute())) {
             throw new ErrorInfo(Error.SET_ATTRIBUTES, String.format(CoreMessages.get("cannotSetAttributes"), target.getAbsolutePath()), true);
         }
     }
