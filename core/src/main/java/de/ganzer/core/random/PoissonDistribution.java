@@ -9,7 +9,7 @@ import java.util.Random;
  * event if the expected, mean number of its occurrence under the same
  * conditions (on the same time/space interval) is mean.
  */
-public class PoissonDistribution {
+public class PoissonDistribution implements Distribution<Long> {
     /**
      * Creates a new instance with mean set to 1.0.
      */
@@ -37,8 +37,9 @@ public class PoissonDistribution {
      *
      * @return The next random number.
      */
-    long next(Random random) {
-        return 0;
+    @Override
+    public Long next(Random random) {
+        return 0L;
     }
 
     private double mean;

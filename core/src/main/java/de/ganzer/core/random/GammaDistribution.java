@@ -8,7 +8,7 @@ import java.util.Random;
  * For floating-point α, the value obtained is the sum of α independent
  * exponentially distributed random variables, each of which has a mean of β.
  */
-public class GammaDistribution {
+public class GammaDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with shape and scale set to 1.0.
      */
@@ -43,8 +43,9 @@ public class GammaDistribution {
      *               distributed random numbers from.
      * @return The next random number.
      */
-    public double next(Random random) {
-        return 0;
+    @Override
+    public Double next(Random random) {
+        return .0;
     }
 
     private double shape;

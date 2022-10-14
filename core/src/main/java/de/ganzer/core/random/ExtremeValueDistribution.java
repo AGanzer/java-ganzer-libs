@@ -7,7 +7,7 @@ import java.util.Random;
  * <p>
  * This it is also known as Gumbel Type I, log-Weibull or Fisher-Tippett Type I.
  */
-public class ExtremeValueDistribution {
+public class ExtremeValueDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with location set ot 0.0 and scale set to 1.0.
      */
@@ -42,8 +42,9 @@ public class ExtremeValueDistribution {
      *               distributed random numbers from.
      * @return The next random number.
      */
-    public double next(Random random) {
-        return 0;
+    @Override
+    public Double next(Random random) {
+        return .0;
     }
 
     private double location;

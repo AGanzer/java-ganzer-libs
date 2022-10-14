@@ -13,7 +13,7 @@ import java.util.Random;
  * {@link NegativeBinomialDistribution}(1, p). It is also the discrete
  * counterpart of {@link ExponentialDistribution}.
  */
-public class GeometricDistribution {
+public class GeometricDistribution implements Distribution<Long> {
     /**
      * Creates a new instance with p set to 0.5.
      */
@@ -42,8 +42,9 @@ public class GeometricDistribution {
      *
      * @return The next random number.
      */
-    long next(Random random) {
-        return 0;
+    @Override
+    public Long next(Random random) {
+        return 0L;
     }
 
     private double p;

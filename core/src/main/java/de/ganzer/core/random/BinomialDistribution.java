@@ -8,7 +8,7 @@ import java.util.Random;
  * The value obtained is the number of successes in a sequence of t yes/no
  * experiments, each of which succeeds with probability p.
  */
-public class BinomialDistribution {
+public class BinomialDistribution implements Distribution<Long> {
     /**
      * Creates a new instance with t set to 1 and p set to 0.5.
      */
@@ -45,8 +45,9 @@ public class BinomialDistribution {
      *
      * @return The next random number.
      */
-    long next(Random random) {
-        return 0;
+    @Override
+    public Long next(Random random) {
+        return 0L;
     }
 
     private long t;

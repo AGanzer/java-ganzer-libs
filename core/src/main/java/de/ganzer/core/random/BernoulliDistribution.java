@@ -31,7 +31,7 @@ public class BernoulliDistribution {
      *
      * @return The next random value.
      */
-    boolean next(Random random) {
+    public boolean next(Random random) {
         return false;
     }
 

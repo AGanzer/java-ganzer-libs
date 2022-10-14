@@ -12,7 +12,7 @@ import java.util.Random;
  * <p>
  * This is the continuous counterpart of {@link GeometricDistribution}.
  */
-public class ExponentialDistribution {
+public class ExponentialDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with lambda set to 1.0.
      */
@@ -37,8 +37,9 @@ public class ExponentialDistribution {
      *
      * @return The next random number.
      */
-    public double next(Random random) {
-        return 0;
+    @Override
+    public Double next(Random random) {
+        return .0;
     }
 
     private double lambda;

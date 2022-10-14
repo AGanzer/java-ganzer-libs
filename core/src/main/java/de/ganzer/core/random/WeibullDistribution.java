@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Produces random numbers according to the Weibull distribution.
  */
-public class WeibullDistribution {
+public class WeibullDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with shape and scale set to 1.0.
      */
@@ -40,8 +40,9 @@ public class WeibullDistribution {
      *               distributed random numbers from.
      * @return The next random number.
      */
-    public double next(Random random) {
-        return 0;
+    @Override
+    public Double next(Random random) {
+        return .0;
     }
 
     private double shape;

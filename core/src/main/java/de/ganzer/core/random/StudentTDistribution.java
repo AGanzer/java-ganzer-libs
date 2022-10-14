@@ -3,13 +3,20 @@ package de.ganzer.core.random;
 import java.util.Random;
 
 /**
- * Produces random numbers x > 0 according to the Chi-squared distribution.
+ * Produces random floating-point values, distributed according a probability
+ * density function.
+ * <p>
+ * This distribution is used when estimating the mean of an unknown normally
+ * distributed value given n + 1 independent measurements, each with additive
+ * errors of unknown standard deviation, as in physical measurements. Or,
+ * alternatively, when estimating the unknown mean of a normal distribution
+ * with unknown standard deviation, given n + 1 samples.
  */
-public class ChiSquaredDistribution implements Distribution<Double> {
+public class StudentTDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with n set to 1.0.
      */
-    public ChiSquaredDistribution() {
+    public StudentTDistribution() {
         this(1.0);
     }
 
@@ -18,7 +25,7 @@ public class ChiSquaredDistribution implements Distribution<Double> {
      *
      * @param n The n distribution parameter (degrees of freedom).
      */
-    public ChiSquaredDistribution(double n) {
+    public StudentTDistribution(double n) {
         this.n = n;
     }
 
@@ -32,7 +39,7 @@ public class ChiSquaredDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return 0.0;
+        return .0;
     }
 
     private double n;

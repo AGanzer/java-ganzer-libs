@@ -8,7 +8,7 @@ import java.util.Random;
  * The value represents the number of failures in a series of independent yes/no
  * trials (each succeeds with probability p), before exactly k successes occur.
  */
-public class NegativeBinomialDistribution {
+public class NegativeBinomialDistribution implements Distribution<Long> {
     /**
      * Creates a new instance with k set to 1 and p set to 0.5.
      */
@@ -44,8 +44,9 @@ public class NegativeBinomialDistribution {
      *               distributed random numbers from.
      * @return The next random number.
      */
-    long next(Random random) {
-        return 0;
+    @Override
+    public Long next(Random random) {
+        return 0L;
     }
 
     private long k;
