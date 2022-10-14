@@ -25,7 +25,7 @@ public class GeometricDistribution implements Distribution<Long> {
      * Creates a new instance from the specified argument.
      *
      * @param p The p distribution parameter (probability of a trial generating
-     *          true). This must be in the range (0 - 1).
+     *          true). This must be in the range (0,1).
      */
     public GeometricDistribution(double p) {
         if (p <= 0 || 1 <= p)
