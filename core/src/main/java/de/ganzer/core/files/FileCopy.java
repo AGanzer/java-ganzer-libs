@@ -796,12 +796,12 @@ public class FileCopy extends FileErrorProvider {
 
     private void copyDirNoQuery(File source, String targetPath) {
         for (var file : listFiles(source)) {
-            targetPath = Path.of(targetPath, file.getName()).toString();
+            String newTargetPath = Path.of(targetPath, file.getName()).toString();
 
             if (isDirectory(file))
-                copyDir(file, targetPath);
+                copyDir(file, newTargetPath);
             else
-                copyFile(file, targetPath);
+                copyFile(file, newTargetPath);
         }
 
         copyAttributes(source, new File(targetPath));
