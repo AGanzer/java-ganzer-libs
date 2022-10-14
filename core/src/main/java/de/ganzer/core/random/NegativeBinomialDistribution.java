@@ -49,6 +49,6 @@ public class NegativeBinomialDistribution implements Distribution<Long> {
         return 0L;
     }
 
-    private long k;
-    private double p;
+    private final long k;
+    private final double p;
 }

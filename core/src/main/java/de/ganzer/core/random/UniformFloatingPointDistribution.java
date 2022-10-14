@@ -48,6 +48,6 @@ public class UniformFloatingPointDistribution implements Distribution<Double> {
         return .0;
     }
 
-    private double min;
-    private double max;
+    private final double min;
+    private final double max;
 }

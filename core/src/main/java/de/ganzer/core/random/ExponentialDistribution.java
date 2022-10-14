@@ -42,5 +42,5 @@ public class ExponentialDistribution implements Distribution<Double> {
         return .0;
     }
 
-    private double lambda;
+    private final double lambda;
 }

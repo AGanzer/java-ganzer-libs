@@ -50,7 +50,7 @@ public class BinomialDistribution implements Distribution<Long> {
         return 0L;
     }
 
-    private long t;
-    private double p;
+    private final long t;
+    private final double p;
 
 }

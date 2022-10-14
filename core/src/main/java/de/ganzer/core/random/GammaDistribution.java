@@ -48,6 +48,6 @@ public class GammaDistribution implements Distribution<Double> {
         return .0;
     }
 
-    private double shape;
-    private double scale;
+    private final double shape;
+    private final double scale;
 }

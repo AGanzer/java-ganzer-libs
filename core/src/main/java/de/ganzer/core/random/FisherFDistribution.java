@@ -45,6 +45,6 @@ public class FisherFDistribution implements Distribution<Double> {
         return .0;
     }
 
-    private double m;
-    private double n;
+    private final double m;
+    private final double n;
 }

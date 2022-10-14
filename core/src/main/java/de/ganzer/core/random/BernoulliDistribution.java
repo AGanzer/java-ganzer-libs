@@ -35,5 +35,5 @@ public class BernoulliDistribution {
         return false;
     }
 
-    private double p;
+    private final double p;
 }

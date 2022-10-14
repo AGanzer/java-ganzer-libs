@@ -47,5 +47,5 @@ public class GeometricDistribution implements Distribution<Long> {
         return 0L;
     }
 
-    private double p;
+    private final double p;
 }

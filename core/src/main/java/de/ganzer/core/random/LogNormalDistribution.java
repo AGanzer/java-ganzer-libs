@@ -48,6 +48,6 @@ public class LogNormalDistribution implements Distribution<Double> {
         return .0;
     }
 
-    private double m;
-    private double s;
+    private final double m;
+    private final double s;
 }

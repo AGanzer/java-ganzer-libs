@@ -46,6 +46,6 @@ public class CauchyDistribution implements Distribution<Double> {
         return 0.0;
     }
 
-    private double location;
-    private double scale;
+    private final double location;
+    private final double scale;
 }

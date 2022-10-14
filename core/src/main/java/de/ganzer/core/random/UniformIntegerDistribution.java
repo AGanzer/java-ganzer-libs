@@ -48,6 +48,6 @@ public class UniformIntegerDistribution implements Distribution<Long> {
         return 0L;
     }
 
-    private long min;
-    private long max;
+    private final long min;
+    private final long max;
 }

@@ -42,5 +42,5 @@ public class StudentTDistribution implements Distribution<Double> {
         return .0;
     }
 
-    private double n;
+    private final double n;
 }

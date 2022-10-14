@@ -42,5 +42,5 @@ public class PoissonDistribution implements Distribution<Long> {
         return 0L;
     }
 
-    private double mean;
+    private final double mean;
 }

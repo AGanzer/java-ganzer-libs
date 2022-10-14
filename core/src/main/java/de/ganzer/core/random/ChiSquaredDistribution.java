@@ -35,5 +35,5 @@ public class ChiSquaredDistribution implements Distribution<Double> {
         return 0.0;
     }
 
-    private double n;
+    private final double n;
 }
