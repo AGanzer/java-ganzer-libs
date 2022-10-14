@@ -44,7 +44,7 @@ public class ExtremeValueDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return .0;
+        return location - scale * StrictMath.log(-StrictMath.log(1 - random.nextDouble()));
     }
 
     private final double location;

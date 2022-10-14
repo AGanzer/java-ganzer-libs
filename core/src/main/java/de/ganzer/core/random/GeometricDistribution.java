@@ -1,6 +1,5 @@
 package de.ganzer.core.random;
 
-import java.security.InvalidParameterException;
 import java.util.Random;
 
 /**

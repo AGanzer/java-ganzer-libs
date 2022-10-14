@@ -29,8 +29,12 @@ public class UniformIntegerDistribution implements Distribution<Long> {
      *
      * @param min The minimum value to create.
      * @param max The maximum value to create.
+     * @throws IllegalArgumentException min is greater than max.
      */
     public UniformIntegerDistribution(long min, long max) {
+         if (min > max)
+            throw new IllegalArgumentException("min,max");
+        
         this.min = min;
         this.max = max;
     }
@@ -45,7 +49,7 @@ public class UniformIntegerDistribution implements Distribution<Long> {
      */
     @Override
     public Long next(Random random) {
-        return 0L;
+       return (long)(random.nextDouble() * (max - min + 1)) + min;
     }
 
     private final long min;

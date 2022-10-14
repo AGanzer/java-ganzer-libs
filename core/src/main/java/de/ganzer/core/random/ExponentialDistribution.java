@@ -17,7 +17,7 @@ public class ExponentialDistribution implements Distribution<Double> {
      * Creates a new instance with lambda set to 1.0.
      */
     public ExponentialDistribution() {
-        this(1);
+        this(1.0);
     }
 
     /**
@@ -39,7 +39,7 @@ public class ExponentialDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return .0;
+        return StrictMath.log(1 - random.nextDouble()) / lambda;
     }
 
     private final double lambda;

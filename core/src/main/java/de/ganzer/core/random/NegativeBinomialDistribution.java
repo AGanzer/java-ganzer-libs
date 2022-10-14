@@ -31,8 +31,12 @@ public class NegativeBinomialDistribution implements Distribution<Long> {
      * @param k The k distribution parameter (number of trial successes).
      * @param p The p distribution parameter (probability of a trial generating
      *          true).
+     * @throws IllegalArgumentException p is greater than 1 or less than 0.
      */
     public NegativeBinomialDistribution(long k, double p) {
+        if (p > 1.0 || p < 0.0)
+            throw new IllegalArgumentException("p");
+        
         this.k = k;
         this.p = p;
     }

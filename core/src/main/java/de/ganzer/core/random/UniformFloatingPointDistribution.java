@@ -9,10 +9,10 @@ import java.util.Random;
 public class UniformFloatingPointDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with a minimum value of 0.0 and a maximum value of
-     * {@code Double.MAX_VALUE}.
+     * 1.0.
      */
     public UniformFloatingPointDistribution() {
-        this(0.0, Double.MAX_VALUE);
+        this(0.0, 1.0);
     }
 
     /**
@@ -29,8 +29,12 @@ public class UniformFloatingPointDistribution implements Distribution<Double> {
      *
      * @param min The minimum value to create.
      * @param max The maximum value to create.
+     * @throws IllegalArgumentException min is greater than max.
      */
     public UniformFloatingPointDistribution(double min, double max) {
+        if (min > max)
+            throw new IllegalArgumentException("min,max");
+        
         this.min = min;
         this.max = max;
     }
@@ -45,7 +49,7 @@ public class UniformFloatingPointDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return .0;
+        return random.nextDouble() * (max - min) + min;
     }
 
     private final double min;

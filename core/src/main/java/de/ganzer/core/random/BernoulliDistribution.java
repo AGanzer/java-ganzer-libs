@@ -18,8 +18,12 @@ public class BernoulliDistribution {
      * Creates a new instance from the specified argument.
      *
      * @param p The p distribution parameter (probability of generating true).
+     * @throws IllegalArgumentException p is greater than 1 or less than 0.
      */
     public BernoulliDistribution(double p) {
+        if (p > 1.0 || p < 0.0)
+            throw new IllegalArgumentException("p");
+        
         this.p = p;
     }
 
@@ -32,7 +36,7 @@ public class BernoulliDistribution {
      * @return The next random value.
      */
     public boolean next(Random random) {
-        return false;
+        return random.nextDouble() < p;
     }
 
     private final double p;
