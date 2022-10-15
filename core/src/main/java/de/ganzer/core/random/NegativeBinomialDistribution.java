@@ -8,6 +8,7 @@ import java.util.Random;
  * The value represents the number of failures in a series of independent yes/no
  * trials (each succeeds with probability p), before exactly k successes occur.
  */
+@SuppressWarnings("unused")
 public class NegativeBinomialDistribution implements Distribution<Long> {
     /**
      * Creates a new instance with k set to 1 and p set to 0.5.
@@ -36,9 +37,14 @@ public class NegativeBinomialDistribution implements Distribution<Long> {
     public NegativeBinomialDistribution(long k, double p) {
         if (p > 1.0 || p < 0.0)
             throw new IllegalArgumentException("p");
-        
+
         this.k = k;
         this.p = p;
+
+        if (k <= 21 * p)
+            bernDist = new BernoulliDistribution(p);
+        else
+            gammaDist = new GammaDistribution(k, (1 - p) / p);
     }
 
     /**
@@ -50,9 +56,25 @@ public class NegativeBinomialDistribution implements Distribution<Long> {
      */
     @Override
     public Long next(Random random) {
-        return 0L;
+        if (k <= 21 * p) {
+            long f = 0;
+            long s = 0;
+
+            while (s < k) {
+                if (bernDist.next(random))
+                    ++s;
+                else
+                    ++f;
+            }
+
+            return f;
+        }
+
+        return new PoissonDistribution(gammaDist.next(random)).next(random);
     }
 
     private final long k;
     private final double p;
+    private BernoulliDistribution bernDist;
+    private GammaDistribution gammaDist;
 }

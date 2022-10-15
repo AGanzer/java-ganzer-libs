@@ -6,6 +6,7 @@ import java.util.Random;
  * Produces random numbers according to a Cauchy distribution (also called
  * Lorentz distribution).
  */
+@SuppressWarnings("unused")
 public class CauchyDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with location set ot 0.0 and scale set to 1.0.
@@ -43,7 +44,9 @@ public class CauchyDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return 0.0;
+        // purposefully let tan arg get as close to pi/2
+        // as it wants, tan will return a finite:
+        return location + scale * StrictMath.tan(3.1415926535897932384626433832795 * random.nextDouble());
     }
 
     private final double location;

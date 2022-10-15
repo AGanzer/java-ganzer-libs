@@ -5,6 +5,7 @@ import java.util.Random;
 /**
  * Produces random numbers according to the f-distribution.
  */
+@SuppressWarnings("unused")
 public class FisherFDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with m and n set to 1.0.
@@ -31,6 +32,8 @@ public class FisherFDistribution implements Distribution<Double> {
     public FisherFDistribution(double m, double n) {
         this.m = m;
         this.n = n;
+        gammaDistM = new GammaDistribution(m * 0.5);
+        gammaDistN = new GammaDistribution(n * 0.5);
     }
 
     /**
@@ -42,9 +45,11 @@ public class FisherFDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return .0;
+        return n * gammaDistM.next(random) / (m * gammaDistN.next(random));
     }
 
     private final double m;
     private final double n;
+    private final GammaDistribution gammaDistM;
+    private final GammaDistribution gammaDistN;
 }

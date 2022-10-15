@@ -27,6 +27,7 @@ public class StudentTDistribution implements Distribution<Double> {
      */
     public StudentTDistribution(double n) {
         this.n = n;
+        gammaDist = new GammaDistribution(n * 0.5, 2);
     }
 
     /**
@@ -39,8 +40,10 @@ public class StudentTDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return .0;
+        return normDist.next(random) * StrictMath.sqrt(n / gammaDist.next(random));
     }
 
     private final double n;
+    private final GammaDistribution gammaDist;
+    private final NormalDistribution normDist = new NormalDistribution();
 }

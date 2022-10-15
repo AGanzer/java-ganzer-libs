@@ -8,6 +8,7 @@ import java.util.Random;
  * The parameters m and s are, respectively, the mean and standard deviation of
  * the natural logarithm of x.
  */
+@SuppressWarnings("unused")
 public class LogNormalDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with m set to 0.0 and s set to 1.0.
@@ -32,8 +33,7 @@ public class LogNormalDistribution implements Distribution<Double> {
      * @param s The s distribution parameter (shape).
      */
     public LogNormalDistribution(double m, double s) {
-        this.m = m;
-        this.s = s;
+        normDist = new NormalDistribution(m, s);
     }
 
     /**
@@ -45,9 +45,8 @@ public class LogNormalDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return .0;
+        return StrictMath.exp(normDist.next(random));
     }
 
-    private final double m;
-    private final double s;
+    private final NormalDistribution normDist;
 }

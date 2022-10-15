@@ -4,6 +4,9 @@ import java.util.Random;
 
 /**
  * Produces random numbers x > 0 according to the Chi-squared distribution.
+ * <p>
+ * {@code ChiSquaredDistribution(p)} is exactly equivalent to
+ * {@link GammaDistribution}(n / 2, 2).
  */
 public class ChiSquaredDistribution implements Distribution<Double> {
     /**
@@ -19,7 +22,7 @@ public class ChiSquaredDistribution implements Distribution<Double> {
      * @param n The n distribution parameter (degrees of freedom).
      */
     public ChiSquaredDistribution(double n) {
-        this.n = n;
+        gammaDist = new GammaDistribution(n / 2, 2);
     }
 
     /**
@@ -32,8 +35,8 @@ public class ChiSquaredDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return 0.0;
+        return gammaDist.next(random);
     }
 
-    private final double n;
+    private final GammaDistribution gammaDist;
 }

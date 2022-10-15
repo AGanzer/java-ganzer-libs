@@ -25,12 +25,14 @@ public class GeometricDistribution implements Distribution<Long> {
      *
      * @param p The p distribution parameter (probability of a trial generating
      *          true). This must be in the range (0,1).
+     * @throws IllegalArgumentException p is less than or equal to 0.0 or p is
+     *                                  greater than or equal to 1.0.
      */
     public GeometricDistribution(double p) {
-        if (p <= 0 || 1 <= p)
+        if (p <= 0 || p >= 1)
             throw new IllegalArgumentException("p");
 
-        this.p = p;
+        negBinDist = new NegativeBinomialDistribution(1, p);
     }
 
     /**
@@ -38,13 +40,12 @@ public class GeometricDistribution implements Distribution<Long> {
      *
      * @param random The random number generator where to get uniformly
      *               distributed random numbers from.
-     *
      * @return The next random number.
      */
     @Override
     public Long next(Random random) {
-        return 0L;
+        return negBinDist.next(random);
     }
 
-    private final double p;
+    private final NegativeBinomialDistribution negBinDist;
 }
