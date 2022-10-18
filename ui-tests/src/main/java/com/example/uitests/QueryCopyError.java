@@ -8,7 +8,7 @@ import javafx.scene.control.ButtonType;
 
 import java.io.File;
 
-public class QueryError implements FileCopy.QueryErrorAction {
+public class QueryCopyError implements FileCopy.QueryErrorAction {
     private static final ButtonType RETRY = new ButtonType("Retry");
     private static final ButtonType IGNORE = new ButtonType("Ignore");
     private static final ButtonType IGNORE_ALL = new ButtonType("Ignore All");

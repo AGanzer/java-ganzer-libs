@@ -88,7 +88,7 @@ public class CopyTestController implements TestProvider {
                                         : CopyProgressContinuation.CONTINUE;
                             }
                         },
-                        new QueryError(),
+                        new QueryCopyError(),
                         new QueryOverwrite());
 
                 copy.start(sourcePath.getText(), targetPath.getText(), suppressInit.isSelected());
