@@ -2,7 +2,7 @@ package com.example.uitests;
 
 import de.ganzer.core.files.FileCopy;
 import de.ganzer.core.files.FileError;
-import de.ganzer.core.files.ProgressContinuation;
+import de.ganzer.core.files.CopyProgressContinuation;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.core.validation.ValidatorException;
 import de.ganzer.fx.validation.ValidatorTextFormatter;
@@ -84,8 +84,8 @@ public class CopyTestController implements TestProvider {
 
                             synchronized (this) {
                                 return cancelCopy
-                                        ? ProgressContinuation.CANCEL
-                                        : ProgressContinuation.CONTINUE;
+                                        ? CopyProgressContinuation.CANCEL
+                                        : CopyProgressContinuation.CONTINUE;
                             }
                         },
                         new QueryError(),
@@ -94,9 +94,7 @@ public class CopyTestController implements TestProvider {
                 copy.start(sourcePath.getText(), targetPath.getText(), suppressInit.isSelected());
 
                 if (copy.getError() != FileError.NONE) {
-                    Platform.runLater(() -> {
-                        TestApplication.alert(copy.getErrorDescription());
-                    });
+                    Platform.runLater(() -> TestApplication.alert(copy.getErrorDescription()));
                 }
 
                 synchronized (this) {
@@ -106,7 +104,7 @@ public class CopyTestController implements TestProvider {
         }
     }
 
-    public void chooseSourceClicked(ActionEvent actionEvent) {
+    public void chooseSourceClicked(ActionEvent ignoredActionEvent) {
         String path = copyDirectories.isSelected()
                 ? chooseDirectory(sourcePath.getText(), "Choose Source Directory")
                 : chooseFile(sourcePath.getText());
@@ -115,7 +113,7 @@ public class CopyTestController implements TestProvider {
             sourcePath.setText(path);
     }
 
-    public void chooseTargetClicked(ActionEvent actionEvent) {
+    public void chooseTargetClicked(ActionEvent ignoredActionEvent) {
         String path = chooseDirectory(targetPath.getText(), "Choose Target Directory");
 
         if (path != null)
@@ -179,7 +177,7 @@ public class CopyTestController implements TestProvider {
         return true;
     }
 
-    public void cancelClicked(ActionEvent actionEvent) {
+    public void cancelClicked(ActionEvent ignoredActionEvent) {
         synchronized (this) {
             cancelCopy = true;
         }

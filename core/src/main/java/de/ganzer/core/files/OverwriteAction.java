@@ -29,7 +29,7 @@ public enum OverwriteAction {
 
     /**
      * Cancels copying. {@link FileErrorProvider#getError()} will return
-     * {@link FileErrorProvider.Error#CANCELED} after finishing.
+     * {@link FileError#CANCELED} after finishing.
      */
     CANCEL
 }

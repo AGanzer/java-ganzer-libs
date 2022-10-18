@@ -1,10 +1,9 @@
 package de.ganzer.core.files;
 
 /**
- * Defines the status of the progress when copying files with {@link FileCopy}
- * or {@link FileDelete}.
+ * Defines the status of the progress when copying files with {@link FileCopy}.
  */
-public enum ProgressStatus {
+public enum CopyProgressStatus {
     /**
      * The copying operation is initialized and the total bytes to copy are
      * counted. The progress function is called once at startup with 0 counted

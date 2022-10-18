@@ -50,7 +50,7 @@ public enum FileError {
     CREATE_DIR,
 
     /**
-     * A directory cannot be renamed.
+     * A directory cannot be removed.
      */
     DELETE_DIR,
 
@@ -68,6 +68,11 @@ public enum FileError {
      * A source does not exist.
      */
     SOURCE_NOT_EXIST,
+
+    /**
+     * A file or directory does not exist.
+     */
+    FILE_NOT_EXIST,
 
     /**
      * Permissions or times cannt be set.

@@ -3,7 +3,7 @@ package de.ganzer.core.files;
 /**
  * Defines the possible reaction to perform at an occurred error.
  */
-public enum ErrorAction {
+public enum CopyErrorAction {
     /**
      * Copying is aborted completely.
      */

@@ -1,6 +1,6 @@
 package com.example.uitests;
 
-import de.ganzer.core.files.ErrorAction;
+import de.ganzer.core.files.CopyErrorAction;
 import de.ganzer.core.files.FileCopy;
 import de.ganzer.core.files.FileError;
 import javafx.application.Platform;
@@ -16,7 +16,7 @@ public class QueryError implements FileCopy.QueryErrorAction {
     private ButtonType result;
 
     @Override
-    public synchronized ErrorAction query(FileError error, String errorDescription, File source, File target) {
+    public synchronized CopyErrorAction query(FileError error, String errorDescription, File source, File target) {
         result = ButtonType.CANCEL;
 
         Platform.runLater(() -> alert(errorDescription));
@@ -28,18 +28,18 @@ public class QueryError implements FileCopy.QueryErrorAction {
         }
 
         if (result == null || result == ButtonType.CANCEL)
-            return ErrorAction.ABORT;
+            return CopyErrorAction.ABORT;
 
         if (result == IGNORE)
-            return ErrorAction.IGNORE;
+            return CopyErrorAction.IGNORE;
 
         if (result == IGNORE_ALL)
-            return ErrorAction.IGNORE_ALL;
+            return CopyErrorAction.IGNORE_ALL;
 
         if (result == IGNORE_ALL_THE_SAME)
-            return ErrorAction.IGNORE_ALL_THIS;
+            return CopyErrorAction.IGNORE_ALL_THIS;
 
-        return ErrorAction.RETRY;
+        return CopyErrorAction.RETRY;
     }
 
     private synchronized void alert(String errorDescription) {

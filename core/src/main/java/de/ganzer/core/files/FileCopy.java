@@ -37,9 +37,9 @@ public class FileCopy extends FileErrorProvider {
          *                         {@code null} if no description is available.
          * @param source           The file or directory to copy.
          * @param target           The file or directory to overwrite.
-         * @return One of the {@link ErrorAction} values.
+         * @return One of the {@link CopyErrorAction} values.
          */
-        ErrorAction query(FileError error, String errorDescription, File source, File target);
+        CopyErrorAction query(FileError error, String errorDescription, File source, File target);
     }
 
     /**
@@ -47,7 +47,7 @@ public class FileCopy extends FileErrorProvider {
      */
     public static class ProgressInfo {
         private final FileCopy machine;
-        private ProgressStatus status;
+        private CopyProgressStatus status;
         private String sourcePath;
         private String targetPath;
         private String rootSourcePath;
@@ -83,29 +83,29 @@ public class FileCopy extends FileErrorProvider {
          *
          * @return The current status.
          */
-        public ProgressStatus getStatus() {
+        public CopyProgressStatus getStatus() {
             return status;
         }
 
         /**
          * Gets the path to the file or directory that is currently copied.
          * <p>
-         * If {@link #getStatus()} is {@link ProgressStatus#INITIALIZING}, this
+         * If {@link #getStatus()} is {@link CopyProgressStatus#INITIALIZING}, this
          * is the path to the directory or file that's bytes are going to be
          * counted. This is an empty string if the progress function is called
          * first and no directory or file is worked yet.
          * <p>
-         * If {@link #getStatus()} is {@link ProgressStatus#START_DIRECTORY},
+         * If {@link #getStatus()} is {@link CopyProgressStatus#START_DIRECTORY},
          * this is the path to the directory that is going to be copied.
          * <p>
-         * If {@link #getStatus()} is {@link ProgressStatus#START_FILE},
-         * {@link ProgressStatus#COPYING_FILE} or {@link ProgressStatus#FINISHED_FILE},
+         * If {@link #getStatus()} is {@link CopyProgressStatus#START_FILE},
+         * {@link CopyProgressStatus#COPYING_FILE} or {@link CopyProgressStatus#FINISHED_FILE},
          * this is the path to the file that is copied.
          *
          * @return The path to the source that is currently copied or an empty
-         * string if {@link #getStatus()} is {@link ProgressStatus#INITIALIZING}
+         * string if {@link #getStatus()} is {@link CopyProgressStatus#INITIALIZING}
          * and the progress is reported first or if {@link #getStatus()} is
-         * {@link ProgressStatus#FINISHED}.
+         * {@link CopyProgressStatus#FINISHED}.
          */
         public String getSourcePath() {
             return sourcePath;
@@ -115,17 +115,17 @@ public class FileCopy extends FileErrorProvider {
          * Gets the path to the destination file or directory that is currently
          * copied.
          * <p>
-         * If {@link #getStatus()} is {@link ProgressStatus#START_DIRECTORY}, this is
+         * If {@link #getStatus()} is {@link CopyProgressStatus#START_DIRECTORY}, this is
          * the path to the directory where the directory to copy shall be written into.
          * <p>
-         * If {@link #getStatus()} is {@link ProgressStatus#START_FILE},
-         * {@link ProgressStatus#COPYING_FILE} or {@link ProgressStatus#FINISHED_FILE},
+         * If {@link #getStatus()} is {@link CopyProgressStatus#START_FILE},
+         * {@link CopyProgressStatus#COPYING_FILE} or {@link CopyProgressStatus#FINISHED_FILE},
          * this is the path to the file where the source file is copied into.
          *
          * @return The path to the destination where data is currently copied
          * into or an empty string if {@link #getStatus()} is
-         * {@link ProgressStatus#INITIALIZING} and the progress is reported first
-         * or if {@link #getStatus()} is {@link ProgressStatus#FINISHED}.
+         * {@link CopyProgressStatus#INITIALIZING} and the progress is reported first
+         * or if {@link #getStatus()} is {@link CopyProgressStatus#FINISHED}.
          */
         public String getTargetPath() {
             return targetPath;
@@ -136,7 +136,7 @@ public class FileCopy extends FileErrorProvider {
          * to start copying operation.
          *
          * @return The path to the original source that is currently worked or an
-         * empty string if {@link #getStatus()} is {@link ProgressStatus#INITIALIZING}.
+         * empty string if {@link #getStatus()} is {@link CopyProgressStatus#INITIALIZING}.
          */
         public String getRootSourcePath() {
             return rootSourcePath;
@@ -156,8 +156,8 @@ public class FileCopy extends FileErrorProvider {
          * The size of the file that is currently copied.
          * <p>
          * This value is valid only if {@link #getStatus()} is either
-         * {@link ProgressStatus#START_FILE}, {@link ProgressStatus#COPYING_FILE} or
-         * {@link ProgressStatus#FINISHED_FILE}.
+         * {@link CopyProgressStatus#START_FILE}, {@link CopyProgressStatus#COPYING_FILE} or
+         * {@link CopyProgressStatus#FINISHED_FILE}.
          *
          * @return The size of the file in bytes.
          */
@@ -169,8 +169,8 @@ public class FileCopy extends FileErrorProvider {
          * The number of bytes that are already copied from the current file.
          * <p>
          * This value is valid only if {@link #getStatus()} is either
-         * {@link ProgressStatus#START_FILE}, {@link ProgressStatus#COPYING_FILE} or
-         * {@link ProgressStatus#FINISHED_FILE}.
+         * {@link CopyProgressStatus#START_FILE}, {@link CopyProgressStatus#COPYING_FILE} or
+         * {@link CopyProgressStatus#FINISHED_FILE}.
          *
          * @return The number of already copied bytes.
          */
@@ -182,7 +182,7 @@ public class FileCopy extends FileErrorProvider {
          * The number of all bytes that have to be copied.
          * <p>
          * This is the number of currently counted bytes that have to be copied
-         * as long as {@link #getStatus()} is {@link ProgressStatus#INITIALIZING}.
+         * as long as {@link #getStatus()} is {@link CopyProgressStatus#INITIALIZING}.
          * <p>
          * This value is valid only if the initialization is not suppressed via
          * {@link #start}.
@@ -197,7 +197,7 @@ public class FileCopy extends FileErrorProvider {
          * The total number of already copied bytes.
          * <p>
          * This value is valid only if {@link #getStatus()} is other than
-         * {@link ProgressStatus#INITIALIZING}.
+         * {@link CopyProgressStatus#INITIALIZING}.
          *
          * @return The number of already copied bytes.
          */
@@ -209,8 +209,8 @@ public class FileCopy extends FileErrorProvider {
          * Gets the percentage of already copied bytes from the current file.
          * <p>
          * This value is valid only if {@link #getStatus()} is either
-         * {@link ProgressStatus#START_FILE}, {@link ProgressStatus#COPYING_FILE} or
-         * {@link ProgressStatus#FINISHED_FILE}.
+         * {@link CopyProgressStatus#START_FILE}, {@link CopyProgressStatus#COPYING_FILE} or
+         * {@link CopyProgressStatus#FINISHED_FILE}.
          *
          * @return The percentage [0-100].
          */
@@ -222,7 +222,7 @@ public class FileCopy extends FileErrorProvider {
          * Gets the percentage of all already copied bytes.
          * <p>
          * This value is valid only if {@link #getStatus()} is other than
-         * {@link ProgressStatus#INITIALIZING} and if the initialization is not
+         * {@link CopyProgressStatus#INITIALIZING} and if the initialization is not
          * suppressed via {@link #start}.
          *
          * @return The percentage [0-100].
@@ -240,9 +240,9 @@ public class FileCopy extends FileErrorProvider {
          * The called function.
          *
          * @param info The information about the progress.
-         * @return One of the {@link ProgressContinuation} values.
+         * @return One of the {@link CopyProgressContinuation} values.
          */
-        ProgressContinuation report(ProgressInfo info);
+        CopyProgressContinuation report(ProgressInfo info);
     }
 
     /**
@@ -584,7 +584,7 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void initializeCopy(List<File> sourceFiles, File targetFile, boolean suppressInit) throws ErrorInfo {
-        progress.status = ProgressStatus.INITIALIZING;
+        progress.status = CopyProgressStatus.INITIALIZING;
         progress.rootTargetPath = targetFile.getAbsolutePath();
         progress.fileBytesAvail = 0;
         progress.fileBytesCopied = 0;
@@ -592,6 +592,7 @@ public class FileCopy extends FileErrorProvider {
         progress.totalBytesCopied = 0;
         progress.sourcePath = "";
         progress.targetPath = "";
+        progress.rootTargetPath = targetFile.getPath();
         progress.dirOverwriteAction = defaultDirOverwriteAction;
         progress.fileOverwriteAction = defaultFileOverwriteAction;
         progress.ignoreAllErrors = false;
@@ -603,6 +604,8 @@ public class FileCopy extends FileErrorProvider {
         reportProgress();
 
         sourceFiles.forEach(source -> {
+            progress.rootSourcePath = source.getPath();
+
             if (source.isDirectory())
                 initializeCopy(source);
             else
@@ -614,16 +617,16 @@ public class FileCopy extends FileErrorProvider {
         if (progressFunction == null)
             return true;
 
-        ProgressContinuation result = progressFunction.report(progress);
+        CopyProgressContinuation result = progressFunction.report(progress);
 
-        if (result == ProgressContinuation.CANCEL)
+        if (result == CopyProgressContinuation.CANCEL)
             cancel();
 
-        return result == ProgressContinuation.CONTINUE;
+        return result == CopyProgressContinuation.CONTINUE;
     }
 
     private boolean reportStartDir(String sourcePath, String targetPath) {
-        progress.status = ProgressStatus.START_DIRECTORY;
+        progress.status = CopyProgressStatus.START_DIRECTORY;
         progress.sourcePath = sourcePath;
         progress.targetPath = targetPath;
         progress.fileBytesAvail = 0;
@@ -633,7 +636,7 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void reportFinishedDir(String sourcePath, String targetPath) {
-        progress.status = ProgressStatus.FINISHED_DIRECTORY;
+        progress.status = CopyProgressStatus.FINISHED_DIRECTORY;
         progress.sourcePath = sourcePath;
         progress.targetPath = targetPath;
         progress.fileBytesAvail = 0;
@@ -643,7 +646,7 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private boolean reportStartFile(File source, String targetPath) {
-        progress.status = ProgressStatus.START_FILE;
+        progress.status = CopyProgressStatus.START_FILE;
         progress.sourcePath = source.getAbsolutePath();
         progress.targetPath = targetPath;
         progress.fileBytesAvail = source.length();
@@ -653,7 +656,7 @@ public class FileCopy extends FileErrorProvider {
     }
 
     boolean reportCopyingFile(long addBytesCopied) {
-        progress.status = ProgressStatus.COPYING_FILE;
+        progress.status = CopyProgressStatus.COPYING_FILE;
         progress.fileBytesCopied += addBytesCopied;
         progress.totalBytesCopied += addBytesCopied;
 
@@ -661,7 +664,7 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void reportFinishedFile() {
-        progress.status = ProgressStatus.FINISHED_FILE;
+        progress.status = CopyProgressStatus.FINISHED_FILE;
         progress.fileBytesCopied = progress.fileBytesAvail;
 
         reportProgress();
@@ -675,7 +678,7 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void reportFinished() {
-        progress.status = ProgressStatus.FINISHED_FILE;
+        progress.status = CopyProgressStatus.FINISHED;
         progress.fileBytesAvail = 0;
         progress.fileBytesCopied = 0;
         progress.sourcePath = "";
