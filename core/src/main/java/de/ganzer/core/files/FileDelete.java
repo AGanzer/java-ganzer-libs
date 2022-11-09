@@ -249,9 +249,7 @@ public class FileDelete extends FileErrorProvider {
 
         reportFinished();
 
-        return
-
-                getError() != FileError.NONE;
+        return getError() != FileError.NONE;
     }
 
     private static class ErrorInfo extends RuntimeException {
