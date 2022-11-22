@@ -18,7 +18,7 @@
     <repositories>
         <repository>
             <id>core-repo</id>
-            <url>file://${HOME}/java-ganzer-libs/core/target</url>
+            <url>file://${HOME}/Entwicklung/Libraries/Java/ganzer/core/target</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
@@ -37,7 +37,7 @@
             <version>1.0-SNAPSHOT</version>
             <!-- Because the above solution doesn't work: -->
             <scope>system</scope>
-            <systemPath>${HOME}/java-ganzer-libs/core/target/de-ganzer-core-1.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${HOME}/Entwicklung/Libraries/Java/ganzer/core/target/de-ganzer-core-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
