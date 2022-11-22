@@ -7,6 +7,10 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The FileCopy class copies files and directories with progress and error
+ * information.
+ */
 @SuppressWarnings("unused")
 public class FileCopy extends FileErrorProvider {
     /**

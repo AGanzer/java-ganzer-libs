@@ -12,7 +12,7 @@ import de.ganzer.core.CoreMessages;
  * <ul>
  *     <li>{@literal # -> Accept a decimal digit only.}
  *     <li>{@literal ? -> Accept a letter only (case independent).}
- *     <li>{@literal \@ -> Accept every character.}
+ *     <li>{@literal @ -> Accept every character.}
  *     <li>{@literal & -> Accept a letter only (force uppercase).}
  *     <li>{@literal ! -> Accept every character, force uppercase letters.}
  * </ul>

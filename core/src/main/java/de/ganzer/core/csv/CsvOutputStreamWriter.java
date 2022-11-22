@@ -21,18 +21,30 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
     private char valueDelimiter = ',';
     private char maskChar = '"';
 
+    /**
+     * {@inheritDoc}
+     */
     public CsvOutputStreamWriter(OutputStream out, String charsetName) throws UnsupportedEncodingException {
         super(out, charsetName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public CsvOutputStreamWriter(OutputStream out) {
         super(out);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public CsvOutputStreamWriter(OutputStream out, Charset cs) {
         super(out, cs);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public CsvOutputStreamWriter(OutputStream out, CharsetEncoder enc) {
         super(out, enc);
     }
@@ -98,7 +110,9 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
      *
      * @param values The values to write. This will automatically be masked and seperated
      *               by the set value delimiter. The set line delimiter is appended after
-     *               all values are written.  This must not be {@code null}.
+     *               all values are written.
+     * @throws IOException If an I/O error occurs.
+     * @throws NullPointerException values is {@code null}.
      * @see #getLineDelimiter()
      * @see #getValueDelimiter()
      * @see #setLineDelimiter(char)

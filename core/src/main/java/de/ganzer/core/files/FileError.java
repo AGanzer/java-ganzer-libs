@@ -75,7 +75,7 @@ public enum FileError {
     FILE_NOT_EXIST,
 
     /**
-     * Permissions or times cannt be set.
+     * Time or permission cannot be set.
      */
     SET_ATTRIBUTES,
 

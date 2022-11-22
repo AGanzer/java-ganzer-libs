@@ -23,18 +23,30 @@ public class CsvInputStreamReader extends InputStreamReader {
     private char maskChar = '"';
     private int lastRead;
 
+    /**
+     * {@inheritDoc}
+     */
     public CsvInputStreamReader(InputStream in) {
         super(in);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public CsvInputStreamReader(InputStream in, String charsetName) throws UnsupportedEncodingException {
         super(in, charsetName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public CsvInputStreamReader(InputStream in, Charset cs) {
         super(in, cs);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public CsvInputStreamReader(InputStream in, CharsetDecoder dec) {
         super(in, dec);
     }

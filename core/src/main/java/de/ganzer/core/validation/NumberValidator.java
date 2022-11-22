@@ -177,7 +177,6 @@ public class NumberValidator extends Validator {
      *
      * @return The format that is used for formatting the text in display mode
      * or {@code null} to use default formatting.
-     *
      * @see #doFormatText;
      */
     public String getDisplayFormat() {
@@ -268,11 +267,11 @@ public class NumberValidator extends Validator {
      * whether the input is a valid number in the range from {@link #getMinValue()}
      * to {@link #getMaxValue()}.
      *
-     * @param text   The text to validate. This is never {@code null}.
-     * @param er     A reference to a possible exception. If this method returns
-     *               {@code false}, the encapsulated exception is set to an
-     *               instance of {@link ValidatorException}. This must not be
-     *               {@code null}.
+     * @param text The text to validate. This is never {@code null}.
+     * @param er   A reference to a possible exception. If this method returns
+     *             {@code false}, the encapsulated exception is set to an
+     *             instance of {@link ValidatorException}. This must not be
+     *             {@code null}.
      * @return {@code true} if text is valid; otherwise, {@code false} is
      * returned.
      */
@@ -317,12 +316,12 @@ public class NumberValidator extends Validator {
     /**
      * Called to reformats the specified text.
      *
-     * @param text   The text to reformat. This is never {@code null}
-     * @param how    How to format the text. Must be one of the {@link TextFormat}
-     *               values. If this is {@link TextFormat#DISPLAY}, the text is
-     *               formatted to be displayed in a fine format. If this is
-     *               {@link TextFormat#EDIT}, the text is formatted to be an easy
-     *               editable text.
+     * @param text The text to reformat. This is never {@code null}
+     * @param how  How to format the text. Must be one of the {@link TextFormat}
+     *             values. If this is {@link TextFormat#DISPLAY}, the text is
+     *             formatted to be displayed in a fine format. If this is
+     *             {@link TextFormat#EDIT}, the text is formatted to be an easy
+     *             editable text.
      * @return The formatted string or input if the text cannot be formatted.
      */
     @Override

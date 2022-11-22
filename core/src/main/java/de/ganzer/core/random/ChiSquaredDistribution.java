@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Produces random numbers x > 0 according to the Chi-squared distribution.
  * <p>
- * {@code ChiSquaredDistribution(p)} is exactly equivalent to
+ * {@code ChiSquaredDistribution(n)} is exactly equivalent to
  * {@link GammaDistribution}(n / 2, 2).
  */
 public class ChiSquaredDistribution implements Distribution<Double> {

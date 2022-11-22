@@ -2,6 +2,10 @@ package de.ganzer.core.validation;
 
 import de.ganzer.core.CoreMessages;
 
+/**
+ * This CharCountValidator class defines a validator that requires a specified
+ * range of characters to input.
+ */
 public class CharCountValidator extends Validator {
     private int maxLength;
     private int minLength;

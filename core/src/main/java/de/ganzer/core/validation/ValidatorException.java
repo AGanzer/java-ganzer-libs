@@ -1,22 +1,19 @@
 package de.ganzer.core.validation;
 
+/**
+ * This exception is used to notify about invalid text.
+ */
 public class ValidatorException extends RuntimeException {
+    /**
+     * {@inheritDoc}
+     */
     public ValidatorException() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ValidatorException(String message) {
         super(message);
-    }
-
-    public ValidatorException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ValidatorException(Throwable cause) {
-        super(cause);
-    }
-
-    public ValidatorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

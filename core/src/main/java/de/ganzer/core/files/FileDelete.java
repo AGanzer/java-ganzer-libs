@@ -8,6 +8,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The FileDelete class deletes files and directories with progress and error
+ * information.
+ */
 @SuppressWarnings("unused")
 public class FileDelete extends FileErrorProvider {
     /**

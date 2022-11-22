@@ -169,7 +169,7 @@ public class Validator {
      *               {@code false}, the encapsulated exception is set to an
      *               instance of {@link ValidatorException}. This must not be
      *               {@code null}.
-     * @return {@code true} if input is valid; otherwise, <c>false</c>
+     * @return {@code true} if input is valid; otherwise, {@code false}
      * is returned.
      * @see ValidatorExceptionRef for an example.
      */
