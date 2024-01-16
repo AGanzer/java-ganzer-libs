@@ -18,7 +18,6 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public class CsvInputStreamReader extends InputStreamReader {
-    private char lineDelimiter = '\n';
     private char valueDelimiter = ',';
     private char maskChar = '"';
     private int lastRead;
@@ -49,24 +48,6 @@ public class CsvInputStreamReader extends InputStreamReader {
      */
     public CsvInputStreamReader(InputStream in, CharsetDecoder dec) {
         super(in, dec);
-    }
-
-    /**
-     * Gets the delimiter used for line separation.
-     *
-     * @return The set delimiter. The default is '\n'.
-     */
-    public char getLineDelimiter() {
-        return lineDelimiter;
-    }
-
-    /**
-     * Sets the delimiter to use for line separation.
-     *
-     * @param lineDelimiter The delimiter to use.
-     */
-    public void setLineDelimiter(char lineDelimiter) {
-        this.lineDelimiter = lineDelimiter;
     }
 
     /**
@@ -134,7 +115,7 @@ public class CsvInputStreamReader extends InputStreamReader {
     }
 
     private boolean stopReading() {
-        return lastRead == -1 || lastRead == lineDelimiter;
+        return lastRead == -1 || lastRead == '\r' || lastRead == '\n';
     }
 
     private boolean readValue(StringBuilder value) throws IOException, InvalidCsvException {
@@ -145,6 +126,9 @@ public class CsvInputStreamReader extends InputStreamReader {
 
         if (lastRead == maskChar)
             return readMaskedValue(value);
+
+        if (stopReading() )
+            return false;
 
         value.append((char)lastRead);
 
@@ -196,6 +180,6 @@ public class CsvInputStreamReader extends InputStreamReader {
     }
 
     private boolean endOfValueReached(int c) {
-        return c == valueDelimiter || c == lineDelimiter || c == -1;
+        return c == valueDelimiter || c == '\n' || c == '\r' || c == -1;
     }
 }

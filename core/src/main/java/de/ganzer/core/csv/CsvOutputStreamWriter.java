@@ -17,7 +17,7 @@ import java.util.Collection;
  */
 @SuppressWarnings("unused")
 public class CsvOutputStreamWriter extends OutputStreamWriter {
-    private char lineDelimiter = '\n';
+    private String lineDelimiter = System.lineSeparator();
     private char valueDelimiter = ',';
     private char maskChar = '"';
 
@@ -54,7 +54,7 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
      *
      * @return The set delimiter. The default is '\n'.
      */
-    public char getLineDelimiter() {
+    public String getLineDelimiter() {
         return lineDelimiter;
     }
 
@@ -63,7 +63,7 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
      *
      * @param lineDelimiter The delimiter to use.
      */
-    public void setLineDelimiter(char lineDelimiter) {
+    public void setLineDelimiter(String lineDelimiter) {
         this.lineDelimiter = lineDelimiter;
     }
 
@@ -115,7 +115,7 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
      * @throws NullPointerException values is {@code null}.
      * @see #getLineDelimiter()
      * @see #getValueDelimiter()
-     * @see #setLineDelimiter(char)
+     * @see #setLineDelimiter(String)
      * @see #setValueDelimiter(char)
      * @see #writeLine(Collection, boolean)
      */
@@ -134,7 +134,7 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
      * @throws NullPointerException values is {@code null}.
      * @see #getLineDelimiter()
      * @see #getValueDelimiter()
-     * @see #setLineDelimiter(char)
+     * @see #setLineDelimiter(String)
      * @see #setValueDelimiter(char)
      */
     public void writeLine(Collection<String> values, boolean maskAlways) throws IOException {
@@ -172,7 +172,7 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
     }
 
     private boolean requiresMask(char c) {
-        return c == maskChar || c == valueDelimiter || c == lineDelimiter;
+        return c == maskChar || c == valueDelimiter || c == '\n' || c == '\r';
     }
 
     private void writeMaskedValue(String value) throws IOException {
