@@ -103,7 +103,7 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
             if (!validator.isValidInput(text, true))
                 return null;
 
-            if (text.length() - input.length() != 0) {
+            if (!text.toString().equals(input)) {
                 control.setText(text.toString());
 
                 Platform.runLater(() -> {
