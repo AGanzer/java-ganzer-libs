@@ -10,6 +10,7 @@
         <fx:reference source="controller" />
     </userData>
     <TitledPane collapsible="false"
+                focusTraversable="false"
                 text="Input">
         <GridPane hgap="5"
                   vgap="5">
@@ -37,10 +38,13 @@
                        GridPane.rowIndex="1" />
         </GridPane>
     </TitledPane>
-    <TitledPane fx:id="settingsContainer" collapsible="false"
+    <TitledPane fx:id="settingsContainer"
+                collapsible="false"
+                focusTraversable="false"
                 text="Settings">
     </TitledPane>
     <TitledPane collapsible="false"
+                focusTraversable="false"
                 text="Options">
         <GridPane hgap="5"
                   vgap="5">
