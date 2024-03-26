@@ -6,9 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ui-tests" />
         <module name="core" />
         <module name="fx" />
+        <module name="de-ganzer-fx" />
+        <module name="ui-tests" />
+        <module name="de-ganzer-core" />
       </profile>
     </annotationProcessing>
   </component>
