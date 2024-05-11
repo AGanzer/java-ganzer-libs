@@ -251,10 +251,10 @@ public class Validator {
     protected boolean doValidate(String text, ValidatorExceptionRef er) {
         er.setException(null);
 
-        if (text.length() == 0) {
+        if (text.isEmpty()) {
             if (hasOption(ValidatorOptions.NEEDS_INPUT))
                 er.setException(new ValidatorException(errorMessage != null ? errorMessage : CoreMessages.get("inputRequired")));
-        } else if (text.trim().length() == 0 && !hasOption(ValidatorOptions.BLANKS_VALID)) {
+        } else if (text.trim().isEmpty() && !hasOption(ValidatorOptions.BLANKS_VALID)) {
             er.setException(new ValidatorException(errorMessage != null ? errorMessage : CoreMessages.get("blanksNotAllowed")));
         }
 
