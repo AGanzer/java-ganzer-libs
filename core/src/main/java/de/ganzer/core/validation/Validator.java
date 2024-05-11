@@ -2,8 +2,6 @@ package de.ganzer.core.validation;
 
 import de.ganzer.core.CoreMessages;
 
-import java.util.MissingFormatArgumentException;
-
 /**
  * This defines a validator that supports basic validation of text.
  * <p>
@@ -112,6 +110,7 @@ public class Validator {
      * Determines whether the specified option is set.
      *
      * @param validatorOption The option to query.
+     *
      * @return {@code true} if the specified option is set. If validatorOption
      * is a combination of multiply options, {@code true} is returned if at
      * least one of the queried options is set.
@@ -135,11 +134,14 @@ public class Validator {
      *                 characters if necessary. If this is {@code false},
      *                 the text is not automatically filled, even if the option
      *                 {@link ValidatorOptions#AUTO_FILL} is set.
+     *
      * @return The result of {@link #doInputValidation}.
+     *
+     * @throws NullPointerException text is {@code null}.
      */
     public final boolean isValidInput(StringBuilder text, boolean autoFill) {
         if (text == null)
-            throw new MissingFormatArgumentException("text");
+            throw new NullPointerException("text");
 
         return doInputValidation(text, autoFill && hasOption(ValidatorOptions.AUTO_FILL));
     }
@@ -150,6 +152,7 @@ public class Validator {
      * This calls {@link #validate(String, ValidatorExceptionRef)}.
      *
      * @param input  The text to validate. This must not be {@code null}.
+     *
      * @throws ValidatorException input is invalid.
      */
     public final void validate(String input) throws ValidatorException {
@@ -169,16 +172,20 @@ public class Validator {
      *               {@code false}, the encapsulated exception is set to an
      *               instance of {@link ValidatorException}. This must not be
      *               {@code null}.
+     *
      * @return {@code true} if input is valid; otherwise, {@code false}
      * is returned.
+     *
+     * @throws NullPointerException input or er is {@code null}.
+     *
      * @see ValidatorExceptionRef for an example.
      */
     public final boolean validate(String input, ValidatorExceptionRef er) {
         if (input == null)
-            throw new MissingFormatArgumentException("input");
+            throw new NullPointerException("input");
 
         if (er == null)
-            throw new MissingFormatArgumentException("er");
+            throw new NullPointerException("er");
 
         return doValidate(input, er);
     }
@@ -195,11 +202,14 @@ public class Validator {
      *               formatted to be displayed in a fine format. If this is
      *               {@link TextFormat#EDIT}, the text is formatted to be an easy
      *               editable text.
+     *
      * @return The result of {@link #doFormatText}
+     *
+     * @throws NullPointerException input is {@code null}.
      */
     public final String formatText(String input, TextFormat how) {
         if (input == null)
-            throw new MissingFormatArgumentException("input");
+            throw new NullPointerException("input");
 
         return doFormatText(input, how);
     }
@@ -211,6 +221,7 @@ public class Validator {
      * @param text     The text to validate. This is never {@code null}. The text
      *                 must not be modified if autoFill is {@code false}.
      * @param autoFill Indicates whether the text is allowed to be modified.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
      * returned.
      */
@@ -227,12 +238,13 @@ public class Validator {
      * <p>
      * Inheritors should overwrite this to do a more complex validation.
      *
-     * @param text   The text to validate. This is never {@code null}. The text
-     *               must not be modified if autoFill is {@code false}.
-     * @param er     A reference to a possible exception. If this method returns
-     *               {@code false}, the encapsulated exception is set to an
-     *               instance of {@link ValidatorException}. This must not be
-     *               {@code null}.
+     * @param text The text to validate. This is never {@code null}. The text
+     *             must not be modified if autoFill is {@code false}.
+     * @param er   A reference to a possible exception. If this method returns
+     *             {@code false}, the encapsulated exception is set to an
+     *             instance of {@link ValidatorException}. This must not be
+     *             {@code null}.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
      * returned.
      */
@@ -255,12 +267,13 @@ public class Validator {
      * This implementation does nothing and returns text. Inheritors should overwrite
      * this to reformat the text.
      *
-     * @param text  The text to reformat. This is never {@code null}
-     * @param how    How to format the text. Must be one of the {@link TextFormat}
-     *               values. If this is {@link TextFormat#DISPLAY}, the text is
-     *               formatted to be displayed in a fine format. If this is
-     *               {@link TextFormat#EDIT}, the text is formatted to be an easy
-     *               editable text.
+     * @param text The text to reformat. This is never {@code null}
+     * @param how  How to format the text. Must be one of the {@link TextFormat}
+     *             values. If this is {@link TextFormat#DISPLAY}, the text is
+     *             formatted to be displayed in a fine format. If this is
+     *             {@link TextFormat#EDIT}, the text is formatted to be an easy
+     *             editable text.
+     *
      * @return This implementation does return text. Inheritors may return a modified
      * text. However, the modified text should still be valid.
      */
