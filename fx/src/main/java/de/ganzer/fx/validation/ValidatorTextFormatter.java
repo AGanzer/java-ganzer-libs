@@ -87,8 +87,8 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
      *                  be {@code null}.
      * @param control   The control that's input shall be validated. This must not
      *                  be {@code null}.
-     * @throws NullPointerException validator is {@code null}.
-     * @throws NullPointerException control is {@code null}.
+     *
+     * @throws NullPointerException validator or control is {@code null}.
      */
     public ValidatorTextFormatter(Validator validator, TextInputControl control) {
         super(change -> {
@@ -157,6 +157,7 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
      *           {@code false}, the encapsulated exception is set to an
      *           instance of {@link ValidatorException}. This must not be
      *           {@code null}.
+     *
      * @return {@code true} if input is valid; otherwise, <c>false</c>
      * is returned.
      */
