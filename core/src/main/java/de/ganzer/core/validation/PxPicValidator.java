@@ -48,8 +48,7 @@ public class PxPicValidator extends Validator {
         INCOMPLETE_NO_FILL
     }
 
-    @SuppressWarnings("InnerClassMayBeStatic")
-    private class StateMachine {
+    private static class StateMachine {
         private final String picture;
         private final StringBuilder input;
         private int idxPic;
