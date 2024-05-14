@@ -42,10 +42,9 @@ public class WeibullDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return scale * StrictMath.pow(expDist.next(random), 1.0 / shape);
+        return scale * StrictMath.pow(-StrictMath.log(1 - random.nextDouble()), 1.0 / shape);
     }
 
     private final double shape;
     private final double scale;
-    private final ExponentialDistribution expDist = new ExponentialDistribution();
 }
