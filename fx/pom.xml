@@ -14,12 +14,10 @@
         <junit.version>5.8.2</junit.version>
     </properties>
 
-    <!-- This is for CodeSnack only: -->
-    <!-- This doesn't work at all, but should do:
     <repositories>
         <repository>
             <id>core-repo</id>
-            <url>file://${HOME}/java-ganzer-libs/core/target</url>
+            <url>file://${project.basedir}/../core/target</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
@@ -29,17 +27,15 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
-    </repositories>-->
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <!-- Because the above solution doesn't work: -->
-            <!-- This is for CodeSnack only: -->
             <scope>system</scope>
-            <systemPath>${HOME}/java-ganzer-libs/core/target/de-ganzer-core-1.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}/../core/target/de-ganzer-core-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
