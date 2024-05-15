@@ -25,8 +25,9 @@ public class GeometricDistribution implements Distribution<Long> {
      *
      * @param p The p distribution parameter (probability of a trial generating
      *          true). This must be in the range (0,1).
+     *
      * @throws IllegalArgumentException p is less than or equal to 0.0 or p is
-     *                                  greater than or equal to 1.0.
+     * greater than or equal to 1.0.
      */
     public GeometricDistribution(double p) {
         if (p <= 0 || p >= 1)

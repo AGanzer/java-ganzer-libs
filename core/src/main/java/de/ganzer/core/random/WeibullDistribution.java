@@ -27,8 +27,13 @@ public class WeibullDistribution implements Distribution<Double> {
      *
      * @param shape The shape.
      * @param scale The scale.
+     *
+     * @throws IllegalArgumentException if shape is less than or equal to 0.0.
      */
     public WeibullDistribution(double shape, double scale) {
+        if (shape <= 0.0)
+            throw new IllegalArgumentException("shape");
+
         this.shape = shape;
         this.scale = scale;
     }

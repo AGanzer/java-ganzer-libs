@@ -24,10 +24,10 @@ public class NormalDistribution implements Distribution<Double> {
     }
 
     /**
-     * Creates a new instance from the specifeid arguments.
+     * Creates a new instance from the specified arguments.
      *
      * @param mean      The mean to use.
-     * @param deviation The devialtion to use.
+     * @param deviation The deviation to use.
      */
     public NormalDistribution(double mean, double deviation) {
         this.mean = mean;

@@ -29,6 +29,7 @@ public class UniformFloatingPointDistribution implements Distribution<Double> {
      *
      * @param min The minimum value to create.
      * @param max The maximum value to create.
+     *
      * @throws IllegalArgumentException min is greater than max.
      */
     public UniformFloatingPointDistribution(double min, double max) {

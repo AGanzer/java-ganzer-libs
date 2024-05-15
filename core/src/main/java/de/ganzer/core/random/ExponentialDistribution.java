@@ -24,8 +24,13 @@ public class ExponentialDistribution implements Distribution<Double> {
      * Creates a new instance from the specified argument.
      *
      * @param lambda The λ distribution parameter (the rate parameter).
+     *
+     * @throws IllegalArgumentException if lambda is less than or equal to 0.0.
      */
     public ExponentialDistribution(double lambda) {
+        if (lambda <= 0.0)
+            throw new IllegalArgumentException("lambda");
+
         this.lambda = lambda;
     }
 

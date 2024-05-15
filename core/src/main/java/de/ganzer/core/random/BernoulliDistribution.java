@@ -18,6 +18,7 @@ public class BernoulliDistribution {
      * Creates a new instance from the specified argument.
      *
      * @param p The p distribution parameter (probability of generating true).
+     *
      * @throws IllegalArgumentException p is greater than 1 or less than 0.
      */
     public BernoulliDistribution(double p) {

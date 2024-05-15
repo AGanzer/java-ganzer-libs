@@ -18,6 +18,8 @@ public class FisherFDistribution implements Distribution<Double> {
      * Creates a new instance with n set to 1.0.
      *
      * @param m The m distribution parameter (degrees of freedom).
+     *
+     * @throws IllegalArgumentException if m is less than or equal to 0.0.
      */
     public FisherFDistribution(double m) {
         this(m, 1.0);
@@ -28,10 +30,19 @@ public class FisherFDistribution implements Distribution<Double> {
      *
      * @param m The m distribution parameter (degrees of freedom).
      * @param n The n distribution parameter (degrees of freedom).
+     *
+     * @throws IllegalArgumentException if m or n is less than or equal to 0.0.
      */
     public FisherFDistribution(double m, double n) {
+        if (m <= 0.0)
+            throw new IllegalArgumentException("m");
+
+        if (n <= 0.0)
+            throw new IllegalArgumentException("n");
+
         this.m = m;
         this.n = n;
+
         gammaDistM = new GammaDistribution(m * 0.5);
         gammaDistN = new GammaDistribution(n * 0.5);
     }

@@ -24,8 +24,13 @@ public class StudentTDistribution implements Distribution<Double> {
      * Creates a new instance from the specified argument.
      *
      * @param n The n distribution parameter (degrees of freedom).
+     *
+     * @throws IllegalArgumentException if n is less than or equal to 0.0.
      */
     public StudentTDistribution(double n) {
+        if (n <= 0.0)
+            throw new IllegalArgumentException("n");
+
         this.n = n;
         gammaDist = new GammaDistribution(n * 0.5, 2);
     }

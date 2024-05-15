@@ -20,8 +20,13 @@ public class ChiSquaredDistribution implements Distribution<Double> {
      * Creates a new instance from the specified argument.
      *
      * @param n The n distribution parameter (degrees of freedom).
+     *
+     * @throws IllegalArgumentException if n is less than or equal to 0.0.
      */
     public ChiSquaredDistribution(double n) {
+        if (n <= 0.0)
+            throw new IllegalArgumentException("shape");
+
         gammaDist = new GammaDistribution(n / 2, 2);
     }
 

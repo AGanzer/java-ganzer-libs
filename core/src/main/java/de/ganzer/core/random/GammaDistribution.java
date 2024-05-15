@@ -20,6 +20,8 @@ public class GammaDistribution implements Distribution<Double> {
      * Creates a new instance with scale set to 1.0.
      *
      * @param shape The shape.
+     *
+     * @throws IllegalArgumentException if shape is less than or equal to 0.0.
      */
     public GammaDistribution(double shape) {
         this(shape, 1.0);
@@ -30,8 +32,13 @@ public class GammaDistribution implements Distribution<Double> {
      *
      * @param shape The shape.
      * @param scale The scale.
+     *
+     * @throws IllegalArgumentException if shape is less than or equal to 0.0.
      */
     public GammaDistribution(double shape, double scale) {
+        if (shape <= 0.0)
+            throw new IllegalArgumentException("shape");
+
         this.shape = shape;
         this.scale = scale;
     }

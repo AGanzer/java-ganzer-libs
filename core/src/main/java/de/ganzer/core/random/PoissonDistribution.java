@@ -21,6 +21,7 @@ public class PoissonDistribution implements Distribution<Long> {
      * Creates a new instance from the specified argument.
      *
      * @param mean The mean (µ). The must be greater than 0.0.
+     *
      * @throws IllegalArgumentException mean is less than or equal to 0.0.
      */
     public PoissonDistribution(double mean) {
