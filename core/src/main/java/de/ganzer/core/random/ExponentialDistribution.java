@@ -44,7 +44,7 @@ public class ExponentialDistribution implements Distribution<Double> {
      */
     @Override
     public Double next(Random random) {
-        return StrictMath.log(1 - random.nextDouble()) / lambda;
+        return -StrictMath.log(1 - random.nextDouble()) / lambda;
     }
 
     private final double lambda;
