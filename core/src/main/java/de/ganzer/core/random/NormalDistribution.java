@@ -6,6 +6,7 @@ import java.util.Random;
  * Produces random numbers according to the Normal (or Gaussian) random number
  * distribution.
  */
+@SuppressWarnings("unused")
 public class NormalDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with a mean of 0.0 and a deviation of 1.0.

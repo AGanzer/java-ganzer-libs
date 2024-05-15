@@ -6,6 +6,7 @@ import java.util.Random;
  * Produces random floating-point values x, uniformly distributed on the
  * interval [min,max).
  */
+@SuppressWarnings("unused")
 public class UniformFloatingPointDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with a minimum value of 0.0 and a maximum value of

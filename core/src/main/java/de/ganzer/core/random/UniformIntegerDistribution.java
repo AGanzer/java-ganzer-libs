@@ -6,6 +6,7 @@ import java.util.Random;
  * Produces random integer values i, uniformly distributed on the closed
  * interval [min,max].
  */
+@SuppressWarnings("unused")
 public class UniformIntegerDistribution implements Distribution<Long> {
     /**
      * Creates a new instance with a minimum value of 0 and a maximum value of

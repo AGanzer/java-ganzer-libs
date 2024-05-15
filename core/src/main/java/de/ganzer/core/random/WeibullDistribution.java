@@ -5,6 +5,7 @@ import java.util.Random;
 /**
  * Produces random numbers according to the Weibull distribution.
  */
+@SuppressWarnings("unused")
 public class WeibullDistribution implements Distribution<Double> {
     /**
      * Creates a new instance with shape and scale set to 1.0.
