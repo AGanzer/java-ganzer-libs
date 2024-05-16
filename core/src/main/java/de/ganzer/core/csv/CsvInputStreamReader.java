@@ -154,7 +154,7 @@ public class CsvInputStreamReader extends InputStreamReader {
         return value.length() > 0;
     }
 
-    private boolean endOfMaskedValueReached(int c) throws IOException, InvalidCsvException {
+    private boolean endOfMaskedValueReached(int c) throws IOException {
         if (c == -1)
             return true;
 
