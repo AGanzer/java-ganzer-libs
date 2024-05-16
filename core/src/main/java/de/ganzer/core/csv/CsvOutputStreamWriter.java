@@ -24,15 +24,15 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
     /**
      * {@inheritDoc}
      */
-    public CsvOutputStreamWriter(OutputStream out, String charsetName) throws UnsupportedEncodingException {
-        super(out, charsetName);
+    public CsvOutputStreamWriter(OutputStream out) {
+        super(out);
     }
 
     /**
      * {@inheritDoc}
      */
-    public CsvOutputStreamWriter(OutputStream out) {
-        super(out);
+    public CsvOutputStreamWriter(OutputStream out, String charsetName) throws UnsupportedEncodingException {
+        super(out, charsetName);
     }
 
     /**
