@@ -2,6 +2,7 @@ package com.example.uitests;
 
 import de.ganzer.core.validation.RegularExpressionValidator;
 import de.ganzer.core.validation.Validator;
+import de.ganzer.core.validation.ValidatorExceptionRef;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
@@ -47,6 +48,11 @@ public class RegularExpressionValidatorSettingsController implements TestValidat
         this.testValidator = (RegularExpressionValidator)testValidator;
     }
     //endregion
+
+    @Override
+    public boolean validateSettings(ValidatorExceptionRef ref) {
+        return true;
+    }
 
     //region init
     @FXML

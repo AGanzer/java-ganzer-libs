@@ -3,6 +3,7 @@ package com.example.uitests;
 import de.ganzer.core.validation.CharCountValidator;
 import de.ganzer.core.validation.NumberValidator;
 import de.ganzer.core.validation.Validator;
+import de.ganzer.core.validation.ValidatorExceptionRef;
 import de.ganzer.fx.validation.ValidatorTextFormatter;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -12,7 +13,8 @@ import java.text.ParseException;
 
 public class CharCountValidatorSettingsController  implements TestValidatorController {
     //region fields
-    private final NumberValidator inputLengthValidator = new NumberValidator(0, Short.MAX_VALUE);
+    private ValidatorTextFormatter minInputLengthFormatter;
+    private ValidatorTextFormatter maxInputLengthFormatter;
     private CharCountValidator testValidator;
     //endregion
 
@@ -34,11 +36,19 @@ public class CharCountValidatorSettingsController  implements TestValidatorContr
     }
     //endregion
 
+    @Override
+    public boolean validateSettings(ValidatorExceptionRef ref) {
+        return minInputLengthFormatter.validate(ref)
+                && maxInputLengthFormatter.validate(ref);
+    }
+
     //region init
     @FXML
     private void initialize() {
-        new ValidatorTextFormatter(inputLengthValidator, minInputLength);
-        new ValidatorTextFormatter(inputLengthValidator, maxInputLength);
+        var validator = new NumberValidator(0, Short.MAX_VALUE);
+
+        minInputLengthFormatter = new ValidatorTextFormatter(validator, minInputLength);
+        maxInputLengthFormatter = new ValidatorTextFormatter(validator, maxInputLength);
 
         initializeListeners();
     }
@@ -47,7 +57,7 @@ public class CharCountValidatorSettingsController  implements TestValidatorContr
     private void initializeListeners() {
         minInputLength.textProperty().addListener((p, o, n) -> {
             try {
-                if (minInputLength.getText().length() == 0)
+                if (minInputLength.getText().isEmpty())
                     return;
 
                 testValidator.setMinLength(NumberFormat.getInstance().parse(minInputLength.getText()).intValue());
@@ -58,7 +68,7 @@ public class CharCountValidatorSettingsController  implements TestValidatorContr
         });
         maxInputLength.textProperty().addListener((p, o, n) -> {
             try {
-                if (maxInputLength.getText().length() == 0)
+                if (maxInputLength.getText().isEmpty())
                     return;
 
                 testValidator.setMaxLength(NumberFormat.getInstance().parse(maxInputLength.getText()).intValue());

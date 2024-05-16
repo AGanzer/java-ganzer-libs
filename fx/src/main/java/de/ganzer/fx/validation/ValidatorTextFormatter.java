@@ -7,13 +7,16 @@ import de.ganzer.core.validation.ValidatorExceptionRef;
 import javafx.application.Platform;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.control.Tooltip;
 
 /**
  * A common formatter that encapsulates an instance of the {@link Validator}
  * class to validate text during input.
  * <p>
- * If you don't want to create fields or variables for the validators, the
- * validation can be done by an instance of this class:
+ * This formatter should be used for validation instead of using the validator
+ * itself because it is able to change the style of the control if the input is
+ * invalid. In this case the control's tooltip is set to the validators error
+ * message.
  * {@code
 @FXML
 private Button okButton;
@@ -32,15 +35,26 @@ private void initialize() {
 private void closeDialog(ActionEvent actionEvent) {
     Node source = (Node)actionEvent.getSource();
 
-    if (source != okButton || applyValues()) {
+    if (source != okButton || applyValues(true)) {
         Stage stage = (Stage)source.getScene().getWindow();
         stage.close();
     }
 }
 
-private boolean applyValues() {
-    return validate(numEnemies) &&
-            validate(numNuggets);
+private boolean applyValues(boolean withMessageBox) {
+    // Show errors by MessageBox an by error indicator:
+    //
+    if (withMessageBox)
+        return validate(numEnemies) && validate(numNuggets);
+
+    // Show errors by error indicators only:
+    //
+    boolean isValid = true;
+
+    isValid = ((ValidatorTextFormatter)numEnemies.getTextFormatter()).isValid() && isValid;
+    isValid = ((ValidatorTextFormatter)numNuggets.getTextFormatter()).isValid() && isValid;
+
+    return isValid;
 }
 
 private boolean validate(TextField field) {
@@ -65,8 +79,15 @@ private boolean validate(TextField field) {
  */
 @SuppressWarnings("unused")
 public class ValidatorTextFormatter extends TextFormatter<String> {
+    private static final String DEFAULT_ERROR_STYLE = "-fx-border-color: red; -fx-focus-color: red;";
     private final Validator validator;
     private final TextInputControl control;
+    private boolean setErrorIndicators = true;
+    private String errorStyle = DEFAULT_ERROR_STYLE;
+    private boolean validateOnLostFocus = true;
+    private String orgStyle;
+    private Tooltip orgTooltip;
+    private boolean errorIndicatorsVisible;
 
     /**
      * Creates a new instance from the specified arguments.
@@ -125,8 +146,14 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
 
         control.setTextFormatter(this);
 
-        control.focusedProperty().addListener((p, o, n) ->
-                control.setText(validator.formatText(control.getText(), n ? TextFormat.EDIT : TextFormat.DISPLAY)));
+        control.focusedProperty().addListener((p, o, n) -> {
+            if (n)
+                control.setText(validator.formatText(control.getText(), TextFormat.EDIT));
+            else {
+                control.setText(validator.formatText(control.getText(), TextFormat.DISPLAY));
+                validate(false);
+            }
+        });
 
         this.validator = validator;
         this.control = control;
@@ -142,12 +169,99 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
     }
 
     /**
+     * Indicates whether validation is automatically performed when the control
+     * has lost its focus.
+     *
+     * @return {@code true} if automatic validation is performed; otherwise,
+     * {@code false}.
+     */
+    public boolean isValidateOnLostFocus() {
+        return validateOnLostFocus;
+    }
+
+    /**
+     * Sets whether an automatic validation shall be performed when the control
+     * has lost its focus.
+     *
+     * @param validateOnLostFocus {@code false} to permit automatic validation.
+     *                            The default is {@code true}.
+     */
+    public void setValidateOnLostFocus(boolean validateOnLostFocus) {
+        this.validateOnLostFocus = validateOnLostFocus;
+    }
+
+    /**
+     * Indicates whether the style of the control is changed on error.
+     *
+     * @return {@code true} if the style is changed on error; otherwise,
+     * {@code false}.
+     */
+    public boolean isSetErrorIndicators() {
+        return setErrorIndicators;
+    }
+
+    /**
+     * Sets whether the style of the control is changed on error.
+     *
+     * @param setErrorIndicators {@code true} to change the style on error. The
+     *                        default is {@code true}.
+     */
+    public void setSetErrorIndicators(boolean setErrorIndicators) {
+        this.setErrorIndicators = setErrorIndicators;
+    }
+
+    /**
+     * Gets the current style to indicate an error.
+     *
+     * @return The current style to use for indicating an error.
+     */
+    public String getErrorStyle() {
+        return errorStyle;
+    }
+
+    /**
+     * Sets the style to use to indicate an error.
+     *
+     * @param errorStyle The style to set. If this is {@code null}, the default
+     *                   style "-fx-border-color: red; -fx-focus-color: red;"
+     *                   is set.
+     */
+    public void setErrorStyle(String errorStyle) {
+        this.errorStyle = errorStyle == null
+                ? DEFAULT_ERROR_STYLE
+                : errorStyle;
+    }
+
+    /**
+     * Resets the style of the control to its default.
+     */
+    public void resetStyle() {
+        if (!errorIndicatorsVisible)
+            return;
+
+        control.setStyle(orgStyle);
+        control.setTooltip(orgTooltip);
+
+        errorIndicatorsVisible = false;
+    }
+
+    /**
+     * Validates the input.
+     *
+     * @return {@code true} if input is valid; otherwise, {@code false}
+     * is returned.
+     */
+    public boolean isValid() {
+        return validate(false);
+    }
+
+    /**
      * Checks whether the current text of the linked control is valid.
      *
      * @throws ValidatorException If the text is invalid.
      */
     public void validate() throws ValidatorException {
-        validator.validate(control.getText());
+        validate(true);
     }
 
     /**
@@ -158,10 +272,38 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
      *           instance of {@link ValidatorException}. This must not be
      *           {@code null}.
      *
-     * @return {@code true} if input is valid; otherwise, <c>false</c>
+     * @return {@code true} if input is valid; otherwise, {@code false}
      * is returned.
      */
     public boolean validate(ValidatorExceptionRef er) {
-        return validator.validate(control.getText(), er);
+        if (validator.validate(control.getText(), er)) {
+            resetStyle();
+            return true;
+        }
+
+        if (setErrorIndicators && !errorIndicatorsVisible) {
+            orgStyle = control.getStyle();
+            orgTooltip = control.getTooltip();
+
+            errorIndicatorsVisible = true;
+
+            control.setStyle(errorStyle);
+            control.setTooltip(new Tooltip(er.getException().getMessage()));
+        }
+
+        return false;
+    }
+
+    private boolean validate(boolean throwException) {
+        ValidatorExceptionRef ref = new ValidatorExceptionRef();
+
+        if (!validate(ref)) {
+            if (throwException)
+                throw ref.getException();
+
+            return false;
+        }
+
+        return true;
     }
 }

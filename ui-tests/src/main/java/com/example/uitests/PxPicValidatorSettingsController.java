@@ -2,6 +2,7 @@ package com.example.uitests;
 
 import de.ganzer.core.validation.PxPicValidator;
 import de.ganzer.core.validation.Validator;
+import de.ganzer.core.validation.ValidatorExceptionRef;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -41,6 +42,11 @@ public class PxPicValidatorSettingsController implements TestValidatorController
         this.testValidator = (PxPicValidator)testValidator;
     }
     //endregion
+
+    @Override
+    public boolean validateSettings(ValidatorExceptionRef ref) {
+        return true;
+    }
 
     //region init
     @FXML

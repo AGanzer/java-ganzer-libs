@@ -2,6 +2,7 @@ package com.example.uitests;
 
 import de.ganzer.core.validation.NumberValidator;
 import de.ganzer.core.validation.Validator;
+import de.ganzer.core.validation.ValidatorExceptionRef;
 import de.ganzer.fx.validation.ValidatorTextFormatter;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -12,7 +13,9 @@ import java.text.ParseException;
 public class NumberValidatorSettingsController implements TestValidatorController {
     //region fields
     private final NumberValidator minMaxValueValidator = new NumberValidator();
-    private final NumberValidator numDecimalsValidator = new NumberValidator(0, 6);
+    private ValidatorTextFormatter minValueTextFormatter;
+    private ValidatorTextFormatter maxValueTextFormatter;
+    private ValidatorTextFormatter numDecimalsTextFormatter;
     private NumberValidator testValidator;
     //endregion
 
@@ -48,12 +51,21 @@ public class NumberValidatorSettingsController implements TestValidatorControlle
     }
     //endregion
 
+    @Override
+    public boolean validateSettings(ValidatorExceptionRef ref) {
+        return minValueTextFormatter.validate(ref)
+                && maxValueTextFormatter.validate(ref)
+                && numDecimalsTextFormatter.validate(ref);
+    }
+
     //region init
     @FXML
     private void initialize() {
-        new ValidatorTextFormatter(minMaxValueValidator, minValue);
-        new ValidatorTextFormatter(minMaxValueValidator, maxValue);
-        new ValidatorTextFormatter(numDecimalsValidator, numDecimals);
+        NumberValidator numDecimalsValidator = new NumberValidator(0, 6);
+
+        minValueTextFormatter = new ValidatorTextFormatter(minMaxValueValidator, minValue);
+        maxValueTextFormatter = new ValidatorTextFormatter(minMaxValueValidator, maxValue);
+        numDecimalsTextFormatter = new ValidatorTextFormatter(numDecimalsValidator, numDecimals);
 
         initializeListeners();
     }
@@ -62,7 +74,7 @@ public class NumberValidatorSettingsController implements TestValidatorControlle
     private void initializeListeners() {
         minValue.textProperty().addListener((p, o, n) -> {
             try {
-                if (minValue.getText().length() == 0)
+                if (minValue.getText().isEmpty())
                     return;
 
                 testValidator.setMinValue(NumberFormat.getInstance().parse(minValue.getText()).doubleValue());
@@ -73,7 +85,7 @@ public class NumberValidatorSettingsController implements TestValidatorControlle
         });
         maxValue.textProperty().addListener((p, o, n) -> {
             try {
-                if (maxValue.getText().length() == 0)
+                if (maxValue.getText().isEmpty())
                     return;
 
                 testValidator.setMaxValue(NumberFormat.getInstance().parse(maxValue.getText()).doubleValue());
@@ -84,7 +96,7 @@ public class NumberValidatorSettingsController implements TestValidatorControlle
         });
         numDecimals.textProperty().addListener((p, o, n) -> {
             try {
-                if (numDecimals.getText().length() == 0)
+                if (numDecimals.getText().isEmpty())
                     return;
 
                 int numDec = NumberFormat.getInstance().parse(numDecimals.getText()).intValue();

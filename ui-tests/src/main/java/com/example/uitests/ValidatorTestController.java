@@ -20,6 +20,7 @@ import java.io.IOException;
 public class ValidatorTestController implements TestProvider {
     //region fields
     private Validator testValidator;
+    private ValidatorTextFormatter validatorTextFormatter;
     //endregion
 
     //region controls
@@ -145,8 +146,11 @@ public class ValidatorTestController implements TestProvider {
             return;
         }
 
+        if (validatorTextFormatter != null)
+            validatorTextFormatter.resetStyle();
+
         testValidator = validator;
-        new ValidatorTextFormatter(testValidator, testInput);
+        validatorTextFormatter = new ValidatorTextFormatter(testValidator, testInput);
 
         enableOptions();
     }
@@ -176,7 +180,7 @@ public class ValidatorTestController implements TestProvider {
         var message = "Input is valid!";
 
         try {
-            testValidator.validate(testInput.getText());
+            validatorTextFormatter.validate();
         } catch (ValidatorException e) {
             message = e.getMessage();
         }
