@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
+@SuppressWarnings("unused")
 public class PxPicValidatorSettingsController implements TestValidatorController {
     //region fields
     private PxPicValidator testValidator;

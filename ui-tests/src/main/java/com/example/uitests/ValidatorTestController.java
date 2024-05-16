@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 
+@SuppressWarnings("unused")
 public class ValidatorTestController implements TestProvider {
     //region fields
     private Validator testValidator;
@@ -193,11 +194,11 @@ public class ValidatorTestController implements TestProvider {
     //endregion
 
     //region actions
-    public void onOptionsChanged(ActionEvent actionEvent) {
+    public void onOptionsChanged(ActionEvent ignored) {
         adjustValidatorOptions();
     }
 
-    public void onValidatorChanged(ActionEvent actionEvent) {
+    public void onValidatorChanged(ActionEvent ignored) {
         setupValidator(validatorToTest.getValue());
     }
     //endregion

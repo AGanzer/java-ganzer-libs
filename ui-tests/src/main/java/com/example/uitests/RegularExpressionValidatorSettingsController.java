@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+@SuppressWarnings("unused")
 public class RegularExpressionValidatorSettingsController implements TestValidatorController {
     //region fields
     private RegularExpressionValidator testValidator;
@@ -86,7 +87,7 @@ public class RegularExpressionValidatorSettingsController implements TestValidat
     //endregion
 
     //region event handling
-    public void onIgnoreCaseChanged(ActionEvent actionEvent) {
+    public void onIgnoreCaseChanged(ActionEvent ignored) {
         updateValidator();
     }
     //endregion
