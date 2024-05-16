@@ -285,11 +285,14 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
             return true;
         }
 
-        if (showErrorIndicators && noErrorIndicatorSet()) {
-            orgStyle = control.getStyle();
-            orgTooltip = control.getTooltip();
+        if (showErrorIndicators) {
+            if (noErrorIndicatorSet()) {
+                orgStyle = control.getStyle();
+                orgTooltip = control.getTooltip();
 
-            control.setStyle(errorStyle);
+                control.setStyle(errorStyle);
+            }
+
             control.setTooltip(new Tooltip(er.getException().getMessage()));
         }
 
