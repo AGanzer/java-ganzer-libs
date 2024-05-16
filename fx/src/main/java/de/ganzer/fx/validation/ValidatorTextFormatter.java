@@ -82,12 +82,11 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
     private static final String DEFAULT_ERROR_STYLE = "-fx-border-color: red; -fx-focus-color: red;";
     private final Validator validator;
     private final TextInputControl control;
-    private boolean setErrorIndicators = true;
+    private boolean showErrorIndicators = true;
     private String errorStyle = DEFAULT_ERROR_STYLE;
     private boolean validateOnLostFocus = true;
     private String orgStyle;
     private Tooltip orgTooltip;
-    private boolean errorIndicatorsVisible;
 
     /**
      * Creates a new instance from the specified arguments.
@@ -151,7 +150,9 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
                 control.setText(validator.formatText(control.getText(), TextFormat.EDIT));
             else {
                 control.setText(validator.formatText(control.getText(), TextFormat.DISPLAY));
-                validate(false);
+
+                if (validateOnLostFocus)
+                    validate(false);
             }
         });
 
@@ -196,18 +197,23 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
      * @return {@code true} if the style is changed on error; otherwise,
      * {@code false}.
      */
-    public boolean isSetErrorIndicators() {
-        return setErrorIndicators;
+    public boolean isShowErrorIndicators() {
+        return showErrorIndicators;
     }
 
     /**
      * Sets whether the style of the control is changed on error.
      *
-     * @param setErrorIndicators {@code true} to change the style on error. The
-     *                        default is {@code true}.
+     * @param showErrorIndicators {@code true} to change the style on error. The
+     *                            default is {@code true}.
      */
-    public void setSetErrorIndicators(boolean setErrorIndicators) {
-        this.setErrorIndicators = setErrorIndicators;
+    public void setShowErrorIndicators(boolean showErrorIndicators) {
+        if (showErrorIndicators == this.showErrorIndicators)
+            return;
+
+        resetIndicators();
+
+        this.showErrorIndicators = showErrorIndicators;
     }
 
     /**
@@ -233,16 +239,14 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
     }
 
     /**
-     * Resets the style of the control to its default.
+     * Resets the style of the control and the tooltip to their defaults.
      */
-    public void resetStyle() {
-        if (!errorIndicatorsVisible)
+    public void resetIndicators() {
+        if (noErrorIndicatorSet())
             return;
 
         control.setStyle(orgStyle);
         control.setTooltip(orgTooltip);
-
-        errorIndicatorsVisible = false;
     }
 
     /**
@@ -277,21 +281,23 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
      */
     public boolean validate(ValidatorExceptionRef er) {
         if (validator.validate(control.getText(), er)) {
-            resetStyle();
+            resetIndicators();
             return true;
         }
 
-        if (setErrorIndicators && !errorIndicatorsVisible) {
+        if (showErrorIndicators && noErrorIndicatorSet()) {
             orgStyle = control.getStyle();
             orgTooltip = control.getTooltip();
-
-            errorIndicatorsVisible = true;
 
             control.setStyle(errorStyle);
             control.setTooltip(new Tooltip(er.getException().getMessage()));
         }
 
         return false;
+    }
+
+    private boolean noErrorIndicatorSet() {
+        return !errorStyle.equals(control.getStyle());
     }
 
     private boolean validate(boolean throwException) {

@@ -148,7 +148,7 @@ public class ValidatorTestController implements TestProvider {
         }
 
         if (validatorTextFormatter != null)
-            validatorTextFormatter.resetStyle();
+            validatorTextFormatter.resetIndicators();
 
         testValidator = validator;
         validatorTextFormatter = new ValidatorTextFormatter(testValidator, testInput);
