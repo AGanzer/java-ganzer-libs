@@ -1,6 +1,6 @@
 package de.ganzer.core.files;
 
-import de.ganzer.core.CoreMessages;
+import de.ganzer.core.internals.CoreMessages;
 
 import java.io.*;
 import java.nio.file.Path;

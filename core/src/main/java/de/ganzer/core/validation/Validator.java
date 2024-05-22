@@ -1,6 +1,6 @@
 package de.ganzer.core.validation;
 
-import de.ganzer.core.CoreMessages;
+import de.ganzer.core.internals.CoreMessages;
 
 /**
  * This defines a validator that supports basic validation of text.

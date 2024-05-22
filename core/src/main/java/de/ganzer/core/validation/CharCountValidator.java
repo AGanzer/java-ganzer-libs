@@ -1,6 +1,6 @@
 package de.ganzer.core.validation;
 
-import de.ganzer.core.CoreMessages;
+import de.ganzer.core.internals.CoreMessages;
 
 /**
  * This CharCountValidator class defines a validator that requires a specified

@@ -1,4 +1,4 @@
-package de.ganzer.core;
+package de.ganzer.core.internals;
 
 import java.util.ResourceBundle;
 

@@ -1,6 +1,6 @@
 package de.ganzer.core.validation;
 
-import de.ganzer.core.CoreMessages;
+import de.ganzer.core.internals.CoreMessages;
 
 /**
  * The PxPicValidator class defines a validator that validates text by using a
