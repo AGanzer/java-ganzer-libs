@@ -596,7 +596,6 @@ public class FileCopy extends FileErrorProvider {
         progress.totalBytesCopied = 0;
         progress.sourcePath = "";
         progress.targetPath = "";
-        progress.rootTargetPath = targetFile.getPath();
         progress.dirOverwriteAction = defaultDirOverwriteAction;
         progress.fileOverwriteAction = defaultFileOverwriteAction;
         progress.ignoreAllErrors = false;
@@ -608,12 +607,12 @@ public class FileCopy extends FileErrorProvider {
         reportProgress();
 
         sourceFiles.forEach(source -> {
-            progress.rootSourcePath = source.getPath();
+            progress.rootSourcePath = source.getAbsolutePath();
 
             if (source.isDirectory())
                 initializeCopy(source);
             else
-                reportInitializeProgress(source.getAbsolutePath(), source.length());
+                reportInitializeProgress(progress.rootSourcePath, source.length());
         });
     }
 
