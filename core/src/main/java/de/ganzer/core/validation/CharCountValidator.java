@@ -132,7 +132,7 @@ public class CharCountValidator extends Validator {
         if (!super.doValidate(text, er))
             return false;
 
-        if (text.length() == 0)
+        if (text.isEmpty())
             return true;
 
         if (maxLength != 0 && text.length() > maxLength)

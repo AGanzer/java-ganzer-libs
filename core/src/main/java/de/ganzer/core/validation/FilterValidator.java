@@ -221,15 +221,15 @@ public class FilterValidator extends CharCountValidator {
     }
 
     private boolean validateText(String text) {
-        if (text.length() == 0)
+        if (text.isEmpty())
             return true;
 
-        if (validChars.length() > 0)
+        if (!validChars.isEmpty())
             for (int i = 0; i < text.length(); ++i)
                 if (validChars.indexOf(text.charAt(i)) == -1)
                     return false;
 
-        if (invalidChars.length() > 0)
+        if (!invalidChars.isEmpty())
             for (int i = 0; i < text.length(); ++i)
                 if (invalidChars.indexOf(text.charAt(i)) != -1)
                     return false;

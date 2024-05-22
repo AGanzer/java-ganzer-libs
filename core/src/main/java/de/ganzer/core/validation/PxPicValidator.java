@@ -524,7 +524,7 @@ public class PxPicValidator extends Validator {
      * returned.
      */
     public boolean checkSyntax(String picture) {
-        if (picture.length() == 0)
+        if (picture.isEmpty())
             return true;
 
         char lastChar = picture.charAt(picture.length() - 1);
@@ -587,7 +587,7 @@ public class PxPicValidator extends Validator {
         if (!super.doInputValidation(text, autoFill))
             return false;
 
-        if (picture.length() == 0 || text.length() == 0)
+        if (picture.isEmpty() || text.length() == 0)
             return true;
 
         switch (new StateMachine(picture, text).start(autoFill)) {
@@ -619,7 +619,7 @@ public class PxPicValidator extends Validator {
         if (!super.doValidate(text, er))
             return false;
 
-        if (picture.length() == 0 || text.length() == 0)
+        if (picture.isEmpty() || text.isEmpty())
             return true;
 
         switch (new StateMachine(picture, new StringBuilder(text)).start(false)) {

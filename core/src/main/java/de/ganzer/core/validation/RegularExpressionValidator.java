@@ -112,7 +112,7 @@ public class RegularExpressionValidator extends Validator {
         if (!super.doValidate(text, er))
             return false;
 
-        if ((text.length() == 0) || pattern == null)
+        if ((text.isEmpty()) || pattern == null)
             return true;
 
         if (pattern.matcher(text).matches())

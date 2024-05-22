@@ -192,7 +192,7 @@ public class NumberValidator extends Validator {
      * @see #doFormatText;
      */
     public void setDisplayFormat(String displayFormat) {
-        if (displayFormat != null && displayFormat.length() == 0)
+        if (displayFormat != null && displayFormat.isEmpty())
             this.displayFormat = null;
         else
             this.displayFormat = displayFormat;
@@ -218,7 +218,7 @@ public class NumberValidator extends Validator {
      * @see #doFormatText;
      */
     public void setEditFormat(String editFormat) {
-        if (editFormat != null && editFormat.length() == 0)
+        if (editFormat != null && editFormat.isEmpty())
             this.editFormat = null;
         else
             this.editFormat = editFormat;
@@ -280,7 +280,7 @@ public class NumberValidator extends Validator {
         if (!super.doValidate(text, er))
             return false;
 
-        if (text.length() == 0)
+        if (text.isEmpty())
             return true;
 
         var d = DecimalStyle.ofDefaultLocale();
