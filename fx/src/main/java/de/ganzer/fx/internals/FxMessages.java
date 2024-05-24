@@ -1,4 +1,4 @@
-package de.ganzer.fx;
+package de.ganzer.fx.internals;
 
 import java.util.ResourceBundle;
 
