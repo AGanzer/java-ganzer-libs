@@ -13,12 +13,12 @@ public class FileNames {
     private static final int FOR_MAC = 1;
     private static final int FOR_WINDOWS = 2;
     private static final int FOR_OTHERS = FOR_WINDOWS;
-    private static final String INVALID_NAME_CHARS[] = {
+    private static final String[] INVALID_NAME_CHARS = {
             "/",
             "/:",
             "<>\\/\":|*?"
     };
-    private static final String INVALID_MASKED_NAME_CHARS[] = {
+    private static final String[] INVALID_MASKED_NAME_CHARS = {
             "/",
             ":/",
             "<>\\/\":|"
@@ -31,7 +31,7 @@ public class FileNames {
 
     /**
      * The default format of a filename that contains a counter (the default
-     * is "%1$s (%2$d)") that is used by {@link #getUniqueName(Path)}.
+     * is "%1$s (%2$d)") that is used by {@link #getUniqueName(Path, String)}.
      * <p>
      * A counter is used to rename a file for copy operations. Assuming the
      * counter is 2 and the file to copy into the same directory names
@@ -41,7 +41,7 @@ public class FileNames {
 
     /**
      * The default format of a filename that contains a hint (the default is
-     * "%1$s - %2$s") that is used by {@link #getUniqueName(Path)}.
+     * "%1$s - %2$s") that is used by {@link #getUniqueName(Path, String)}.
      * <p>
      * A hint is used to rename a file for copy operations. Assuming the hint
      * is "Copy" and the file to copy into the same directory names "file.txt",
@@ -52,7 +52,7 @@ public class FileNames {
     /**
      * The default format of a filename that contains a hint with a counter
      * (the default is "%1$s - %2$s (%3$d)") that is used by
-     * {@link #getUniqueName(Path)}.
+     * {@link #getUniqueName(Path, String)}.
      * <p>
      * A hint is used to rename a file for copy operations. Assuming the hint
      * is "Copy", the counter is 2 and the file to copy into the same directory
@@ -69,7 +69,7 @@ public class FileNames {
      * @see #DEFAULT_COUNTED_HINT_FORMAT
      * @see #DEFAULT_HINT_FORMAT
      * @see #getValidName(Path)
-     * @see #getUniqueName(Path)
+     * @see #getUniqueName(Path, String)
      */
     public FileNames() {
         this(DEFAULT_COUNTED_FORMAT, DEFAULT_HINT_FORMAT, DEFAULT_COUNTED_HINT_FORMAT, null);
@@ -84,7 +84,7 @@ public class FileNames {
      * @param countedHintFormat The format to use for names with a counted hint.
      *
      * @see #getValidName(Path)
-     * @see #getUniqueName(Path)
+     * @see #getUniqueName(Path, String)
      *
      * @throws NullPointerException {@code countedFormat}, {@code hintFormat} or
      * {@code countedHintFormat} is {@code null}.
@@ -110,7 +110,7 @@ public class FileNames {
      * @see #DEFAULT_COUNTED_HINT_FORMAT
      * @see #DEFAULT_HINT_FORMAT
      * @see #getValidName(Path)
-     * @see #getUniqueName(Path)
+     * @see #getUniqueName(Path, String)
      *
      * @throws NullPointerException {@code countedFormat}, {@code hintFormat} or
      * {@code countedHintFormat} is {@code null}.
@@ -371,19 +371,19 @@ public class FileNames {
 
         Path newPath = Path.of(dir, newName + ext);
 
-        if (!path.toFile().exists())
-            return path;
+        if (!newPath.toFile().exists())
+            return newPath;
 
         for (int i = hasHint ? 2 : 3; i < Integer.MAX_VALUE; ++i) {
             if (hasHint)
                 newName = String.format(countedHintFormat, name, hint);
             else
-                newName = String.format(countedFormat, name, 1);
+                newName = String.format(countedFormat, name, i);
 
             newPath = Path.of(dir, newName + ext);
 
-            if (!path.toFile().exists())
-                return path;
+            if (!newPath.toFile().exists())
+                return newPath;
         }
 
         return null;
