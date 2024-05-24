@@ -376,7 +376,7 @@ public class FileNames {
 
         for (int i = hasHint ? 2 : 3; i < Integer.MAX_VALUE; ++i) {
             if (hasHint)
-                newName = String.format(countedHintFormat, name, hint);
+                newName = String.format(countedHintFormat, name, hint, i);
             else
                 newName = String.format(countedFormat, name, i);
 
