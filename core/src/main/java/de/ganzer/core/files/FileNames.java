@@ -68,11 +68,26 @@ public class FileNames {
      * @see #DEFAULT_COUNTED_FORMAT
      * @see #DEFAULT_COUNTED_HINT_FORMAT
      * @see #DEFAULT_HINT_FORMAT
-     * @see #getValidName(Path)
+     * @see #getValidName(String)
      * @see #getUniqueName(Path, String)
      */
     public FileNames() {
         this(DEFAULT_COUNTED_FORMAT, DEFAULT_HINT_FORMAT, DEFAULT_COUNTED_HINT_FORMAT, null);
+    }
+
+    /**
+     * Creates a new instance from the specified argument and default format
+     * settings.
+     *
+     * @param charReplacement The character replacement function that is used by
+     *                        {@link #getValidName(String)} to replace invalid
+     *                        characters. If this is {@code null}, the default
+     *                        replacement is used to replace invalid characters
+     *                        with its two digits Unicode value and a preceding
+     *                        % character.
+     */
+    public FileNames(Function<Character, String> charReplacement) {
+        this(DEFAULT_COUNTED_FORMAT, DEFAULT_HINT_FORMAT, DEFAULT_COUNTED_HINT_FORMAT, charReplacement);
     }
 
     /**
@@ -83,7 +98,7 @@ public class FileNames {
      * @param hintFormat The format to use for names with a hint.
      * @param countedHintFormat The format to use for names with a counted hint.
      *
-     * @see #getValidName(Path)
+     * @see #getValidName(String)
      * @see #getUniqueName(Path, String)
      *
      * @throws NullPointerException {@code countedFormat}, {@code hintFormat} or
@@ -109,7 +124,7 @@ public class FileNames {
      * @see #DEFAULT_COUNTED_FORMAT
      * @see #DEFAULT_COUNTED_HINT_FORMAT
      * @see #DEFAULT_HINT_FORMAT
-     * @see #getValidName(Path)
+     * @see #getValidName(String)
      * @see #getUniqueName(Path, String)
      *
      * @throws NullPointerException {@code countedFormat}, {@code hintFormat} or
@@ -127,86 +142,45 @@ public class FileNames {
     }
 
     /**
-     * Checks whether the name part of the specified path is a valid filename
-     * for the current operating system.
+     * Checks whether the specified name is a valid filename for the current
+     * operating system.
      * <p>
      * Note that unter Linux and Mac/OS the jokers ? and * are valid for
      * filenames.
      *
-     * @param path The path to check the name from.
+     * @param name The name to check.
      *
-     * @return {@code true} if the name part of {@code path} is valid;
-     * otherwise, {@code false} is returned.
+     * @return {@code true} if {@code name} is valid; otherwise, {@code false}
+     * is returned.
      *
-     * @throws NullPointerException {@code path} is {@code null}.
+     * @throws NullPointerException {@code name} is {@code null}.
      *
      * @see #isValidMaskedName(String)
      */
-    public boolean isValidName(String path) {
-        return isValidName(Path.of(path, getInvalidNameChars()));
+    public boolean isValidName(String name) {
+        return isValidName(name, getInvalidNameChars());
     }
 
     /**
-     * Checks whether the name part of the specified path is a valid filename
-     * for the current operating system.
-     * <p>
-     * Note that unter Linux and Mac/OS the jokers ? and * are valid for
-     * filenames.
+     * Checks whether the specified name is a valid filename for masking for
+     * the current operating system.
      *
-     * @param path The path to check the name from.
+     * @param name The name to check. This may contain jokers (? and *).
      *
-     * @return {@code true} if the name part of {@code path} is valid;
-     * otherwise, {@code false} is returned.
+     * @return {@code true} if {@code name} is valid; otherwise, {@code false}
+     * is returned.
      *
-     * @throws NullPointerException {@code path} is {@code null}.
-     *
-     * @see #isValidMaskedName(Path)
-     */
-    public boolean isValidName(Path path) {
-        Objects.requireNonNull(path);
-        return isValidName(path, getInvalidNameChars());
-    }
-
-    /**
-     * Checks whether the name part of the specified path is a valid filename
-     * for masking for the current operating system.
-     *
-     * @param path The path to check the name from. This may contain jokers
-     *             (? and *).
-     *
-     * @return {@code true} if the name part of {@code path} is valid;
-     * otherwise, {@code false} is returned.
-     *
-     * @throws NullPointerException {@code path} is {@code null}.
+     * @throws NullPointerException {@code name} is {@code null}.
      *
      * @see #isValidName(String)
      */
-    public boolean isValidMaskedName(String path) {
-        return isValidName(Path.of(path, getInvalidMaskedNameChars()));
+    public boolean isValidMaskedName(String name) {
+        return isValidName(name, getInvalidMaskedNameChars());
     }
 
     /**
-     * Checks whether the name part of the specified path is a valid filename
-     * for masking for the current operating system.
-     *
-     * @param path The path to check the name from. This may contain jokers
-     *             (? and *).
-     *
-     * @return {@code true} if the name part of {@code path} is valid;
-     * otherwise, {@code false} is returned.
-     *
-     * @throws NullPointerException {@code path} is {@code null}.
-     *
-     * @see #isValidName(Path)
-     */
-    public boolean isValidMaskedName(Path path) {
-        Objects.requireNonNull(path);
-        return isValidName(path, getInvalidMaskedNameChars());
-    }
-
-    /**
-     * Changes all invalid characters of the filename part of the given path
-     * to build a valid filename for the current operating system.
+     * Changes all invalid characters in the given name to build a valid
+     * filename for the current operating system.
      * <p>
      * The function that is used by this method is the one that is set at
      * construction or a default function if no other one is set.
@@ -214,91 +188,47 @@ public class FileNames {
      * Note that unter Linux and Mac/OS the jokers ? and * are valid for
      * filenames.
      *
-     * @param path The path where to validate the filename part.
+     * @param name The name to make valid.
      *
-     * @return {@code path} with a valid filename.
+     * @return {@code name} if {@code name} is valid; otherwise, a valid name
+     * built from {@code name}.
      *
-     * @throws NullPointerException {@code path} is {@code null}.
+     * @throws NullPointerException {@code name} is {@code null}.
      *
      * @see #getValidMaskedName(String)
+     * @see #FileNames {@literal (Function<Character, String>)}
      */
-    public String getValidName(String path) {
-        return getValidName(Path.of(path), getInvalidNameChars()).toString();
+    public String getValidName(String name) {
+        return getValidName(name, getInvalidNameChars());
     }
 
     /**
-     * Changes all invalid characters of the filename part of the given path
-     * to build a valid filename for the current operating system.
-     * <p>
-     * The function that is used by this method is the one that is set at
-     * construction or a default function if no other one is set.
-     * <p>
-     * Note that unter Linux and Mac/OS the jokers ? and * are valid for
-     * filenames.
-     *
-     * @param path The path where to validate the filename part.
-     *
-     * @return {@code path} with a valid filename.
-     *
-     * @throws NullPointerException {@code path} is {@code null}.
-     *
-     * @see #getValidMaskedName(Path)
-     */
-    public Path getValidName(Path path) {
-        Objects.requireNonNull(path);
-        return getValidName(path, getInvalidNameChars());
-    }
-
-    /**
-     * Changes all invalid characters of the filename part of the given path
-     * to build a valid filename for the current operating system.
+     * Changes all invalid characters in the given name to build a valid
+     * filename that may contain jokers for the current operating system.
      * <p>
      * The function that is used by this method is the one that is set at
      * construction or a default function if no other one is set.
      * <p>
      *
-     * @param path The path where to validate the filename part.
+     * @param name The name to make valid.
      *
-     * @return {@code path} with a valid filename. This may contain jokers
-     * (? and *).
+     * @return {@code name} if {@code name} is valid; otherwise, a valid name
+     * built from {@code name}. This may contain jokers (? and *).
      *
-     * @throws NullPointerException {@code path} is {@code null}.
+     * @throws NullPointerException {@code name} is {@code null}.
      *
      * @see #getValidName(String)
-     * @see #FileNames {@literal (String, String, String, Function<Character, String>)}
+     * @see #FileNames {@literal (Function<Character, String>)}
      */
-    public String getValidMaskedName(String path) {
-        return getValidName(Path.of(path), getInvalidMaskedNameChars()).toString();
-    }
-
-    /**
-     * Changes all invalid characters of the filename part of the given path
-     * to build a valid filename for the current operating system.
-     * <p>
-     * The function that is used by this method is the one that is set at
-     * construction or a default function if no other one is set.
-     * <p>
-     *
-     * @param path The path where to validate the filename part.
-     *
-     * @return {@code path} with a valid filename. This may contain jokers
-     * (? and *).
-     *
-     * @throws NullPointerException {@code path} is {@code null}.
-     *
-     * @see #getValidName(Path)
-     * @see #FileNames {@literal (String, String, String, Function<Character, String>)}
-     */
-    public Path getValidMaskedName(Path path) {
-        Objects.requireNonNull(path);
-        return getValidName(path, getInvalidMaskedNameChars());
+    public String getValidMaskedName(String name) {
+        return getValidName(name, getInvalidMaskedNameChars());
     }
 
     /**
      * Creates a unique name from the filename part of the specified path.
      * <p>
      * This method takes the name part of the specified path. This name is
-     * modified (without the extension) as long as another file or directory
+     * modified (without the extensions) as long as another file or directory
      * with that name exists in the directory part of {@code path}. If
      * {@code path} does not contain a directory, the current working directory
      * is used.
@@ -311,15 +241,13 @@ public class FileNames {
      *             a string like "Copy". If this is {@code null} or empty, not
      *             hint is used.
      *
-     * @return A name that is unique. This may be equal to {@code path if
+     * @return A path that is unique. This may be equal to {@code path} if
      * {@code path} is already unique and {@code hint} is empty. The only
-     * part that may be changed is the name without extension. {@code null}
-     * is returned if {@code path} is empty or if no unique name can be
-     * created.
+     * part that may be changed is the name part without extension. {@code null}
+     * is returned if no unique name can be created.
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    @SuppressWarnings("JavadocBlankLines")
     public String getUniqueName(String path, String hint) {
         return getUniqueName(Path.of(path), hint).toString();
     }
@@ -328,7 +256,7 @@ public class FileNames {
      * Creates a unique name from the filename part of the specified path.
      * <p>
      * This method takes the name part of the specified path. This name is
-     * modified (without the extension) as long as another file or directory
+     * modified (without the extensions) as long as another file or directory
      * with that name exists in the directory part of {@code path}. If
      * {@code path} does not contain a directory, the current working directory
      * is used.
@@ -341,22 +269,20 @@ public class FileNames {
      *             a string like "Copy". If this is {@code null} or empty, not
      *             hint is used.
      *
-     * @return A name that is unique. This may be equal to {@code path if
+     * @return A path that is unique. This may be equal to {@code path} if
      * {@code path} is already unique and {@code hint} is empty. The only
      * part that may be changed is the name without extension. {@code null}
-     * is returned if {@code path} is empty or if no unique name can be
-     * created.
+     * is returned if no unique name can be created.
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    @SuppressWarnings("JavadocBlankLines")
     public Path getUniqueName(Path path, String hint) {
         if (!path.toFile().exists())
             return path;
 
         String dir = path.getParent().toString();
         String name = getNameWithoutExtensions(path);
-        String ext = getExtension(name);
+        String ext = getAllExtensions(path);
 
         if (!ext.isEmpty())
             ext = '.' + ext;
@@ -400,7 +326,7 @@ public class FileNames {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public String getNameWithoutLastExtension(String path) {
+    public static String getNameWithoutLastExtension(String path) {
         return getNameWithoutLastExtension(Path.of(path));
     }
 
@@ -415,7 +341,7 @@ public class FileNames {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public String getNameWithoutLastExtension(Path path) {
+    public static String getNameWithoutLastExtension(Path path) {
         Objects.requireNonNull(path);
 
         String name = path.getFileName().toString();
@@ -437,7 +363,7 @@ public class FileNames {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public String getNameWithoutExtensions(String path) {
+    public static String getNameWithoutExtensions(String path) {
         return getNameWithoutExtensions(Path.of(path));
     }
 
@@ -451,7 +377,7 @@ public class FileNames {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public String getNameWithoutExtensions(Path path) {
+    public static String getNameWithoutExtensions(Path path) {
         Objects.requireNonNull(path);
 
         String name = path.getFileName().toString();
@@ -474,7 +400,7 @@ public class FileNames {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public String getExtension(String path) {
+    public static String getExtension(String path) {
         Objects.requireNonNull(path);
 
         int i = path.lastIndexOf('.');
@@ -496,7 +422,7 @@ public class FileNames {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public String getExtension(Path path) {
+    public static String getExtension(Path path) {
         Objects.requireNonNull(path);
         return getExtension(path.toString());
     }
@@ -512,7 +438,7 @@ public class FileNames {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public String getAllExtensions(String path) {
+    public static String getAllExtensions(String path) {
         return getAllExtensions(Path.of(path));
     }
 
@@ -527,7 +453,7 @@ public class FileNames {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public String getAllExtensions(Path path) {
+    public static String getAllExtensions(Path path) {
         Objects.requireNonNull(path);
 
         String name = path.getFileName().toString();
@@ -539,24 +465,21 @@ public class FileNames {
         return name.substring(i + 1);
     }
 
-    private boolean isValidName(Path path, String invalidChars) {
-        String name = path.getFileName().toString();
-
+    private static boolean isValidName(String name, String invalidChars) {
         for (int i = 0; i < name.length(); i++) {
             char c = name.charAt(i);
 
-            if (invalidChars.indexOf(c) < 0)
+            if (invalidChars.indexOf(c) >= 0)
                 return false;
         }
 
         return true;
     }
 
-    private Path getValidName(Path path, String invalidChars) {
+    private String getValidName(String name, String invalidChars) {
         Function<Character, String> replacement = charReplacement != null
                 ? charReplacement
                 : FileNames::defaultCharReplacement;
-        String name = path.getFileName().toString();
         StringBuilder newName = new StringBuilder();
 
         for (int i = 0; i < name.length(); i++) {
@@ -568,7 +491,7 @@ public class FileNames {
                 newName.append(replacement.apply(c));
         }
 
-        return Path.of(path.getParent().toString(), newName.toString());
+        return newName.toString();
     }
 
     private static String getInvalidNameChars() {
