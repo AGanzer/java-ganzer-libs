@@ -9,13 +9,13 @@ import java.io.FileOutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileNamesTest {
+class FileNameToolsTest {
     @ParameterizedTest
     @CsvSource(delimiter = ',', value = {
             "ab.c, true",
             "ab/.c, false"})
     void isValidName(String name, String expected) {
-        FileNames fn = new FileNames();
+        FileNameTools fn = new FileNameTools();
         assertEquals("true".equals(expected), fn.isValidName(name));
     }
 
@@ -24,31 +24,31 @@ class FileNamesTest {
             "a?b.c*, true",
             "a?b/.c*, false"})
     void isValidMaskedName(String name, String expected) {
-        FileNames fn = new FileNames();
+        FileNameTools fn = new FileNameTools();
         assertEquals("true".equals(expected), fn.isValidName(name));
     }
 
     @Test
     void getValidName2() {
-        FileNames fn = new FileNames(c -> "_");
+        FileNameTools fn = new FileNameTools(c -> "_");
         assertEquals("a_b.c", fn.getValidName("a/b.c"));
     }
 
     @Test
     void getValidMaskedName2() {
-        FileNames fn = new FileNames(c -> "_");
+        FileNameTools fn = new FileNameTools(c -> "_");
         assertEquals("a?_b.c*", fn.getValidName("a?/b.c*"));
     }
 
     @Test
     void getValidName() {
-        FileNames fn = new FileNames();
+        FileNameTools fn = new FileNameTools();
         assertEquals("a%2Fb.c", fn.getValidName("a/b.c"));
     }
 
     @Test
     void getValidMaskedName() {
-        FileNames fn = new FileNames();
+        FileNameTools fn = new FileNameTools();
         assertEquals("a?%2Fb.c*", fn.getValidName("a?/b.c*"));
     }
 
@@ -58,7 +58,7 @@ class FileNamesTest {
             "name.e1, name",
             "name.e1.e2, name.e1"})
     void getNameWithoutLastExtension(String name, String expected) {
-        assertEquals(expected, FileNames.getNameWithoutLastExtension(name));
+        assertEquals(expected, FileNameTools.getNameWithoutLastExtension(name));
     }
 
 
@@ -68,7 +68,7 @@ class FileNamesTest {
             "name.e1, name",
             "name.e1.e2, name"})
     void getNameWithoutExtensions(String name, String expected) {
-        assertEquals(expected, FileNames.getNameWithoutExtensions(name));
+        assertEquals(expected, FileNameTools.getNameWithoutExtensions(name));
     }
 
     @ParameterizedTest
@@ -77,7 +77,7 @@ class FileNamesTest {
             "name.e1, e1",
             "name.e1.e2, e2"})
     void getExtension(String name, String expected) {
-        assertEquals(expected == null ? "" : expected, FileNames.getExtension(name));
+        assertEquals(expected == null ? "" : expected, FileNameTools.getExtension(name));
     }
 
     @ParameterizedTest
@@ -86,14 +86,14 @@ class FileNamesTest {
             "name.e1, e1",
             "name.e1.e2, e1.e2"})
     void getAllExtensions(String name, String expected) {
-        assertEquals(expected == null ? "" : expected, FileNames.getAllExtensions(name));
+        assertEquals(expected == null ? "" : expected, FileNameTools.getAllExtensions(name));
     }
 
     @Test
     void getUniqueNameWithHint() {
         String existing = "./name.ext";
         String expected = "./name - Copy.ext";
-        FileNames fn = new FileNames();
+        FileNameTools fn = new FileNameTools();
 
         try {
             createFile(existing);
@@ -108,7 +108,7 @@ class FileNamesTest {
         String existing1 = "./name.ext";
         String existing2 = "./name - Copy.ext";
         String expected = "./name - Copy (2).ext";
-        FileNames fn = new FileNames();
+        FileNameTools fn = new FileNameTools();
 
         try {
             createFile(existing1);
@@ -124,7 +124,7 @@ class FileNamesTest {
     void getUniqueNameWithoutHint() {
         String existing = "./name.ext";
         String expected = "./name (2).ext";
-        FileNames fn = new FileNames();
+        FileNameTools fn = new FileNameTools();
 
         try {
             createFile(existing);
@@ -139,7 +139,7 @@ class FileNamesTest {
         String existing1 = "./name.ext";
         String existing2 = "./name (2).ext";
         String expected = "./name (3).ext";
-        FileNames fn = new FileNames();
+        FileNameTools fn = new FileNameTools();
 
         try {
             createFile(existing1);

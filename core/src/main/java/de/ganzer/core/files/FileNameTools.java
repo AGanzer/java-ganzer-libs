@@ -8,7 +8,7 @@ import java.util.function.Function;
  * A utility class for working with filenames.
  */
 @SuppressWarnings("unused")
-public class FileNames {
+public class FileNameTools {
     private static final int FOR_LINUX = 0;
     private static final int FOR_MAC = 1;
     private static final int FOR_WINDOWS = 2;
@@ -71,7 +71,7 @@ public class FileNames {
      * @see #getValidName(String)
      * @see #getUniqueName(Path, String)
      */
-    public FileNames() {
+    public FileNameTools() {
         this(DEFAULT_COUNTED_FORMAT, DEFAULT_HINT_FORMAT, DEFAULT_COUNTED_HINT_FORMAT, null);
     }
 
@@ -86,7 +86,7 @@ public class FileNames {
      *                        with its two digits Unicode value and a preceding
      *                        % character.
      */
-    public FileNames(Function<Character, String> charReplacement) {
+    public FileNameTools(Function<Character, String> charReplacement) {
         this(DEFAULT_COUNTED_FORMAT, DEFAULT_HINT_FORMAT, DEFAULT_COUNTED_HINT_FORMAT, charReplacement);
     }
 
@@ -104,7 +104,7 @@ public class FileNames {
      * @throws NullPointerException {@code countedFormat}, {@code hintFormat} or
      * {@code countedHintFormat} is {@code null}.
      */
-    public FileNames(String countedFormat, String hintFormat, String countedHintFormat) {
+    public FileNameTools(String countedFormat, String hintFormat, String countedHintFormat) {
         this(countedFormat, hintFormat, countedHintFormat, null);
     }
 
@@ -130,7 +130,7 @@ public class FileNames {
      * @throws NullPointerException {@code countedFormat}, {@code hintFormat} or
      * {@code countedHintFormat} is {@code null}.
      */
-    public FileNames(String countedFormat, String hintFormat, String countedHintFormat, Function<Character, String> charReplacement) {
+    public FileNameTools(String countedFormat, String hintFormat, String countedHintFormat, Function<Character, String> charReplacement) {
         Objects.requireNonNull(countedFormat);
         Objects.requireNonNull(hintFormat);
         Objects.requireNonNull(countedHintFormat);
@@ -196,7 +196,7 @@ public class FileNames {
      * @throws NullPointerException {@code name} is {@code null}.
      *
      * @see #getValidMaskedName(String)
-     * @see #FileNames {@literal (Function<Character, String>)}
+     * @see #FileNameTools {@literal (Function<Character, String>)}
      */
     public String getValidName(String name) {
         return getValidName(name, getInvalidNameChars());
@@ -218,7 +218,7 @@ public class FileNames {
      * @throws NullPointerException {@code name} is {@code null}.
      *
      * @see #getValidName(String)
-     * @see #FileNames {@literal (Function<Character, String>)}
+     * @see #FileNameTools {@literal (Function<Character, String>)}
      */
     public String getValidMaskedName(String name) {
         return getValidName(name, getInvalidMaskedNameChars());
@@ -479,7 +479,7 @@ public class FileNames {
     private String getValidName(String name, String invalidChars) {
         Function<Character, String> replacement = charReplacement != null
                 ? charReplacement
-                : FileNames::defaultCharReplacement;
+                : FileNameTools::defaultCharReplacement;
         StringBuilder newName = new StringBuilder();
 
         for (int i = 0; i < name.length(); i++) {
