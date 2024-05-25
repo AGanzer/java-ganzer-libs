@@ -65,7 +65,6 @@ public class FileNameTools {
      * @see #FileNameTools(String, String, String)
      */
     public static final String DEFAULT_COUNTED_HINT_FORMAT = "%1$s - %2$s (%3$d)";
-    private String path;
 
     /**
      * Creates a new instance with default format settings and a default
