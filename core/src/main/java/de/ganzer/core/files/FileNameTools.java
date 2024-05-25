@@ -36,6 +36,8 @@ public class FileNameTools {
      * A counter is used to rename a file for copy operations. Assuming the
      * counter is 2 and the file to copy into the same directory names
      * "file.txt", the default format formats "filename (2).txt"
+     *
+     * @see #FileNameTools(String, String, String)
      */
     public static final String DEFAULT_COUNTED_FORMAT = "%1$s (%2$d)";
 
@@ -46,6 +48,8 @@ public class FileNameTools {
      * A hint is used to rename a file for copy operations. Assuming the hint
      * is "Copy" and the file to copy into the same directory names "file.txt",
      * the default format formats "filename - Copy.txt"
+     *
+     * @see #FileNameTools(String, String, String)
      */
     public static final String DEFAULT_HINT_FORMAT = "%1$s - %2$s";
 
@@ -57,6 +61,8 @@ public class FileNameTools {
      * A hint is used to rename a file for copy operations. Assuming the hint
      * is "Copy", the counter is 2 and the file to copy into the same directory
      * names "file.txt", the default format formats "filename - Copy (2).txt"
+     *
+     * @see #FileNameTools(String, String, String)
      */
     public static final String DEFAULT_COUNTED_HINT_FORMAT = "%1$s - %2$s (%3$d)";
     private String path;
@@ -85,6 +91,12 @@ public class FileNameTools {
      *                        replacement is used to replace invalid characters
      *                        with its two digits Unicode value and a preceding
      *                        % character.
+     *
+     * @see #DEFAULT_COUNTED_FORMAT
+     * @see #DEFAULT_COUNTED_HINT_FORMAT
+     * @see #DEFAULT_HINT_FORMAT
+     * @see #getValidName(String)
+     * @see #getUniqueName(Path, String)
      */
     public FileNameTools(Function<Character, String> charReplacement) {
         this(DEFAULT_COUNTED_FORMAT, DEFAULT_HINT_FORMAT, DEFAULT_COUNTED_HINT_FORMAT, charReplacement);
@@ -94,10 +106,25 @@ public class FileNameTools {
      * Creates a new instance from the specified arguments and a default
      * character replacement.
      *
-     * @param countedFormat The format to sue for counted names.
-     * @param hintFormat The format to use for names with a hint.
-     * @param countedHintFormat The format to use for names with a counted hint.
+     * @param countedFormat The format string to use for the name together with
+     *                      a sequential number. The string must contain at
+     *                      least one "%1$s" and at least one "%2$d". These are
+     *                      the placeholders for the name (1) and for the
+     *                      sequential number (2).
+     * @param hintFormat The format string to use for the name together with a
+     *                   hint. The string must contain at least one "%1$s" and
+     *                   at least one "%2$s". These are the placeholders for
+     *                   the name (1) and for the hint (2).
+     * @param countedHintFormat The format string to use for the name together
+     *                          with a hint and a sequential number. The string
+     *                          must contain at least one "%1$s", at least one
+     *                          "%2$s" and at least one "%3$d". These are the
+     *                          placeholders for the name (1), for the
+     *                          sequential number (2) and for the hint (3).
      *
+     * @see #DEFAULT_COUNTED_FORMAT
+     * @see #DEFAULT_COUNTED_HINT_FORMAT
+     * @see #DEFAULT_HINT_FORMAT
      * @see #getValidName(String)
      * @see #getUniqueName(Path, String)
      *
@@ -111,9 +138,21 @@ public class FileNameTools {
     /**
      * Creates a new instance from the specified arguments.
      *
-     * @param countedFormat The format to sue for counted names.
-     * @param hintFormat The format to use for names with a hint.
-     * @param countedHintFormat The format to use for names with a counted hint.
+     * @param countedFormat The format string to use for the name together with
+     *                      a sequential number. The string must contain at
+     *                      least one "%1$s" and at least one "%2$d". These are
+     *                      the placeholders for the name (1) and for the
+     *                      sequential number (2).
+     * @param hintFormat The format string to use for the name together with a
+     *                   hint. The string must contain at least one "%1$s" and
+     *                   at least one "%2$s". These are the placeholders for
+     *                   the name (1) and for the hint (2).
+     * @param countedHintFormat The format string to use for the name together
+     *                          with a hint and a sequential number. The string
+     *                          must contain at least one "%1$s", at least one
+     *                          "%2$s" and at least one "%3$d". These are the
+     *                          placeholders for the name (1), for the
+     *                          sequential number (2) and for the hint (3).
      * @param charReplacement The character replacement function that is used by
      *                        {@link #getValidName(String)} to replace invalid
      *                        characters. If this is {@code null}, the default
