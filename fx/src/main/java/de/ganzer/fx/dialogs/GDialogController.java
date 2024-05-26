@@ -1,8 +1,5 @@
 package de.ganzer.fx.dialogs;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.TextField;
-
 import java.util.function.Consumer;
 
 /**
