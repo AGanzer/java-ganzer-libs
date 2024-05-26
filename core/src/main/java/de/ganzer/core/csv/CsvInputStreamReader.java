@@ -1,5 +1,7 @@
 package de.ganzer.core.csv;
 
+import de.ganzer.core.internals.CoreMessages;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,9 +20,12 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public class CsvInputStreamReader extends InputStreamReader {
-    private char valueDelimiter = ',';
+    private char valueSeparator = ',';
     private char maskChar = '"';
     private int lastRead;
+    private int currentLine = 1;
+    private int currentColumn;
+    private boolean skipRead;
 
     /**
      * {@inheritDoc}
@@ -51,21 +56,21 @@ public class CsvInputStreamReader extends InputStreamReader {
     }
 
     /**
-     * Gets the delimiter used for value separation.
+     * Gets the separator used for value separation.
      *
-     * @return The set delimiter. The default is ','.
+     * @return The set separator. The default is ','.
      */
-    public char getValueDelimiter() {
-        return valueDelimiter;
+    public char getValueSeparator() {
+        return valueSeparator;
     }
 
     /**
-     * Sets the delimiter to use for value separation.
+     * Sets the separator to use for value separation.
      *
-     * @param valueDelimiter The delimiter to use.
+     * @param valueSeparator The separator to use.
      */
-    public void setValueDelimiter(char valueDelimiter) {
-        this.valueDelimiter = valueDelimiter;
+    public void setValueSeparator(char valueSeparator) {
+        this.valueSeparator = valueSeparator;
     }
 
     /**
@@ -98,18 +103,19 @@ public class CsvInputStreamReader extends InputStreamReader {
      */
     public List<String> readLine() throws IOException, InvalidCsvException {
         List<String> values = new ArrayList<>();
+        StringBuilder value = new StringBuilder();
 
         do {
-            StringBuilder value = new StringBuilder();
-
             while (readValue(value)) {
                 values.add(value.toString());
                 value.setLength(0);
 
-                if (stopReading())
+                if (stopReading()) {
+                    checkEOL();
                     break;
+                }
             }
-        } while (values.isEmpty() && lastRead != -1); // Skip empty lines!
+        } while (values.isEmpty() && lastRead != -1); // This skips empty lines!
 
         return values;
     }
@@ -119,7 +125,12 @@ public class CsvInputStreamReader extends InputStreamReader {
     }
 
     private boolean readValue(StringBuilder value) throws IOException, InvalidCsvException {
-        lastRead = read();
+        ++currentColumn;
+
+        if (skipRead)
+            skipRead = false;
+        else
+            lastRead = read();
 
         if (lastRead == -1)
             return false;
@@ -136,7 +147,9 @@ public class CsvInputStreamReader extends InputStreamReader {
     }
 
     private boolean readMaskedValue(StringBuilder value) throws IOException, InvalidCsvException {
-        for (; ; ) {
+        while (true) {
+            ++currentColumn;
+
             lastRead = read();
 
             if (endOfMaskedValueReached(lastRead))
@@ -146,10 +159,10 @@ public class CsvInputStreamReader extends InputStreamReader {
         }
 
         if (lastRead == -1)
-            throw new InvalidCsvException("Unexpected end of data.");
+            throw new InvalidCsvException(String.format(CoreMessages.get("unexpectedEndOfData"), currentLine, currentColumn));
 
         if (!endOfValueReached(lastRead))
-            throw new InvalidCsvException("Delimiter expected.");
+            throw new InvalidCsvException(String.format(CoreMessages.get("separatorExpected"), currentLine, currentColumn));
 
         return value.length() > 0;
     }
@@ -167,7 +180,9 @@ public class CsvInputStreamReader extends InputStreamReader {
     }
 
     private boolean readUnmaskedValue(StringBuilder value) throws IOException {
-        for (; ; ) {
+        while (true) {
+            ++currentColumn;
+
             lastRead = read();
 
             if (endOfValueReached(lastRead))
@@ -180,6 +195,25 @@ public class CsvInputStreamReader extends InputStreamReader {
     }
 
     private boolean endOfValueReached(int c) {
-        return c == valueDelimiter || c == '\n' || c == '\r' || c == -1;
+        return c == valueSeparator || c == '\n' || c == '\r' || c == -1;
+    }
+
+    private void checkEOL() throws IOException {
+        if (lastRead == '\n') {
+            countLine();
+        } else if (lastRead == '\r') {
+            countLine();
+
+            if (lastRead == '\n')
+                lastRead = read();
+        }
+    }
+
+    public void countLine() throws IOException {
+        ++currentLine;
+        currentColumn = 0;
+
+        lastRead = read();
+        skipRead = true;
     }
 }

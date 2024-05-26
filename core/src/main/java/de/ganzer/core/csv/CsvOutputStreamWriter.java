@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Writes values as formatted CSV into a stream.
@@ -17,8 +18,8 @@ import java.util.Collection;
  */
 @SuppressWarnings("unused")
 public class CsvOutputStreamWriter extends OutputStreamWriter {
-    private String lineDelimiter = System.lineSeparator();
-    private char valueDelimiter = ',';
+    private String lineSeparator = System.lineSeparator();
+    private char valueSeparator = ',';
     private char maskChar = '"';
 
     /**
@@ -50,39 +51,42 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
     }
 
     /**
-     * Gets the delimiter used for line separation.
+     * Gets the separator used for line separation.
      *
-     * @return The set delimiter. The default is '\n'.
+     * @return The set separator. The default is the system's line separator.
      */
-    public String getLineDelimiter() {
-        return lineDelimiter;
+    public String getLineSeparator() {
+        return lineSeparator;
     }
 
     /**
-     * Sets the delimiter to use for line separation.
+     * Sets the separator to use for line separation.
      *
-     * @param lineDelimiter The delimiter to use.
+     * @param lineSeparator The separator to use. If this is {@code null} or
+     *                      empty, the system's line separator is used.
      */
-    public void setLineDelimiter(String lineDelimiter) {
-        this.lineDelimiter = lineDelimiter;
+    public void setLineSeparator(String lineSeparator) {
+        this.lineSeparator = lineSeparator == null || lineSeparator.isEmpty()
+                ? System.lineSeparator()
+                : lineSeparator;
     }
 
     /**
-     * Gets the delimiter used for value separation.
+     * Gets the separator used for value separation.
      *
-     * @return The set delimiter. The default is ','.
+     * @return The set separator. The default is ','.
      */
-    public char getValueDelimiter() {
-        return valueDelimiter;
+    public char getValueSeparator() {
+        return valueSeparator;
     }
 
     /**
-     * Sets the delimiter to use for value separation.
+     * Sets the separator to use for value separation.
      *
-     * @param valueDelimiter The delimiter to use.
+     * @param valueSeparator The separator to use.
      */
-    public void setValueDelimiter(char valueDelimiter) {
-        this.valueDelimiter = valueDelimiter;
+    public void setValueSeparator(char valueSeparator) {
+        this.valueSeparator = valueSeparator;
     }
 
     /**
@@ -111,12 +115,14 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
      * @param values The values to write. This will automatically be masked and seperated
      *               by the set value delimiter. The set line delimiter is appended after
      *               all values are written.
+     *
      * @throws IOException If an I/O error occurs.
      * @throws NullPointerException values is {@code null}.
-     * @see #getLineDelimiter()
-     * @see #getValueDelimiter()
-     * @see #setLineDelimiter(String)
-     * @see #setValueDelimiter(char)
+     *
+     * @see #getLineSeparator()
+     * @see #getValueSeparator()
+     * @see #setLineSeparator(String)
+     * @see #setValueSeparator(char)
      * @see #writeLine(Collection, boolean)
      */
     public void writeLine(Collection<String> values) throws IOException {
@@ -130,29 +136,30 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
      *                   by the set value delimiter. The set line delimiter is appended after
      *                   all values are written. This must not be {@code null}.
      * @param maskAlways If <code>true</code>, the values will always be masked.
+     *
      * @throws IOException If an I/O error occurs.
      * @throws NullPointerException values is {@code null}.
-     * @see #getLineDelimiter()
-     * @see #getValueDelimiter()
-     * @see #setLineDelimiter(String)
-     * @see #setValueDelimiter(char)
+     *
+     * @see #getLineSeparator()
+     * @see #getValueSeparator()
+     * @see #setLineSeparator(String)
+     * @see #setValueSeparator(char)
      */
     public void writeLine(Collection<String> values, boolean maskAlways) throws IOException {
-        if (values == null)
-            throw new NullPointerException("values");
+        Objects.requireNonNull(values, "CsvOutputStreamWriter::writeLine: values");
 
         boolean separate = false;
 
         for (String value : values) {
             if (separate)
-                write(valueDelimiter);
+                write(valueSeparator);
             else
                 separate = true;
 
             writeValue(value, maskAlways);
         }
 
-        write(lineDelimiter);
+        write(lineSeparator);
     }
 
     private void writeValue(String value, boolean maskAlways) throws IOException {
@@ -172,7 +179,7 @@ public class CsvOutputStreamWriter extends OutputStreamWriter {
     }
 
     private boolean requiresMask(char c) {
-        return c == maskChar || c == valueDelimiter || c == '\n' || c == '\r';
+        return c == maskChar || c == valueSeparator || c == '\n' || c == '\r';
     }
 
     private void writeMaskedValue(String value) throws IOException {

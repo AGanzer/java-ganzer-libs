@@ -101,7 +101,7 @@ public class CsvStreamTest {
 
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         CsvOutputStreamWriter w = new CsvOutputStreamWriter(os, StandardCharsets.UTF_8);
-        w.setLineDelimiter(lineFeed);
+        w.setLineSeparator(lineFeed);
 
         for (List<String> line : readContent)
             w.writeLine(line, maskAlways);
