@@ -2,6 +2,8 @@ package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
 
+import java.util.Objects;
+
 /**
  * This defines a validator that supports basic validation of text.
  * <p>
@@ -140,9 +142,7 @@ public class Validator {
      * @throws NullPointerException text is {@code null}.
      */
     public final boolean isValidInput(StringBuilder text, boolean autoFill) {
-        if (text == null)
-            throw new NullPointerException("text");
-
+        Objects.requireNonNull(text, "text");
         return doInputValidation(text, autoFill && hasOption(ValidatorOptions.AUTO_FILL));
     }
 
@@ -181,11 +181,8 @@ public class Validator {
      * @see ValidatorExceptionRef for an example.
      */
     public final boolean validate(String input, ValidatorExceptionRef er) {
-        if (input == null)
-            throw new NullPointerException("input");
-
-        if (er == null)
-            throw new NullPointerException("er");
+        Objects.requireNonNull(input, "input");
+        Objects.requireNonNull(er, "er");
 
         return doValidate(input, er);
     }
@@ -208,9 +205,7 @@ public class Validator {
      * @throws NullPointerException input is {@code null}.
      */
     public final String formatText(String input, TextFormat how) {
-        if (input == null)
-            throw new NullPointerException("input");
-
+        Objects.requireNonNull(input, "input");
         return doFormatText(input, how);
     }
 

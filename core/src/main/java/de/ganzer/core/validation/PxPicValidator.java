@@ -2,6 +2,8 @@ package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
 
+import java.util.Objects;
+
 /**
  * The PxPicValidator class defines a validator that validates text by using a
  * picture mask that complies to Borland's Paradox database pictures.
@@ -502,14 +504,11 @@ public class PxPicValidator extends Validator {
      * is thrown. To avoid this, the picture's syntax can be validated by
      * {@link #checkSyntax(String)}.
      *
-     * @param picture The picture to set. An empty string makes every input valid.
-     * @throws NullPointerException picture is {@code null}.
+     * @param picture The picture to set. An empty string or {@code null} makes
+     *               every input valid.
      * @throws IllegalArgumentException picture contains an invalid mask.
      */
     public void setPicture(String picture) {
-        if (picture == null )
-            throw new NullPointerException("picture");
-
         if (!checkSyntax(picture))
             throw new IllegalArgumentException("picture");
 
@@ -524,7 +523,7 @@ public class PxPicValidator extends Validator {
      * returned.
      */
     public boolean checkSyntax(String picture) {
-        if (picture.isEmpty())
+        if (picture == null || picture.isEmpty())
             return true;
 
         char lastChar = picture.charAt(picture.length() - 1);
@@ -587,7 +586,7 @@ public class PxPicValidator extends Validator {
         if (!super.doInputValidation(text, autoFill))
             return false;
 
-        if (picture.isEmpty() || text.length() == 0)
+        if (picture == null || picture.isEmpty() || text.length() == 0)
             return true;
 
         switch (new StateMachine(picture, text).start(autoFill)) {
@@ -619,7 +618,7 @@ public class PxPicValidator extends Validator {
         if (!super.doValidate(text, er))
             return false;
 
-        if (picture.isEmpty() || text.isEmpty())
+        if (picture == null || picture.isEmpty() || text.isEmpty())
             return true;
 
         switch (new StateMachine(picture, new StringBuilder(text)).start(false)) {
