@@ -2,8 +2,6 @@ package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
 
-import java.util.Objects;
-
 /**
  * The PxPicValidator class defines a validator that validates text by using a
  * picture mask that complies to Borland's Paradox database pictures.
