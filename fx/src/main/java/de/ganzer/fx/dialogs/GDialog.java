@@ -11,6 +11,7 @@ import javafx.stage.Window;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+// TODO: Add documentation.
 @SuppressWarnings("unused")
 public class GDialog<Controller extends GDialogController<Data>, Data> {
     private final FXMLLoader loader;

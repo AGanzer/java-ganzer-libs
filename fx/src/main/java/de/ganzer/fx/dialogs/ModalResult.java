@@ -1,5 +1,9 @@
 package de.ganzer.fx.dialogs;
 
+/**
+ * This is a utility class that provides named constants that can be used as
+ * results for modal dialogs.
+ */
 @SuppressWarnings("unused")
 public class ModalResult {
     public static final int CANCEL = 0;
