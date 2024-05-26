@@ -169,9 +169,9 @@ public class FileNameTools {
      * {@code countedHintFormat} is {@code null}.
      */
     public FileNameTools(String countedFormat, String hintFormat, String countedHintFormat, Function<Character, String> charReplacement) {
-        Objects.requireNonNull(countedFormat);
-        Objects.requireNonNull(hintFormat);
-        Objects.requireNonNull(countedHintFormat);
+        Objects.requireNonNull(countedFormat, "FileNameTools: countedFormat");
+        Objects.requireNonNull(hintFormat, "FileNameTools: hintFormat");
+        Objects.requireNonNull(countedHintFormat, "FileNameTools: countedHintFormat");
 
         this.countedFormat = countedFormat;
         this.hintFormat = hintFormat;
@@ -287,6 +287,7 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public String getUniqueName(String path, String hint) {
+        Objects.requireNonNull(path, "FileNameTools::getUniqueName: path");
         return getUniqueName(Path.of(path), hint).toString();
     }
 
@@ -315,6 +316,8 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public Path getUniqueName(Path path, String hint) {
+        Objects.requireNonNull(path, "FileNameTools::getUniqueName: path");
+
         if (!path.toFile().exists())
             return path;
 
@@ -365,6 +368,7 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public static String getNameWithoutLastExtension(String path) {
+        Objects.requireNonNull(path, "FileNameTools::getNameWithoutLastExtension: path");
         return getNameWithoutLastExtension(Path.of(path));
     }
 
@@ -380,7 +384,7 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public static String getNameWithoutLastExtension(Path path) {
-        Objects.requireNonNull(path);
+        Objects.requireNonNull(path, "FileNameTools::getNameWithoutLastExtension: path");
 
         String name = path.getFileName().toString();
         int i = name.lastIndexOf('.');
@@ -402,6 +406,7 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public static String getNameWithoutExtensions(String path) {
+        Objects.requireNonNull(path, "FileNameTools::getNameWithoutExtensions: path");
         return getNameWithoutExtensions(Path.of(path));
     }
 
@@ -416,7 +421,7 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public static String getNameWithoutExtensions(Path path) {
-        Objects.requireNonNull(path);
+        Objects.requireNonNull(path, "FileNameTools::getNameWithoutExtensions: path");
 
         String name = path.getFileName().toString();
         int i = name.indexOf('.');
@@ -439,7 +444,7 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public static String getExtension(String path) {
-        Objects.requireNonNull(path);
+        Objects.requireNonNull(path, "FileNameTools::getExtension: path");
 
         int i = path.lastIndexOf('.');
 
@@ -461,7 +466,7 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public static String getExtension(Path path) {
-        Objects.requireNonNull(path);
+        Objects.requireNonNull(path, "FileNameTools::getExtension: path");
         return getExtension(path.toString());
     }
 
@@ -477,6 +482,7 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public static String getAllExtensions(String path) {
+        Objects.requireNonNull(path, "FileNameTools::getAllExtensions: path");
         return getAllExtensions(Path.of(path));
     }
 
@@ -492,7 +498,7 @@ public class FileNameTools {
      * @throws NullPointerException {@code path} is {@code null}.
      */
     public static String getAllExtensions(Path path) {
-        Objects.requireNonNull(path);
+        Objects.requireNonNull(path, "FileNameTools::getAllExtensions: path");
 
         String name = path.getFileName().toString();
         int i = name.indexOf('.');
