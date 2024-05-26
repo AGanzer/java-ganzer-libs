@@ -11,11 +11,13 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class TestApplication extends Application {
+    public static final String APP_TITLE = "Manual UI-Tests (ganzer-libs)";
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Manual UI-Tests (ganzer-libs)");
+        stage.setTitle(APP_TITLE);
         stage.setScene(scene);
         stage.show();
     }
@@ -26,7 +28,7 @@ public class TestApplication extends Application {
 
     public static void alert(String message) {
         var a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle("Manual UI-Tests (ganzer-libs)");
+        a.setTitle(APP_TITLE);
         a.setContentText(message);
 
         a.showAndWait();
@@ -34,7 +36,7 @@ public class TestApplication extends Application {
 
     public static Optional<ButtonType> alert(String message, ButtonType... buttons) {
         var a = new Alert(Alert.AlertType.CONFIRMATION, message, buttons);
-        a.setTitle("Manual UI-Tests (ganzer-libs)");
+        a.setTitle(APP_TITLE);
 
         return a.showAndWait();
     }

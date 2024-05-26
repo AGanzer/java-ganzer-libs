@@ -3,26 +3,51 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.uitests.TestController">
-    <VBox spacing="10"
-          AnchorPane.bottomAnchor="10"
-          AnchorPane.leftAnchor="10"
-          AnchorPane.rightAnchor="10"
-          AnchorPane.topAnchor="10">
-        <TabPane fx:id="tabs" tabClosingPolicy="UNAVAILABLE">
-            <Tab fx:id="validatorTab"
-                 text="Validator Tests" />
-            <Tab fx:id="copyTab"
-                 text="Copy Tests" />
-        </TabPane>
-        <ButtonBar >
-            <buttons>
-                <Button ButtonBar.buttonData="OTHER"
-                        defaultButton="true"
-                        text="Start test"
-                        onAction="#startTestClicked" />
-            </buttons>
-        </ButtonBar>
-    </VBox>
-</AnchorPane>
+    <top>
+        <MenuBar>
+            <Menu text="_File">
+                <MenuItem text="_Exit"
+                          accelerator="Alt+F4"
+                          onAction="#exitApplication" />
+            </Menu>
+            <Menu text="_Dialogs">
+                <MenuItem text="Show _Modal"
+                          onAction="#showDialogModal" />
+                <MenuItem text="Show _Non-Modal"
+                          onAction="#showDialogNonModal" />
+                <MenuItem text="Show Without _Decoration"
+                          onAction="#showDialogWithoutDecoration" />
+                <MenuItem text="Show With _Utility Frame"
+                          onAction="#showDialogWithUtilityFrame" />
+                <MenuItem text="Show Without _Parent"
+                          onAction="#showDialogWithoutParent" />
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <AnchorPane>
+            <VBox spacing="10"
+                  AnchorPane.bottomAnchor="10"
+                  AnchorPane.leftAnchor="10"
+                  AnchorPane.rightAnchor="10"
+                  AnchorPane.topAnchor="0">
+                <TabPane fx:id="tabs" tabClosingPolicy="UNAVAILABLE">
+                    <Tab fx:id="validatorTab"
+                         text="Validator Tests" />
+                    <Tab fx:id="copyTab"
+                         text="Copy Tests" />
+                </TabPane>
+                <ButtonBar >
+                    <buttons>
+                        <Button ButtonBar.buttonData="OTHER"
+                                defaultButton="true"
+                                text="Start test"
+                                onAction="#startTestClicked" />
+                    </buttons>
+                </ButtonBar>
+            </VBox>
+        </AnchorPane>
+    </center>
+</BorderPane>
