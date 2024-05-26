@@ -396,9 +396,7 @@ public class FileCopy extends FileErrorProvider {
      * @throws NullPointerException defaultFileOverwriteAction is {@code null}.
      */
     public void setDefaultFileOverwriteAction(OverwriteAction defaultFileOverwriteAction) {
-        if (defaultDirOverwriteAction == null)
-            throw new NullPointerException("defaultDirOverwriteAction");
-
+        Objects.requireNonNull(defaultFileOverwriteAction, "defaultFileOverwriteAction");
         this.defaultFileOverwriteAction = defaultFileOverwriteAction;
     }
 
@@ -419,9 +417,7 @@ public class FileCopy extends FileErrorProvider {
      * @throws NullPointerException defaultFileOverwriteAction is {@code null}.
      */
     public void setDefaultDirOverwriteAction(OverwriteAction defaultDirOverwriteAction) {
-        if (defaultDirOverwriteAction == null)
-            throw new NullPointerException("defaultDirOverwriteAction");
-
+        Objects.requireNonNull(defaultDirOverwriteAction, "defaultDirOverwriteAction");
         this.defaultDirOverwriteAction = defaultDirOverwriteAction;
     }
 
@@ -431,8 +427,8 @@ public class FileCopy extends FileErrorProvider {
      * The data that fits into the buffer is read and written as a block. The
      * user cannot cancel the operation while a buffer is moved from one file
      * to another. Progress information is reported only after a buffer is
-     * completely worked and before (if there is more data avail) the next
-     * block of data is copied.
+     * completely worked and before (if there is more data available) the next
+     * block of data will be copied.
      *
      * @return The size of the buffer in bytes. The default value is 8 KB.
      */
@@ -508,8 +504,13 @@ public class FileCopy extends FileErrorProvider {
      *                     nor {@link ProgressInfo#getTotalPercentage} can be used
      *                     when progress is reported.
      * @return {@code true} on success; otherwise, {@code false} is returned.
+     *
+     * @throws NullPointerException sources or target is {@code null}.
      */
     public boolean start(List<String> sources, String target, boolean suppressInit) {
+        Objects.requireNonNull(sources, "sources");
+        Objects.requireNonNull(target, "target");
+
         var sourceFiles = sources.stream().map(File::new).collect(Collectors.toList());
         var targetFile = new File(target);
 

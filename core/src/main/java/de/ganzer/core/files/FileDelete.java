@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -237,8 +238,12 @@ public class FileDelete extends FileErrorProvider {
      *                     nor {@link FileDelete.ProgressInfo#getPercentage} can be used
      *                     when progress is reported.
      * @return {@code true} on success; otherwise, {@code false} is returned.
+     *
+     * @throws NullPointerException sources is {@code null}.
      */
     public boolean start(List<String> sources, boolean suppressInit) {
+        Objects.requireNonNull(sources, "sources");
+
         var sourceFiles = sources.stream().map(File::new).collect(Collectors.toList());
 
         clearError();
