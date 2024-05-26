@@ -2,6 +2,7 @@ package de.ganzer.fx.dialogs;
 
 import java.util.function.Consumer;
 
+@SuppressWarnings("unused")
 public interface GDialogController<Data> {
     void initControls(Data data);
 
