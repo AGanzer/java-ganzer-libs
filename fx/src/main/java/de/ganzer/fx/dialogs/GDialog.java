@@ -191,7 +191,8 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * <p>
      * This method does not return before the dialog is closed.
      * <p>
-     * If the modality is {@code null}, {@link Modality#WINDOW_MODAL} is used.
+     * If the modality is {@code null}, {@link Modality#APPLICATION_MODAL} is
+     * used.
      * <p>
      * If the style is {@code null}, {@link StageStyle#UTILITY} is used.
      *
@@ -219,7 +220,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
                 parent,
                 xPos,
                 yPos,
-                modality != null ? modality : Modality.WINDOW_MODAL,
+                modality != null ? modality : Modality.APPLICATION_MODAL,
                 style != null ? style : StageStyle.UTILITY);
         dialog.showAndWait();
 
