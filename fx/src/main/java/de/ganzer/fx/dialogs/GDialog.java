@@ -27,6 +27,10 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
         this.style = StageStyle.DECORATED;
     }
 
+    public Data getData() {
+        return data;
+    }
+
     public void setStyle(StageStyle style) {
         this.style = style == null ? StageStyle.DECORATED : style;
     }
