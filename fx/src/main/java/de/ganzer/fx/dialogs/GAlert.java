@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
@@ -77,10 +77,15 @@ public class GAlert {
             textArea.setEditable(false);
             textArea.setWrapText(true);
 
-            VBox vBox = new VBox();
-            vBox.getChildren().add(textArea);
+            AnchorPane pane = new AnchorPane();
+            pane.getChildren().add(textArea);
 
-            setExpandableContent(vBox);
+            AnchorPane.setTopAnchor(textArea, 0.0);
+            AnchorPane.setBottomAnchor(textArea, 0.0);
+            AnchorPane.setLeftAnchor(textArea, 0.0);
+            AnchorPane.setRightAnchor(textArea, 0.0);
+
+            setExpandableContent(pane);
         }
     }
 
