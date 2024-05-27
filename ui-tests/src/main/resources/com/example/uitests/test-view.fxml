@@ -19,8 +19,6 @@
                           onAction="#showDialogNonModal" />
                 <MenuItem text="Show Without _Decoration"
                           onAction="#showDialogWithoutDecoration" />
-                <MenuItem text="Show With _Utility Frame"
-                          onAction="#showDialogWithUtilityFrame" />
                 <MenuItem text="Show Without _Parent"
                           onAction="#showDialogWithoutParent" />
             </Menu>

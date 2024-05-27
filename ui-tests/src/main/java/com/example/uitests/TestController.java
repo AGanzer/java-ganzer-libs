@@ -70,14 +70,6 @@ public class TestController {
         dialog.showAndWait(tabs.getScene().getWindow());
     }
 
-    public void showDialogWithUtilityFrame(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, Object> dialog = new GDialog<>(fxmlLoader, null);
-
-        dialog.setStyle(StageStyle.UTILITY);
-        dialog.showAndWait(tabs.getScene().getWindow());
-    }
-
     public void showDialogWithoutParent(ActionEvent ignored) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
         GDialog<TestDialogController, Object> dialog = new GDialog<>(fxmlLoader, null);
