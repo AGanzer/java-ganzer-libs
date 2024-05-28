@@ -187,11 +187,20 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
     }
 
     /**
+     * This is the same as a call to {@link #showAndWait(Window)} with a parent
+     * set to {@code null}.
+     *
+     * @throws IOException If the dialog cannot be created from the resources.
+     */
+    public int showAndWait() throws IOException {
+        return showAndWait(null, Double.MIN_VALUE, Double.MIN_VALUE);
+    }
+
+    /**
      * This calls {@link #showAndWait(Window, double, double)} with the specified
      * parent to open the dialog centered to {@code parent}.
      *
-     * @param parent The parent to set. This should be better not {@code null}
-     *               for modal dialogs.
+     * @param parent The parent to set.
      *
      * @throws IOException If the dialog cannot be created from the resources.
      */
@@ -209,8 +218,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * <p>
      * If the style is {@code null}, {@link StageStyle#UTILITY} is used.
      *
-     * @param parent The parent to set. This should be better not {@code null}
-     *               for modal dialogs.
+     * @param parent The parent to set.
      * @param xPos   The X-position of the dialog's top-left corner when it is
      *               shown. If this is {@link Double#MIN_VALUE}, the dialog is
      *               horizontally centered to its parent.
