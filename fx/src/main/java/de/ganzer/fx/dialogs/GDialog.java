@@ -24,7 +24,7 @@ public class MainWindowController {
     // Other code here ...
 
     public void showDialogModal(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("my-dialog-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
         GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
 
         if (dialog.showAndWait(findMyWindow()) != ModalResult.CANCEL)
@@ -32,7 +32,7 @@ public class MainWindowController {
     }
 
     public void showDialog(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("my-dialog-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
         GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
 
         dialog.setApplyDataConsumer(input -> workWithInput(input));
