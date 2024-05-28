@@ -58,12 +58,14 @@
                       text="Require input"
                       selected="true"
                       onAction="#onOptionsChanged" />
+            <!--suppress XmlUnresolvedReference -->
             <CheckBox fx:id="blanksValid"
                       GridPane.rowIndex="0"
                       GridPane.columnIndex="1"
                       text="Allow blank input"
                       disable="${!controller.blanksValidEnabled}"
                       onAction="#onOptionsChanged" />
+            <!--suppress XmlUnresolvedReference -->
             <CheckBox fx:id="autoFill"
                       GridPane.rowIndex="1"
                       GridPane.columnIndex="0"
