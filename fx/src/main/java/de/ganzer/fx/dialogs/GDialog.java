@@ -50,6 +50,7 @@ public class MainWindowController {
 public class GDialog<Controller extends GDialogController<Data>, Data> {
     private final FXMLLoader loader;
     private final Data data;
+    private final String title;
     private StageStyle style;
     private Modality modality;
     private GDialogController<Data> controller;
@@ -70,9 +71,10 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * @see #setModality(Modality)
      * @see #setStyle(StageStyle)
      */
-    public GDialog(FXMLLoader loader, Data data) {
+    public GDialog(String title, FXMLLoader loader, Data data) {
         Objects.requireNonNull(loader, "GDialog::GDialog: loader");
 
+        this.title = title;
         this.loader = loader;
         this.data = data;
     }
@@ -243,12 +245,13 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
         Parent root = loader.load();
         Scene scene = new Scene(root);
         Stage dialog = new Stage();
-        dialog.onShowingProperty().addListener((p, o, n) -> adjustPosition(dialog, parent, xPos, yPos));
 
+        dialog.onShowingProperty().addListener((p, o, n) -> adjustPosition(dialog, parent, xPos, yPos));
         dialog.initOwner(parent);
         dialog.initModality(modality);
         dialog.initStyle(style);
         dialog.setScene(scene);
+        dialog.setTitle(title);
 
         controller = loader.getController();
         controller.initControls(data);
