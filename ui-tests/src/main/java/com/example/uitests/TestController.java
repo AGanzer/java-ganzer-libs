@@ -1,11 +1,15 @@
 package com.example.uitests;
 
+import com.example.uitests.charts.ChartsController;
 import de.ganzer.fx.dialogs.GDialog;
+import de.ganzer.fx.dialogs.ModalResult;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
@@ -43,28 +47,31 @@ public class TestController {
 
     public void showDialogModal(ActionEvent ignored) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, Object> dialog = new GDialog<>(fxmlLoader, null);
+        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, null);
 
-        int result = dialog.showAndWait(tabs.getScene().getWindow());
+        if (dialog.showAndWait(tabs.getScene().getWindow()) == ModalResult.OK)
+            alert("Information", "OK Button Clicked");
+    }
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(TestApplication.APP_TITLE);
-        alert.setHeaderText("Result of Dialog");
-        alert.setContentText("Result: " + result);
+    public void showDialogAutoApply(ActionEvent ignored) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
+        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, "");
 
-        alert.showAndWait();
+        dialog.setApplyDataConsumer(data -> alert("Information", "Auto applied!"));
+
+        dialog.showAndWait(tabs.getScene().getWindow());
     }
 
     public void showDialogNonModal(ActionEvent ignored) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, Object> dialog = new GDialog<>(fxmlLoader, null);
+        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, null);
 
         dialog.show(tabs.getScene().getWindow());
     }
 
     public void showDialogWithoutDecoration(ActionEvent ignored) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, Object> dialog = new GDialog<>(fxmlLoader, null);
+        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, null);
 
         dialog.setStyle(StageStyle.UNDECORATED);
         dialog.showAndWait(tabs.getScene().getWindow());
@@ -72,8 +79,37 @@ public class TestController {
 
     public void showDialogWithoutParent(ActionEvent ignored) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, Object> dialog = new GDialog<>(fxmlLoader, null);
+        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, null);
 
         dialog.show(null);
+    }
+
+    public void showDialogWithApplyButton(ActionEvent ignored) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
+        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, "Input some text");
+
+        dialog.setApplyDataConsumer(data -> alert("Apply clicked!", "New text: " + data));
+
+        dialog.show(null);
+    }
+
+    private void alert(String header, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(TestApplication.APP_TITLE);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+
+        alert.showAndWait();
+    }
+
+    public void showCharts(ActionEvent ignored) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(ChartsController.class.getResource("charts-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+
+        stage.setTitle("Charts");
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.show();
     }
 }

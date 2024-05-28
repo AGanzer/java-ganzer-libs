@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.example.uitests.charts.OneValueSettingsController"
+          hgap="10"
+          vgap="10">
+    <columnConstraints>
+        <ColumnConstraints />
+        <ColumnConstraints hgrow="ALWAYS" />
+    </columnConstraints>
+    <Label fx:id="valueLabel"
+           GridPane.columnIndex="0"
+           GridPane.rowIndex="0"
+           labelFor="${valueInput}"
+           mnemonicParsing="true" />
+    <TextField GridPane.columnIndex="1"
+               GridPane.rowIndex="0"
+               alignment="CENTER_RIGHT"
+               fx:id="valueInput"
+               onKeyTyped="#textChanged" />
+</GridPane>

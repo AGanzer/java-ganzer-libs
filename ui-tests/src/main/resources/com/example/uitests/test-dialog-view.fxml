@@ -28,13 +28,19 @@
                            GridPane.rowIndex="0" />
             </GridPane>
         </TitledPane>
-        <ButtonBar >
+        <ButtonBar fx:id="buttonBar">
             <buttons>
-                <Button ButtonBar.buttonData="OK_DONE"
+                <Button fx:id="okButton"
+                        ButtonBar.buttonData="OK_DONE"
                         defaultButton="true"
                         text="_OK"
                         onAction="#okClicked" />
-                <Button ButtonBar.buttonData="CANCEL_CLOSE"
+                <Button fx:id="applyButton"
+                        ButtonBar.buttonData="APPLY"
+                        text="_Apply"
+                        visible="false"
+                        onAction="#applyClicked" />
+                <Button fx:id="cancelButton" ButtonBar.buttonData="CANCEL_CLOSE"
                         cancelButton="true"
                         text="_Cancel"
                         onAction="#cancelClicked" />
