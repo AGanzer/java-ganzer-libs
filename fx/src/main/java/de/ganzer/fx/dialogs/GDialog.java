@@ -1,5 +1,6 @@
 package de.ganzer.fx.dialogs;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -224,6 +225,11 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
                 yPos,
                 modality != null ? modality : Modality.APPLICATION_MODAL,
                 style != null ? style : StageStyle.UTILITY);
+
+        // toFront() is necessary because sometimes the parent window
+        // gets the input focus after the dialog is shown:
+        //
+        Platform.runLater(dialog::toFront);
         dialog.showAndWait();
 
         int result = controller.getModalResult();
