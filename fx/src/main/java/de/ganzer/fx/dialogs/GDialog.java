@@ -128,6 +128,16 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
     }
 
     /**
+     * This is the same as a call to {@link #show(Window)} with a parent
+     * set to {@code null}.
+     *
+     * @throws IOException If the dialog cannot be created from the resources.
+     */
+    void show() throws IOException {
+        show(null, Double.MIN_VALUE, Double.MIN_VALUE);
+    }
+
+    /**
      * This calls {@link #show(Window, double, double)} with the specified
      * parent to open the dialog centered to {@code parent}.
      *
