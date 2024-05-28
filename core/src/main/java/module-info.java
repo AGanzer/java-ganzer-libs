@@ -1,4 +1,4 @@
-module ganzer.core.main {
+module de.ganzer.core {
     exports de.ganzer.core;
     exports de.ganzer.core.csv;
     exports de.ganzer.core.files;

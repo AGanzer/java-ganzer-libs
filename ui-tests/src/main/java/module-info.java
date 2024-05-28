@@ -1,7 +1,7 @@
 module com.example.uitests {
     requires javafx.controls;
     requires javafx.fxml;
-    requires ganzer.core.main;
+    requires de.ganzer.core;
     requires de.ganzer.fx;
     opens com.example.uitests to javafx.fxml;
     opens com.example.uitests.charts to javafx.fxml;
