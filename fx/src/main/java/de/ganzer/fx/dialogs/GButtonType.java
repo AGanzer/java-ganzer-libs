@@ -34,10 +34,10 @@ public final class GButtonType {
     public static final ButtonType IGNORE;
 
     static {
-        YES_TO_ALL = new ButtonType(FXMessages.get("yesToAll"), ButtonBar.ButtonData.YES);
-        NO_TO_ALL = new ButtonType(FXMessages.get("noToAll"), ButtonBar.ButtonData.NO);
-        RETRY = new ButtonType(FXMessages.get("retry"), ButtonBar.ButtonData.OK_DONE);
-        ABORT = new ButtonType(FXMessages.get("abort"), ButtonBar.ButtonData.CANCEL_CLOSE);
-        IGNORE = new ButtonType(FXMessages.get("ignore"), ButtonBar.ButtonData.CANCEL_CLOSE);
+        YES_TO_ALL = new ButtonType(FXMessages.get("yesToAllButton"), ButtonBar.ButtonData.YES);
+        NO_TO_ALL = new ButtonType(FXMessages.get("noToAllButton"), ButtonBar.ButtonData.NO);
+        RETRY = new ButtonType(FXMessages.get("retryButton"), ButtonBar.ButtonData.OK_DONE);
+        ABORT = new ButtonType(FXMessages.get("abortButton"), ButtonBar.ButtonData.CANCEL_CLOSE);
+        IGNORE = new ButtonType(FXMessages.get("ignoreButton"), ButtonBar.ButtonData.CANCEL_CLOSE);
     }
 }
