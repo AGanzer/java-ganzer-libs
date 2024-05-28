@@ -1,11 +1,13 @@
 package de.ganzer.fx.dialogs;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Callback;
@@ -202,6 +204,11 @@ public class GAlert {
                 yPos,
                 modality != null ? modality : Modality.APPLICATION_MODAL,
                 style != null ? style : StageStyle.UTILITY);
+
+        // toFront() is necessary because sometimes the parent window
+        // gets the input focus after the dialog is shown:
+        //
+        Platform.runLater(() -> ((Stage)alert.getDialogPane().getScene().getWindow()).toFront());
         Optional<ButtonType> result = alert.showAndWait();
 
         return result.map(this::translate).orElse(0);
