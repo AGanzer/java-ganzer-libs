@@ -164,6 +164,14 @@ public class GAlert {
     }
 
     /**
+     * This is the same as a call to {@link #showAndWait(Window)} with a parent
+     * set to {@code null}.
+     */
+    public int showAndWait() {
+        return showAndWait(null, Double.MIN_VALUE, Double.MIN_VALUE);
+    }
+
+    /**
      * This calls {@link #showAndWait(Window, double, double)} with the specified
      * parent to open the alert box centered to {@code parent}.
      *
