@@ -133,7 +133,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      *
      * @throws IOException If the dialog cannot be created from the resources.
      */
-    void show() throws IOException {
+    public void show() throws IOException {
         show(null, Double.MIN_VALUE, Double.MIN_VALUE);
     }
 
