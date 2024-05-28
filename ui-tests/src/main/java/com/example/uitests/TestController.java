@@ -48,48 +48,38 @@ public class TestController {
     }
 
     public void showDialogModal(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, null);
+        GDialog<TestDialogController, String> dialog = createDialog(null);
 
         if (dialog.showAndWait() == ModalResult.OK)
             alert("Information", "OK Button Clicked");
     }
 
     public void showDialogAutoApply(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, "");
-
-        dialog.setApplyDataConsumer(data -> alert("Information", "Auto applied!"));
+        GDialog<TestDialogController, String> dialog = createDialog("");
+        dialog.setApplyDataConsumer(data -> alert("Information", "Automatically applied!"));
 
         dialog.showAndWait();
     }
 
     public void showDialogNonModal(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, null);
-
+        GDialog<TestDialogController, String> dialog = createDialog(null);
         dialog.show(tabs.getScene().getWindow());
     }
 
     public void showDialogWithoutDecoration(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, null);
+        GDialog<TestDialogController, String> dialog = createDialog(null);
 
         dialog.setStyle(StageStyle.UNDECORATED);
         dialog.showAndWait();
     }
 
     public void showDialogWithoutParent(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, null);
-
+        GDialog<TestDialogController, String> dialog = createDialog(null);
         dialog.show();
     }
 
     public void showDialogWithApplyButton(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        GDialog<TestDialogController, String> dialog = new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, "Input some text");
-
+        GDialog<TestDialogController, String> dialog = createDialog("Input some text");
         dialog.setApplyDataConsumer(data -> alert("Apply clicked!", "New text: " + data));
 
         dialog.show();
@@ -106,6 +96,11 @@ public class TestController {
         int result = gAlert.showAndWait(tabs.getScene().getWindow());
 
         alert("Information", "GAlert closed with: " + translate(result));
+    }
+
+    private static GDialog<TestDialogController, String> createDialog(String data) {
+        FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
+        return new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, data);
     }
 
     private String translate(int button) {
