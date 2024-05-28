@@ -94,7 +94,7 @@ public class CopyTestController implements TestProvider {
                 copy.start(sourcePath.getText(), targetPath.getText(), suppressInit.isSelected());
 
                 if (copy.getError() != FileError.NONE) {
-                    Platform.runLater(() -> TestApplication.alert(copy.getErrorDescription()));
+                    Platform.runLater(() -> TestApplication.alertError(copy.getErrorDescription()));
                 }
 
                 synchronized (this) {
@@ -166,7 +166,7 @@ public class CopyTestController implements TestProvider {
         try {
             ((ValidatorTextFormatter)field.getTextFormatter()).validate();
         } catch (ValidatorException e) {
-            TestApplication.alert(e.getMessage());
+            TestApplication.alertInfo(e.getMessage());
 
             field.requestFocus();
             field.selectAll();

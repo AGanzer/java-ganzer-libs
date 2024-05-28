@@ -129,7 +129,7 @@ public class ValidatorTestController implements TestProvider {
                 break;
 
             default:
-                TestApplication.alert("Unknown Validator.");
+                TestApplication.alertError("Unknown Validator.");
         }
     }
 
@@ -143,7 +143,7 @@ public class ValidatorTestController implements TestProvider {
 
             settingsContainer.setContent(parent);
         } catch (IOException e) {
-            TestApplication.alert(String.format("Cannot load %s.", viewName));
+            TestApplication.alertError(String.format("Cannot load %s.", viewName));
             return;
         }
 
@@ -186,7 +186,7 @@ public class ValidatorTestController implements TestProvider {
             message = e.getMessage();
         }
 
-        TestApplication.alert(message);
+        TestApplication.alertInfo(message);
 
         testInput.requestFocus();
         testInput.selectAll();

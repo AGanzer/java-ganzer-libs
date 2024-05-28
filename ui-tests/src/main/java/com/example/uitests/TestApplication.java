@@ -26,18 +26,27 @@ public class TestApplication extends Application {
         launch();
     }
 
-    public static void alert(String message) {
-        var a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(APP_TITLE);
-        a.setContentText(message);
-
-        a.showAndWait();
+    public static void alertInfo(String message) {
+        alert(Alert.AlertType.INFORMATION, message);
     }
 
-    public static Optional<ButtonType> alert(String message, ButtonType... buttons) {
+    public static void alertError(String message) {
+        alert(Alert.AlertType.ERROR, message);
+    }
+
+    public static Optional<ButtonType> alertConfirm(String message, ButtonType... buttons) {
         var a = new Alert(Alert.AlertType.CONFIRMATION, message, buttons);
         a.setTitle(APP_TITLE);
 
         return a.showAndWait();
+    }
+
+    private static void alert(Alert.AlertType type, String message) {
+        var a = new Alert(type);
+        a.setTitle(APP_TITLE);
+        a.setHeaderText(null);
+        a.setContentText(message);
+
+        a.showAndWait();
     }
 }

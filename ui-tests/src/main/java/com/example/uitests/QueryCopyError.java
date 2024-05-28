@@ -43,7 +43,7 @@ public class QueryCopyError implements FileCopy.QueryErrorAction {
     }
 
     private synchronized void alert(String errorDescription) {
-        result = TestApplication.alert(
+        result = TestApplication.alertConfirm(
                 errorDescription,
                 IGNORE,
                 IGNORE_ALL,

@@ -18,10 +18,6 @@
                 <ColumnConstraints />
                 <ColumnConstraints hgrow="ALWAYS" />
             </columnConstraints>
-            <rowConstraints>
-                <RowConstraints />
-                <RowConstraints />
-            </rowConstraints>
             <Label GridPane.columnIndex="0"
                    GridPane.rowIndex="0"
                    text="Choose validator:" />

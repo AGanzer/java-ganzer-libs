@@ -34,7 +34,7 @@ public class TestController {
 
             tab.setContent(parent);
         } catch (IOException e) {
-            TestApplication.alert(String.format("Cannot load %s.", viewName));
+            TestApplication.alertError(String.format("Cannot load %s.", viewName));
         }
     }
 
@@ -51,12 +51,12 @@ public class TestController {
         GDialog<TestDialogController, String> dialog = createDialog(null);
 
         if (dialog.showAndWait() == ModalResult.OK)
-            alert("Information", "OK Button Clicked");
+            TestApplication.alertInfo("OK Button Clicked");
     }
 
     public void showDialogAutoApply(ActionEvent ignored) throws IOException {
         GDialog<TestDialogController, String> dialog = createDialog("");
-        dialog.setApplyDataConsumer(data -> alert("Information", "Automatically applied!"));
+        dialog.setApplyDataConsumer(data -> TestApplication.alertInfo("Automatically applied!"));
 
         dialog.showAndWait();
     }
@@ -80,7 +80,7 @@ public class TestController {
 
     public void showDialogWithApplyButton(ActionEvent ignored) throws IOException {
         GDialog<TestDialogController, String> dialog = createDialog("Input some text");
-        dialog.setApplyDataConsumer(data -> alert("Apply clicked!", "New text: " + data));
+        dialog.setApplyDataConsumer(data -> TestApplication.alertInfo("Apply clicked!\n\nNew text: " + data));
 
         dialog.show();
     }
@@ -95,7 +95,7 @@ public class TestController {
 
         int result = gAlert.showAndWait(tabs.getScene().getWindow());
 
-        alert("Information", "GAlert closed with: " + translate(result));
+        TestApplication.alertInfo("GAlert closed with: " + translate(result));
     }
 
     private static GDialog<TestDialogController, String> createDialog(String data) {
@@ -123,15 +123,6 @@ public class TestController {
             default:
                 return "Unknown";
         }
-    }
-
-    private void alert(String header, String message) {
-        GAlert alert = new GAlert(Alert.AlertType.INFORMATION);
-        alert.setTitle(TestApplication.APP_TITLE);
-        alert.setHeaderText(header);
-        alert.setContentText(message);
-
-        alert.showAndWait();
     }
 
     public void showCharts(ActionEvent ignored) throws IOException {

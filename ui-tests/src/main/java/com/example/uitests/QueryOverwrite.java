@@ -38,7 +38,7 @@ public class QueryOverwrite implements FileCopy.QueryOverwriteAction {
     }
 
     private synchronized void alert(File target) {
-        result = TestApplication.alert(
+        result = TestApplication.alertConfirm(
                 String.format("Overwrite \"%s\"?", target),
                 ButtonType.YES,
                 YES_TO_ALL,
