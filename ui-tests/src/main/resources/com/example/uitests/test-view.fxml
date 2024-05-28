@@ -26,6 +26,10 @@
                 <MenuItem text="Show With _Apply Button"
                           onAction="#showDialogWithApplyButton" />
             </Menu>
+            <Menu text="_Alerts">
+                <MenuItem text="_GAlert Dialog"
+                          onAction="#gAlertDialogClicked" />
+            </Menu>
             <Menu text="_Validation">
                 <MenuItem text="_Charts"
                           onAction="#showCharts" />
