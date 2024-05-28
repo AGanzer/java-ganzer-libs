@@ -35,6 +35,46 @@ public class GAlert {
     }
 
     /**
+     * Creates a new instance from the specified arguments.
+     *
+     * @param type The type of the alert box.
+     * @param title The title of the alert box.
+     */
+    public GAlert(Alert.AlertType type, String title) {
+        alert = new Alert(type);
+        alert.setTitle(title);
+    }
+
+    /**
+     * Creates a new instance from the specified arguments with hidden content
+     * text.
+     *
+     * @param type The type of the alert box.
+     * @param title The title of the alert box.
+     * @param content The content text of the alert box.
+     */
+    public GAlert(Alert.AlertType type, String title, String content) {
+        alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(content);
+    }
+
+    /**
+     * Creates a new instance from the specified arguments.
+     *
+     * @param type The type of the alert box.
+     * @param title The title of the alert box.
+     * @param header The header text of the alert box.
+     * @param content The content text of the alert box.
+     */
+    public GAlert(Alert.AlertType type, String title, String header, String content) {
+        alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+    }
+
+    /**
      * Sets the title of the alert box.
      *
      * @param title The title to set.

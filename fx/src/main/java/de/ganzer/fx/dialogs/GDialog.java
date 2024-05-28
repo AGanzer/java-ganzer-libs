@@ -51,7 +51,7 @@ public class MainWindowController {
 public class GDialog<Controller extends GDialogController<Data>, Data> {
     private final FXMLLoader loader;
     private final Data data;
-    private final String title;
+    private String title;
     private StageStyle style;
     private Modality modality;
     private GDialogController<Data> controller;
@@ -62,6 +62,26 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * <p>
      * The style and the modality are set to {@code null}.
      *
+     * @param loader The loader to create the dialog to show from the resources.
+     * @param data The data that initializes the dialog and that may be changed
+     *             by the user. This can be {@code null} if the dialog does not
+     *             require any data.
+     *
+     * @throws NullPointerException {@code loader} is {@code null}.
+     *
+     * @see #setModality(Modality)
+     * @see #setStyle(StageStyle)
+     */
+    public GDialog(FXMLLoader loader, Data data) {
+        this(null, loader, data);
+    }
+
+    /**
+     * Creates a new instance from the specified arguments.
+     * <p>
+     * The style and the modality are set to {@code null}.
+     *
+     * @param title The title to set for the dialog to show.
      * @param loader The loader to create the dialog to show from the resources.
      * @param data The data that initializes the dialog and that may be changed
      *             by the user. This can be {@code null} if the dialog does not
@@ -87,6 +107,15 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      */
     public Data getData() {
         return data;
+    }
+
+    /**
+     * Sets the title of the dialog to show.
+     *
+     * @param title The new title.
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     /**
