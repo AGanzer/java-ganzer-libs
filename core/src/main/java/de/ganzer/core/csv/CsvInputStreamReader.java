@@ -138,8 +138,8 @@ public class CsvInputStreamReader extends InputStreamReader {
         if (lastRead == maskChar)
             return readMaskedValue(value);
 
-        if (stopReading() )
-            return false;
+        if (stopReading())
+            return currentColumn != 1;
 
         if (lastRead == valueSeparator)
             return true;

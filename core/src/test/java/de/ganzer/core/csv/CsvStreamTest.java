@@ -19,7 +19,7 @@ public class CsvStreamTest {
 
     @Test
     void testFullReadWrite() throws IOException {
-        String csvContent = "1,2,3\n" +
+        String csvContent = ",,3\n" +
                 "\"1,1\",\"2\n2\",3\n" +
                 "1,2,\"3\"\"3\"\n";
         String writtenContent = doReadWrite(csvContent, false, "\n");
@@ -29,7 +29,7 @@ public class CsvStreamTest {
 
     @Test
     void testFullReadWriteWindowsLineFeed() throws IOException {
-        String csvContent = "1,2,3\r\n" +
+        String csvContent = "1,,\r\n" +
                 "\"1,1\",\"2\r\n2\",3\r\n" +
                 "1,2,\"3\"\"3\"\r\n";
         String writtenContent = doReadWrite(csvContent, false, "\r\n");
