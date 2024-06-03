@@ -141,6 +141,9 @@ public class CsvInputStreamReader extends InputStreamReader {
         if (stopReading() )
             return false;
 
+        if (lastRead == valueSeparator)
+            return true;
+
         value.append((char)lastRead);
 
         return readUnmaskedValue(value);
