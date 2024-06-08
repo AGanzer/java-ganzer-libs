@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -49,12 +50,11 @@ public class MainWindowController {
  */
 @SuppressWarnings("unused")
 public class GDialog<Controller extends GDialogController<Data>, Data> {
-    private final FXMLLoader loader;
     private final Data data;
-    private String title;
-    private StageStyle style;
+    private final Stage dialog;
+    private final GDialogController<Data> controller;
     private Modality modality;
-    private GDialogController<Data> controller;
+    private StageStyle style;
     private Consumer<Data> applyDataConsumer;
 
     /**
@@ -72,7 +72,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * @see #setModality(Modality)
      * @see #setStyle(StageStyle)
      */
-    public GDialog(FXMLLoader loader, Data data) {
+    public GDialog(FXMLLoader loader, Data data) throws IOException {
         this(null, loader, data);
     }
 
@@ -92,12 +92,16 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * @see #setModality(Modality)
      * @see #setStyle(StageStyle)
      */
-    public GDialog(String title, FXMLLoader loader, Data data) {
+    public GDialog(String title, FXMLLoader loader, Data data) throws IOException {
         Objects.requireNonNull(loader, "GDialog::GDialog: loader");
 
-        this.title = title;
-        this.loader = loader;
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+
         this.data = data;
+        this.controller = loader.getController();
+        this.dialog = new Stage();
+        this.dialog.setScene(scene);
     }
 
     /**
@@ -115,7 +119,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * @param title The new title.
      */
     public void setTitle(String title) {
-        this.title = title;
+        dialog.setTitle(title);
     }
 
     /**
@@ -146,6 +150,18 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
     }
 
     /**
+     * Adds the icon to the stage's icons.
+     *
+     * @param icon The icon to add.
+     *
+     * @throws NullPointerException {@code icon} is {@code null}.
+     */
+    public void setIcon(Image icon) {
+        Objects.requireNonNull(icon);
+        dialog.getIcons().add(icon);
+    }
+
+    /**
      * Sets the consumer that shall be called when an "Apply" button of the
      * dialog to show is clicked.
      *
@@ -154,6 +170,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      */
     public void setApplyDataConsumer(Consumer<Data> applyDataConsumer) {
         this.applyDataConsumer = applyDataConsumer;
+        controller.setApplyDataConsumer(applyDataConsumer);
     }
 
     /**
@@ -206,12 +223,13 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * @throws IOException If the dialog cannot be created from the resources.
      */
     public void show(Window parent, double xPos, double yPos) throws IOException {
-        Stage dialog = createDialog(
+        prepareForShow(
                 parent,
                 xPos,
                 yPos,
                 modality != null ? modality : Modality.NONE,
                 style != null ? style : StageStyle.DECORATED);
+
         dialog.show();
     }
 
@@ -266,7 +284,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * @throws IOException If the dialog cannot be created from the resources.
      */
     public int showAndWait(Window parent, double xPos, double yPos) throws IOException {
-        Stage dialog = createDialog(
+        prepareForShow(
                 parent,
                 xPos,
                 yPos,
@@ -294,26 +312,16 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
                 && controller.autoApplyDataAfterClose();
     }
 
-    private Stage createDialog(Window parent, double xPos, double yPos, Modality modality, StageStyle style) throws IOException {
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        Stage dialog = new Stage();
-
-        dialog.onShowingProperty().addListener((p, o, n) -> adjustPosition(dialog, parent, xPos, yPos));
+    private void prepareForShow(Window parent, double xPos, double yPos, Modality modality, StageStyle style) {
         dialog.initOwner(parent);
         dialog.initModality(modality);
         dialog.initStyle(style);
-        dialog.setScene(scene);
-        dialog.setTitle(title);
+        dialog.onShowingProperty().addListener((p, o, n) -> adjustPosition(parent, xPos, yPos));
 
-        controller = loader.getController();
         controller.initControls(data);
-        controller.setApplyDataConsumer(applyDataConsumer);
-
-        return dialog;
     }
 
-    private static void adjustPosition(Stage dialog, Window parent, double xPos, double yPos) {
+    private void adjustPosition(Window parent, double xPos, double yPos) {
         if (parent == null)
             return;
 

@@ -98,7 +98,7 @@ public class TestController {
         TestApplication.alertInfo("GAlert closed with: " + translate(result));
     }
 
-    private static GDialog<TestDialogController, String> createDialog(String data) {
+    private static GDialog<TestDialogController, String> createDialog(String data) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
         return new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, data);
     }
