@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -25,8 +26,7 @@ public class MainWindowController {
 
     public void showDialogModal(ActionEvent ignored) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
-        Parent root = fxmlLoader.load();
-        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(root, fxmlLoader.getController(), new InputDialogData());
+        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
 
         if (dialog.showAndWait(findMyWindow()) != ModalResult.CANCEL)
             workWithInput(dialog.getData());
@@ -34,8 +34,7 @@ public class MainWindowController {
 
     public void showDialog(ActionEvent ignored) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
-        Parent root = fxmlLoader.load();
-        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(root, fxmlLoader.getController(), new InputDialogData());
+        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
 
         dialog.setApplyDataConsumer(input -> workWithInput(input));
         dialog.show(null);
@@ -56,6 +55,58 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
     private Modality modality;
     private StageStyle style;
     private Consumer<Data> applyDataConsumer;
+
+    /**
+     * Creates a new instance from the specified arguments.
+     * <p>
+     * The style and the modality are set to {@code null}.
+     *
+     * @param loader The loader to use to create the dialog to show from the
+     *               resources.
+     * @param data The data that initializes the dialog and that may be changed
+     *             by the user. This can be {@code null} if the dialog does not
+     *             require any data.
+     *
+     * @throws NullPointerException {@code loader} is {@code null}.
+     * @throws IOException When the dialog root cannot be loaded from the
+     * resources.
+     *
+     * @see #setModality(Modality)
+     * @see #setStyle(StageStyle)
+     */
+    public GDialog(FXMLLoader loader, Data data) throws IOException {
+        this(null, loader, data);
+    }
+
+    /**
+     * Creates a new instance from the specified arguments.
+     * <p>
+     * The style and the modality are set to {@code null}.
+     *
+     * @param title The title to set for the dialog to show.
+     * @param loader The loader to use to create the dialog to show from the
+     *               resources.
+     * @param data The data that initializes the dialog and that may be changed
+     *             by the user. This can be {@code null} if the dialog does not
+     *             require any data.
+     *
+     * @throws NullPointerException {@code loader} is {@code null}.
+     * @throws IOException When the dialog root cannot be loaded from the
+     * resources.
+     *
+     * @see #setModality(Modality)
+     * @see #setStyle(StageStyle)
+     */
+    public GDialog(String title, FXMLLoader loader, Data data) throws IOException {
+        Objects.requireNonNull(loader, "GDialog::GDialog: loader");
+
+        Parent root = loader.load();
+
+        this.data = data;
+        this.controller = loader.getController();
+        this.dialog = new Stage();
+        this.dialog.setScene(new Scene(root));
+    }
 
     /**
      * Creates a new instance from the specified arguments.

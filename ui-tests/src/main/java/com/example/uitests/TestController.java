@@ -100,8 +100,7 @@ public class TestController {
 
     private static GDialog<TestDialogController, String> createDialog(String data) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("test-dialog-view.fxml"));
-        Parent root = fxmlLoader.load();
-        return new GDialog<>(TestApplication.APP_TITLE, root, fxmlLoader.getController(), data);
+        return new GDialog<>(TestApplication.APP_TITLE, fxmlLoader, data);
     }
 
     private String translate(int button) {
