@@ -26,7 +26,8 @@ public class MainWindowController {
 
     public void showDialogModal(ActionEvent ignored) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
-        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
+        Parent root = fxmlLoader.load();
+        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(root, fxmlLoader.getController(), new InputDialogData());
 
         if (dialog.showAndWait(findMyWindow()) != ModalResult.CANCEL)
             workWithInput(dialog.getData());
@@ -34,13 +35,13 @@ public class MainWindowController {
 
     public void showDialog(ActionEvent ignored) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
-        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
+        Parent root = fxmlLoader.load();
+        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(root, fxmlLoader.getController(), new InputDialogData());
 
         dialog.setApplyDataConsumer(input -> workWithInput(input));
         dialog.show(null);
     }
 }
-
  * }
  *
  * @param <Controller> The Controller class that is created by
@@ -62,19 +63,19 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * <p>
      * The style and the modality are set to {@code null}.
      *
-     * @param loader The loader to create the dialog to show from the resources.
+     * @param dialogRoot The parent root of the dialog to show.
      * @param data The data that initializes the dialog and that may be changed
      *             by the user. This can be {@code null} if the dialog does not
      *             require any data.
      *
-     * @throws NullPointerException {@code loader} is {@code null}.
-     * @throws IOException If the dialog cannot be created from the resources.
+     * @throws NullPointerException {@code dialogRoot} or {@code controller}
+     * is {@code null}.
      *
      * @see #setModality(Modality)
      * @see #setStyle(StageStyle)
      */
-    public GDialog(FXMLLoader loader, Data data) throws IOException {
-        this(null, loader, data);
+    public GDialog(Parent dialogRoot, Controller controller, Data data) {
+        this(null, dialogRoot, controller, data);
     }
 
     /**
@@ -83,27 +84,25 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * The style and the modality are set to {@code null}.
      *
      * @param title The title to set for the dialog to show.
-     * @param loader The loader to create the dialog to show from the resources.
+     * @param dialogRoot The parent root of the dialog to show.
      * @param data The data that initializes the dialog and that may be changed
      *             by the user. This can be {@code null} if the dialog does not
      *             require any data.
      *
-     * @throws NullPointerException {@code loader} is {@code null}.
-     * @throws IOException If the dialog cannot be created from the resources.
+     * @throws NullPointerException {@code dialogRoot} or {@code controller}
+     * is {@code null}.
      *
      * @see #setModality(Modality)
      * @see #setStyle(StageStyle)
      */
-    public GDialog(String title, FXMLLoader loader, Data data) throws IOException {
-        Objects.requireNonNull(loader, "GDialog::GDialog: loader");
-
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+    public GDialog(String title, Parent dialogRoot, Controller controller, Data data) {
+        Objects.requireNonNull(dialogRoot, "GDialog::GDialog: dialogRoot");
+        Objects.requireNonNull(controller, "GDialog::GDialog: controller");
 
         this.data = data;
-        this.controller = loader.getController();
+        this.controller = controller;
         this.dialog = new Stage();
-        this.dialog.setScene(scene);
+        this.dialog.setScene(new Scene(dialogRoot));
     }
 
     /**
