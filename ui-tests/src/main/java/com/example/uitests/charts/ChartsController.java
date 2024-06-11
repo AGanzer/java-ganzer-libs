@@ -56,7 +56,7 @@ public class ChartsController implements Initializable {
         distributionBox.getSelectionModel().select(0);
 
         new ValidatorTextFormatter(numValuesValidator, numValuesInput);
-        numValuesInput.setText(numValuesValidator.formatText("10000", TextFormat.DISPLAY));
+        numValuesInput.setText(numValuesValidator.formatText("100000", TextFormat.DISPLAY));
 
         updateSettings();
     }
