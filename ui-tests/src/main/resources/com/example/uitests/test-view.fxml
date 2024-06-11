@@ -30,7 +30,7 @@
                 <MenuItem text="_GAlert Dialog"
                           onAction="#gAlertDialogClicked" />
             </Menu>
-            <Menu text="_Validation">
+            <Menu text="_Other">
                 <MenuItem text="_Charts"
                           onAction="#showCharts" />
             </Menu>
