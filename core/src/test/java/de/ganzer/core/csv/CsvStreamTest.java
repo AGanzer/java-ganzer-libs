@@ -12,7 +12,14 @@ public class CsvStreamTest {
     @Test
     void testEmptyReadWrite() throws IOException {
         String csvContent = "";
-        String writtenContent = doReadWrite(csvContent, false, "\n");
+        String writtenContent = doReadWrite(csvContent, false, "\n", false);
+
+        Assertions.assertEquals(csvContent, writtenContent);
+    }
+    @Test
+    void testEmptyValueReadWrite() throws IOException {
+        String csvContent = "123\n\n123\n";
+        String writtenContent = doReadWrite(csvContent, false, "\n", true);
 
         Assertions.assertEquals(csvContent, writtenContent);
     }
@@ -22,7 +29,7 @@ public class CsvStreamTest {
         String csvContent = ",,3\n" +
                 "\"1,1\",\"2\n2\",3\n" +
                 "1,2,\"3\"\"3\"\n";
-        String writtenContent = doReadWrite(csvContent, false, "\n");
+        String writtenContent = doReadWrite(csvContent, false, "\n", false);
 
         Assertions.assertEquals(csvContent, writtenContent);
     }
@@ -32,7 +39,7 @@ public class CsvStreamTest {
         String csvContent = "1,,\r\n" +
                 "\"1,1\",\"2\r\n2\",3\r\n" +
                 "1,2,\"3\"\"3\"\r\n";
-        String writtenContent = doReadWrite(csvContent, false, "\r\n");
+        String writtenContent = doReadWrite(csvContent, false, "\r\n", false);
 
         Assertions.assertEquals(csvContent, writtenContent);
     }
@@ -42,7 +49,7 @@ public class CsvStreamTest {
         String csvContent = "1,2,3\n" +
                 "\"1,1\",\"2\n2\",3\n" +
                 "1,2,3";
-        String writtenContent = doReadWrite(csvContent, false, "\n");
+        String writtenContent = doReadWrite(csvContent, false, "\n", false);
 
         Assertions.assertEquals(csvContent + "\n", writtenContent);
     }
@@ -55,7 +62,7 @@ public class CsvStreamTest {
         String expectedContent = "\"1\",\"2\",\"3\"\n" +
                 "\"1,1\",\"2\n2\",\"3\"\n" +
                 "\"1\",\"2\",\"3\"\"3\"\n";
-        String writtenContent = doReadWrite(csvContent, true, "\n");
+        String writtenContent = doReadWrite(csvContent, true, "\n", false);
 
         Assertions.assertEquals(expectedContent, writtenContent);
     }
@@ -68,7 +75,7 @@ public class CsvStreamTest {
 
         Assertions.assertThrows(
                 InvalidCsvException.class,
-                () -> doReadWrite(csvContent, false, "\n"),
+                () -> doReadWrite(csvContent, false, "\n", false),
                 "InvalidCsvException not thrown.");
     }
 
@@ -80,13 +87,14 @@ public class CsvStreamTest {
 
         Assertions.assertThrows(
                 InvalidCsvException.class,
-                () -> doReadWrite(csvContent, false, "\n"),
+                () -> doReadWrite(csvContent, false, "\n", false),
                 "InvalidCsvException not thrown.");
     }
 
-    private String doReadWrite(String csvContent, boolean maskAlways, String lineFeed) throws IOException {
+    private String doReadWrite(String csvContent, boolean maskAlways, String lineFeed, boolean emptyLineIsEmptyValue) throws IOException {
         InputStream is = new ByteArrayInputStream(csvContent.getBytes(StandardCharsets.UTF_8));
         CsvInputStreamReader r = new CsvInputStreamReader(is, StandardCharsets.UTF_8);
+        r.setReadEmptyLineAsEmptyValue(emptyLineIsEmptyValue);
 
         List<List<String>> readContent = new ArrayList<>();
 

@@ -22,6 +22,7 @@ import java.util.List;
 public class CsvInputStreamReader extends InputStreamReader {
     private char valueSeparator = ',';
     private char maskChar = '"';
+    private boolean readEmptyLineAsEmptyValue;
     private int lastRead;
     private int currentLine = 1;
     private int currentColumn;
@@ -92,6 +93,39 @@ public class CsvInputStreamReader extends InputStreamReader {
     }
 
     /**
+     * Indicates whether an empty line is treated as an empty value.
+     * <p>
+     * By default, empty lines are skipped, but there may be situations where
+     * this is not wanted (single column files). In this case this property
+     * can be changed to {@code true} to read empty values instead of skipping
+     * the line.
+     *
+     * @return {@code true} if empty lines are treated as an empty value;
+     * otherwise, {@code false} is returned.
+     *
+     * @see #setReadEmptyLineAsEmptyValue(boolean)
+     */
+    public boolean isReadEmptyLineAsEmptyValue() {
+        return readEmptyLineAsEmptyValue;
+    }
+
+    /**
+     * Sets a value that indicates whether an empty line is treated as an empty
+     * value.
+     * <p>
+     * By default, empty lines are skipped, but there may be situations where
+     * this is not wanted (single column files). In this case this property
+     * can be changed to {@code true} to read empty values instead of skipping
+     * the line.
+     *
+     * @param readEmptyLineAsEmptyValue {@code true} to treat empty lines as
+     *                                   empty values.
+     */
+    public void setReadEmptyLineAsEmptyValue(boolean readEmptyLineAsEmptyValue) {
+        this.readEmptyLineAsEmptyValue = readEmptyLineAsEmptyValue;
+    }
+
+    /**
      * Reads a single line from the input stream.
      * <p>
      * Empty lines are ignored.
@@ -139,7 +173,7 @@ public class CsvInputStreamReader extends InputStreamReader {
             return readMaskedValue(value);
 
         if (stopReading())
-            return currentColumn != 1;
+            return isEmptyValue();
 
         if (lastRead == valueSeparator)
             return true;
@@ -147,6 +181,10 @@ public class CsvInputStreamReader extends InputStreamReader {
         value.append((char)lastRead);
 
         return readUnmaskedValue(value);
+    }
+
+    private boolean isEmptyValue() {
+        return currentColumn != 1 || readEmptyLineAsEmptyValue;
     }
 
     private boolean readMaskedValue(StringBuilder value) throws IOException, InvalidCsvException {
