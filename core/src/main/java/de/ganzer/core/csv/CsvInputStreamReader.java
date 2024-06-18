@@ -98,7 +98,7 @@ public class CsvInputStreamReader extends InputStreamReader {
      * By default, empty lines are skipped, but there may be situations where
      * this is not wanted (single column files). In this case this property
      * can be changed to {@code true} to read empty values instead of skipping
-     * the line.
+     * empty lines.
      *
      * @return {@code true} if empty lines are treated as an empty value;
      * otherwise, {@code false} is returned.
@@ -116,7 +116,7 @@ public class CsvInputStreamReader extends InputStreamReader {
      * By default, empty lines are skipped, but there may be situations where
      * this is not wanted (single column files). In this case this property
      * can be changed to {@code true} to read empty values instead of skipping
-     * the line.
+     * empty lines.
      *
      * @param readEmptyLineAsEmptyValue {@code true} to treat empty lines as
      *                                   empty values.
