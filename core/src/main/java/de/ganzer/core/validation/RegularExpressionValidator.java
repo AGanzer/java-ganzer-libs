@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * The RegularExpressionValidator class defines a validator that validates text
  * by using a regular expression.
  */
-public class RegularExpressionValidator extends Validator {
+public class RegularExpressionValidator extends CharCountValidator {
     private Pattern pattern;
 
     /**

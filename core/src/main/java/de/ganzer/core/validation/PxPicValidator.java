@@ -37,7 +37,7 @@ import de.ganzer.core.internals.CoreMessages;
  *     <li>{@literal [(*3#*2[#]) ]*3#-*4# -> Telephone no. with opt. 3-5 digits area code.}
  * </ul>
  */
-public class PxPicValidator extends Validator {
+public class PxPicValidator extends CharCountValidator {
     private enum Status {
         COMPLETE,
         INCOMPLETE,
