@@ -260,20 +260,27 @@ public class PxPicValidator extends Validator {
             int j = idxPic;
 
             if (isIncomplete(result)) {
+                boolean loop = true;
+
                 // Skip optional pieces:
                 //
-                for (; ; ) {
-                    if (picture.charAt(j) == '[')
-                        j = toGroupEnd(term, j);
-                    else if (picture.charAt(j) == '*') {
-                        if (j < term && !Character.isDigit(picture.charAt(j + 1))) {
-                            ++j;
+                while (loop) {
+                    switch (picture.charAt(j)) {
+                        case '[':
                             j = toGroupEnd(term, j);
-                        } else {
                             break;
-                        }
-                    } else {
-                        break;
+
+                        case '*':
+                            if (j < term && !Character.isDigit(picture.charAt(j + 1)))
+                                ++j;
+
+                            j = toGroupEnd(term, j);
+
+                            break;
+
+                        default:
+                            loop = false;
+                            break;
                     }
 
                     if (j == term)
@@ -313,16 +320,6 @@ public class PxPicValidator extends Validator {
                     case ';':
                         ++newPos;
                         break;
-
-                    case '*':
-                        ++newPos;
-
-                        while (Character.isDigit(picture.charAt(newPos)))
-                            ++idxPic;
-
-                        newPos = toGroupEnd(term, newPos);
-
-                        continue;
                 }
 
                 ++newPos;
