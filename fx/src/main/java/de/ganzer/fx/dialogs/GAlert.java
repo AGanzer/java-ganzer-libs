@@ -305,7 +305,7 @@ public class GAlert {
     private void adjustAlertBox(Window parent, double xPos, double yPos, Modality modality, StageStyle stageStyle) {
         Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
 
-        if (stage != null)
+        if (stage != null && icon != null)
             stage.getIcons().add(icon);
 
         alert.initOwner(parent);
@@ -314,6 +314,7 @@ public class GAlert {
         alert.onShowingProperty().addListener((p, o, n) -> adjustPosition(alert, parent, xPos, yPos));
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private static void adjustPosition(Alert alert, Window parent, double xPos, double yPos) {
         if (parent == null)
             return;

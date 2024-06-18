@@ -360,6 +360,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
         controller.initControls(data);
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private void adjustPosition(Window parent, double xPos, double yPos) {
         if (parent == null)
             return;
