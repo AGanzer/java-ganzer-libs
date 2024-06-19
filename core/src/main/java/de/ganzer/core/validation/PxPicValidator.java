@@ -17,7 +17,7 @@ import de.ganzer.core.internals.CoreMessages;
  *     <li>{@literal ! -> Accept every character, force uppercase letters.}
  * </ul>
  * <p>
- * 	Comparison:
+ * Comparison:
  * <ul>
  *     <li>{@literal ; -> Treat next char as is.}
  *     <li>{@literal * -> Repetition counter. May be followed by a decimal number.
