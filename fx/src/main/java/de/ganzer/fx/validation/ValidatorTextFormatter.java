@@ -147,9 +147,9 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
 
         control.focusedProperty().addListener((p, o, n) -> {
             if (n)
-                control.setText(validator.formatText(control.getText(), TextFormat.EDIT));
+                control.setText(validator.formatText(getText(control), TextFormat.EDIT));
             else {
-                control.setText(validator.formatText(control.getText(), TextFormat.DISPLAY));
+                control.setText(validator.formatText(getText(control), TextFormat.DISPLAY));
 
                 if (validateOnLostFocus)
                     validate(false);
@@ -280,7 +280,7 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
      * is returned.
      */
     public boolean validate(ValidatorExceptionRef er) {
-        if (validator.validate(control.getText(), er)) {
+        if (validator.validate(getText(control), er)) {
             resetIndicators();
             return true;
         }
@@ -297,6 +297,10 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
         }
 
         return false;
+    }
+
+    private static String getText(TextInputControl control) {
+        return control.getText() == null ? "" : control.getText();
     }
 
     private boolean noErrorIndicatorSet() {
