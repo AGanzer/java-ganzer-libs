@@ -9,6 +9,8 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.Tooltip;
 
+import java.util.Objects;
+
 /**
  * A common formatter that encapsulates an instance of the {@link Validator}
  * class to validate text during input.
@@ -19,20 +21,20 @@ import javafx.scene.control.Tooltip;
  * message.
  * {@code
 @FXML
-private Button okButton;
+public Button okButton;
 @FXML
-private TextField numNuggets;
+public TextField numNuggets;
 @FXML
-private TextField numEnemies;
+public TextField numEnemies;
 
 @FXML
-private void initialize() {
+public void initialize() {
     new ValidatorTextFormatter(new NumberValidator(1, 10), numNuggets);
     new ValidatorTextFormatter(new NumberValidator(1, 10), numEnemies);
 }
 
 @FXML
-private void closeDialog(ActionEvent actionEvent) {
+public void closeDialog(ActionEvent actionEvent) {
     Node source = (Node)actionEvent.getSource();
 
     if (source != okButton || applyValues(true)) {
@@ -42,7 +44,7 @@ private void closeDialog(ActionEvent actionEvent) {
 }
 
 private boolean applyValues(boolean withMessageBox) {
-    // Show errors by MessageBox an by error indicator:
+    // Show errors by MessageBox and by error indicator:
     //
     if (withMessageBox)
         return validate(numEnemies) && validate(numNuggets);
@@ -53,6 +55,10 @@ private boolean applyValues(boolean withMessageBox) {
 
     isValid = ((ValidatorTextFormatter)numEnemies.getTextFormatter()).isValid() && isValid;
     isValid = ((ValidatorTextFormatter)numNuggets.getTextFormatter()).isValid() && isValid;
+
+    if (isValid) {
+        // Apply values here.
+    }
 
     return isValid;
 }
@@ -137,19 +143,15 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
             return change;
         });
 
-        if (validator == null)
-            throw new NullPointerException("validator");
-
-        if (control == null)
-            throw new NullPointerException("control");
+        Objects.requireNonNull(validator,"validator");
+        Objects.requireNonNull(control, "control");
 
         control.setTextFormatter(this);
-
         control.focusedProperty().addListener((p, o, n) -> {
             if (n)
-                control.setText(validator.formatText(getText(control), TextFormat.EDIT));
+                control.setText(validator.formatText(getText(), TextFormat.EDIT));
             else {
-                control.setText(validator.formatText(getText(control), TextFormat.DISPLAY));
+                control.setText(validator.formatText(getText(), TextFormat.DISPLAY));
 
                 if (validateOnLostFocus)
                     validate(false);
@@ -158,6 +160,15 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
 
         this.validator = validator;
         this.control = control;
+    }
+
+    /**
+     * Gets the control that is validated.
+     *
+     * @return The control to validate.
+     */
+    public TextInputControl getControl() {
+        return control;
     }
 
     /**
@@ -280,7 +291,7 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
      * is returned.
      */
     public boolean validate(ValidatorExceptionRef er) {
-        if (validator.validate(getText(control), er)) {
+        if (validator.validate(getText(), er)) {
             resetIndicators();
             return true;
         }
@@ -299,7 +310,7 @@ public class ValidatorTextFormatter extends TextFormatter<String> {
         return false;
     }
 
-    private static String getText(TextInputControl control) {
+    private String getText() {
         return control.getText() == null ? "" : control.getText();
     }
 
