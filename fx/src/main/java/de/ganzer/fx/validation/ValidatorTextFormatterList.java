@@ -84,7 +84,7 @@ public class ValidatorTextFormatterList extends ArrayList<ValidatorTextFormatter
     }
      * }
      */
-    public interface OnValidationFailHandler {
+    public interface ValidationFailHandler {
         /**
          * This is invoked when a validation has failed.
          *
@@ -98,7 +98,7 @@ public class ValidatorTextFormatterList extends ArrayList<ValidatorTextFormatter
         boolean validationFailed(ValidatorTextFormatter formatter, ValidatorException exception);
     }
 
-    private OnValidationFailHandler onValidationFail;
+    private ValidationFailHandler validationFailHandler;
 
     /**
      * {@inheritDoc}
@@ -125,10 +125,10 @@ public class ValidatorTextFormatterList extends ArrayList<ValidatorTextFormatter
      *
      * @return The set handler or {@code null} if no handler is set.
      *
-     * @see #setOnValidationFail(OnValidationFailHandler)
+     * @see #setValidationFailHandler(ValidationFailHandler)
      */
-    public OnValidationFailHandler getOnValidationFail() {
-        return onValidationFail;
+    public ValidationFailHandler getValidationFailHandler() {
+        return validationFailHandler;
     }
 
     /**
@@ -140,17 +140,17 @@ public class ValidatorTextFormatterList extends ArrayList<ValidatorTextFormatter
      * handler returns {@code false}, the loop is left and no further validation
      * is done.
      *
-     * @param onValidationFail The handler to set. This may be {@code null} (the
-     *                         default).
+     * @param validationFailHandler The handler to set. This may be {@code null}
+     *                              (the default).
      */
-    public void setOnValidationFail(OnValidationFailHandler onValidationFail) {
-        this.onValidationFail = onValidationFail;
+    public void setValidationFailHandler(ValidationFailHandler validationFailHandler) {
+        this.validationFailHandler = validationFailHandler;
     }
 
     /**
      * Validates all input that is inserted into this {@code ValidatorTextFormatterList}.
      * <p>
-     * If a handler ist set by {@link #setOnValidationFail(OnValidationFailHandler)}
+     * If a handler ist set by {@link #setValidationFailHandler(ValidationFailHandler)}
      * this is called on each validation failure as long as the handler does not
      * return {@code false}, what means that the validation loop is left.
      *
@@ -163,8 +163,8 @@ public class ValidatorTextFormatterList extends ArrayList<ValidatorTextFormatter
         for (ValidatorTextFormatter formatter: this) {
             boolean isValid = formatter.validate(exceptionRef);
 
-            if (!isValid && onValidationFail != null) {
-                if (!onValidationFail.validationFailed(formatter, exceptionRef.getException()))
+            if (!isValid && validationFailHandler != null) {
+                if (!validationFailHandler.validationFailed(formatter, exceptionRef.getException()))
                     return false;
             }
 
