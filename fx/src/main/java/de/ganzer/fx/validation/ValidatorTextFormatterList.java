@@ -67,7 +67,7 @@ public class ValidatorTextFormatterList extends ArrayList<ValidatorTextFormatter
 
     @FXML
     public void initialize() {
-        formatterList.setOnValidationFail((f, e) -> {
+        formatterList.setValidationFailHandler((f, e) -> {
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("My Application");
             a.setHeaderText(ResourceBundle.getBundle("messages").getString("invalidInput"));
