@@ -1,6 +1,7 @@
 package de.ganzer.fx.dialogs;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -24,7 +25,6 @@ public class GAlert {
     private final Alert alert;
     private StageStyle style;
     private Modality modality;
-    private Image icon;
     private Callback<ButtonType, Integer> resultTranslator;
 
     /**
@@ -169,8 +169,13 @@ public class GAlert {
         this.modality = modality;
     }
 
-    public void setIcon(Image icon) {
-        this.icon = icon;
+    /**
+     * Gets the icons of the underlying stage.
+     *
+     * @return The icons of the stage.
+     */
+    public ObservableList<Image> getIcons() {
+        return ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons();
     }
 
     /**
@@ -303,11 +308,6 @@ public class GAlert {
     }
 
     private void adjustAlertBox(Window parent, double xPos, double yPos, Modality modality, StageStyle stageStyle) {
-        Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
-
-        if (stage != null && icon != null)
-            stage.getIcons().add(icon);
-
         alert.initOwner(parent);
         alert.initModality(modality);
         alert.initStyle(stageStyle);

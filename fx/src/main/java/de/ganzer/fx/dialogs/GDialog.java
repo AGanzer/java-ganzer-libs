@@ -1,6 +1,7 @@
 package de.ganzer.fx.dialogs;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -201,15 +202,12 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
     }
 
     /**
-     * Adds the icon to the stage's icons.
+     * Gets the icons of the underlying stage.
      *
-     * @param icon The icon to add.
-     *
-     * @throws NullPointerException {@code icon} is {@code null}.
+     * @return The icons of the stage.
      */
-    public void setIcon(Image icon) {
-        Objects.requireNonNull(icon);
-        dialog.getIcons().add(icon);
+    public ObservableList<Image> getIcons() {
+        return dialog.getIcons();
     }
 
     /**
