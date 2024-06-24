@@ -7,6 +7,7 @@ import javafx.scene.control.SeparatorMenuItem;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class SeparatorAction implements ActionItemBuilder {
     @Override
     public List<MenuItem> createMenuItems() {
