@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 /**
  * Groups actions that are exclusively selectable.
- *
+ * <p>
  * This class helps to group radio buttons and exclusively checkable menu items
  * without defining special {@link ToggleGroup}. This enables handling of the
  * action states of multiple equal groups in menus and toolbars.
