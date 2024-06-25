@@ -11,71 +11,160 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Groups several actions to enable the creation of menus and menu items.
+ * <p>
+ * See {@link Action} for an example.
+ */
 @SuppressWarnings("unused")
 public class ActionGroup extends Action {
     private final List<ActionItemBuilder> actions = new ArrayList<>();
 
+    /**
+     * Creates an empty action group with no menu text.
+     */
     public ActionGroup() {
     }
 
+    /**
+     * Creates an empty action group with the specified menu text.
+     *
+     * @param commandText The text of the menu to set.
+     */
     public ActionGroup(String commandText) {
         super(commandText);
     }
 
+    /**
+     * Calls {@link #setCommandText(String)}.
+     *
+     * @param commandText The command text to set.
+     *
+     * @return This action group.
+     */
     @Override
     public ActionGroup commandText(String commandText) {
         setCommandText(commandText);
         return this;
     }
 
+    /**
+     * Calls {@link #setDisabled(boolean)}.
+     *
+     * @param disabled {@code true} to disable the action; otherwise, the action
+     *                 is enabled.
+     *
+     * @return This action group.
+     */
     @Override
     public ActionGroup disabled(boolean disabled) {
         setDisabled(disabled);
         return this;
     }
 
+    /**
+     * Calls {@link #setVisible(boolean)}.
+     *
+     * @param visible {@code false} to hide the controls that are bound to this
+     *                action; otherwise, the controls are shown.
+     *
+     * @return This action group.
+     */
     @Override
     public ActionGroup visible(boolean visible) {
         setVisible(visible);
         return this;
     }
 
+    /**
+     * Calls {@link #setMenuImage(Node)}.
+     *
+     * @param image The image to set.
+     *
+     * @return This action group.
+     */
     @Override
     public ActionGroup menuImage(Node image) {
         setMenuImage(image);
         return this;
     }
 
+    /**
+     * Calls {@link #setButtonImage(Node)}.
+     *
+     * @param image The image to set.
+     *
+     * @return This action group.
+     */
     @Override
     public ActionGroup buttonImage(Node image) {
         setButtonImage(image);
         return this;
     }
 
+    /**
+     * Calls {@link #setOnAction(EventHandler)}.
+     *
+     * @param onAction The action handler to invoke when this action is fired.
+     *
+     * @return This action group.
+     */
     @Override
     public ActionGroup onAction(EventHandler<ActionEvent> onAction) {
         setOnAction(onAction);
         return this;
     }
 
+    /**
+     * Calls {@link #setNotBindMenu(int)}.
+     *
+     * @param notBindMenu The properties that shall not be bound to the created
+     *                    menu item.
+     *
+     * @return This action group.
+     */
     @Override
     public ActionGroup notBindMenu(int notBindMenu) {
         setNotBindMenu(notBindMenu);
         return this;
     }
 
+    /**
+     * Calls {@link #setNotBindButton(int)}.
+     *
+     * @param notBindButton The properties that shall not be bound to the
+     *                      created button.
+     *
+     * @return This action group.
+     */
     @Override
     public ActionGroup notBindButton(int notBindButton) {
         setNotBindButton(notBindButton);
         return this;
     }
 
+    /**
+     * Calls {@link #setTooltipText(String)}.
+     *
+     * @param tooltipText The text to set.
+     *
+     * @return This action group.
+     */
     @Override
     public ActionGroup tooltipText(String tooltipText) {
         setTooltipText(tooltipText);
         return this;
     }
 
+    /**
+     * Adds the specified actions into this group.
+     *
+     * @param actions The actions to add.
+     *
+     * @return This action group.
+     *
+     * @throws NullPointerException {@code actions} is {@code null}.
+     */
     public ActionGroup addAll(ActionItemBuilder... actions) {
         Objects.requireNonNull(actions);
 
@@ -83,6 +172,11 @@ public class ActionGroup extends Action {
         return this;
     }
 
+    /**
+     * Creates a menu with all containing actions.
+     *
+     * @return The created menu.
+     */
     public Menu createMenu() {
         Menu menu = new Menu();
         bindTo(menu);
