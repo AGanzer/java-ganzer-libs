@@ -180,9 +180,9 @@ public class ActionGroup extends Action {
     public List<Node> createButtons(boolean focusTraversable) {
         MenuButton button = new MenuButton();
         button.getItems().addAll(createItems());
+        button.setFocusTraversable(focusTraversable);
 
         bindTo(button, getNotBindButton());
-        button.setFocusTraversable(focusTraversable);
 
         return List.of(button);
     }
