@@ -233,7 +233,7 @@ public class ActionGroup extends Action {
         button.getItems().addAll(action.createItems());
         button.setFocusTraversable(focusTraversable);
 
-        action.bindTo(button, getNotBindButton() | BindNot.ACTION);
+        action.bindTo(button, action.getNotBindButton() | BindNot.ACTION);
 
         return button;
     }
