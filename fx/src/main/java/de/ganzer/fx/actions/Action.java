@@ -437,7 +437,8 @@ public class Action implements ActionItemBuilder {
      * @see #createMenuItems()
      */
     public Action bindTo(MenuItem item, int not) {
-        item.onActionProperty().bind(onActionProperty());
+        if ((not & BindNot.ACTION) == 0)
+            item.onActionProperty().bind(onActionProperty());
 
         if ((not & BindNot.COMMAND_TEXT) == 0)
             item.textProperty().bind(commandTextProperty());
@@ -512,7 +513,8 @@ public class Action implements ActionItemBuilder {
      * @see #createButtons(boolean)
      */
     public Action bindTo(ButtonBase button, int not) {
-        button.onActionProperty().bind(onActionProperty());
+        if ((not & BindNot.ACTION) == 0)
+            button.onActionProperty().bind(onActionProperty());
 
         if ((not & BindNot.COMMAND_TEXT) == 0)
             button.textProperty().bind(commandTextProperty());

@@ -171,21 +171,24 @@ public class ActionGroup extends Action {
     }
 
     /**
-     * Creates a menu button that contains all actions of this group as menu
-     * items.
+     * Creates for all actions of this group buttons.
      *
-     * @return A list with exactly one button.
+     * @return A list with the created buttons.
      */
     @Override
     public List<Node> createButtons(boolean focusTraversable) {
-        MenuButton button = new MenuButton();
-        button.getItems().addAll(createItems());
-        button.setFocusTraversable(focusTraversable);
+        List<Node> buttons = new ArrayList<>();
 
-        bindTo(button, getNotBindButton());
+        for (ActionItemBuilder action: actions) {
+            if (action instanceof ActionGroup)
+                buttons.add(createMenuButton((ActionGroup)action, focusTraversable));
+            else
+                buttons.addAll(action.createButtons(focusTraversable));
+        }
 
-        return List.of(button);
+        return buttons;
     }
+
     /**
      * Adds the specified actions into this group.
      *
@@ -216,11 +219,21 @@ public class ActionGroup extends Action {
         return menu;
     }
 
+    private Node createMenuButton(ActionGroup action, boolean focusTraversable) {
+        MenuButton button = new MenuButton();
+        button.getItems().addAll(action.createItems());
+        button.setFocusTraversable(focusTraversable);
+
+        action.bindTo(button, getNotBindButton() | BindNot.ACTION);
+
+        return button;
+    }
+
     private Collection<? extends MenuItem> createItems() {
         List<MenuItem> items = new ArrayList<>();
 
-        for (ActionItemBuilder item: actions)
-            items.addAll(item.createMenuItems());
+        for (ActionItemBuilder action: actions)
+            items.addAll(action.createMenuItems());
 
         return items;
     }

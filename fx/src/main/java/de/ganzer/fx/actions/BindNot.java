@@ -46,4 +46,9 @@ public final class BindNot {
      * Don't bind the image.
      */
     public static final int IMAGE = 0x40;
+
+    /**
+     * Don't bind the action handler (for menu buttons).
+     */
+    public static final int ACTION = 0x80;
 }
