@@ -3,8 +3,7 @@ package de.ganzer.fx.actions;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -157,6 +156,37 @@ public class ActionGroup extends Action {
     }
 
     /**
+     * Creates a menu that contains all actions of this group as menu items.
+     *
+     * @return A list with exactly one menu.
+     */
+    @Override
+    public List<MenuItem> createMenuItems() {
+        List<MenuItem> items = new ArrayList<>();
+        items.add(createMenu());
+
+        bindTo(items.get(0), getNotBindMenu());
+
+        return items;
+    }
+
+    /**
+     * Creates a menu button that contains all actions of this group as menu
+     * items.
+     *
+     * @return A list with exactly one button.
+     */
+    @Override
+    public List<Node> createButtons(boolean focusTraversable) {
+        MenuButton button = new MenuButton();
+        button.getItems().addAll(createItems());
+
+        bindTo(button, getNotBindButton());
+        button.setFocusTraversable(focusTraversable);
+
+        return List.of(button);
+    }
+    /**
      * Adds the specified actions into this group.
      *
      * @param actions The actions to add.
@@ -179,7 +209,7 @@ public class ActionGroup extends Action {
      */
     public Menu createMenu() {
         Menu menu = new Menu();
-        bindTo(menu);
+        bindTo(menu, getNotBindMenu());
 
         menu.getItems().addAll(createItems());
 
