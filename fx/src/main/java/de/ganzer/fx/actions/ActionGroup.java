@@ -219,6 +219,15 @@ public class ActionGroup extends Action {
         return menu;
     }
 
+    /**
+     * Creates a menu button with all containing actions.
+     *
+     * @return The created menu.
+     */
+    public Node createMenuButton(boolean focusTraversable) {
+        return createMenuButton(this, focusTraversable);
+    }
+
     private Node createMenuButton(ActionGroup action, boolean focusTraversable) {
         MenuButton button = new MenuButton();
         button.getItems().addAll(action.createItems());
