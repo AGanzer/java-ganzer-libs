@@ -2,6 +2,21 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
+      <option name="id" value="core-repo" />
+      <option name="name" value="core-repo" />
+      <option name="url" value="file://D:\Entwicklung\Libraries\Java\ganzer\ui-tests/../core/target" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="fx-repo" />
+      <option name="name" value="fx-repo" />
+      <option name="url" value="file://D:\Entwicklung\Libraries\Java\ganzer\ui-tests/../fx/target" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="core-repo" />
+      <option name="name" value="core-repo" />
+      <option name="url" value="file://$PROJECT_DIR$/ui-tests/../core/target" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
@@ -9,12 +24,12 @@
     <remote-repository>
       <option name="id" value="core-repo" />
       <option name="name" value="core-repo" />
-      <option name="url" value="file://$PROJECT_DIR$/fx/../core/target" />
+      <option name="url" value="file:../core/target" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="core-repo" />
       <option name="name" value="core-repo" />
-      <option name="url" value="file:../core/target" />
+      <option name="url" value="file://$PROJECT_DIR$/fx/../core/target" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="fx-repo" />
@@ -27,6 +42,11 @@
       <option name="url" value="file://$PROJECT_DIR$/ui-tests/../fx/target" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="core-repo" />
+      <option name="name" value="core-repo" />
+      <option name="url" value="file://D:\Entwicklung\Libraries\Java\ganzer\fx/../core/target" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Maven Central repository" />
       <option name="url" value="https://repo1.maven.org/maven2" />
@@ -35,11 +55,6 @@
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="core-repo" />
-      <option name="name" value="core-repo" />
-      <option name="url" value="file://$PROJECT_DIR$/ui-tests/../core/target" />
     </remote-repository>
   </component>
 </project>
