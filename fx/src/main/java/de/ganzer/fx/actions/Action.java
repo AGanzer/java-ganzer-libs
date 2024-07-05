@@ -19,7 +19,7 @@ import java.util.function.Function;
  * buttons and to handle the status of the controls that are linked with
  * this action.
  * <p>
- * The following sample creates a File and a Format menu and show how a group
+ * The following example creates a File and a Format menu and shows how a group
  * of radio menu items can be created and how the buttons can be inserted into
  * a toolbar:
  * <p>
@@ -129,7 +129,7 @@ public class MainWindowController implements Initializable {
 }
  * }
  *
- * Another example shows haw to user this class with already existing menu items
+ * Another example shows how to use this class with already existing menu items
  * and buttons:
  * {@code
 public class MainWindowController implements Initializable {
