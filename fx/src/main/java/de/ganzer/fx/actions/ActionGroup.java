@@ -5,10 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Groups several actions to enable the creation of menus and menu items.
@@ -16,7 +13,7 @@ import java.util.Objects;
  * See {@link Action} for an example.
  */
 @SuppressWarnings("unused")
-public class ActionGroup extends Action {
+public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
     private final List<ActionItemBuilder> actions = new ArrayList<>();
 
     /**
@@ -189,6 +186,26 @@ public class ActionGroup extends Action {
         return buttons;
     }
 
+    @Override
+    public Iterator<ActionItemBuilder> iterator() {
+        return actions.iterator();
+    }
+
+    /**
+     * Creates a menu with all containing actions.
+     *
+     * @return The created menu.
+     */
+    @Override
+    public Menu createMenu() {
+        Menu menu = new Menu();
+        bindTo(menu, getNotBindMenu());
+
+        menu.getItems().addAll(createItems());
+
+        return menu;
+    }
+
     /**
      * Adds the specified actions into this group.
      *
@@ -203,20 +220,6 @@ public class ActionGroup extends Action {
 
         this.actions.addAll(List.of(actions));
         return this;
-    }
-
-    /**
-     * Creates a menu with all containing actions.
-     *
-     * @return The created menu.
-     */
-    public Menu createMenu() {
-        Menu menu = new Menu();
-        bindTo(menu, getNotBindMenu());
-
-        menu.getItems().addAll(createItems());
-
-        return menu;
     }
 
     /**
