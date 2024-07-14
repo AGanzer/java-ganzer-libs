@@ -437,29 +437,29 @@ public class Action implements ActionItemBuilder {
      * @see #createMenuItems()
      */
     public Action bindTo(MenuItem item, int not) {
-        if ((not & BindNot.ACTION) == 0)
+        if (shouldBind(not, BindNot.ACTION))
             item.onActionProperty().bind(onActionProperty());
 
-        if ((not & BindNot.COMMAND_TEXT) == 0)
+        if (shouldBind(not, BindNot.COMMAND_TEXT))
             item.textProperty().bind(commandTextProperty());
 
-        if ((not & BindNot.ACCELERATOR) == 0)
+        if (shouldBind(not, BindNot.ACCELERATOR))
             item.acceleratorProperty().bind(acceleratorProperty());
 
-        if ((not & BindNot.DISABLED) == 0)
+        if (shouldBind(not, BindNot.DISABLED))
             item.disableProperty().bind(disabledProperty());
 
-        if ((not & BindNot.VISIBLE) == 0)
+        if (shouldBind(not, BindNot.VISIBLE))
             item.visibleProperty().bind(visibleProperty());
 
-        if ((not & BindNot.SELECTED) == 0) {
+        if (shouldBind(not, BindNot.SELECTED)) {
             if (item instanceof RadioMenuItem)
                 ((RadioMenuItem)item).selectedProperty().bindBidirectional(selectedProperty());
             else if (item instanceof CheckMenuItem)
                 ((CheckMenuItem)item).selectedProperty().bindBidirectional(selectedProperty());
         }
 
-        if ((not & BindNot.IMAGE) == 0) {
+        if (shouldBind(not, BindNot.IMAGE)) {
             item.graphicProperty().bind(new ObjectBinding<>() {
                 {
                     this.bind(menuImageProperty());
@@ -513,19 +513,19 @@ public class Action implements ActionItemBuilder {
      * @see #createButtons(boolean)
      */
     public Action bindTo(ButtonBase button, int not) {
-        if ((not & BindNot.ACTION) == 0)
+        if (shouldBind(not, BindNot.ACTION))
             button.onActionProperty().bind(onActionProperty());
 
-        if ((not & BindNot.COMMAND_TEXT) == 0)
+        if (shouldBind(not, BindNot.COMMAND_TEXT))
             button.textProperty().bind(commandTextProperty());
 
-        if ((not & BindNot.DISABLED) == 0)
+        if (shouldBind(not, BindNot.DISABLED))
             button.disableProperty().bind(disabledProperty());
 
-        if ((not & BindNot.VISIBLE) == 0)
+        if (shouldBind(not, BindNot.VISIBLE))
             button.visibleProperty().bind(visibleProperty());
 
-        if ((not & BindNot.TOOLTIP_TEXT) == 0) {
+        if (shouldBind(not, BindNot.TOOLTIP_TEXT)) {
             String ttText = getTooltipText();
 
             if (ttText == null) {
@@ -542,10 +542,10 @@ public class Action implements ActionItemBuilder {
             button.setTooltip(tooltip);
         }
 
-        if ((not & BindNot.SELECTED) == 0 && (button instanceof ToggleButton))
+        if (shouldBind(not, BindNot.SELECTED) && (button instanceof ToggleButton))
             ((ToggleButton)button).selectedProperty().bindBidirectional(selectedProperty());
 
-        if ((not & BindNot.IMAGE) == 0) {
+        if (shouldBind(not, BindNot.IMAGE)) {
             button.graphicProperty().bind(new ObjectBinding<>() {
                 {
                     this.bind(buttonImageProperty());
@@ -1024,6 +1024,10 @@ public class Action implements ActionItemBuilder {
             return new ImageView(((ImageView)image).getImage());
 
         return null;
+    }
+
+    private static boolean shouldBind(int value, int bindNot) {
+        return (value & bindNot) == 0;
     }
 
     private static String removeMnemonic(String text) {
