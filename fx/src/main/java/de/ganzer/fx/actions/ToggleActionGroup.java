@@ -192,22 +192,6 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void forEach(Consumer<? super Action> action) {
-        actions.forEach(action);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Spliterator<Action> spliterator() {
-        return actions.spliterator();
-    }
-
-    /**
      * Creates menu items for each contained action.
      *
      * @return The created items.
