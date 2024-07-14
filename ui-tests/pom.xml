@@ -46,16 +46,16 @@
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../core/target/de-ganzer-core-1.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}/../core/target/de-ganzer-core-1.0.1.jar</systemPath>
        </dependency>
         <dependency>
             <groupId>de.ganzer.fx</groupId>
             <artifactId>de-ganzer-fx</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.1.1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../fx/target/de-ganzer-fx-1.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}/../fx/target/de-ganzer-fx-1.1.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
