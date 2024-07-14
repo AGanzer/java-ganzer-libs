@@ -7,7 +7,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToggleGroup;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Groups actions that are exclusively selectable.

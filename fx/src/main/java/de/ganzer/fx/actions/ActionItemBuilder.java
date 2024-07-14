@@ -22,16 +22,6 @@ public interface ActionItemBuilder {
     }
 
     /**
-     * Creates the menus that are encapsulated by an action group.
-     *
-     * @return A list with the created menus or {@code null} if the implementing
-     * class does not support this.
-     */
-    default List<Menu> createMenus() {
-        return null;
-    }
-
-    /**
      * Creates the menu items that visualizes an action or an action group.
      *
      * @return A list with the created items.
