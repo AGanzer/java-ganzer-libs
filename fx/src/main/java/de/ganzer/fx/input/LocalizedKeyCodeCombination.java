@@ -8,6 +8,7 @@ import javafx.scene.input.KeyEvent;
  * The same as {@link javafx.scene.input.KeyCodeCombination} but with
  * localization.
  */
+@SuppressWarnings("unused")
 public final class LocalizedKeyCodeCombination extends LocalizedKeyCombination {
     private final KeyCode code;
 
@@ -172,11 +173,11 @@ public final class LocalizedKeyCodeCombination extends LocalizedKeyCombination {
 
     private static char getSingleChar(KeyCode code) {
         switch (code) {
-            case ENTER: return '\u21B5';
-            case LEFT: return '\u2190';
-            case UP: return '\u2191';
-            case RIGHT: return '\u2192';
-            case DOWN: return '\u2193';
+            case ENTER: return '↵';
+            case LEFT: return '←';
+            case UP: return '↑';
+            case RIGHT: return '→';
+            case DOWN: return '↓';
             case COMMA: return ',';
             case MINUS: return '-';
             case PERIOD: return '.';
@@ -203,7 +204,7 @@ public final class LocalizedKeyCodeCombination extends LocalizedKeyCombination {
             case COLON: return ':';
             case CIRCUMFLEX: return '^';
             case DOLLAR: return '$';
-            case EURO_SIGN: return '\u20AC';
+            case EURO_SIGN: return '€';
             case EXCLAMATION_MARK: return '!';
             case LEFT_PARENTHESIS: return '(';
             case NUMBER_SIGN: return '#';
@@ -229,9 +230,9 @@ public final class LocalizedKeyCodeCombination extends LocalizedKeyCombination {
         //
         if (System.getProperty("os.name").startsWith("Mac")) {
             switch (code) {
-                case BACK_SPACE: return '\u232B';
-                case ESCAPE: return '\u238B';
-                case DELETE: return '\u2326';
+                case BACK_SPACE: return '⌫';
+                case ESCAPE: return '⎋';
+                case DELETE: return '⌦';
                 default:
                     break;
             }
