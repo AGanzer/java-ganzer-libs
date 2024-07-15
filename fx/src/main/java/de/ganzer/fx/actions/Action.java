@@ -532,7 +532,7 @@ public class Action implements ActionItemBuilder {
                 if (getAccelerator() == null)
                     ttText = removeMnemonic(getCommandText());
                 else
-                    ttText = String.format(FXMessages.get("tooltipFormat"), removeMnemonic(getCommandText()), accelerator.get());
+                    ttText = String.format(FXMessages.get("tooltipFormat"), removeMnemonic(getCommandText()), accelerator.get().getDisplayText());
 
                 setTooltipText(ttText);
             }
