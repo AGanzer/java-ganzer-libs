@@ -576,7 +576,7 @@ public class Action implements ActionItemBuilder {
      *
      * @return This action.
      *
-     * @see #createButtons(boolean)
+     * @see #createButtons(boolean, ImageSize)
      */
     public Action bindTo(ButtonBase button, ImageSize imageSize) {
         return bindTo(button, imageSize, 0);
@@ -597,7 +597,7 @@ public class Action implements ActionItemBuilder {
      *
      * @return This action.
      *
-     * @see #createButtons(boolean)
+     * @see #createButtons(boolean, ImageSize)
      */
     public Action bindTo(ButtonBase button, ImageSize imageSize, int not) {
         if (shouldBind(not, BindNot.ACTION))

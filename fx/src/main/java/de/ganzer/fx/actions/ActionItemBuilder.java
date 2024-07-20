@@ -11,6 +11,7 @@ import java.util.List;
  * Must be implemented by all actions that shall be grouped into an instance
  * of {@link ActionGroup}
  */
+@SuppressWarnings("unused")
 public interface ActionItemBuilder {
     /**
      * Creates a single menu that visualizes an action group.
