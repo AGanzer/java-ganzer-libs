@@ -9,7 +9,7 @@
         <MenuBar>
             <Menu text="_File">
                 <MenuItem text="_Exit"
-                          accelerator="Alt+F4"
+                          accelerator="Ctrl+Shift+F4"
                           onAction="#exitApplication" />
             </Menu>
             <Menu text="_Dialogs">

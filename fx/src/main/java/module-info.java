@@ -6,4 +6,5 @@ module de.ganzer.fx {
     exports de.ganzer.fx.validation;
     exports de.ganzer.fx.dialogs;
     exports de.ganzer.fx.actions;
+    exports de.ganzer.fx.input;
 }

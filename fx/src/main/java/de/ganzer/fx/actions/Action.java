@@ -14,6 +14,28 @@ import javafx.scene.input.KeyCombination;
 import java.util.List;
 import java.util.function.Function;
 
+/*
+Was noch fehlt:
+- tag, um beliebige Benutzerdaten mit der Action zu verbinden.
+- small, medium(?) und and large button images.
+- boolean, um zu entscheiden, ob shortcuts in die tooltips sollen
+  (ist es besser, dieses global festzulegen?).
+- boolean, um zu entscheiden, ob shortcut in die Schalterbeschriftung
+  soll (ist es besser, dieses global festzulegen?).
+- createMenus() für das Erzeugen einer Liste von Menu-Objekten, die
+  über MenuBar.getMenus().addAll() eingefügt werden können.
+
+Möglichkeiten der Umsetzung:
+- tooltip bekommt intern ein eigenes Property für Buttons. Dieses wird
+  intern gesetzt über das bereits vorhandene Property (für die shortcuts).
+- commandText bekommt intern ein eigenes Property für Buttons. Dieses wird
+  intern gesetzt über das bereits vorhandene Property (für die shortcuts).
+- small und large images über das Binding setzen. Weiterer Parameter:
+  Bind (enum Bind mit SMALL, MEDIUM(?) und LARGE). Dieses löst nicht das
+  Problem mit createButtons(), denn welches image soll verwendet werden?
+  Hier ebenfalls den Parameter Bind einfügen?
+*/
+
 /**
  * The {@code Action} class provides a simplification to create menus and
  * buttons and to handle the status of the controls that are linked with
@@ -532,7 +554,7 @@ public class Action implements ActionItemBuilder {
                 if (getAccelerator() == null)
                     ttText = removeMnemonic(getCommandText());
                 else
-                    ttText = String.format(FXMessages.get("tooltipFormat"), removeMnemonic(getCommandText()), accelerator.get());
+                    ttText = String.format(FXMessages.get("tooltipFormat"), removeMnemonic(getCommandText()), accelerator.get().getDisplayText());
 
                 setTooltipText(ttText);
             }
