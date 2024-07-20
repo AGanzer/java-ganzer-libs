@@ -9,7 +9,7 @@ import javafx.scene.control.MenuItem;
  *
  * @see Action
  * @see Action#bindTo(MenuItem, int)
- * @see Action#bindTo(ButtonBase, int)
+ * @see Action#bindTo(ButtonBase, ImageSize, int)
  */
 public final class BindNot {
     /**

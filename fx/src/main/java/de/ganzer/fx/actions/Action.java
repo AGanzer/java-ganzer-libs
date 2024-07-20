@@ -17,23 +17,8 @@ import java.util.function.Function;
 /*
 Was noch fehlt:
 - tag, um beliebige Benutzerdaten mit der Action zu verbinden.
-- small, medium(?) und and large button images.
-- boolean, um zu entscheiden, ob shortcuts in die tooltips sollen
-  (ist es besser, dieses global festzulegen?).
-- boolean, um zu entscheiden, ob shortcut in die Schalterbeschriftung
-  soll (ist es besser, dieses global festzulegen?).
 - createMenus() für das Erzeugen einer Liste von Menu-Objekten, die
   über MenuBar.getMenus().addAll() eingefügt werden können.
-
-Möglichkeiten der Umsetzung:
-- tooltip bekommt intern ein eigenes Property für Buttons. Dieses wird
-  intern gesetzt über das bereits vorhandene Property (für die shortcuts).
-- commandText bekommt intern ein eigenes Property für Buttons. Dieses wird
-  intern gesetzt über das bereits vorhandene Property (für die shortcuts).
-- small und large images über das Binding setzen. Weiterer Parameter:
-  Bind (enum Bind mit SMALL, MEDIUM(?) und LARGE). Dieses löst nicht das
-  Problem mit createButtons(), denn welches image soll verwendet werden?
-  Hier ebenfalls den Parameter Bind einfügen?
 */
 
 /**
@@ -208,15 +193,22 @@ public class MainWindowController implements Initializable {
  */
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public class Action implements ActionItemBuilder {
+    private static boolean showAcceleratorsInTooltips = true;
+    private static boolean showAcceleratorsInButtonTexts = false;
+
     private final StringProperty commandText;
+    private final StringProperty buttonCommandText;
     private final ObjectProperty<KeyCombination> accelerator;
-    private final StringProperty tooltipText;
+    private final ObjectProperty<Tooltip> tooltip;
     private final ObjectProperty<Node> menuImage;
-    private final ObjectProperty<Node> buttonImage;
+    private final ObjectProperty<Node> smallButtonImage;
+    private final ObjectProperty<Node> mediumButtonImage;
+    private final ObjectProperty<Node> largeButtonImage;
     private final BooleanProperty disabled;
     private final BooleanProperty selected;
     private final BooleanProperty visible;
     private final ObjectProperty<EventHandler<ActionEvent>> onAction;
+    private String tooltipText;
     private boolean selectable;
     private boolean exclusiveSelectable;
     private int notBindMenu;
@@ -239,14 +231,61 @@ public class Action implements ActionItemBuilder {
      */
     public Action(String commandText) {
         this.commandText = new SimpleStringProperty(commandText);
+        this.buttonCommandText = new SimpleStringProperty();
         this.accelerator = new SimpleObjectProperty<>();
-        this.tooltipText = new SimpleStringProperty();
+        this.tooltip = new SimpleObjectProperty<>();
         this.menuImage = new SimpleObjectProperty<>();
-        this.buttonImage = new SimpleObjectProperty<>();
+        this.smallButtonImage = new SimpleObjectProperty<>();
+        this.mediumButtonImage = new SimpleObjectProperty<>();
+        this.largeButtonImage = new SimpleObjectProperty<>();
         this.disabled = new SimpleBooleanProperty(false);
         this.selected = new SimpleBooleanProperty(false);
         this.visible = new SimpleBooleanProperty(true);
         this.onAction = new SimpleObjectProperty<>();
+    }
+
+    /**
+     * Indicates whether the accelerators are shown in the texts of a
+     * tooltip.
+     *
+     * @return {@code true} if the accelerators are shown; otherwise,
+     * {@code false}.
+     */
+    public static boolean isShowAcceleratorsInTooltips() {
+        return showAcceleratorsInTooltips;
+    }
+
+    /**
+     * Sets a value that indicates whether the accelerators shall be shown in
+     * the texts of a tooltip.
+     *
+     * @param show {@code true} to show the accelerators. The default value is
+     *       {@code true}.
+     */
+    public static void setShowAcceleratorsInTooltips(boolean show) {
+        Action.showAcceleratorsInTooltips = show;
+    }
+
+    /**
+     * Indicates whether the accelerators are shown in the texts of a
+     * button.
+     *
+     * @return {@code true} if the accelerators are shown; otherwise,
+     * {@code false}.
+     */
+    public static boolean isShowAcceleratorsInButtonTexts() {
+        return showAcceleratorsInButtonTexts;
+    }
+
+    /**
+     * Sets a value that indicates whether the accelerators shall be shown in
+     * the texts of a tooltip.
+     *
+     * @param show {@code true} to show the accelerators. The default value is
+     *       {@code false}.
+     */
+    public static void setShowAcceleratorsInButtonTexts(boolean show) {
+        Action.showAcceleratorsInButtonTexts = show;
     }
 
     /**
@@ -298,14 +337,38 @@ public class Action implements ActionItemBuilder {
     }
 
     /**
-     * Calls {@link #setButtonImage(Node)}.
+     * Calls {@link #setSmallButtonImage(Node)}.
      *
      * @param image The image to set.
      *
      * @return This action.
      */
-    public Action buttonImage(Node image) {
-        setButtonImage(image);
+    public Action smallButtonImage(Node image) {
+        setSmallButtonImage(image);
+        return this;
+    }
+
+    /**
+     * Calls {@link #setMediumButtonImage(Node)}.
+     *
+     * @param image The image to set.
+     *
+     * @return This action.
+     */
+    public Action mediumButtonImage(Node image) {
+        setMediumButtonImage(image);
+        return this;
+    }
+
+    /**
+     * Calls {@link #setLargeButtonImage(Node)}.
+     *
+     * @param image The image to set.
+     *
+     * @return This action.
+     */
+    public Action largeButtonImage(Node image) {
+        setLargeButtonImage(image);
         return this;
     }
 
@@ -460,31 +523,31 @@ public class Action implements ActionItemBuilder {
      */
     public Action bindTo(MenuItem item, int not) {
         if (shouldBind(not, BindNot.ACTION))
-            item.onActionProperty().bind(onActionProperty());
+            item.onActionProperty().bind(onAction);
 
         if (shouldBind(not, BindNot.COMMAND_TEXT))
-            item.textProperty().bind(commandTextProperty());
+            item.textProperty().bind(commandText);
 
         if (shouldBind(not, BindNot.ACCELERATOR))
-            item.acceleratorProperty().bind(acceleratorProperty());
+            item.acceleratorProperty().bind(accelerator);
 
         if (shouldBind(not, BindNot.DISABLED))
-            item.disableProperty().bind(disabledProperty());
+            item.disableProperty().bind(disabled);
 
         if (shouldBind(not, BindNot.VISIBLE))
-            item.visibleProperty().bind(visibleProperty());
+            item.visibleProperty().bind(visible);
 
         if (shouldBind(not, BindNot.SELECTED)) {
             if (item instanceof RadioMenuItem)
-                ((RadioMenuItem)item).selectedProperty().bindBidirectional(selectedProperty());
+                ((RadioMenuItem)item).selectedProperty().bindBidirectional(selected);
             else if (item instanceof CheckMenuItem)
-                ((CheckMenuItem)item).selectedProperty().bindBidirectional(selectedProperty());
+                ((CheckMenuItem)item).selectedProperty().bindBidirectional(selected);
         }
 
         if (shouldBind(not, BindNot.IMAGE)) {
             item.graphicProperty().bind(new ObjectBinding<>() {
                 {
-                    this.bind(menuImageProperty());
+                    this.bind(menuImage);
                 }
 
                 protected Node computeValue() {
@@ -493,7 +556,7 @@ public class Action implements ActionItemBuilder {
 
                 public void removeListener(InvalidationListener listener) {
                     super.removeListener(listener);
-                    this.unbind(menuImageProperty());
+                    this.unbind(menuImage);
                 }
             });
         }
@@ -509,13 +572,14 @@ public class Action implements ActionItemBuilder {
      * this is called automatically.
      *
      * @param button The item to bind.
+     * @param imageSize The size of the image to bind.
      *
      * @return This action.
      *
      * @see #createButtons(boolean)
      */
-    public Action bindTo(ButtonBase button) {
-        return bindTo(button, 0);
+    public Action bindTo(ButtonBase button, ImageSize imageSize) {
+        return bindTo(button, imageSize, 0);
     }
 
     /**
@@ -526,6 +590,7 @@ public class Action implements ActionItemBuilder {
      * this is called automatically.
      *
      * @param button The item to bind.
+     * @param imageSize The size of the image to bind.
      * @param not The properties that shall not be bound to the button. This may
      *            be any combination of the {@link BindNot} values. The accelerator
      *            is never bound to a button.
@@ -534,52 +599,56 @@ public class Action implements ActionItemBuilder {
      *
      * @see #createButtons(boolean)
      */
-    public Action bindTo(ButtonBase button, int not) {
+    public Action bindTo(ButtonBase button, ImageSize imageSize, int not) {
         if (shouldBind(not, BindNot.ACTION))
-            button.onActionProperty().bind(onActionProperty());
+            button.onActionProperty().bind(onAction);
 
         if (shouldBind(not, BindNot.COMMAND_TEXT))
-            button.textProperty().bind(commandTextProperty());
+            button.textProperty().bind(buttonCommandText);
 
         if (shouldBind(not, BindNot.DISABLED))
-            button.disableProperty().bind(disabledProperty());
+            button.disableProperty().bind(disabled);
 
         if (shouldBind(not, BindNot.VISIBLE))
-            button.visibleProperty().bind(visibleProperty());
+            button.visibleProperty().bind(visible);
 
-        if (shouldBind(not, BindNot.TOOLTIP_TEXT)) {
-            String ttText = getTooltipText();
-
-            if (ttText == null) {
-                if (getAccelerator() == null)
-                    ttText = removeMnemonic(getCommandText());
-                else
-                    ttText = String.format(FXMessages.get("tooltipFormat"), removeMnemonic(getCommandText()), accelerator.get().getDisplayText());
-
-                setTooltipText(ttText);
-            }
-
-            Tooltip tooltip = new Tooltip(getTooltipText());
-            tooltip.textProperty().bind(tooltipTextProperty());
-            button.setTooltip(tooltip);
-        }
+        if (shouldBind(not, BindNot.TOOLTIP_TEXT))
+            button.tooltipProperty().bind(tooltip);
 
         if (shouldBind(not, BindNot.SELECTED) && (button instanceof ToggleButton))
-            ((ToggleButton)button).selectedProperty().bindBidirectional(selectedProperty());
+            ((ToggleButton)button).selectedProperty().bindBidirectional(selected);
 
         if (shouldBind(not, BindNot.IMAGE)) {
+            ObjectProperty<Node> property;
+
+            switch (imageSize) {
+                case SMALL:
+                    property = smallButtonImage;
+                    break;
+
+                case MEDIUM:
+                    property = mediumButtonImage;
+                    break;
+
+                case LARGE:
+                    property = largeButtonImage;
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("imageSize is invalid.");
+            }
             button.graphicProperty().bind(new ObjectBinding<>() {
                 {
-                    this.bind(buttonImageProperty());
+                    this.bind(property);
                 }
 
                 protected Node computeValue() {
-                    return cloneImage(getButtonImage());
+                    return cloneImage(getSmallButtonImage());
                 }
 
                 public void removeListener(InvalidationListener listener) {
                     super.removeListener(listener);
-                    this.unbind(buttonImageProperty());
+                    this.unbind(property);
                 }
             });
         }
@@ -607,6 +676,7 @@ public class Action implements ActionItemBuilder {
      */
     public void setCommandText(String commandText) {
         this.commandText.set(commandText);
+        adjustButtonCommandText();
     }
 
     /**
@@ -616,7 +686,7 @@ public class Action implements ActionItemBuilder {
      *         text is set.
      */
     public String getTooltipText() {
-        return tooltipText.get();
+        return tooltipText;
     }
 
     /**
@@ -628,7 +698,8 @@ public class Action implements ActionItemBuilder {
      * @param tooltipText The text of the tooltip to set.
      */
     public void setTooltipText(String tooltipText) {
-        this.tooltipText.set(tooltipText);
+        this.tooltipText = tooltipText;
+        adjustButtonToolTip();
     }
 
     /**
@@ -653,24 +724,66 @@ public class Action implements ActionItemBuilder {
     }
 
     /**
-     * Gets the image to use for buttons.
+     * Gets the small image to use for buttons.
      *
      * @return The image to use. The default is {@code null}.
      */
-    public Node getButtonImage() {
-        return buttonImage.get();
+    public Node getSmallButtonImage() {
+        return smallButtonImage.get();
     }
 
     /**
-     * Sets the image to use for buttons.
+     * Sets the small image to use for buttons.
      *
      * @param buttonImage The image to use. If this is not of type {@link ImageView},
      *                    a cloning function must be set.
      *
      * @see #cloneImage(Function)
      */
-    public void setButtonImage(Node buttonImage) {
-        this.buttonImage.set(buttonImage);
+    public void setSmallButtonImage(Node buttonImage) {
+        this.smallButtonImage.set(buttonImage);
+    }
+
+    /**
+     * Gets the medium image to use for buttons.
+     *
+     * @return The image to use. The default is {@code null}.
+     */
+    public Node getMediumButtonImage() {
+        return mediumButtonImage.get();
+    }
+
+    /**
+     * Sets the medium image to use for buttons.
+     *
+     * @param buttonImage The image to use. If this is not of type {@link ImageView},
+     *                    a cloning function must be set.
+     *
+     * @see #cloneImage(Function)
+     */
+    public void setMediumButtonImage(Node buttonImage) {
+        this.mediumButtonImage.set(buttonImage);
+    }
+
+    /**
+     * Gets the large image to use for buttons.
+     *
+     * @return The image to use. The default is {@code null}.
+     */
+    public Node getLargeButtonImage() {
+        return largeButtonImage.get();
+    }
+
+    /**
+     * Sets the large image to use for buttons.
+     *
+     * @param buttonImage The image to use. If this is not of type {@link ImageView},
+     *                    a cloning function must be set.
+     *
+     * @see #cloneImage(Function)
+     */
+    public void setLargeButtonImage(Node buttonImage) {
+        this.largeButtonImage.set(buttonImage);
     }
 
     /**
@@ -862,7 +975,7 @@ public class Action implements ActionItemBuilder {
      * Gets the properties that shall not be bound to a created button.
      * <p>
      * This is used only when the controls are created by this action. If
-     * already existing controls shall be bound, use {@link #bindTo(ButtonBase, int)}.
+     * already existing controls shall be bound, use {@link #bindTo(ButtonBase, ImageSize, int)}.
      *
      * @return The properties that shall not be bound. This may be any
      *         combination of the {@link BindNot} values.
@@ -875,7 +988,7 @@ public class Action implements ActionItemBuilder {
      * Sets the properties that shall not be bound to a created button.
      * <p>
      * This is used only when the controls are created by this action. If
-     * already existing controls shall be bound, use {@link #bindTo(ButtonBase, int)}.
+     * already existing controls shall be bound, use {@link #bindTo(ButtonBase, ImageSize, int)}.
      *
      * @param notBindButton The properties that shall not be bound. This may be
      *                      any combination of the {@link BindNot} values.
@@ -935,15 +1048,6 @@ public class Action implements ActionItemBuilder {
     }
 
     /**
-     * The property that holds the tooltip text.
-     *
-     * @return The property that is bound to the controls.
-     */
-    public StringProperty tooltipTextProperty() {
-        return tooltipText;
-    }
-
-    /**
      * The property that holds the image to use for menu items.
      *
      * @return The property that is bound to the controls.
@@ -953,12 +1057,30 @@ public class Action implements ActionItemBuilder {
     }
 
     /**
-     * The property that holds the image to use for buttons.
+     * The property that holds the small image to use for buttons.
      *
      * @return The property that is bound to the controls.
      */
-    public ObjectProperty<Node> buttonImageProperty() {
-        return buttonImage;
+    public ObjectProperty<Node> smallButtonImageProperty() {
+        return smallButtonImage;
+    }
+
+    /**
+     * The property that holds the medium image to use for buttons.
+     *
+     * @return The property that is bound to the controls.
+     */
+    public ObjectProperty<Node> mediumButtonImageProperty() {
+        return mediumButtonImage;
+    }
+
+    /**
+     * The property that holds the large image to use for buttons.
+     *
+     * @return The property that is bound to the controls.
+     */
+    public ObjectProperty<Node> largeButtonImageProperty() {
+        return largeButtonImage;
     }
 
     /**
@@ -1021,10 +1143,14 @@ public class Action implements ActionItemBuilder {
     /**
      * Creates a button that visualizes the action.
      *
+     * @param focusTraversable Indicates whether the button can get the keyboard
+     *                         focus.
+     * @param imageSize        The size of the image to bind.
+     *
      * @return A list with exactly one button.
      */
     @Override
-    public List<Node> createButtons(boolean focusTraversable) {
+    public List<Node> createButtons(boolean focusTraversable, ImageSize imageSize) {
         ButtonBase button;
 
         if (exclusiveSelectable || selectable)
@@ -1032,7 +1158,7 @@ public class Action implements ActionItemBuilder {
         else
             button = new Button();
 
-        bindTo(button, notBindButton);
+        bindTo(button, imageSize, notBindButton);
         button.setFocusTraversable(focusTraversable);
 
         return List.of(button);
@@ -1046,6 +1172,40 @@ public class Action implements ActionItemBuilder {
             return new ImageView(((ImageView)image).getImage());
 
         return null;
+    }
+
+    private void adjustButtonToolTip() {
+        String ttText = getTooltipText();
+
+        if (ttText == null)
+            ttText = removeMnemonic(getCommandText());
+
+        if (getAccelerator() != null && showAcceleratorsInTooltips)
+            ttText = String.format(FXMessages.get("tooltipFormat"), ttText, accelerator.get().getDisplayText());
+
+        getTooltip().setText(ttText);
+    }
+
+    private void adjustButtonCommandText() {
+        String bcText = getCommandText();
+
+        if (bcText == null)
+            buttonCommandText.set(null);
+        else if (getAccelerator() != null && showAcceleratorsInButtonTexts)
+            bcText = String.format(FXMessages.get("buttonFormat"), bcText, accelerator.get().getDisplayText());
+
+        buttonCommandText.set(bcText);
+    }
+
+    private Tooltip getTooltip() {
+        var tt = tooltip.get();
+
+        if (tt == null) {
+            tt = new Tooltip();
+            tooltip.set(tt);
+        }
+
+        return tt;
     }
 
     private static boolean shouldBind(int value, int bindNot) {

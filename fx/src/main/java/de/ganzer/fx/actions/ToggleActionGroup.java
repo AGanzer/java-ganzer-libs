@@ -208,14 +208,18 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     /**
      * Creates buttons for each contained action.
      *
+     * @param focusTraversable Indicates whether the button can get the keyboard
+     *                         focus.
+     * @param imageSize        The size of the image to bind.
+     *
      * @return The created buttons.
      */
     @Override
-    public List<Node> createButtons(boolean focusTraversable) {
+    public List<Node> createButtons(boolean focusTraversable, ImageSize imageSize) {
         List<Node> buttons = new ArrayList<>();
 
         for (ActionItemBuilder button: actions)
-            buttons.addAll(button.createButtons(focusTraversable));
+            buttons.addAll(button.createButtons(focusTraversable, imageSize));
 
         return buttons;
     }
