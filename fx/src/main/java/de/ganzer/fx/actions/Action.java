@@ -14,13 +14,6 @@ import javafx.scene.input.KeyCombination;
 import java.util.List;
 import java.util.function.Function;
 
-/*
-Was noch fehlt:
-- tag, um beliebige Benutzerdaten mit der Action zu verbinden.
-- createMenus() für das Erzeugen einer Liste von Menu-Objekten, die
-  über MenuBar.getMenus().addAll() eingefügt werden können.
-*/
-
 /**
  * The {@code Action} class provides a simplification to create menus and
  * buttons and to handle the status of the controls that are linked with
@@ -214,6 +207,7 @@ public class Action implements ActionItemBuilder {
     private int notBindMenu;
     private int notBindButton;
     private Function<Node, Node> cloneImage;
+    private Object tag;
 
     /**
      * Creates an action with a {@code null} command text.
@@ -1028,6 +1022,33 @@ public class Action implements ActionItemBuilder {
     public void setCloneImage(Function<Node, Node> cloneImage) {
         this.cloneImage = cloneImage;
     }
+
+    /**
+     * Gets a tag object.
+     * <p>
+     * This property can be used to store application specific information
+     * that must be associated with an action. It is not used by the
+     * action itself.
+     *
+     * @return The set a tag object.
+     */
+    public Object getTag() {
+        return tag;
+    }
+
+    /**
+     * Sets a tag object.
+     * <p>
+     * This property can be used to store application specific information
+     * that must be associated with an action. It is not used by the
+     * action itself.
+     *
+     * @param tag The object to set.
+     */
+    public void setTag(Object tag) {
+        this.tag = tag;
+    }
+
 
     /**
      * The property that holds the command text.
