@@ -28,7 +28,7 @@ public class SeparatorAction implements ActionItemBuilder {
      * @return The created separator of type {@link Separator}.
      */
     @Override
-    public List<Node> createButtons(boolean ignored) {
+    public List<Node> createButtons(boolean ignored1, ImageSize ignored2) {
         return List.of(new Separator());
     }
 }

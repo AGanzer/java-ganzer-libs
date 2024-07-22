@@ -73,28 +73,41 @@ public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
     }
 
     /**
-     * Calls {@link #setMenuImage(Node)}.
+     * Calls {@link #setSmallButtonImage(Node)}.
      *
      * @param image The image to set.
      *
      * @return This action group.
      */
     @Override
-    public ActionGroup menuImage(Node image) {
-        setMenuImage(image);
+    public ActionGroup smallButtonImage(Node image) {
+        setSmallButtonImage(image);
         return this;
     }
 
     /**
-     * Calls {@link #setButtonImage(Node)}.
+     * Calls {@link #setMediumButtonImage(Node)}.
      *
      * @param image The image to set.
      *
      * @return This action group.
      */
     @Override
-    public ActionGroup buttonImage(Node image) {
-        setButtonImage(image);
+    public ActionGroup mediumButtonImage(Node image) {
+        setMediumButtonImage(image);
+        return this;
+    }
+
+    /**
+     * Calls {@link #setLargeButtonImage(Node)}.
+     *
+     * @param image The image to set.
+     *
+     * @return This action group.
+     */
+    @Override
+    public ActionGroup largeButtonImage(Node image) {
+        setLargeButtonImage(image);
         return this;
     }
 
@@ -170,22 +183,29 @@ public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
     /**
      * Creates for all actions of this group buttons.
      *
+     * @param focusTraversable Indicates whether the button can get the keyboard
+     *                         focus.
+     * @param imageSize        The size of the image to bind.
+     *
      * @return A list with the created buttons.
      */
     @Override
-    public List<Node> createButtons(boolean focusTraversable) {
+    public List<Node> createButtons(boolean focusTraversable, ImageSize imageSize) {
         List<Node> buttons = new ArrayList<>();
 
         for (ActionItemBuilder action: actions) {
             if (action instanceof ActionGroup)
-                buttons.add(createMenuButton((ActionGroup)action, focusTraversable));
+                buttons.add(createMenuButton((ActionGroup)action, focusTraversable, imageSize));
             else
-                buttons.addAll(action.createButtons(focusTraversable));
+                buttons.addAll(action.createButtons(focusTraversable, imageSize));
         }
 
         return buttons;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Iterator<ActionItemBuilder> iterator() {
         return actions.iterator();
@@ -207,6 +227,25 @@ public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
     }
 
     /**
+     * Creates a collection of menus that visualizes an action group.
+     * <p>
+     * If this group contains items of type {@link SeparatorAction} or
+     * {@link Action}, these items will not be in the returned collection.
+     *
+     * @return A collection of menus.
+     */
+    @Override
+    public List<Menu> createMenus() {
+        List<Menu> menus = new ArrayList<>();
+
+        for (var item: this)
+            if (item instanceof ActionGroup)
+                menus.add(item.createMenu());
+
+        return menus;
+    }
+
+    /**
      * Adds the specified actions into this group.
      *
      * @param actions The actions to add.
@@ -225,18 +264,22 @@ public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
     /**
      * Creates a menu button with all containing actions.
      *
+     * @param focusTraversable Indicates whether the button can get the keyboard
+     *                         focus.
+     * @param imageSize        The size of the image to bind.
+     *
      * @return The created menu.
      */
-    public Node createMenuButton(boolean focusTraversable) {
-        return createMenuButton(this, focusTraversable);
+    public Node createMenuButton(boolean focusTraversable, ImageSize imageSize) {
+        return createMenuButton(this, focusTraversable, imageSize);
     }
 
-    private Node createMenuButton(ActionGroup action, boolean focusTraversable) {
+    private Node createMenuButton(ActionGroup action, boolean focusTraversable, ImageSize imageSize) {
         MenuButton button = new MenuButton();
         button.getItems().addAll(action.createItems());
         button.setFocusTraversable(focusTraversable);
 
-        action.bindTo(button, action.getNotBindButton() | BindNot.ACTION);
+        action.bindTo(button, imageSize, action.getNotBindButton() | BindNot.ACTION);
 
         return button;
     }
