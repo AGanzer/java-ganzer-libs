@@ -122,7 +122,7 @@ public final class LocalizedKeyCodeCombination extends LocalizedKeyCombination {
             return sb.toString();
         }
 
-        sb.append(FXMessages.get(code.toString()));
+        sb.append(FXMessages.get(FXMessages.get(code.toString())));
 
         return sb.toString();
     }
