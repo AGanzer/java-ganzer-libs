@@ -22,16 +22,16 @@ public abstract class LocalizedKeyCombination extends KeyCombination {
             return super.getDisplayText();
 
         if (this.getControl() == KeyCombination.ModifierValue.DOWN || this.getShortcut() == KeyCombination.ModifierValue.DOWN)
-            return FXMessages.get("keyControl") + "+";
+            return FXMessages.get("CONTROL") + "+";
 
         if (this.getAlt() == KeyCombination.ModifierValue.DOWN)
-            return FXMessages.get("keyAlt") + "+";
+            return FXMessages.get("ALT") + "+";
 
         if (this.getShift() == KeyCombination.ModifierValue.DOWN)
-            return FXMessages.get("keyShift") + "+";
+            return FXMessages.get("SHIFT") + "+";
 
         if (this.getMeta() == KeyCombination.ModifierValue.DOWN)
-            return FXMessages.get("keyMeta") + "+";
+            return FXMessages.get("META") + "+";
 
         return "";
     }
