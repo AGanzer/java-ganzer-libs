@@ -637,7 +637,7 @@ public class Action implements ActionItemBuilder {
                 }
 
                 protected Node computeValue() {
-                    return cloneImage(getSmallButtonImage());
+                    return cloneImage(property.get());
                 }
 
                 public void removeListener(InvalidationListener listener) {
