@@ -43,7 +43,8 @@ public final class BindNot {
     public static final int VISIBLE = 0x20;
 
     /**
-     * Don't bind the image.
+     * Don't bind the image. For Buttons, this is identical to using
+     * {@link ImageSize#NONE}.
      */
     public static final int IMAGE = 0x40;
 

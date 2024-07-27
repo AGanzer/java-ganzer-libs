@@ -11,6 +11,11 @@ import javafx.scene.control.ButtonBase;
  */
 public enum ImageSize {
     /**
+     * Don't bind any image. This is identical to using {@link BindNot#IMAGE}.
+     */
+    NONE,
+
+    /**
      * Bind the small image.
      */
     SMALL,

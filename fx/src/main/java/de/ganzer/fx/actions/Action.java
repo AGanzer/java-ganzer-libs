@@ -612,7 +612,7 @@ public class Action implements ActionItemBuilder {
         if (shouldBind(not, BindNot.SELECTED) && (button instanceof ToggleButton))
             ((ToggleButton)button).selectedProperty().bindBidirectional(selected);
 
-        if (shouldBind(not, BindNot.IMAGE)) {
+        if (imageSize == ImageSize.NONE || shouldBind(not, BindNot.IMAGE)) {
             ObjectProperty<Node> property;
 
             switch (imageSize) {
