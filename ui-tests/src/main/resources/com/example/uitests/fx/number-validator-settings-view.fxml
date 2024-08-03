@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.example.uitests.fx.NumberValidatorSettingsController"
+          hgap="5"
+          vgap="5">
+    <userData>
+        <fx:reference source="controller" />
+    </userData>
+    <columnConstraints>
+        <ColumnConstraints />
+        <ColumnConstraints hgrow="ALWAYS" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+    </rowConstraints>
+    <Label GridPane.columnIndex="0"
+           GridPane.rowIndex="0"
+           text="Smallest allowed number:" />
+    <TextField fx:id="minValue"
+               GridPane.columnIndex="1"
+               GridPane.rowIndex="0" />
+    <Label GridPane.columnIndex="0"
+           GridPane.rowIndex="1"
+           text="Greatest allowed number:" />
+    <TextField fx:id="maxValue"
+               GridPane.columnIndex="1"
+               GridPane.rowIndex="1" />
+    <Label GridPane.columnIndex="0"
+           GridPane.rowIndex="2"
+           text="Number of decimals to allow:" />
+    <TextField fx:id="numDecimals"
+               GridPane.columnIndex="1"
+               GridPane.rowIndex="2" />
+    <Label GridPane.columnIndex="0"
+           GridPane.rowIndex="3"
+           text="Alternative display format to use:" />
+    <TextField fx:id="displayFormat"
+               GridPane.columnIndex="1"
+               GridPane.rowIndex="3" />
+    <Label GridPane.columnIndex="0"
+           GridPane.rowIndex="4"
+           text="Alternative edit format to use:" />
+    <TextField fx:id="editFormat"
+               GridPane.columnIndex="1"
+               GridPane.rowIndex="4" />
+</GridPane>

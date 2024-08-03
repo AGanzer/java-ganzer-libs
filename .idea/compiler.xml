@@ -11,6 +11,7 @@
         <module name="de-ganzer-fx" />
         <module name="ui-tests" />
         <module name="de-ganzer-core" />
+        <module name="de-ganzer-swing" />
       </profile>
     </annotationProcessing>
   </component>
