@@ -27,6 +27,11 @@
       <option name="url" value="file://$PROJECT_DIR$/ui-tests/../fx/target" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="swing-repo" />
+      <option name="name" value="swing-repo" />
+      <option name="url" value="file://$PROJECT_DIR$/ui-tests/../swing/target" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="fx-repo" />
       <option name="name" value="fx-repo" />
       <option name="url" value="file:../fx/target" />
