@@ -7,6 +7,7 @@ import java.util.Objects;
  * This event ist used by {@link GAction} instances to notify that an action is
  * performed.
  */
+@SuppressWarnings("unused")
 public class GActionEvent {
     private final GAction source;
     private final String actionCommand;

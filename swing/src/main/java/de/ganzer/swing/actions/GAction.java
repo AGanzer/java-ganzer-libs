@@ -107,6 +107,7 @@ public class MainFrame extends JFrame {
 }
  * }
  */
+@SuppressWarnings("unused")
 public class GAction extends AbstractAction implements GActionItemBuilder {
     private final EventListenerList actionListeners = new EventListenerList();
     private String command;

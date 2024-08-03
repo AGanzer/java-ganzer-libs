@@ -2,8 +2,6 @@ package de.ganzer.swing.actions;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -238,7 +236,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
                 if (action != event.getSource())
                     action.selected(false);
                 else if (selectedAction != event.getSource()) {
-                    selectedAction = (GAction) event.getSource();
+                    selectedAction = event.getSource();
                     fireSelectedActionChanged(selectedAction);
                 }
             }
