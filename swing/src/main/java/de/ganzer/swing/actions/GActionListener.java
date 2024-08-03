@@ -17,7 +17,7 @@ public interface GActionListener extends EventListener {
     /**
      * Invoked when an {@link GAction} event occurs.
      *
-     * @param e the event to be processed
+     * @param event the event to be processed
      */
-    void actionPerformed(GActionEvent e);
+    void actionPerformed(GActionEvent event);
 }

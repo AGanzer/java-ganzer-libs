@@ -15,7 +15,7 @@ public class GActionEvent {
     /**
      * Creates a new event from the specified arguments.
      *
-     * @param source The sending Action of the event.
+     * @param source The sending {@link GAction} of the event.
      * @param actionCommand The actions command of the sending action.
      * @param origin The original action event, send by a button or menu item.
      *

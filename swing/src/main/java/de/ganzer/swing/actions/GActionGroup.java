@@ -36,7 +36,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
      *
      * @param actions The actions to add.
      *
-     * @return This action group.
+     * @return {@code this}.
      *
      * @throws NullPointerException {@code actions} is {@code null} or one of
      *         the elements in {@code actions} is {@code null}.
@@ -178,7 +178,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
             JMenu menu = builder.createMenu();
 
             if (menu != null)
-                target.add(builder.createMenu());
+                target.add(menu);
         }
     }
 
@@ -205,6 +205,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
                 builder.addMenuItems(target);
         }
     }
+
     /**
      * Creates a single button with a popup menu that contains the actions of
      * this group.
@@ -248,8 +249,8 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
         Objects.requireNonNull(target, "target must not be null.");
 
         for (GActionItemBuilder builder : actions) {
-            if (builder instanceof GActionGroup group)
-                target.add(group.createButton(focusable));
+            if (builder instanceof GActionGroup)
+                target.add(builder.createButton(focusable));
             else
                 builder.addButtons(target, focusable);
         }
