@@ -1,5 +1,6 @@
 package com.example.uitests.swing;
 
+import com.example.uitests.swing.tests.InputTestDialog;
 import de.ganzer.swing.actions.*;
 
 import javax.swing.*;
@@ -140,7 +141,8 @@ public class MainFrame extends JFrame {
         buttonsMenu.addButtons(toolBar, CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
         toolBar.addSeparator();
         toolBar.add(subMenu.createButton(CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
-
+        toolBar.addSeparator();
+        testMenu.addButtons(toolBar, CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
     }
 
@@ -167,6 +169,9 @@ public class MainFrame extends JFrame {
     }
 
     private void onInputTest(GActionEvent event) {
+        var data = new InputTestDialog.Data();
 
+        if (InputTestDialog.showModal(this, data))
+            System.out.println("Your input: " + data.input);
     }
 }
