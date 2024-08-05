@@ -37,7 +37,7 @@ public final class CreateOptions {
 
     /**
      * The created buttons has no border.
-     *
+     * <p>
      * This sets the paint border property of a button and might not have any
      * effect. See {@link AbstractButton#setBorderPainted(boolean)} for more
      * details.
