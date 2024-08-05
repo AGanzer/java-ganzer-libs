@@ -13,6 +13,7 @@ public class MainFrame extends JFrame {
     GActionGroup fileMenu;
     GActionGroup buttonsMenu;
     GActionGroup subMenu;
+    GActionGroup testMenu;
 
     @Override
     protected void frameInit() {
@@ -118,8 +119,29 @@ public class MainFrame extends JFrame {
                                 new GAction("Dummy 4"),
                                 new GAction("Dummy 5"),
                                 new GAction("Dummy 6")
-                        )
+                        ),
+                testMenu = new GActionGroup("Tests").addAll(
+                        new GAction("Input Test")
+                                .onAction(this::onInputTest)
+                )
         );
+    }
+
+    private void initMenu() {
+        var menuBar = new JMenuBar();
+        mainMenu.addMenus(menuBar);
+        setJMenuBar(menuBar);
+    }
+
+    private void initToolBar() {
+        var toolBar = new JToolBar();
+        fileMenu.addButtons(toolBar, CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
+        toolBar.addSeparator();
+        buttonsMenu.addButtons(toolBar, CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
+        toolBar.addSeparator();
+        toolBar.add(subMenu.createButton(CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
+
+        getContentPane().add(toolBar, BorderLayout.PAGE_START);
     }
 
     private void onExit(GActionEvent event) {
@@ -144,19 +166,7 @@ public class MainFrame extends JFrame {
                 event.getSelectedAction() == null ? "No" : event.getSelectedAction().getName());
     }
 
-    private void initMenu() {
-        var menuBar = new JMenuBar();
-        mainMenu.addMenus(menuBar);
-        getContentPane().add(menuBar, BorderLayout.PAGE_START);
-    }
+    private void onInputTest(GActionEvent event) {
 
-    private void initToolBar() {
-        var toolBar = new JToolBar();
-        fileMenu.addButtons(toolBar, CreateOptions.NO_BORDER);//, CreateOptions.SHOW_TEXT | CreateOptions.IMAGE_TOP);
-        toolBar.addSeparator();
-        buttonsMenu.addButtons(toolBar, CreateOptions.NO_BORDER);//, CreateOptions.SHOW_TEXT | CreateOptions.IMAGE_TOP);
-        getContentPane().add(toolBar, BorderLayout.PAGE_END);
-        toolBar.addSeparator();
-        toolBar.add(subMenu.createButton(CreateOptions.NO_BORDER));//, CreateOptions.SHOW_TEXT | CreateOptions.IMAGE_TOP));
     }
 }

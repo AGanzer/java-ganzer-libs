@@ -31,9 +31,9 @@ public final class CreateOptions {
     public static final int HIDE_IMAGE = 0x04;
 
     /**
-     * The images of the buttons are above the text.
+     * The images of the buttons are not above the texts but leads them.
      */
-    public static final int IMAGE_TOP = 0x08;
+    public static final int IMAGE_TRAILING = 0x08;
 
     /**
      * The created buttons has no border.
