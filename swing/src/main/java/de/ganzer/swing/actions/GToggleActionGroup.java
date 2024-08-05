@@ -182,14 +182,15 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
      * into the specified target.
      *
      * @param target The toolbar where to insert the buttons.
-     * @param focusable Indicates whether the created button shall be focusable.
+     * @param options The options to use. This is any combination of the
+     *        {@link CreateOptions} values.
      *
      * @throws NullPointerException {@code target} is {@code null}.
      */
     @Override
-    public void addButtons(JToolBar target, boolean focusable) {
+    public void addButtons(JToolBar target, int options) {
         for (var action: actions)
-            action.addButtons(target, focusable);
+            action.addButtons(target, options);
     }
 
     /**

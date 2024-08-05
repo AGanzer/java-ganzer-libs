@@ -347,7 +347,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      * @return {@code this}.
      *
      * @see #createMenuItem()
-     * @see #createButton(boolean)
+     * @see #createButton(int)
      */
     public GAction selectable(boolean selectable) {
         this.selectable = selectable;
@@ -376,7 +376,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      * @return {@code this}.
      *
      * @see #createMenuItem()
-     * @see #createButton(boolean)
+     * @see #createButton(int)
      */
     public GAction exclusivelySelectable(boolean selectable) {
         this.exclusivelySelectable = selectable;
@@ -543,14 +543,16 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     /**
      * Creates a single button depending on the select ability of the action.
      *
-     * @param focusable Indicates whether the created button shall be focusable.
+     * @param options The options to use. This is any combination of the
+     *        {@link CreateOptions} values.
      *
      * @return The created button. This is {@link JToggleButton} if
      *         {@link #isExclusivelySelectable()} or {@link #isSelectable()} is
-     *         {@code true}. Otherwise, it is {@link JButton}.
+     *         {@code true}. Otherwise, it is {@link JButton}. If any image is
+     *         set, the button's action text is hidden.
      */
     @Override
-    public AbstractButton createButton(boolean focusable) {
+    public AbstractButton createButton(int options) {
         AbstractButton button;
 
         if (exclusivelySelectable || selectable)
@@ -559,7 +561,11 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
             button = new JButton(this);
 
         button.setActionCommand(command);
-        button.setFocusable(focusable);
+        button.setFocusable(CreateOptions.isSet(options, CreateOptions.FOCUSABLE));
+        button.setHideActionText(shouldHideText(options));
+        button.setVerticalTextPosition(getVerticalTextPosition(options));
+        button.setHorizontalTextPosition(getHorizontalTextPosition(options));
+        button.setBorderPainted(!CreateOptions.isSet(options, CreateOptions.NO_BORDER));
 
         return button;
     }
@@ -570,16 +576,36 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      * The created button is {@link JRadioButton} if
      * {@link #isExclusivelySelectable()} is {@code true}. It is {@link JCheckBox}
      * if {@link #isSelectable()} is {@code true}. In all other cases it is
-     * {@link JButton}.
+     * {@link JButton}. If any image is set, the buttons action texts are hidden.
      *
      * @param target The toolbar where to insert the separator.
-     * @param focusable Indicates whether the created button shall be focusable.
+     * @param options The options to use. This is any combination of the
+     *        {@link CreateOptions} values.
      *
      * @throws NullPointerException {@code target} is {@code null}.
      */
     @Override
-    public void addButtons(JToolBar target, boolean focusable) {
+    public void addButtons(JToolBar target, int options) {
         Objects.requireNonNull(target);
-        target.add(createButton(focusable));
+        target.add(createButton(options));
+    }
+
+    protected final boolean shouldHideText(int options) {
+        if (CreateOptions.isSet(options, CreateOptions.SHOW_TEXT))
+            return false;
+
+        return getSmallIcon() != null || getLargeIcon() != null;
+    }
+
+    protected final int getVerticalTextPosition(int options) {
+        return CreateOptions.isSet(options, CreateOptions.IMAGE_TOP)
+                ? SwingConstants.BOTTOM
+                : SwingConstants.CENTER;
+    }
+
+    protected final int getHorizontalTextPosition(int options) {
+        return CreateOptions.isSet(options, CreateOptions.IMAGE_TOP)
+                ? SwingConstants.CENTER
+                : SwingConstants.TRAILING;
     }
 }

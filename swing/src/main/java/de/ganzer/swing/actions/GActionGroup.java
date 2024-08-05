@@ -210,14 +210,15 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
      * Creates a single button with a popup menu that contains the actions of
      * this group.
      *
-     * @param focusable Indicates whether the created button shall be focusable.
+     * @param options The options to use. This is any combination of the
+     *        {@link CreateOptions} values.
      *
      * @return The created button of type {@link JButton}.
      */
     @Override
-    public AbstractButton createButton(boolean focusable) {
+    public AbstractButton createButton(int options) {
         var menu = createPopupMenu();
-        var button = new JButton(this);
+        var button = super.createButton(options);
 
         button.addMouseListener(new MouseAdapter() {
             @Override
@@ -226,8 +227,6 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
                     menu.show(e.getComponent(), e.getX(), e.getY());
             }
         });
-
-        button.setFocusable(focusable);
 
         return button;
     }
@@ -240,19 +239,20 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
      * created.
      *
      * @param target The toolbar where to insert the buttons.
-     * @param focusable Indicates whether the created button shall be focusable.
+     * @param options The options to use. This is any combination of the
+     *        {@link CreateOptions} values.
      *
      * @throws NullPointerException {@code target} is {@code null}.
      */
     @Override
-    public void addButtons(JToolBar target, boolean focusable) {
+    public void addButtons(JToolBar target, int options) {
         Objects.requireNonNull(target, "target must not be null.");
 
         for (GActionItemBuilder builder : actions) {
             if (builder instanceof GActionGroup)
-                target.add(builder.createButton(focusable));
+                target.add(builder.createButton(options));
             else
-                builder.addButtons(target, focusable);
+                builder.addButtons(target, options);
         }
     }
 

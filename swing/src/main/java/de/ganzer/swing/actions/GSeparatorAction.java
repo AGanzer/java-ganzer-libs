@@ -24,12 +24,12 @@ public class GSeparatorAction implements GActionItemBuilder {
      * This creates and inserts a single separator into the specified target.
      *
      * @param target The toolbar where to insert the separator.
-     * @param focusable This is ignored here.
+     * @param options This is ignored here.
      *
      * @throws NullPointerException {@code target} is {@code null}.
      */
     @Override
-    public void addButtons(JToolBar target, boolean focusable) {
+    public void addButtons(JToolBar target, int options) {
         Objects.requireNonNull(target, "target must not be null.");
         target.addSeparator();
     }

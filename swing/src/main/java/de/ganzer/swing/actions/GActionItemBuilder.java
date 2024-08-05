@@ -6,6 +6,7 @@ import javax.swing.*;
  * Must be implemented by all actions that shall be grouped into an instance
  * of {@link GActionGroup}
  */
+@SuppressWarnings("unused")
 public interface GActionItemBuilder {
 	/**
 	 * Creates a single menu that visualizes an action group.
@@ -52,14 +53,43 @@ public interface GActionItemBuilder {
 
 	/**
 	 * Creates a single button that visualizes an action.
-	 *
-	 * @param focusable Indicates whether the created button shall be focusable.
+	 * <p>
+	 * This implementation calls {@link #createButton(int)} with
+	 * {@link CreateOptions#DEFAULT}.
 	 *
 	 * @return A single button or {@code null} if the implementing class does
 	 * not support this.
 	 */
-	default AbstractButton createButton(boolean focusable) {
+	default AbstractButton createButton() {
+		return createButton(CreateOptions.DEFAULT);
+	}
+
+	/**
+	 * Creates a single button that visualizes an action.
+	 *
+	 * @param options The options to use. This is any combination of the
+	 *        {@link CreateOptions} values.
+	 *
+	 * @return A single button or {@code null} if the implementing class does
+	 * not support this.
+	 */
+	default AbstractButton createButton(int options) {
 		return null;
+	}
+
+	/**
+	 * Creates the buttons that visualizes an action or an action group and
+	 * inserts them into the specified target.
+	 * <p>
+	 * This implementation calls {@link #addButtons(JToolBar, int)} with
+	 * {@link CreateOptions#DEFAULT}.
+	 *
+	 * @param target The toolbar where to insert the buttons.
+	 *
+	 * @throws NullPointerException {@code target} is {@code null}.
+	 */
+	default void addButtons(JToolBar target) {
+		addButtons(target, CreateOptions.DEFAULT);
 	}
 
 	/**
@@ -67,9 +97,10 @@ public interface GActionItemBuilder {
 	 * inserts them into the specified target.
 	 *
 	 * @param target The toolbar where to insert the buttons.
-	 * @param focusable Indicates whether the created button shall be focusable.
+	 * @param options The options to use. This is any combination of the
+	 *        {@link CreateOptions} values.
 	 *
 	 * @throws NullPointerException {@code target} is {@code null}.
 	 */
-	void addButtons(JToolBar target, boolean focusable);
+	void addButtons(JToolBar target, int options);
 }
