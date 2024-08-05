@@ -57,17 +57,20 @@ public class MainFrame extends JFrame {
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK))
                                 .smallIcon(Images.load("close-16"))
                                 .largeIcon(Images.load("close-48"))
+                                .shortDescription("Quits this application.")
                                 .onAction(this::onExit)
                 ),
                 buttonsMenu = new GActionGroup("Buttons").addAll(
                         new GAction("Any Option")
                                 .smallIcon(Images.load("stroller-16"))
                                 .largeIcon(Images.load("stroller-48"))
+                                .shortDescription("Sets the option 1.")
                                 .selectable(true)
                                 .onAction(this::onAnyOption),
                         new GAction("Another Option")
                                 .smallIcon(Images.load("car_compact2-16"))
                                 .largeIcon(Images.load("car_compact2-48"))
+                                .shortDescription("Sets the option 2.")
                                 .selectable(true)
                                 .selected(true)
                                 .onAction(this::onAnotherOption),
@@ -78,20 +81,24 @@ public class MainFrame extends JFrame {
                                         new GAction("Choose 1")
                                                 .smallIcon(Images.load("calendar_1-16"))
                                                 .largeIcon(Images.load("calendar_1-48"))
+                                                .shortDescription("Choose the number 1.")
                                                 .exclusivelySelectable(true)
                                                 .selected(true),
                                         new GAction("Choose 2")
                                                 .smallIcon(Images.load("hand_count_three-16"))
                                                 .largeIcon(Images.load("hand_count_three-48"))
+                                                .shortDescription("Choose the number 2.")
                                                 .exclusivelySelectable(true),
                                         new GAction("Choose 3")
                                                 .smallIcon(Images.load("calendar_3-16"))
                                                 .largeIcon(Images.load("calendar_3-48"))
+                                                .shortDescription("Choose the number 3.")
                                                 .exclusivelySelectable(true)
                                 )
                 ),
                 subMenu = new GActionGroup("Others")
                         .largeIcon(Images.load("hamburger-48"))
+                        .shortDescription("Further options.")
                         .addAll(
                                 new GActionGroup("Sub Menu 1").addAll(
                                         new GAction("Sub Dummy 1"),
