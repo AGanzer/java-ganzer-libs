@@ -112,7 +112,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
      * @return {@code this}.
      */
     @Override
-    public GAction shortDescription(String description) {
+    public GActionGroup shortDescription(String description) {
         super.shortDescription(description);
         return this;
     }
@@ -125,7 +125,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
      * @return {@code this}.
      */
     @Override
-    public GAction longDescription(String description) {
+    public GActionGroup longDescription(String description) {
         super.longDescription(description);
         return this;
     }
