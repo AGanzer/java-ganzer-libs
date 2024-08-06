@@ -1,16 +1,15 @@
 package com.example.uitests.swing.tests;
 
 import de.ganzer.core.validation.NumberValidator;
+import de.ganzer.core.validation.PxPicValidator;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.swing.actions.CreateOptions;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionEvent;
+import de.ganzer.swing.validaton.ValidationBehavior;
+import de.ganzer.swing.validaton.ValidationFilter;
 
 import javax.swing.*;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
 import java.awt.*;
 
 public class InputTestDialog extends JDialog {
@@ -26,7 +25,7 @@ public class InputTestDialog extends JDialog {
     }
 
     private final Data data;
-    private JTextField input;
+    private ValidationFilter inputFilter;
     private boolean okClicked;
 
     private InputTestDialog(Frame owner, Data data) {
@@ -45,21 +44,24 @@ public class InputTestDialog extends JDialog {
     }
 
     private void initTextField() {
-        input = new JTextField(data.input, 30);
-        ((AbstractDocument)input.getDocument()).setDocumentFilter(new InputFilter(initValidator()));
+        var inputField = new JTextField(data.input, 30);
 
         var pane = new JPanel();
         pane.setLayout(new FlowLayout());
 
-        pane.add(input);
+        pane.add(inputField);
         getContentPane().add(pane, BorderLayout.CENTER);
+
+        inputFilter = new ValidationFilter(initValidator(), inputField);
     }
 
     private Validator initValidator() {
-        var val = new NumberValidator(-9999999.99, 9999999.99);
-        val.setNumDecimals(2);
+//        var val = new NumberValidator(-9999999.99, 9999999.99);
+//        val.setNumDecimals(2);
+//        return val;
 
-        return val;
+//        return new PxPicValidator("{White,Gr{ay,een},B{l{ack,ue},rown},Red}");
+        return new PxPicValidator("*&");
     }
 
     private void initButtons() {
@@ -78,7 +80,10 @@ public class InputTestDialog extends JDialog {
     }
 
     private void onOk(GActionEvent event) {
-        data.input = this.input.getText();
+        if (!inputFilter.validate(ValidationBehavior.SET_VISUAL_HINTS))
+            return;
+
+        data.input = inputFilter.getText();
         okClicked = true;
 
         setVisible(false);
@@ -86,26 +91,5 @@ public class InputTestDialog extends JDialog {
 
     private void onCancel(GActionEvent event) {
         setVisible(false);
-    }
-
-    private static class InputFilter extends DocumentFilter {
-        private final Validator validator;
-
-        private InputFilter(Validator validator) {
-            this.validator = validator;
-        }
-
-        @Override
-        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-            var input = new StringBuilder(string);
-
-            if (validator.isValidInput(input, true))
-                super.insertString(fb, offset, string, attr);
-        }
-
-        @Override
-        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-            super.replace(fb, offset, length, text, attrs);
-        }
     }
 }
