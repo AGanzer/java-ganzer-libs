@@ -17,19 +17,19 @@
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="core-repo" />
-      <option name="name" value="core-repo" />
-      <option name="url" value="file://$PROJECT_DIR$/swing/../core/target" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="core-repo" />
-      <option name="name" value="core-repo" />
-      <option name="url" value="file://$PROJECT_DIR$/ui-tests/../core/target" />
+      <option name="id" value="swing-repo" />
+      <option name="name" value="swing-repo" />
+      <option name="url" value="file://D:\Entwicklung\Bibliotheken\Java\ganzer\ui-tests/../swing/target" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="swing-repo" />
       <option name="name" value="swing-repo" />
       <option name="url" value="file://$PROJECT_DIR$/ui-tests/../swing/target" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="core-repo" />
+      <option name="name" value="core-repo" />
+      <option name="url" value="file://D:\Entwicklung\Bibliotheken\Java\ganzer\fx/../core/target" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
@@ -39,7 +39,37 @@
     <remote-repository>
       <option name="id" value="core-repo" />
       <option name="name" value="core-repo" />
+      <option name="url" value="file://$PROJECT_DIR$/ui-tests/../core/target" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="core-repo" />
+      <option name="name" value="core-repo" />
+      <option name="url" value="file://D:\Entwicklung\Bibliotheken\Java\ganzer\ui-tests/../core/target" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="fx-repo" />
+      <option name="name" value="fx-repo" />
+      <option name="url" value="file://D:\Entwicklung\Bibliotheken\Java\ganzer\ui-tests/../fx/target" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="core-repo" />
+      <option name="name" value="core-repo" />
+      <option name="url" value="file://$PROJECT_DIR$/swing/../core/target" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="fx-repo" />
+      <option name="name" value="fx-repo" />
+      <option name="url" value="file://$PROJECT_DIR$/ui-tests/../fx/target" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="core-repo" />
+      <option name="name" value="core-repo" />
       <option name="url" value="file://$PROJECT_DIR$/fx/../core/target" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="core-repo" />
+      <option name="name" value="core-repo" />
+      <option name="url" value="file://D:\Entwicklung\Bibliotheken\Java\ganzer\swing/../core/target" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="core-repo" />
@@ -60,11 +90,6 @@
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="fx-repo" />
-      <option name="name" value="fx-repo" />
-      <option name="url" value="file://$PROJECT_DIR$/ui-tests/../fx/target" />
     </remote-repository>
   </component>
 </project>
