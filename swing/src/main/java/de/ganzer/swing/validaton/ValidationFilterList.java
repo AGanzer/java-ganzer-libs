@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class ValidationFilterList implements Iterable<ValidationFilter> {
     private final List<ValidationFilter> filters = new ArrayList<>();
 
@@ -28,6 +29,6 @@ public class ValidationFilterList implements Iterable<ValidationFilter> {
 
     @Override
     public Iterator<ValidationFilter> iterator() {
-        return null;
+        return filters.iterator();
     }
 }
