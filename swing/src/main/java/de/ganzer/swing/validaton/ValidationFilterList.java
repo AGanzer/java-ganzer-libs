@@ -58,11 +58,18 @@ public class ValidationFilterList implements Iterable<ValidationFilter> {
      *         {@link ValidationBehavior#THROW_EXCEPTION}.
      */
     public boolean validate(ValidationBehavior behavior) {
-        for (var filter: this)
-            if (!filter.validate(behavior))
-                return false;
+        boolean valid = true;
 
-        return true;
+        for (var filter: this) {
+            if (!filter.validate(behavior)) {
+                if (behavior == ValidationBehavior.SHOW_MESSAGE_BOX)
+                    return false;
+
+                valid = false;
+            }
+        }
+
+        return valid;
     }
 
     /**
