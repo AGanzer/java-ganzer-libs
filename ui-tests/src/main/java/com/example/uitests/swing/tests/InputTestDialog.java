@@ -3,14 +3,14 @@ package com.example.uitests.swing.tests;
 import de.ganzer.core.validation.NumberValidator;
 import de.ganzer.core.validation.PxPicValidator;
 import de.ganzer.core.validation.Validator;
-import de.ganzer.swing.actions.CreateOptions;
 import de.ganzer.swing.actions.GAction;
-import de.ganzer.swing.actions.GActionEvent;
 import de.ganzer.swing.validaton.ValidationBehavior;
 import de.ganzer.swing.validaton.ValidationFilter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 public class InputTestDialog extends JDialog {
     public static class Data {
@@ -19,6 +19,8 @@ public class InputTestDialog extends JDialog {
 
     public static boolean showModal(Frame owner, Data data) {
         var dialog = new InputTestDialog(owner, data);
+        dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        dialog.setLocationRelativeTo(owner);
         dialog.setVisible(true);
 
         return dialog.okClicked;
@@ -47,7 +49,8 @@ public class InputTestDialog extends JDialog {
         var inputField = new JTextField(data.input, 30);
 
         var pane = new JPanel();
-        pane.setLayout(new FlowLayout());
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        pane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         pane.add(inputField);
         getContentPane().add(pane, BorderLayout.CENTER);
@@ -65,31 +68,37 @@ public class InputTestDialog extends JDialog {
     }
 
     private void initButtons() {
-        GAction ok = new GAction("OK")
-                .onAction(this::onOk);
-        GAction cancel = new GAction("Cancel")
-                .onAction(this::onCancel);
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(this::onOk);
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(this::onCancel);
 
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
+        buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         buttonPane.add(Box.createHorizontalGlue());
-        buttonPane.add(ok.createButton(CreateOptions.FOCUSABLE));
-        buttonPane.add(cancel.createButton(CreateOptions.FOCUSABLE));
+        buttonPane.add(okButton);
+        buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
+        buttonPane.add(cancelButton);
 
         getContentPane().add(buttonPane, BorderLayout.PAGE_END);
+
+        getRootPane().setDefaultButton(okButton);
+        getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "CANCEL");
+        getRootPane().getActionMap().put("CANCEL", new GAction().onAction(e -> onCancel(null)));
     }
 
-    private void onOk(GActionEvent event) {
+    private void onOk(ActionEvent event) {
         if (!inputFilter.validate(ValidationBehavior.SET_VISUAL_HINTS))
             return;
 
         data.input = inputFilter.getText();
         okClicked = true;
 
-        setVisible(false);
+        dispose();
     }
 
-    private void onCancel(GActionEvent event) {
-        setVisible(false);
+    private void onCancel(ActionEvent event) {
+        dispose();
     }
 }

@@ -37,11 +37,11 @@ public class MainFrame extends JFrame {
             System.out.println(laf.getClassName());
 
         try {
-//            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 //            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
         } catch (Exception e) {
             System.err.println("Cannot set look and feel. Using default.");
@@ -123,10 +123,13 @@ public class MainFrame extends JFrame {
                                 new GAction("Dummy 5"),
                                 new GAction("Dummy 6")
                         ),
-                testMenu = new GActionGroup("Tests").addAll(
-                        new GAction("Input Test")
-                                .onAction(this::onInputTest)
-                )
+                testMenu = new GActionGroup("Tests")
+                        .largeIcon(Images.load("multimeter_analog-48"))
+                        .shortDescription("Several Tests.")
+                        .addAll(
+                                new GAction("Input Test")
+                                        .onAction(this::onInputTest)
+                        )
         );
     }
 
@@ -138,13 +141,14 @@ public class MainFrame extends JFrame {
 
     private void initToolBar() {
         var toolBar = new JToolBar();
-        fileMenu.addButtons(toolBar, CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
+
+        fileMenu.addButtons(toolBar, CreateOptions.NO_BORDER);// | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
         toolBar.addSeparator();
-        buttonsMenu.addButtons(toolBar, CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
+        buttonsMenu.addButtons(toolBar, CreateOptions.NO_BORDER);// | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
         toolBar.addSeparator();
-        toolBar.add(subMenu.createButton(CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
-        toolBar.addSeparator();
-        testMenu.addButtons(toolBar, CreateOptions.NO_BORDER | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
+        toolBar.add(subMenu.createButton(CreateOptions.NO_BORDER));// | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
+        toolBar.add(testMenu.createButton(CreateOptions.NO_BORDER));// | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
+
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
     }
 
