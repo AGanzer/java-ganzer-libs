@@ -55,8 +55,8 @@ public class ValidationFilter extends DocumentFilter {
     private static Border errorBorder = BorderFactory.createLineBorder(Color.RED, 1);
     private static Consumer<ValidatorException> errorConsumer;
 
-    private final Validator validator;
     private final JTextComponent textField;
+    private Validator validator;
     private boolean validateOnFocusLost;
     private String orgTooltip;
     private Border orgBorder;
@@ -150,6 +150,12 @@ public class ValidationFilter extends DocumentFilter {
         ValidationFilter.errorConsumer = errorConsumer;
     }
 
+    /**
+     * Gets a value that indicates whether validation is done when the text
+     * field has lost its focus.
+     *
+     * @return {@code true} if validation is performed when the focus is lost.
+     */
     public boolean isValidateOnFocusLost() {
         return validateOnFocusLost;
     }
@@ -186,6 +192,18 @@ public class ValidationFilter extends DocumentFilter {
      */
     public Validator getValidator() {
         return validator;
+    }
+
+    /**
+     * Sets the validator to use for input validation.
+     *
+     * @param validator The validator to use.
+     *
+     * @throws NullPointerException {@code validator} is {@code null}.
+     */
+    public void setValidator(Validator validator) {
+        Objects.requireNonNull(validator, "validator must not be null.");
+        this.validator = validator;
     }
 
     /**
