@@ -15,6 +15,8 @@ public class MainFrame extends JFrame {
     GActionGroup buttonsMenu;
     GActionGroup subMenu;
     GActionGroup testMenu;
+    GActionGroup optionsMenu;
+    JToolBar toolBar;
 
     @Override
     protected void frameInit() {
@@ -129,7 +131,18 @@ public class MainFrame extends JFrame {
                         .addAll(
                                 new GAction("Input Test")
                                         .onAction(this::onInputTest)
-                        )
+                        ),
+                optionsMenu = new GActionGroup("Extras").addAll(
+                        new GAction("Show Text In Buttons")
+                                .shortDescription("Shows/hides the toolbar's buttons texts.")
+                                .selectable(true)
+                                .onAction(this::onShowTexts),
+                        new GAction("Small Buttons")
+                                .shortDescription("Shows small buttons in the toolbar.")
+                                .selectable(true)
+                                .onAction(this::onSmallButtons)
+                )
+
         );
     }
 
@@ -140,7 +153,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initToolBar() {
-        var toolBar = new JToolBar();
+        toolBar = new JToolBar();
 
         fileMenu.addButtons(toolBar, CreateOptions.NO_BORDER);// | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
         toolBar.addSeparator();
@@ -172,6 +185,69 @@ public class MainFrame extends JFrame {
         System.out.format(
                 "%s action is selected!\n",
                 event.getSelectedAction() == null ? "No" : event.getSelectedAction().getName());
+    }
+
+    private void onShowTexts(GActionEvent event) {
+        boolean hide = !event.getSource().isSelected();
+
+        for (int i = 0; i < toolBar.getComponentCount(); i++) {
+            if (toolBar.getComponent(i) instanceof AbstractButton button)
+                button.setHideActionText(hide);
+        }
+    }
+
+    private void onSmallButtons(GActionEvent event) {
+        boolean smallButtons = event.getSource().isSelected();
+
+        for (int i = 0; i < toolBar.getComponentCount(); i++) {
+            if (toolBar.getComponent(i) instanceof AbstractButton button)
+                setImage((GAction)button.getAction(), smallButtons);
+        }
+    }
+
+    private void setImage(GAction action, boolean small) {
+        String size = small ? "-32" : "-48";
+        String image;
+
+        switch (action.getName()) {
+            case "Exit":
+                image = "close" + size;
+                break;
+
+            case "Any Option":
+                image = "stroller" + size;
+                break;
+
+            case "Another Option":
+                image = "car_compact2" + size;
+                break;
+
+            case "Choose 1":
+                image = "calendar_1" + size;
+                break;
+
+            case "Choose 2":
+                image = "hand_count_three" + size;
+                break;
+
+            case "Choose 3":
+                image = "calendar_3" + size;
+                break;
+
+            case "Others":
+                image = "hamburger" + size;
+                break;
+
+            case "Tests":
+                image = "multimeter_analog" + size;
+                break;
+
+            default:
+                System.out.println("Unknown action: " + action.getName());
+                return;
+        }
+
+        action.largeIcon(Images.load(image));
     }
 
     private void onInputTest(GActionEvent event) {
