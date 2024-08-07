@@ -99,7 +99,8 @@ public class InputTestDialog extends JDialog {
     }
 
     private void onOk(ActionEvent event) {
-        if (!inputFilter.validate(ValidationBehavior.SET_VISUAL_HINTS))
+//        if (!inputFilter.validate(ValidationBehavior.SET_VISUAL_HINTS))
+        if (!inputFilter.validate(ValidationBehavior.SHOW_MESSAGE_BOX))
             return;
 
         data.input = inputFilter.getText();
