@@ -33,7 +33,7 @@ public final class CreateOptions {
     /**
      * The images of the buttons are not above the texts but leads them.
      */
-    public static final int IMAGE_TRAILING = 0x08;
+    public static final int IMAGE_LEADING = 0x08;
 
     /**
      * The created buttons has no border.
