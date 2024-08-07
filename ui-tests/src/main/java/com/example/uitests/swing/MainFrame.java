@@ -252,6 +252,7 @@ public class MainFrame extends JFrame {
 
     private void onInputTest(GActionEvent event) {
         var data = new InputTestDialog.Data();
+        data.input = "abcd";
 
         if (InputTestDialog.showModal(this, data))
             System.out.println("Your input: " + data.input);

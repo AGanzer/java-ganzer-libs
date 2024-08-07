@@ -33,8 +33,17 @@ public class InputTestDialog extends JDialog {
     private InputTestDialog(Frame owner, Data data) {
         super(owner, "Input Test", true);
         this.data = data;
+        updateControls();
+    }
 
+    @Override
+    protected void dialogInit() {
+        super.dialogInit();
         init();
+    }
+
+    private void updateControls() {
+        inputFilter.getTextField().setText(data.input);
     }
 
     private void init() {
@@ -46,7 +55,7 @@ public class InputTestDialog extends JDialog {
     }
 
     private void initTextField() {
-        var inputField = new JTextField(data.input, 30);
+        var inputField = new JTextField(30);
 
         var pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
@@ -72,6 +81,7 @@ public class InputTestDialog extends JDialog {
         okButton.addActionListener(this::onOk);
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(this::onCancel);
+        okButton.setPreferredSize(cancelButton.getPreferredSize());
 
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
