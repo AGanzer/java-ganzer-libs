@@ -16,13 +16,11 @@ public class FileNameTools {
     private static final String[] INVALID_NAME_CHARS = {
             "/",
             "/:",
-            "<>\\/\":|*?"
-    };
+            "<>\\/\":|*?"};
     private static final String[] INVALID_MASKED_NAME_CHARS = {
             "/",
             ":/",
-            "<>\\/\":|"
-    };
+            "<>\\/\":|"};
 
     private final String countedFormat;
     private final String hintFormat;
