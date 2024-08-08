@@ -207,6 +207,32 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
+     * Creates the menu items that visualizes this action group and inserts them
+     * into the specified target.
+     * <p>
+     * This implementation calls {@link #createMenu()} for all items that are
+     * of type {@link GActionGroup}. For all others,
+     * {@link GActionItemBuilder#addMenuItems(JMenu)} is called.
+     *
+     * @param target The menu where to insert the menu items.
+     *
+     * @throws NullPointerException {@code target} is {@code null}.
+     */
+    @Override
+    public void addMenuItems(JPopupMenu target) {
+        for (GActionItemBuilder builder : actions) {
+            if (builder instanceof GActionGroup)
+                target.add(builder.createMenu());
+            else if (builder instanceof GToggleActionGroup)
+                builder.addMenuItems(target);
+            else if (builder instanceof GSeparatorAction)
+                target.addSeparator();
+            else
+                target.add(builder.createMenuItem());
+        }
+    }
+
+    /**
      * Creates a single button with a popup menu that contains the actions of
      * this group.
      *
@@ -261,17 +287,6 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
         addMenuItems(menu);
 
         return menu;
-    }
-
-    private void addMenuItems(JPopupMenu target) {
-        for (GActionItemBuilder builder : actions) {
-            if (builder instanceof GActionGroup)
-                target.add(builder.createMenu());
-            else if (builder instanceof GSeparatorAction)
-                target.addSeparator();
-            else
-                target.add(builder.createMenuItem());
-        }
     }
 
     @Override

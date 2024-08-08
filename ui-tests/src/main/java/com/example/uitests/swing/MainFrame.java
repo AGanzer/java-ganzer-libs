@@ -117,8 +117,13 @@ public class MainFrame extends JFrame {
                                         new GAction("Sub Dummy 4")
                                 ),
                                 new GSeparatorAction(),
-                                new GAction("Dummy 1"),
-                                new GAction("Dummy 2"),
+                                new GToggleActionGroup().addAll(
+                                        new GAction("Dummy 1")
+                                                .exclusivelySelectable(true)
+                                                .selected(true),
+                                        new GAction("Dummy 2")
+                                                .exclusivelySelectable(true)
+                                ),
                                 new GSeparatorAction(),
                                 new GAction("Dummy 3"),
                                 new GAction("Dummy 4"),

@@ -23,6 +23,19 @@ public class GSeparatorAction implements GActionItemBuilder {
     /**
      * This creates and inserts a single separator into the specified target.
      *
+     * @param target The menu where to insert the separator.
+     *
+     * @throws NullPointerException {@code target} is {@code null}.
+     */
+    @Override
+    public void addMenuItems(JPopupMenu target) {
+        Objects.requireNonNull(target, "target must not be null.");
+        target.addSeparator();
+    }
+
+    /**
+     * This creates and inserts a single separator into the specified target.
+     *
      * @param target The toolbar where to insert the separator.
      * @param options This is ignored here.
      *

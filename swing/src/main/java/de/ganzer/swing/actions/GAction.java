@@ -541,6 +541,24 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
+     * The creates and inserts a single menu item into the specified target.
+     * <p>
+     * The created menu item is {@link JRadioButtonMenuItem} if
+     * {@link #isExclusivelySelectable()} is {@code true}. It is
+     * {@link JCheckBoxMenuItem} if {@link #isSelectable()} is {@code true}.
+     * In all other cases it is {@link JMenuItem}.
+     *
+     * @param target The menu where to insert the separator.
+     *
+     * @throws NullPointerException {@code target} is {@code null}.
+     */
+    @Override
+    public void addMenuItems(JPopupMenu target) {
+        Objects.requireNonNull(target);
+        target.add(createMenuItem());
+    }
+
+    /**
      * Creates a single button depending on the select ability of the action.
      *
      * @param options The options to use. This is any combination of the

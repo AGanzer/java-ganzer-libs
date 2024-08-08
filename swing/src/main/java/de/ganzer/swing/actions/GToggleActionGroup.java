@@ -178,6 +178,20 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     /**
+     * Creates the menu items that visualizes this toggle group and inserts them
+     * into the specified target.
+     *
+     * @param target The menu where to insert the menu items.
+     *
+     * @throws NullPointerException {@code target} is {@code null}.
+     */
+    @Override
+    public void addMenuItems(JPopupMenu target) {
+        for (var action: actions)
+            action.addMenuItems(target);
+    }
+
+    /**
      * Creates the buttons that visualizes this toggle group and inserts them
      * into the specified target.
      *

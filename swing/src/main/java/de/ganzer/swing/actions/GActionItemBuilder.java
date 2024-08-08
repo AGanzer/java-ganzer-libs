@@ -42,6 +42,16 @@ public interface GActionItemBuilder {
 	void addMenuItems(JMenu target);
 
 	/**
+	 * Creates the menu items that visualizes an action or an action group and
+	 * inserts them into the specified target.
+	 *
+	 * @param target The menu where to insert the items.
+	 *
+	 * @throws NullPointerException {@code target} is {@code null}.
+	 */
+	void addMenuItems(JPopupMenu target);
+
+	/**
 	 * Creates a single menu item that visualizes an action.
 	 *
 	 * @return A single menu item or {@code null} if the implementing class does
