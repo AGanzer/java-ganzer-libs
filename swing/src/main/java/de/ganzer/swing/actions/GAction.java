@@ -418,6 +418,18 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
+     * Calls {@link Action#setEnabled(boolean)}.
+     *
+     * @param enabled The enabled status to set.
+     *
+     * @return {@code this}.
+     */
+    public GAction enabled(boolean enabled) {
+        setEnabled(enabled);
+        return this;
+    }
+
+    /**
      * Adds the specified action listener that is called when this action is
      * performed.
      *

@@ -129,6 +129,19 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
         super.longDescription(description);
         return this;
     }
+    /**
+     * Calls {@link Action#setEnabled(boolean)}.
+     *
+     * @param enabled The enabled status to set.
+     *
+     * @return {@code this}.
+     */
+    @Override
+    public GActionGroup enabled(boolean enabled) {
+        super.enabled(enabled);
+        return this;
+    }
+
 
     /**
      * Calls {@link GAction#onAction(GActionListener)}.
