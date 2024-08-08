@@ -6,6 +6,10 @@ import java.util.function.Function;
 
 /**
  * A utility class for working with filenames.
+ * <p>
+ * Only the methods for extraction of the parts of a path are static. For the
+ * others there could be created a global instance. This could be useful because
+ * an application mostly needs the same handling of filenames throughout.
  */
 @SuppressWarnings("unused")
 public class FileNameTools {
