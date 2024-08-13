@@ -1,5 +1,9 @@
 package de.ganzer.fx.actions;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
@@ -14,10 +18,14 @@ import java.util.*;
  * This class helps to group radio buttons and exclusively checkable menu items
  * without defining special {@link ToggleGroup}. This enables handling of the
  * action states of multiple equal groups in menus and toolbars.
+ * <p>
+ * This class does also enable handling of the enabled status of multiple equal
+ * groups in menus and toolbars.
  */
 @SuppressWarnings("unused")
 public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     private final List<Action> actions = new ArrayList<>();
+    private final ObjectProperty<Action> selectedAction  = new SimpleObjectProperty<>();
 
     /**
      * Creates a group of the specified actions.
@@ -104,17 +112,22 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     }
 
     /**
-     * Adds the specified action to the group.
+     * Gets the currently selected action in this group.
      *
-     * @param action The action to add.
-     *
-     * @throws NullPointerException {@code action} is {@code null}.
+     * @return The action that is currently selected or {@code null} if no
+     *         action is selected.
      */
-    public void add(Action action) {
-        Objects.requireNonNull(action);
+    public Action getSelectedAction() {
+        return selectedAction.get();
+    }
 
-        actions.add(action);
-        action.selectedProperty().addListener(selectedListener);
+    /**
+     * Gets the property that stores the currently selected action.
+     *
+     * @return The property that holds the selected action.
+     */
+    public ReadOnlyObjectProperty<Action> selectedActionProperty() {
+        return selectedAction;
     }
 
     /**
@@ -126,60 +139,17 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
      *
      * @throws NullPointerException {@code actions} is {@code null}.
      */
-    public ActionItemBuilder addAll(Action... actions) {
+    public ToggleActionGroup addAll(Action... actions) {
         Objects.requireNonNull(actions);
 
-        for (Action action: actions)
-            add(action);
+        for (Action action: actions) {
+            Objects.requireNonNull(action);
+
+            this.actions.add(action);
+            action.selectedProperty().addListener(selectedListener);
+        }
 
         return this;
-    }
-
-    /**
-     * Removes the specified action.
-     *
-     * @param action The action to remove.
-     *
-     * @return {@code true} if the action is found and removed; otherwise,
-     *         {@code false}.
-     */
-    public boolean remove(Action action) {
-        if (action != null)
-            action.selectedProperty().removeListener(selectedListener);
-
-        return actions.remove(action);
-    }
-
-    /**
-     * Gets the number of contained actions.
-     *
-     * @return The size of the group.
-     */
-    public int size() {
-        return actions.size();
-    }
-
-    /**
-     * Gets a value that indicates whether the group is empty.
-     *
-     * @return {@code true} if the group is empty; otherwise, {@code false}.
-     */
-    public boolean isEmpty() {
-        return actions.isEmpty();
-    }
-
-    /**
-     * Gets the action at the specified index.
-     *
-     * @param index The index of the action to get.
-     *
-     * @return The action at {@code index}.
-     *
-     * @throws IndexOutOfBoundsException {@code index} is not in the range from
-     *         0 to "{@link #size()} - 1".
-     */
-    public Action getAt(int index) {
-        return actions.get(index);
     }
 
     /**
@@ -229,10 +199,14 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     private class SelectedListener implements ChangeListener<Boolean> {
         @Override
         public void changed(ObservableValue<? extends Boolean> value, Boolean oldValue, Boolean newValue) {
-            if (newValue)
-                for (Action a: actions)
+            if (newValue) {
+                for (Action a : actions) {
                     if (a.selectedProperty() != value)
                         a.setSelected(false);
+                    else
+                        selectedAction.set(a);
+                }
+            }
         }
     }
 }
