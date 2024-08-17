@@ -3,6 +3,7 @@ package de.ganzer.swing.actions;
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 /**
@@ -69,13 +70,13 @@ public class MainFrame extends JFrame {
         );
     }
 
-    private void onAnyOption(GActionEvent event) {
+    private void onAnyOption(ActionEvent event) {
         System.out.format(
                 "Any Option is %s!\n",
                 event.getSource().isSelected() ? "selected" : "deselected");
     }
 
-    private void onAnotherOption(GActionEvent event) {
+    private void onAnotherOption(ActionEvent event) {
         System.out.format(
             "Another Option is %s!\n",
             event.getSource().isSelected() ? "selected" : "deselected");
@@ -87,7 +88,7 @@ public class MainFrame extends JFrame {
                 event.getSelectedAction() == null ? "No" : event.getSelectedAction().getName());
     }
 
-    private void onExit(GActionEvent event) {
+    private void onExit(ActionEvent event) {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
@@ -439,7 +440,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      *
      * @throws NullPointerException {@code listener} is {@code null}.
      */
-    public GAction onAction(GActionListener listener) {
+    public GAction onAction(ActionListener listener) {
         addActionListener(listener);
         return this;
     }
@@ -452,9 +453,9 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      *
      * @throws NullPointerException {@code listener} is {@code null}.
      */
-    public void addActionListener(GActionListener listener) {
+    public void addActionListener(ActionListener listener) {
         Objects.requireNonNull(listener);
-        actionListeners.add(GActionListener.class, listener);
+        actionListeners.add(ActionListener.class, listener);
     }
 
     /**
@@ -463,8 +464,8 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      *
      * @return The listeners. This may be empty if no listener is installed.
      */
-    public GActionListener[] getActionListeners() {
-        return actionListeners.getListeners(GActionListener.class);
+    public ActionListener[] getActionListeners() {
+        return actionListeners.getListeners(ActionListener.class);
     }
 
     /**
@@ -472,8 +473,8 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      *
      * @param listener The listener to remove.
      */
-    public void removeActionListener(GActionListener listener) {
-        actionListeners.remove(GActionListener.class, listener);
+    public void removeActionListener(ActionListener listener) {
+        actionListeners.remove(ActionListener.class, listener);
     }
 
     /**
@@ -488,12 +489,12 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
         Objects.requireNonNull(event);
 
         Object[] listeners = actionListeners.getListenerList();
-        GActionEvent ex = null;
+        ActionEvent ex = null;
 
         // Process the listeners last to first, like AbstractButton does:
         //
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == GActionListener.class) {
+            if (listeners[i] == ActionListener.class) {
                 // Lazily create the event:
                 //
                 if (ex == null) {
@@ -502,10 +503,10 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
                     if(actionCommand == null)
                         actionCommand = command;
 
-                    ex = new GActionEvent(this, actionCommand, event);
+                    ex = new ActionEvent(this, ActionEvent.ACTION_FIRST, actionCommand);
                 }
 
-                ((GActionListener)listeners[i + 1]).actionPerformed(ex);
+                ((ActionListener)listeners[i + 1]).actionPerformed(ex);
             }
         }
     }

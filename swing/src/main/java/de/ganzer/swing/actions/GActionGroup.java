@@ -1,6 +1,7 @@
 package de.ganzer.swing.actions;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -144,7 +145,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
 
 
     /**
-     * Calls {@link GAction#onAction(GActionListener)}.
+     * Calls {@link GAction#onAction(ActionListener)}.
      *
      * @param listener The listener to add.
      *
@@ -153,7 +154,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
      * @throws NullPointerException {@code listener} is {@code null}.
      */
     @Override
-    public GActionGroup onAction(GActionListener listener) {
+    public GActionGroup onAction(ActionListener listener) {
         super.onAction(listener);
         return this;
     }

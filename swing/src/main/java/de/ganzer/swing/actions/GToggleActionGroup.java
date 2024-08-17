@@ -2,6 +2,8 @@ package de.ganzer.swing.actions;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -244,21 +246,21 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
         }
     }
 
-    private final GActionListener actionListener = new GActionListener() {
+    private final ActionListener actionListener = new ActionListener() {
         @Override
-        public void actionPerformed(GActionEvent event) {
+        public void actionPerformed(ActionEvent event) {
             for (var action: actions) {
                 if (action != event.getSource())
                     action.selected(false);
                 else if (selectedAction != event.getSource()) {
-                    selectedAction = event.getSource();
+                    selectedAction = (GAction)event.getSource();
                     fireSelectedActionChanged(selectedAction);
                 }
             }
 
             if (hasNoSelection()) {
                 if (forceSelection)
-                    event.getSource().selected(true);
+                    ((GAction)event.getSource()).selected(true);
                 else {
                     selectedAction = null;
                     fireSelectedActionChanged(null);

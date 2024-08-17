@@ -5,6 +5,7 @@ import de.ganzer.swing.actions.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -170,20 +171,20 @@ public class MainFrame extends JFrame {
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
     }
 
-    private void onExit(GActionEvent event) {
+    private void onExit(ActionEvent event) {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
-    private void onAnyOption(GActionEvent event) {
+    private void onAnyOption(ActionEvent event) {
         System.out.format(
                 "Any Option is %s!\n",
-                event.getSource().isSelected() ? "selected" : "deselected");
+                ((GAction)event.getSource()).isSelected() ? "selected" : "deselected");
     }
 
-    private void onAnotherOption(GActionEvent event) {
+    private void onAnotherOption(ActionEvent event) {
         System.out.format(
                 "Another Option is %s!\n",
-                event.getSource().isSelected() ? "selected" : "deselected");
+                ((GAction)event.getSource()).isSelected() ? "selected" : "deselected");
     }
 
     private void onChooseChanged(GSelectedActionChangedEvent event) {
@@ -192,8 +193,8 @@ public class MainFrame extends JFrame {
                 event.getSelectedAction() == null ? "No" : event.getSelectedAction().getName());
     }
 
-    private void onShowTexts(GActionEvent event) {
-        boolean hide = !event.getSource().isSelected();
+    private void onShowTexts(ActionEvent event) {
+        boolean hide = ((GAction)event.getSource()).isSelected();
 
         for (int i = 0; i < toolBar.getComponentCount(); i++) {
             if (toolBar.getComponent(i) instanceof AbstractButton button)
@@ -201,8 +202,8 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void onSmallButtons(GActionEvent event) {
-        boolean smallButtons = event.getSource().isSelected();
+    private void onSmallButtons(ActionEvent event) {
+        boolean smallButtons = ((GAction)event.getSource()).isSelected();
 
         for (int i = 0; i < toolBar.getComponentCount(); i++) {
             if (toolBar.getComponent(i) instanceof AbstractButton button)
@@ -255,7 +256,7 @@ public class MainFrame extends JFrame {
         action.largeIcon(Images.load(image));
     }
 
-    private void onInputTest(GActionEvent event) {
+    private void onInputTest(ActionEvent event) {
         var data = new InputTestDialog.Data();
         data.input = "abcd";
 
