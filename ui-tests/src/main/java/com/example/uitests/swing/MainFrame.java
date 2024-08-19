@@ -194,7 +194,7 @@ public class MainFrame extends JFrame {
     }
 
     private void onShowTexts(ActionEvent event) {
-        boolean hide = ((GAction)event.getSource()).isSelected();
+        boolean hide = !((GAction)event.getSource()).isSelected();
 
         for (int i = 0; i < toolBar.getComponentCount(); i++) {
             if (toolBar.getComponent(i) instanceof AbstractButton button)
