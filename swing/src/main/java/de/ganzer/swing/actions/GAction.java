@@ -536,7 +536,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
-     * The creates and inserts a single menu item into the specified target.
+     * Creates and inserts a single menu item into the specified target.
      * <p>
      * The created menu item is {@link JRadioButtonMenuItem} if
      * {@link #isExclusivelySelectable()} is {@code true}. It is
@@ -554,7 +554,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
-     * The creates and inserts a single menu item into the specified target.
+     * Creates and inserts a single menu item into the specified target.
      * <p>
      * The created menu item is {@link JRadioButtonMenuItem} if
      * {@link #isExclusivelySelectable()} is {@code true}. It is
@@ -602,7 +602,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
-     * The creates and inserts a single button into the specified target.
+     * Creates and inserts a single button into the specified target.
      * <p>
      * The created button is {@link JRadioButton} if
      * {@link #isExclusivelySelectable()} is {@code true}. It is {@link JCheckBox}
@@ -625,6 +625,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
         if (CreateOptions.isSet(options, CreateOptions.SHOW_TEXT))
             return false;
 
+        // TODO: check visibility of the image too: !CreateOptions.isSet(options, CreateOptions.HIDE_IMAGE) &&
         return getSmallIcon() != null || getLargeIcon() != null;
     }
 

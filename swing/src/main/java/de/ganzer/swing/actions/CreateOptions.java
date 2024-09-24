@@ -21,7 +21,11 @@ public final class CreateOptions {
     public static final int FOCUSABLE = 0x01;
 
     /**
-     * The text of the buttons are hidden.
+     * The text of the buttons are not hidden.
+     *<p>
+     * Normally, the text of a button is visible only if no image is set. This
+     * option forces a visible text even if an image is set. If no image is set,
+     * the button's text ist always visible.
      */
     public static final int SHOW_TEXT = 0x02;
 
