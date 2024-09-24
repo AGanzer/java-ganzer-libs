@@ -32,6 +32,7 @@ import java.util.Objects;
  * @see InputStream
  * @see Charset
  */
+@SuppressWarnings("unused")
 public class BOMInputStreamReader extends Reader {
     private final PushbackInputStream in;
     private final StreamDecoder sd;
@@ -60,7 +61,7 @@ public class BOMInputStreamReader extends Reader {
      * @throws IllegalArgumentException {@code charsetName} is {@code null}.
      * @throws UnsupportedEncodingException If the named charset is not supported.
      */
-    public BOMInputStreamReader(InputStream in, String charsetName) throws IOException, UnsupportedEncodingException {
+    public BOMInputStreamReader(InputStream in, String charsetName) throws IOException {
         super(in);
         this.in = new PushbackInputStream(in);
         this.sd = getDecoder(Charset.forName(charsetName));
