@@ -15,9 +15,4 @@
       </profile>
     </annotationProcessing>
   </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="de-ganzer-core" options="--add-exports java.base/sun.nio.cs=de.ganzer.core" />
-    </option>
-  </component>
 </project>
