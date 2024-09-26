@@ -111,7 +111,6 @@ public class MainFrame extends JFrame {
 @SuppressWarnings("unused")
 public class GAction extends AbstractAction implements GActionItemBuilder {
     private final EventListenerList actionListeners = new EventListenerList();
-    private String command;
     private boolean selectable;
     private boolean exclusivelySelectable;
 
@@ -159,24 +158,14 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
-     * Sets the action command.
-     * <p>
-     * NOTE: The action system in Swing does not provide action commands for
-     * actions (because using actions does make it unnecessary). When buttons
-     * or menu items are created by this action, the button's and item's action
-     * commands are automatically set. If the buttons and items are already
-     * created or created by applying this action, the item's and button's
-     * action commands must be explicitly set to this action's command.
-     * <p>
-     * If this is set after buttons or menu items are created, the already
-     * created component's action commands won't be updated.
+     * Calls {@link #putValue}{@code (ACTION_COMMAND_KEY, name)}.
      *
      * @param command The command to set.
      *
      * @return {@code this}.
      */
     public GAction command(String command) {
-        this.command = command;
+        putValue(ACTION_COMMAND_KEY, command);
         return this;
     }
 
@@ -188,7 +177,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      * @see #command(String)
      */
     public String getCommand() {
-        return command;
+        return (String) getValue(ACTION_COMMAND_KEY);
     }
 
     /**
@@ -489,7 +478,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
         Objects.requireNonNull(event);
 
         Object[] listeners = actionListeners.getListenerList();
-        ActionEvent ex = null;
+        ActionEvent ae = null;
 
         // Process the listeners last to first, like AbstractButton does:
         //
@@ -497,16 +486,16 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
             if (listeners[i] == ActionListener.class) {
                 // Lazily create the event:
                 //
-                if (ex == null) {
+                if (ae == null) {
                     String actionCommand = event.getActionCommand();
 
                     if(actionCommand == null)
-                        actionCommand = command;
+                        actionCommand = getCommand();
 
-                    ex = new ActionEvent(this, ActionEvent.ACTION_FIRST, actionCommand);
+                    ae = new ActionEvent(this, ActionEvent.ACTION_FIRST, actionCommand);
                 }
 
-                ((ActionListener)listeners[i + 1]).actionPerformed(ex);
+                ((ActionListener)listeners[i + 1]).actionPerformed(ae);
             }
         }
     }
@@ -529,8 +518,6 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
             item = new JCheckBoxMenuItem(this);
         else
             item = new JMenuItem(this);
-
-        item.setActionCommand(command);
 
         return item;
     }
@@ -591,7 +578,6 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
         else
             button = new JButton(this);
 
-        button.setActionCommand(command);
         button.setFocusable(CreateOptions.isSet(options, CreateOptions.FOCUSABLE));
         button.setHideActionText(shouldHideText(options));
         button.setVerticalTextPosition(getVerticalTextPosition(options));
