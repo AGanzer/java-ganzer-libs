@@ -616,14 +616,14 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     protected final int getVerticalTextPosition(int options) {
-        return !CreateOptions.isSet(options, CreateOptions.IMAGE_LEADING)
-                ? SwingConstants.BOTTOM
-                : SwingConstants.CENTER;
+        return CreateOptions.isSet(options, CreateOptions.IMAGE_LEADING)
+                ? SwingConstants.CENTER
+                : SwingConstants.BOTTOM;
     }
 
     protected final int getHorizontalTextPosition(int options) {
-        return !CreateOptions.isSet(options, CreateOptions.IMAGE_LEADING)
-                ? SwingConstants.CENTER
-                : SwingConstants.TRAILING;
+        return CreateOptions.isSet(options, CreateOptions.IMAGE_LEADING)
+                ? SwingConstants.TRAILING
+                : SwingConstants.CENTER;
     }
 }
