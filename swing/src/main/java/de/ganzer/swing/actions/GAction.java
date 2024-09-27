@@ -611,8 +611,8 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
         if (CreateOptions.isSet(options, CreateOptions.SHOW_TEXT))
             return false;
 
-        // TODO: check visibility of the image too: !CreateOptions.isSet(options, CreateOptions.HIDE_IMAGE) &&
-        return getSmallIcon() != null || getLargeIcon() != null;
+        return !CreateOptions.isSet(options, CreateOptions.HIDE_IMAGE)
+                && (getSmallIcon() != null || getLargeIcon() != null);
     }
 
     protected final int getVerticalTextPosition(int options) {
