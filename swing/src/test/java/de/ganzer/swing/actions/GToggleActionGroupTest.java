@@ -3,8 +3,6 @@ package de.ganzer.swing.actions;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -124,7 +122,6 @@ class GToggleActionGroupTest {
     @Test
     void removeSelectedActionChangedListener() {
         AtomicBoolean called = new AtomicBoolean(false);
-        GToggleActionGroup action = new GToggleActionGroup();
         GSelectedActionChangedListener listener = e -> called.set(true);
         GAction a;
 
@@ -205,7 +202,7 @@ class GToggleActionGroupTest {
                 new GAction().exclusivelySelectable(true)
         );
 
-        for (GAction action : group)
+        for (GAction ignored : group)
             counter++;
 
         assertEquals(2, counter);

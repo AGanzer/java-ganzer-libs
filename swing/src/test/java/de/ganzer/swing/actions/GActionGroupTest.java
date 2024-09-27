@@ -59,7 +59,7 @@ class GActionGroupTest {
         );
 
         int count = 0;
-        for (GActionItemBuilder ib: group)
+        for (GActionItemBuilder ignored: group)
             count++;
 
         assertEquals(3, count);
