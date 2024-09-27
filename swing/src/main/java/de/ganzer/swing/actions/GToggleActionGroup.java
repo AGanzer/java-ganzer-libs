@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -102,7 +104,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
             if (action.isSelected())
                 selectedAction = action;
 
-            action.addActionListener(actionListener);
+            action.addPropertyChangeListener(propertyChangeListener);
             this.actions.add(action);
         }
 
@@ -246,25 +248,36 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
         }
     }
 
-    private final ActionListener actionListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            for (var action: actions) {
-                if (action != event.getSource())
-                    action.selected(false);
-                else if (selectedAction != event.getSource()) {
-                    selectedAction = (GAction)event.getSource();
-                    fireSelectedActionChanged(selectedAction);
-                }
-            }
+    private boolean inPropertyChangeEvent;
 
-            if (hasNoSelection()) {
-                if (forceSelection)
-                    ((GAction)event.getSource()).selected(true);
-                else {
-                    selectedAction = null;
-                    fireSelectedActionChanged(null);
+    private final PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent event) {
+            if (inPropertyChangeEvent || !event.getPropertyName().equals(Action.SELECTED_KEY))
+                return;
+
+            try {
+                inPropertyChangeEvent = true;
+
+                for (var action: actions) {
+                    if (action != event.getSource())
+                        action.selected(false);
+                    else if (selectedAction != event.getSource()) {
+                        selectedAction = (GAction)event.getSource();
+                        fireSelectedActionChanged(selectedAction);
+                    }
                 }
+
+                if (hasNoSelection()) {
+                    if (forceSelection)
+                        ((GAction)event.getSource()).selected(true);
+                    else {
+                        selectedAction = null;
+                        fireSelectedActionChanged(null);
+                    }
+                }
+            } finally {
+                inPropertyChangeEvent = false;
             }
         }
     };
