@@ -106,6 +106,19 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
+     * Calls {@link GAction#displayedMnemonicIndex(Integer)}.
+     *
+     * @param index The index to set.
+     *
+     * @return {@code this}.
+     */
+    @Override
+    public GActionGroup displayedMnemonicIndex(Integer index) {
+        super.displayedMnemonicIndex(index);
+        return this;
+    }
+
+    /**
      * Calls {@link GAction#shortDescription(String)}.
      *
      * @param description The description to set.
