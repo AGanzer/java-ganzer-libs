@@ -27,24 +27,6 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     private final ObjectProperty<Action> selectedAction  = new SimpleObjectProperty<>();
 
     /**
-     * Creates a group of the specified actions.
-     *
-     * @param actions The actions to add to the group.
-     *
-     * @return The created group.
-     *
-     * @throws NullPointerException {@code actions} is {@code null}.
-     */
-    public static ToggleActionGroup of(Action... actions) {
-        Objects.requireNonNull(actions);
-
-        ToggleActionGroup group = new ToggleActionGroup();
-        group.actions.addAll(List.of(actions));
-
-        return group;
-    }
-
-    /**
      * Calls {@link #setDisabled(boolean)}.
      *
      * @param disabled {@code true} to disable all contained actions.

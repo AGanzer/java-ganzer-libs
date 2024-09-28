@@ -154,7 +154,7 @@ public class MainWindowController implements Initializable {
                 .bindTo(saveItem)
                 .bindTo(saveButton, BindNot.COMMAND_TEXT);
 
-        new ToggleActionGroup.addAll(
+        new ToggleActionGroup().addAll(
                 new Action("_Left")
                         .exclusiveSelectable(true)
                         .selected(true),
