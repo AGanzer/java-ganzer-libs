@@ -106,7 +106,7 @@ public final class LocalizedKeyCodeCombination extends LocalizedKeyCombination {
 
         sb.append(super.getName());
 
-        if (sb.length() > 0) {
+        if (!sb.isEmpty()) {
             sb.append("+");
         }
 
