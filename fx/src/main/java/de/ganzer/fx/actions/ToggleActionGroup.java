@@ -27,30 +27,6 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     private final ObjectProperty<Action> selectedAction  = new SimpleObjectProperty<>();
 
     /**
-     * Calls {@link #setDisabled(boolean)}.
-     *
-     * @param disabled {@code true} to disable all contained actions.
-     *
-     * @return This group.
-     */
-    public ToggleActionGroup disabled(boolean disabled) {
-        setDisabled(disabled);
-        return this;
-    }
-
-    /**
-     * Calls {@link #setVisible(boolean)}.
-     *
-     * @param visible {@code false} to hide all contained actions.
-     *
-     * @return This group.
-     */
-    public ToggleActionGroup visible(boolean visible) {
-        setVisible(visible);
-        return this;
-    }
-
-    /**
      * Gets a value that indicates whether the actions of this group are
      * disabled.
      *
@@ -114,7 +90,9 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     /**
      * Adds the specified actions to the group.
      *
-     * @param actions The actions to add.
+     * @param actions The actions to add. If this is selected, {@link #getSelectedAction()}
+     *        is set to {@code action}. {@link Action#isExclusiveSelectable()}
+     *        is set to {@code true}.
      *
      * @return This group.
      *
@@ -125,6 +103,11 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
 
         for (Action action: actions) {
             Objects.requireNonNull(action);
+
+            action.setExclusiveSelectable(true);
+
+            if (action.isSelected())
+                this.selectedAction.set(action);
 
             this.actions.add(action);
             action.selectedProperty().addListener(selectedListener);
