@@ -93,7 +93,7 @@ class ToggleActionGroupTest {
                 new Action()
         );
 
-        for (var a: group)
+        for (var ignored: group)
             counter++;
 
         assertEquals(4, counter);

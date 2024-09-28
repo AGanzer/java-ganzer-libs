@@ -147,7 +147,7 @@ class ActionGroupTest {
                new ActionGroup()
         );
 
-        for (var a: group)
+        for (var ignored: group)
             counter++;
 
         assertEquals(4, counter);
