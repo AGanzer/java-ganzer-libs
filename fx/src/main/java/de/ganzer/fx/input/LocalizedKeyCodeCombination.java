@@ -12,6 +12,11 @@ import javafx.scene.input.KeyEvent;
 public final class LocalizedKeyCodeCombination extends LocalizedKeyCombination {
     private final KeyCode code;
 
+    /**
+     * Gets the key code of this combination.
+     *
+     * @return The key code.
+     */
     public KeyCode getCode() {
         return code;
     }
@@ -52,8 +57,7 @@ public final class LocalizedKeyCodeCombination extends LocalizedKeyCombination {
      * @param code the key code of the main key
      * @param modifiers the list of modifier keys and their corresponding values
      */
-    public LocalizedKeyCodeCombination(KeyCode code,
-                              Modifier... modifiers) {
+    public LocalizedKeyCodeCombination(KeyCode code, Modifier... modifiers) {
         super(modifiers);
 
         validateKeyCode(code);
