@@ -483,6 +483,18 @@ public class Action implements ActionItemBuilder {
     }
 
     /**
+     * Calls {@link #setTag(Object)}.
+     *
+     * @param tag The tag to set.
+     *
+     * @return This action.
+     */
+    public Action tag(Object tag) {
+        setTag(tag);
+        return this;
+    }
+
+    /**
      * Binds this action to the specified menu item.
      * <p>
      * This method has to be called for already existing menu items that shall

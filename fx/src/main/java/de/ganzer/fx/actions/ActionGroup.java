@@ -166,6 +166,18 @@ public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
     }
 
     /**
+     * Calls {@link #setTag(Object)}.
+     *
+     * @param tag The tag to set.
+     *
+     * @return This action.
+     */
+    public ActionGroup tag(Object tag) {
+        setTag(tag);
+        return this;
+    }
+
+    /**
      * Creates a menu that contains all actions of this group as menu items.
      *
      * @return A list with exactly one menu.
