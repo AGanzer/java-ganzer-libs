@@ -1,5 +1,7 @@
 package de.ganzer.swing.actions;
 
+import de.ganzer.swing.controls.*;
+
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -143,6 +145,20 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
         super.longDescription(description);
         return this;
     }
+
+    /**
+     * Calls {@link GAction#visible(boolean)}.
+     *
+     * @param visible The visibility to set.
+     *
+     * @return {@code this}.
+     */
+    @Override
+    public GActionGroup visible(boolean visible) {
+        super.visible(visible);
+        return this;
+    }
+
     /**
      * Calls {@link Action#setEnabled(boolean)}.
      *
@@ -155,7 +171,6 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
         super.enabled(enabled);
         return this;
     }
-
 
     /**
      * Calls {@link GAction#onAction(ActionListener)}.
@@ -180,7 +195,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
      */
     @Override
     public JMenu createMenu() {
-        JMenu menu = new JMenu(this);
+        GMenu menu = new GMenu(this);
         addMenuItems(menu);
 
         return menu;

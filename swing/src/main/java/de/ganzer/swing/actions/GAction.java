@@ -1,5 +1,7 @@
 package de.ganzer.swing.actions;
 
+import de.ganzer.swing.controls.*;
+
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
@@ -110,6 +112,8 @@ public class MainFrame extends JFrame {
  */
 @SuppressWarnings("unused")
 public class GAction extends AbstractAction implements GActionItemBuilder {
+    public static final String VISIBILITY_KEY = "visibility";
+
     private final EventListenerList actionListeners = new EventListenerList();
     private boolean selectable;
     private boolean exclusivelySelectable;
@@ -408,6 +412,40 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
+     * Sets the visibility of the action.
+     * <p>
+     * Note: This does not work with any of the default Swing controls because
+     * these controls does not observe the visibility. The only controls that
+     * observes this are {@link GMenuItem}
+     * <ul>
+     *     <li>{@link GMenu}
+     *     <li>{@link GMenuItem}
+     *     <li>{@link GRadioButtonMenuItem}
+     *     <li>{@link GCheckBoxMenuItem}
+     *     <li>{@link GButton}
+     *     <li>{@link GToggleButton}
+     * </ul>
+     *
+     * @param visible The visibility to set.
+     *
+     * @return {@code this}.
+     */
+    public GAction visible(boolean visible) {
+        putValue(VISIBILITY_KEY, visible);
+        return this;
+    }
+
+    /**
+     * Gets the visibility of the action.
+     *
+     * @return The visibility.
+     */
+    public boolean isVisible() {
+        Boolean value = (Boolean) getValue(VISIBILITY_KEY);
+        return value != null && value;
+    }
+
+    /**
      * Calls {@link Action#setEnabled(boolean)}.
      *
      * @param enabled The enabled status to set.
@@ -503,21 +541,21 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     /**
      * Creates a single menu item depending on the select ability of the action.
      *
-     * @return The created menu item. This is {@link JRadioButtonMenuItem} if
+     * @return The created menu item. This is {@link GRadioButtonMenuItem} if
      *         {@link #isExclusivelySelectable()} is {@code true}. This is
-     *         {@link JCheckBoxMenuItem} if {@link #isSelectable()} is
-     *         {@code true}. In all other cases it is {@link JMenuItem}.
+     *         {@link GCheckBoxMenuItem} if {@link #isSelectable()} is
+     *         {@code true}. In all other cases it is {@link GMenuItem}.
      */
     @Override
     public JMenuItem createMenuItem() {
         JMenuItem item;
 
         if (exclusivelySelectable)
-            item = new JRadioButtonMenuItem(this);
+            item = new GRadioButtonMenuItem(this);
         else if (selectable)
-            item = new JCheckBoxMenuItem(this);
+            item = new GCheckBoxMenuItem(this);
         else
-            item = new JMenuItem(this);
+            item = new GMenuItem(this);
 
         return item;
     }
@@ -525,10 +563,10 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     /**
      * Creates and inserts a single menu item into the specified target.
      * <p>
-     * The created menu item is {@link JRadioButtonMenuItem} if
+     * The created menu item is {@link GRadioButtonMenuItem} if
      * {@link #isExclusivelySelectable()} is {@code true}. It is
-     * {@link JCheckBoxMenuItem} if {@link #isSelectable()} is {@code true}.
-     * In all other cases it is {@link JMenuItem}.
+     * {@link GCheckBoxMenuItem} if {@link #isSelectable()} is {@code true}.
+     * In all other cases it is {@link GMenuItem}.
      *
      * @param target The menu where to insert the separator.
      *
@@ -543,10 +581,10 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     /**
      * Creates and inserts a single menu item into the specified target.
      * <p>
-     * The created menu item is {@link JRadioButtonMenuItem} if
+     * The created menu item is {@link GRadioButtonMenuItem} if
      * {@link #isExclusivelySelectable()} is {@code true}. It is
-     * {@link JCheckBoxMenuItem} if {@link #isSelectable()} is {@code true}.
-     * In all other cases it is {@link JMenuItem}.
+     * {@link GCheckBoxMenuItem} if {@link #isSelectable()} is {@code true}.
+     * In all other cases it is {@link GMenuItem}.
      *
      * @param target The menu where to insert the separator.
      *
@@ -564,9 +602,9 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      * @param options The options to use. This is any combination of the
      *        {@link CreateOptions} values.
      *
-     * @return The created button. This is {@link JToggleButton} if
+     * @return The created button. This is {@link GToggleButton} if
      *         {@link #isExclusivelySelectable()} or {@link #isSelectable()} is
-     *         {@code true}. Otherwise, it is {@link JButton}. If any image is
+     *         {@code true}. Otherwise, it is {@link GButton}. If any image is
      *         set, the button's action text is hidden.
      */
     @Override
@@ -574,9 +612,9 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
         AbstractButton button;
 
         if (exclusivelySelectable || selectable)
-            button = new JToggleButton(this);
+            button = new GToggleButton(this);
         else
-            button = new JButton(this);
+            button = new GButton(this);
 
         button.setFocusable(CreateOptions.isSet(options, CreateOptions.FOCUSABLE));
         button.setHideActionText(shouldHideText(options));
@@ -590,12 +628,11 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     /**
      * Creates and inserts a single button into the specified target.
      * <p>
-     * The created button is {@link JRadioButton} if
-     * {@link #isExclusivelySelectable()} is {@code true}. It is {@link JCheckBox}
-     * if {@link #isSelectable()} is {@code true}. In all other cases it is
-     * {@link JButton}. If any image is set, the buttons action texts are hidden.
+     * The created button isis {@link GToggleButton} if {@link #isExclusivelySelectable()}
+     * or {@link #isSelectable()} is {@code true}. Otherwise, it is {@link GButton}.
+     * If any image is set, the button's action text is hidden.
      *
-     * @param target The toolbar where to insert the separator.
+     * @param target The toolbar where to insert the button.
      * @param options The options to use. This is any combination of the
      *        {@link CreateOptions} values.
      *
