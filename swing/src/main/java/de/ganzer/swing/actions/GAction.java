@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.Key;
 import java.util.*;
 
 /**
@@ -123,6 +124,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      */
     public GAction() {
         putValue(SELECTED_KEY, false);
+        putValue(VISIBILITY_KEY, true);
     }
 
     /**
@@ -131,6 +133,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public GAction(String name) {
         super(name);
         putValue(SELECTED_KEY, false);
+        putValue(VISIBILITY_KEY, true);
     }
 
     /**
@@ -138,6 +141,8 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      */
     public GAction(String name, Icon icon) {
         super(name, icon);
+        putValue(SELECTED_KEY, false);
+        putValue(VISIBILITY_KEY, true);
     }
 
     /**
@@ -150,6 +155,15 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public GAction name(String name) {
         putValue(NAME, name);
         return this;
+    }
+
+    /**
+     * Calls {@link #putValue}{@code (NAME, name)}.
+     *
+     * @param name The name to set.
+     */
+    public void setName(String name) {
+        putValue(NAME, name);
     }
 
     /**
@@ -171,6 +185,15 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public GAction command(String command) {
         putValue(ACTION_COMMAND_KEY, command);
         return this;
+    }
+
+    /**
+     * Calls {@link #putValue}{@code (ACTION_COMMAND_KEY, name)}.
+     *
+     * @param command The command to set.
+     */
+    public void setCommand(String command) {
+        putValue(ACTION_COMMAND_KEY, command);
     }
 
     /**
@@ -197,6 +220,17 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
+     * Calls {@link #putValue}{@code (SMALL_ICON, icon)}.
+     *
+     * @param icon The icon to set.
+     *
+     * @return {@code this}.
+     */
+    public void setSmallIcon(Icon icon) {
+        putValue(SMALL_ICON, icon);
+    }
+
+    /**
      * Gets the small icon of the action.
      *
      * @return The icon or {@code null} if it is not set.
@@ -215,6 +249,15 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public GAction largeIcon(Icon icon) {
         putValue(LARGE_ICON_KEY, icon);
         return this;
+    }
+
+    /**
+     * Calls {@link #putValue}{@code (LARGE_ICON_KEY, icon)}.
+     *
+     * @param icon The icon to set.
+     */
+    public void setLargeIcon(Icon icon) {
+        putValue(LARGE_ICON_KEY, icon);
     }
 
     /**
@@ -239,6 +282,15 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
+     * Calls {@link #putValue}{@code (ACCELERATOR_KEY, keyStroke)}.
+     *
+     * @param keyStroke The accelerator to set.
+     */
+    public void setAccelerator(KeyStroke keyStroke) {
+        putValue(ACCELERATOR_KEY, keyStroke);
+    }
+
+    /**
      * Gets the accelerator of the action.
      *
      * @return The accelerator or {@code null} if it is not set.
@@ -257,6 +309,15 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public GAction mnemonic(Integer keyCode) {
         putValue(MNEMONIC_KEY, keyCode);
         return this;
+    }
+
+    /**
+     * Calls {@link #putValue}{@code (MNEMONIC_KEY, keyCode)}.
+     *
+     * @param keyCode The mnemonic to set.
+     */
+    public void setMnemonic(Integer keyCode) {
+        putValue(MNEMONIC_KEY, keyCode);
     }
 
     /**
@@ -281,6 +342,15 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
+     * Calls {@link #putValue}{@code (DISPLAYED_MNEMONIC_INDEX_KEY, index)}.
+     *
+     * @param index The index to set.
+     */
+    public void setDisplayedMnemonicIndex(Integer index) {
+        putValue(DISPLAYED_MNEMONIC_INDEX_KEY, index);
+    }
+
+    /**
      * Gets the displayed mnemonic index of the action.
      *
      * @return The index or {@code null} if it is not set.
@@ -302,6 +372,15 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
+     * Calls {@link #putValue}{@code (SHORT_DESCRIPTION, description)}.
+     *
+     * @param description The description to set.
+     */
+    public void setShortDescription(String description) {
+        putValue(SHORT_DESCRIPTION, description);
+    }
+
+    /**
      * Gets the short description of the action.
      *
      * @return The description or {@code null} if it is not set.
@@ -320,6 +399,15 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public GAction longDescription(String description) {
         putValue(LONG_DESCRIPTION, description);
         return this;
+    }
+
+    /**
+     * Calls {@link #putValue}{@code (LONG_DESCRIPTION, description)}.
+     *
+     * @param description The description to set.
+     */
+    public void setLongDescription(String description) {
+        putValue(LONG_DESCRIPTION, description);
     }
 
     /**
@@ -346,6 +434,20 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public GAction selectable(boolean selectable) {
         this.selectable = selectable;
         return this;
+    }
+
+    /**
+     * Sets a value that indicates whether the action is selectable.
+     * <p>
+     * This is used only for the creation of buttons and menu items.
+     *
+     * @param selectable {@code true} to make the action selectable.
+     *
+     * @see #createMenuItem()
+     * @see #createButton(int)
+     */
+    public void setSelectable(boolean selectable) {
+        this.selectable = selectable;
     }
 
     /**
@@ -378,6 +480,20 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
+     * Sets a value that indicates whether the action is exclusively selectable.
+     * <p>
+     * This is used only for the creation of buttons and menu items.
+     *
+     * @param selectable {@code true} to make the action exclusively selectable.
+     *
+     * @see #createMenuItem()
+     * @see #createButton(int)
+     */
+    public void setExclusivelySelectable(boolean selectable) {
+        this.exclusivelySelectable = selectable;
+    }
+
+    /**
      * Gets a value that indicates whether the action is exclusively selectable.
      *
      * @return {@code true} if the action is exclusively selectable; otherwise,
@@ -399,6 +515,15 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public GAction selected(boolean selected) {
         putValue(SELECTED_KEY, selected);
         return this;
+    }
+
+    /**
+     * Calls {@link #putValue}{@code (SELECTED_KEY, selected)}.
+     *
+     * @param selected The selection status to set.
+     */
+    public void setSelected(boolean selected) {
+        putValue(SELECTED_KEY, selected);
     }
 
     /**
@@ -436,13 +561,46 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     }
 
     /**
+     * Sets the visibility of the action.
+     * <p>
+     * Note: This does not work with any of the default Swing controls because
+     * these controls does not observe the visibility. The only controls that
+     * observes this are {@link GMenuItem}
+     * <ul>
+     *     <li>{@link GMenu}
+     *     <li>{@link GMenuItem}
+     *     <li>{@link GRadioButtonMenuItem}
+     *     <li>{@link GCheckBoxMenuItem}
+     *     <li>{@link GButton}
+     *     <li>{@link GToggleButton}
+     * </ul>
+     *
+     * @param visible The visibility to set.
+     */
+    public void setVisible(boolean visible) {
+        putValue(VISIBILITY_KEY, visible);
+    }
+
+    /**
      * Gets the visibility of the action.
+     * <p>
+     * Note: This does not work with any of the default Swing controls because
+     * these controls does not observe the visibility. The only controls that
+     * observes this are {@link GMenuItem}
+     * <ul>
+     *     <li>{@link GMenu}
+     *     <li>{@link GMenuItem}
+     *     <li>{@link GRadioButtonMenuItem}
+     *     <li>{@link GCheckBoxMenuItem}
+     *     <li>{@link GButton}
+     *     <li>{@link GToggleButton}
+     * </ul>
      *
      * @return The visibility.
      */
     public boolean isVisible() {
         Boolean value = (Boolean) getValue(VISIBILITY_KEY);
-        return value != null && value;
+        return value == null || value;
     }
 
     /**
