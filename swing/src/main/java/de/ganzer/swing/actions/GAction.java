@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.security.Key;
 import java.util.*;
 
 /**
@@ -223,8 +222,6 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      * Calls {@link #putValue}{@code (SMALL_ICON, icon)}.
      *
      * @param icon The icon to set.
-     *
-     * @return {@code this}.
      */
     public void setSmallIcon(Icon icon) {
         putValue(SMALL_ICON, icon);
