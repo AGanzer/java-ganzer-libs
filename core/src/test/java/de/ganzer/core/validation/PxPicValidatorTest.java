@@ -7,25 +7,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DataPair {
-    private final String input;
-    private final String expected;
-
-    public DataPair(String input, String expected) {
-        this.input = input;
-        this.expected = expected;
-    }
-
-    public String getInput() {
-        return input;
-    }
-
-    public String getExpected() {
-        return expected;
-    }
-}
-
 class PxPicValidatorTest {
+    private record DataPair(String input, String expected) {
+    }
+
     @Test
     void constructEmpty() {
         var val = new PxPicValidator();
@@ -125,18 +110,18 @@ class PxPicValidatorTest {
                 new DataPair("Gray1", "Gray1"));
 
         for (DataPair d: validData) {
-            var input = new StringBuilder(d.getInput());
+            var input = new StringBuilder(d.input());
             var result = val.isValidInput(input, true);
 
-            assertEquals(d.getExpected(), input.toString());
+            assertEquals(d.expected(), input.toString());
             assertTrue(result);
         }
 
         for (DataPair d: invalidData) {
-            var input = new StringBuilder(d.getInput());
+            var input = new StringBuilder(d.input());
             var result = val.isValidInput(input, true);
 
-            assertEquals(d.getExpected(), input.toString());
+            assertEquals(d.expected(), input.toString());
             assertFalse(result);
         }
     }
@@ -157,10 +142,10 @@ class PxPicValidatorTest {
                 new DataPair("r", "R"));
 
         for (DataPair d: validData) {
-            var input = new StringBuilder(d.getInput());
+            var input = new StringBuilder(d.input());
             var result = val.isValidInput(input, true);
 
-            assertEquals(d.getExpected(), input.toString());
+            assertEquals(d.expected(), input.toString());
             assertTrue(result);
         }
     }
@@ -183,18 +168,18 @@ class PxPicValidatorTest {
 
 
         for (DataPair d: validData) {
-            var input = new StringBuilder(d.getInput());
+            var input = new StringBuilder(d.input());
             var result = val.isValidInput(input, true);
 
-            assertEquals(d.getExpected(), input.toString());
+            assertEquals(d.expected(), input.toString());
             assertTrue(result);
         }
 
         for (DataPair d: invalidData) {
-            var input = new StringBuilder(d.getInput());
+            var input = new StringBuilder(d.input());
             var result = val.isValidInput(input, true);
 
-            assertEquals(d.getExpected(), input.toString());
+            assertEquals(d.expected(), input.toString());
             assertFalse(result);
         }
     }
@@ -209,10 +194,10 @@ class PxPicValidatorTest {
                 new DataPair("12/", "12/"));
 
         for (DataPair d: validData) {
-            var input = new StringBuilder(d.getInput());
+            var input = new StringBuilder(d.input());
             var result = val.isValidInput(input, true);
 
-            assertEquals(d.getExpected(), input.toString());
+            assertEquals(d.expected(), input.toString());
             assertTrue(result);
         }
     }
