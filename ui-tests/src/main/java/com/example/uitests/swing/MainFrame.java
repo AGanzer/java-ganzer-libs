@@ -14,7 +14,7 @@ public class MainFrame extends JFrame {
     GActionGroup mainMenu;
     GActionGroup fileMenu;
     GActionGroup buttonsMenu;
-    GActionGroup subMenu;
+    GActionGroup othersMenu;
     GActionGroup testMenu;
     GActionGroup optionsMenu;
     JToolBar toolBar;
@@ -103,7 +103,7 @@ public class MainFrame extends JFrame {
                                                 .exclusivelySelectable(true)
                                 )
                 ),
-                subMenu = new GActionGroup("Others")
+                othersMenu = new GActionGroup("Others")
                         .largeIcon(Images.load("hamburger-48"))
                         .shortDescription("Further options.")
                         .addAll(
@@ -146,7 +146,11 @@ public class MainFrame extends JFrame {
                         new GAction("Small Buttons")
                                 .shortDescription("Shows small buttons in the toolbar.")
                                 .selectable(true)
-                                .onAction(this::onSmallButtons)
+                                .onAction(this::onSmallButtons),
+                        new GAction("Hide  Others")
+                                .shortDescription("Shows/hides the Others menu")
+                                .selectable(true)
+                                .onAction(this::hideOthers)
                 )
 
         );
@@ -165,7 +169,7 @@ public class MainFrame extends JFrame {
         toolBar.addSeparator();
         buttonsMenu.addButtons(toolBar, CreateOptions.NO_BORDER);// | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
         toolBar.addSeparator();
-        toolBar.add(subMenu.createButton(CreateOptions.NO_BORDER));// | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
+        toolBar.add(othersMenu.createButton(CreateOptions.NO_BORDER));// | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
         toolBar.add(testMenu.createButton(CreateOptions.NO_BORDER));// | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
 
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
@@ -209,6 +213,10 @@ public class MainFrame extends JFrame {
             if (toolBar.getComponent(i) instanceof AbstractButton button)
                 setImage((GAction)button.getAction(), smallButtons);
         }
+    }
+
+    private void hideOthers(ActionEvent ignored) {
+        othersMenu.setVisible(!othersMenu.isVisible());
     }
 
     private void setImage(GAction action, boolean small) {
