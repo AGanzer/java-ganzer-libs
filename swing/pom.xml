@@ -6,7 +6,7 @@
 
     <groupId>de.ganzer.swing</groupId>
     <artifactId>de-ganzer-swing</artifactId>
-    <version>1.1.0</version>
+    <version>4.0.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,9 +36,9 @@
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
-            <version>1.0.1</version>
+            <version>4.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../core/target/de-ganzer-core-1.0.1.jar</systemPath>
+            <systemPath>${project.basedir}/../core/target/de-ganzer-core-4.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

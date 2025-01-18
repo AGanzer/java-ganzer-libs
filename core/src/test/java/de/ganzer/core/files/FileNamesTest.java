@@ -9,14 +9,13 @@ import java.io.FileOutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileNameToolsTest {
+class FileNamesTest {
     @ParameterizedTest
     @CsvSource(delimiter = ',', value = {
             "ab.c, true",
             "ab/.c, false"})
     void isValidName(String name, String expected) {
-        FileNameTools fn = new FileNameTools();
-        assertEquals("true".equals(expected), fn.isValidName(name));
+        assertEquals("true".equals(expected), FileNames.isValidName(name));
     }
 
     @ParameterizedTest
@@ -24,32 +23,31 @@ class FileNameToolsTest {
             "a?b.c*, true",
             "a?b/.c*, false"})
     void isValidMaskedName(String name, String expected) {
-        FileNameTools fn = new FileNameTools();
-        assertEquals("true".equals(expected), fn.isValidMaskedName(name));
+        assertEquals("true".equals(expected), FileNames.isValidMaskedName(name));
     }
 
     @Test
     void getValidName2() {
-        FileNameTools fn = new FileNameTools(c -> "_");
-        assertEquals("a_b.c", fn.getValidName("a/b.c"));
+        FileNames.setCharReplacement(c -> "_");
+        assertEquals("a_b.c", FileNames.getValidName("a/b.c"));
     }
 
     @Test
     void getValidMaskedName2() {
-        FileNameTools fn = new FileNameTools(c -> "_");
-        assertEquals("a?_b.c*", fn.getValidMaskedName("a?/b.c*"));
+        FileNames.setCharReplacement(c -> "_");
+        assertEquals("a?_b.c*", FileNames.getValidMaskedName("a?/b.c*"));
     }
 
     @Test
     void getValidName() {
-        FileNameTools fn = new FileNameTools();
-        assertEquals("a%2Fb.c", fn.getValidName("a/b.c"));
+        FileNames.setCharReplacement(null);
+        assertEquals("a%2Fb.c", FileNames.getValidName("a/b.c"));
     }
 
     @Test
     void getValidMaskedName() {
-        FileNameTools fn = new FileNameTools();
-        assertEquals("a?%2Fb.c*", fn.getValidMaskedName("a?/b.c*"));
+        FileNames.setCharReplacement(null);
+        assertEquals("a?%2Fb.c*", FileNames.getValidMaskedName("a?/b.c*"));
     }
 
     @ParameterizedTest
@@ -58,7 +56,7 @@ class FileNameToolsTest {
             "name.e1, name",
             "name.e1.e2, name.e1"})
     void getNameWithoutLastExtension(String name, String expected) {
-        assertEquals(expected, FileNameTools.getNameWithoutLastExtension(name));
+        assertEquals(expected, FileNames.getNameWithoutLastExtension(name));
     }
 
 
@@ -68,7 +66,7 @@ class FileNameToolsTest {
             "name.e1, name",
             "name.e1.e2, name"})
     void getNameWithoutExtensions(String name, String expected) {
-        assertEquals(expected, FileNameTools.getNameWithoutExtensions(name));
+        assertEquals(expected, FileNames.getNameWithoutExtensions(name));
     }
 
     @ParameterizedTest
@@ -77,7 +75,7 @@ class FileNameToolsTest {
             "name.e1, e1",
             "name.e1.e2, e2"})
     void getExtension(String name, String expected) {
-        assertEquals(expected == null ? "" : expected, FileNameTools.getExtension(name));
+        assertEquals(expected == null ? "" : expected, FileNames.getExtension(name));
     }
 
     @ParameterizedTest
@@ -86,18 +84,17 @@ class FileNameToolsTest {
             "name.e1, e1",
             "name.e1.e2, e1.e2"})
     void getAllExtensions(String name, String expected) {
-        assertEquals(expected == null ? "" : expected, FileNameTools.getAllExtensions(name));
+        assertEquals(expected == null ? "" : expected, FileNames.getAllExtensions(name));
     }
 
     @Test
     void getUniqueNameWithHint() {
         String existing = "./name.ext";
         String expected = "." + File.separatorChar + "name - Copy.ext";
-        FileNameTools fn = new FileNameTools();
 
         try {
             createFile(existing);
-            assertEquals(expected, fn.getUniqueName(existing, "Copy"));
+            assertEquals(expected, FileNames.getUniqueName(existing, "Copy"));
         } finally {
             deleteFile(existing);
         }
@@ -108,12 +105,11 @@ class FileNameToolsTest {
         String existing1 = "./name.ext";
         String existing2 = "./name - Copy.ext";
         String expected = "." + File.separatorChar + "name - Copy (2).ext";
-        FileNameTools fn = new FileNameTools();
 
         try {
             createFile(existing1);
             createFile(existing2);
-            assertEquals(expected, fn.getUniqueName(existing1, "Copy"));
+            assertEquals(expected, FileNames.getUniqueName(existing1, "Copy"));
         } finally {
             deleteFile(existing2);
             deleteFile(existing1);
@@ -124,11 +120,10 @@ class FileNameToolsTest {
     void getUniqueNameWithoutHint() {
         String existing = "./name.ext";
         String expected = "." + File.separatorChar + "name (2).ext";
-        FileNameTools fn = new FileNameTools();
 
         try {
             createFile(existing);
-            assertEquals(expected, fn.getUniqueName(existing, null));
+            assertEquals(expected, FileNames.getUniqueName(existing, null));
         } finally {
             deleteFile(existing);
         }
@@ -139,12 +134,11 @@ class FileNameToolsTest {
         String existing1 = "./name.ext";
         String existing2 = "./name (2).ext";
         String expected = "." + File.separatorChar + "name (3).ext";
-        FileNameTools fn = new FileNameTools();
 
         try {
             createFile(existing1);
             createFile(existing2);
-            assertEquals(expected, fn.getUniqueName(existing1, null));
+            assertEquals(expected, FileNames.getUniqueName(existing1, null));
         } finally {
             deleteFile(existing2);
             deleteFile(existing1);

@@ -6,13 +6,40 @@ import java.util.function.Function;
 
 /**
  * A utility class for working with filenames.
- * <p>
- * Only the methods for extraction of the parts of a path are static. For the
- * others there could be created a global instance. This could be useful because
- * an application mostly needs the same handling of filenames throughout.
  */
 @SuppressWarnings("unused")
-public class FileNameTools {
+public final class FileNames {
+    /**
+     * The default format of a filename that contains a counter (the default
+     * is "%1$s (%2$d)") that is used by {@link #getUniqueName(Path, String)}.
+     * <p>
+     * A counter is used to rename a file for copy operations. Assuming the
+     * counter is 2 and the file to copy into the same directory names
+     * "file.txt", the default format formats "filename (2).txt"
+     */
+    public static final String DEFAULT_COUNTED_FORMAT = "%1$s (%2$d)";
+
+    /**
+     * The default format of a filename that contains a hint (the default is
+     * "%1$s - %2$s") that is used by {@link #getUniqueName(Path, String)}.
+     * <p>
+     * A hint is used to rename a file for copy operations. Assuming the hint
+     * is "Copy" and the file to copy into the same directory names "file.txt",
+     * the default format formats "filename - Copy.txt"
+     */
+    public static final String DEFAULT_HINT_FORMAT = "%1$s - %2$s";
+
+    /**
+     * The default format of a filename that contains a hint with a counter
+     * (the default is "%1$s - %2$s (%3$d)") that is used by
+     * {@link #getUniqueName(Path, String)}.
+     * <p>
+     * A hint is used to rename a file for copy operations. Assuming the hint
+     * is "Copy", the counter is 2 and the file to copy into the same directory
+     * names "file.txt", the default format formats "filename - Copy (2).txt"
+     */
+    public static final String DEFAULT_COUNTED_HINT_FORMAT = "%1$s - %2$s (%3$d)";
+
     private static final int FOR_LINUX = 0;
     private static final int FOR_MAC = 1;
     private static final int FOR_WINDOWS = 2;
@@ -26,159 +53,114 @@ public class FileNameTools {
             ":/",
             "<>\\/\":|"};
 
-    private final String countedFormat;
-    private final String hintFormat;
-    private final String countedHintFormat;
-    private final Function<Character, String> charReplacement;
+    private static String countedFormat = DEFAULT_COUNTED_FORMAT;
+    private static String hintFormat = DEFAULT_HINT_FORMAT;
+    private static String countedHintFormat = DEFAULT_COUNTED_HINT_FORMAT;
+    private static Function<Character, String> charReplacement;
 
     /**
-     * The default format of a filename that contains a counter (the default
-     * is "%1$s (%2$d)") that is used by {@link #getUniqueName(Path, String)}.
-     * <p>
-     * A counter is used to rename a file for copy operations. Assuming the
-     * counter is 2 and the file to copy into the same directory names
-     * "file.txt", the default format formats "filename (2).txt"
+     * Gets the format string to use for the name together with a sequential
+     * number.
      *
-     * @see #FileNameTools(String, String, String)
-     */
-    public static final String DEFAULT_COUNTED_FORMAT = "%1$s (%2$d)";
-
-    /**
-     * The default format of a filename that contains a hint (the default is
-     * "%1$s - %2$s") that is used by {@link #getUniqueName(Path, String)}.
-     * <p>
-     * A hint is used to rename a file for copy operations. Assuming the hint
-     * is "Copy" and the file to copy into the same directory names "file.txt",
-     * the default format formats "filename - Copy.txt"
+     * @return The used format string. This is {@link #DEFAULT_COUNTED_FORMAT}
+     *         by default.
      *
-     * @see #FileNameTools(String, String, String)
+     * @see #setCountedFormat(String)
      */
-    public static final String DEFAULT_HINT_FORMAT = "%1$s - %2$s";
-
-    /**
-     * The default format of a filename that contains a hint with a counter
-     * (the default is "%1$s - %2$s (%3$d)") that is used by
-     * {@link #getUniqueName(Path, String)}.
-     * <p>
-     * A hint is used to rename a file for copy operations. Assuming the hint
-     * is "Copy", the counter is 2 and the file to copy into the same directory
-     * names "file.txt", the default format formats "filename - Copy (2).txt"
-     *
-     * @see #FileNameTools(String, String, String)
-     */
-    public static final String DEFAULT_COUNTED_HINT_FORMAT = "%1$s - %2$s (%3$d)";
-
-    /**
-     * Creates a new instance with default format settings and a default
-     * character replacement.
-     *
-     * @see #DEFAULT_COUNTED_FORMAT
-     * @see #DEFAULT_COUNTED_HINT_FORMAT
-     * @see #DEFAULT_HINT_FORMAT
-     * @see #getValidName(String)
-     * @see #getUniqueName(Path, String)
-     */
-    public FileNameTools() {
-        this(DEFAULT_COUNTED_FORMAT, DEFAULT_HINT_FORMAT, DEFAULT_COUNTED_HINT_FORMAT, null);
+    public static String getCountedFormat() {
+        return countedFormat;
     }
 
     /**
-     * Creates a new instance from the specified argument and default format
-     * settings.
+     * Sets the format string to use for the name together with a sequential
+     * number.
+     * <p>
+     * The string must contain at least one "%1$s" and at least one "%2$d".
+     * These are the placeholders for the name (1) and for the sequential
+     * number (2).
      *
-     * @param charReplacement The character replacement function that is used by
-     *                        {@link #getValidName(String)} to replace invalid
-     *                        characters. If this is {@code null}, the default
-     *                        replacement is used to replace invalid characters
-     *                        with its two digits Unicode value and a preceding
-     *                        % character.
-     *
-     * @see #DEFAULT_COUNTED_FORMAT
-     * @see #DEFAULT_COUNTED_HINT_FORMAT
-     * @see #DEFAULT_HINT_FORMAT
-     * @see #getValidName(String)
-     * @see #getUniqueName(Path, String)
+     * @param countedFormat The format string to set. If this is {@code null},
+     *        {@link #DEFAULT_COUNTED_FORMAT} is set.
      */
-    public FileNameTools(Function<Character, String> charReplacement) {
-        this(DEFAULT_COUNTED_FORMAT, DEFAULT_HINT_FORMAT, DEFAULT_COUNTED_HINT_FORMAT, charReplacement);
+    public static void setCountedFormat(String countedFormat) {
+        FileNames.countedFormat = countedFormat == null ? DEFAULT_COUNTED_FORMAT : countedFormat;
     }
 
     /**
-     * Creates a new instance from the specified arguments and a default
-     * character replacement.
+     * Gets the format string to use for the name together with a hint.
      *
-     * @param countedFormat The format string to use for the name together with
-     *                      a sequential number. The string must contain at
-     *                      least one "%1$s" and at least one "%2$d". These are
-     *                      the placeholders for the name (1) and for the
-     *                      sequential number (2).
-     * @param hintFormat The format string to use for the name together with a
-     *                   hint. The string must contain at least one "%1$s" and
-     *                   at least one "%2$s". These are the placeholders for
-     *                   the name (1) and for the hint (2).
-     * @param countedHintFormat The format string to use for the name together
-     *                          with a hint and a sequential number. The string
-     *                          must contain at least one "%1$s", at least one
-     *                          "%2$s" and at least one "%3$d". These are the
-     *                          placeholders for the name (1), for the
-     *                          sequential number (2) and for the hint (3).
+     * @return The used format string. This is {@link #DEFAULT_HINT_FORMAT}
+     *         by default.
      *
-     * @see #DEFAULT_COUNTED_FORMAT
-     * @see #DEFAULT_COUNTED_HINT_FORMAT
-     * @see #DEFAULT_HINT_FORMAT
-     * @see #getValidName(String)
-     * @see #getUniqueName(Path, String)
-     *
-     * @throws NullPointerException {@code countedFormat}, {@code hintFormat} or
-     * {@code countedHintFormat} is {@code null}.
+     * @see #setHintFormat(String)
      */
-    public FileNameTools(String countedFormat, String hintFormat, String countedHintFormat) {
-        this(countedFormat, hintFormat, countedHintFormat, null);
+    public static String getHintFormat() {
+        return hintFormat;
     }
 
     /**
-     * Creates a new instance from the specified arguments.
+     * Sets the format string to use for the name together with a hint.
+     * <p>
+     * The string must contain at least one "%1$s" and at least one "%2$s".
+     * These are the placeholders for the name (1) and for the hint (2).
      *
-     * @param countedFormat The format string to use for the name together with
-     *                      a sequential number. The string must contain at
-     *                      least one "%1$s" and at least one "%2$d". These are
-     *                      the placeholders for the name (1) and for the
-     *                      sequential number (2).
-     * @param hintFormat The format string to use for the name together with a
-     *                   hint. The string must contain at least one "%1$s" and
-     *                   at least one "%2$s". These are the placeholders for
-     *                   the name (1) and for the hint (2).
-     * @param countedHintFormat The format string to use for the name together
-     *                          with a hint and a sequential number. The string
-     *                          must contain at least one "%1$s", at least one
-     *                          "%2$s" and at least one "%3$d". These are the
-     *                          placeholders for the name (1), for the
-     *                          sequential number (2) and for the hint (3).
-     * @param charReplacement The character replacement function that is used by
-     *                        {@link #getValidName(String)} to replace invalid
-     *                        characters. If this is {@code null}, the default
-     *                        replacement is used to replace invalid characters
-     *                        with its two digits Unicode value and a preceding
-     *                        % character.
-     *
-     * @see #DEFAULT_COUNTED_FORMAT
-     * @see #DEFAULT_COUNTED_HINT_FORMAT
-     * @see #DEFAULT_HINT_FORMAT
-     * @see #getValidName(String)
-     * @see #getUniqueName(Path, String)
-     *
-     * @throws NullPointerException {@code countedFormat}, {@code hintFormat} or
-     * {@code countedHintFormat} is {@code null}.
+     * @param hintFormat The format string to set. If this is {@code null},
+     *        {@link #DEFAULT_HINT_FORMAT} is set.
      */
-    public FileNameTools(String countedFormat, String hintFormat, String countedHintFormat, Function<Character, String> charReplacement) {
-        Objects.requireNonNull(countedFormat, "FileNameTools: countedFormat");
-        Objects.requireNonNull(hintFormat, "FileNameTools: hintFormat");
-        Objects.requireNonNull(countedHintFormat, "FileNameTools: countedHintFormat");
+    public static void setHintFormat(String hintFormat) {
+        FileNames.hintFormat = hintFormat == null ? DEFAULT_HINT_FORMAT : hintFormat;
+    }
 
-        this.countedFormat = countedFormat;
-        this.hintFormat = hintFormat;
-        this.countedHintFormat = countedHintFormat;
-        this.charReplacement = charReplacement;
+    /**
+     * Gets the format string to use for the name together with a hint and a
+     * sequential number.
+     *
+     * @return The used format string. This is {@link #DEFAULT_COUNTED_HINT_FORMAT}
+     *         by default.
+     *
+     * @see #setCountedHintFormat(String)
+     */
+    public static String getCountedHintFormat() {
+        return countedHintFormat;
+    }
+
+    /**
+     * Sets the format string to use for the name together with a hint and a
+     * sequential number.
+     * <p>
+     * The string must contain at least one "%1$s", at least one "%2$s" and at
+     * least one "%3$d". These are the placeholders for the name (1), for the
+     * sequential number (2) and for the hint (3).
+     *
+     * @param countedHintFormat The format string to set. If this is {@code null},
+     *        {@link #DEFAULT_COUNTED_HINT_FORMAT} is set.
+     */
+    public static void setCountedHintFormat(String countedHintFormat) {
+        FileNames.countedHintFormat = countedHintFormat == null ? DEFAULT_COUNTED_HINT_FORMAT : countedHintFormat;
+    }
+
+    /**
+     * Gets the character replacement function that is used by
+     * {@link #getValidName(String)} to replace invalid characters.
+     *
+     * @return The used function or {@code null} if no function is set.
+     *
+     * @see #setCharReplacement(Function)
+     */
+    public static Function<Character, String> getCharReplacement() {
+        return charReplacement;
+    }
+
+    /**
+     * Sets the character replacement function that is used by
+     * {@link #getValidName(String)} to replace invalid characters.
+     *
+     * @param charReplacement The replacement function to set. If this is
+     *        {@code null}, invalid characters are replaced with its two digits
+     *        Unicode value and a preceding % character.
+     */
+    public static void setCharReplacement(Function<Character, String> charReplacement) {
+        FileNames.charReplacement = charReplacement;
     }
 
     /**
@@ -197,7 +179,7 @@ public class FileNameTools {
      *
      * @see #isValidMaskedName(String)
      */
-    public boolean isValidName(String name) {
+    public static boolean isValidName(String name) {
         return isValidName(name, getInvalidNameChars());
     }
 
@@ -214,7 +196,7 @@ public class FileNameTools {
      *
      * @see #isValidName(String)
      */
-    public boolean isValidMaskedName(String name) {
+    public static boolean isValidMaskedName(String name) {
         return isValidName(name, getInvalidMaskedNameChars());
     }
 
@@ -236,9 +218,9 @@ public class FileNameTools {
      * @throws NullPointerException {@code name} is {@code null}.
      *
      * @see #getValidMaskedName(String)
-     * @see #FileNameTools {@literal (Function<Character, String>)}
+     * @see #setCharReplacement(Function)
      */
-    public String getValidName(String name) {
+    public static String getValidName(String name) {
         return getValidName(name, getInvalidNameChars());
     }
 
@@ -258,9 +240,9 @@ public class FileNameTools {
      * @throws NullPointerException {@code name} is {@code null}.
      *
      * @see #getValidName(String)
-     * @see #FileNameTools {@literal (Function<Character, String>)}
+     * @see #setCharReplacement(Function)
      */
-    public String getValidMaskedName(String name) {
+    public static String getValidMaskedName(String name) {
         return getValidName(name, getInvalidMaskedNameChars());
     }
 
@@ -288,7 +270,7 @@ public class FileNameTools {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public String getUniqueName(String path, String hint) {
+    public static String getUniqueName(String path, String hint) {
         Objects.requireNonNull(path, "FileNameTools::getUniqueName: path");
         return getUniqueName(Path.of(path), hint).toString();
     }
@@ -317,7 +299,7 @@ public class FileNameTools {
      *
      * @throws NullPointerException {@code path} is {@code null}.
      */
-    public Path getUniqueName(Path path, String hint) {
+    public static Path getUniqueName(Path path, String hint) {
         Objects.requireNonNull(path, "FileNameTools::getUniqueName: path");
 
         if (!path.toFile().exists())
@@ -522,10 +504,10 @@ public class FileNameTools {
         return true;
     }
 
-    private String getValidName(String name, String invalidChars) {
+    private static String getValidName(String name, String invalidChars) {
         Function<Character, String> replacement = charReplacement != null
                 ? charReplacement
-                : FileNameTools::defaultCharReplacement;
+                : FileNames::defaultCharReplacement;
         StringBuilder newName = new StringBuilder();
 
         for (int i = 0; i < name.length(); i++) {
