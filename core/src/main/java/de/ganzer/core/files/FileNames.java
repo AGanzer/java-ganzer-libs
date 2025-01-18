@@ -272,7 +272,9 @@ public final class FileNames {
      */
     public static String getUniqueName(String path, String hint) {
         Objects.requireNonNull(path, "FileNameTools::getUniqueName: path");
-        return getUniqueName(Path.of(path), hint).toString();
+        Path result = getUniqueName(Path.of(path), hint);
+
+        return result == null ? null : result.toString();
     }
 
     /**
