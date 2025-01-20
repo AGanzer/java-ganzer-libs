@@ -205,7 +205,7 @@ public class CsvInputStreamReader extends InputStreamReader {
         if (!endOfValueReached(lastRead))
             throw new InvalidCsvException(String.format(CoreMessages.get("separatorExpected"), currentLine, currentColumn));
 
-        return value.length() > 0;
+        return !value.isEmpty();
     }
 
     private boolean endOfMaskedValueReached(int c) throws IOException {
@@ -232,7 +232,7 @@ public class CsvInputStreamReader extends InputStreamReader {
             value.append((char)lastRead);
         }
 
-        return value.length() > 0;
+        return !value.isEmpty();
     }
 
     private boolean endOfValueReached(int c) {
