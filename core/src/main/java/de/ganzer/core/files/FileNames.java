@@ -230,7 +230,6 @@ public final class FileNames {
      * <p>
      * The function that is used by this method is the one that is set at
      * construction or a default function if no other one is set.
-     * <p>
      *
      * @param name The name to make valid.
      *

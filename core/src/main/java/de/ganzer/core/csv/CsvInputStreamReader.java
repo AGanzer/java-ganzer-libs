@@ -250,7 +250,7 @@ public class CsvInputStreamReader extends InputStreamReader {
         }
     }
 
-    public void countLine() throws IOException {
+    private void countLine() throws IOException {
         ++currentLine;
         currentColumn = 0;
 
