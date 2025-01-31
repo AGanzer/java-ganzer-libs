@@ -21,7 +21,7 @@ public class Accordion extends JPanel implements Iterable<TogglePanel> {
     public static final String HORIZONTAL_ALIGNMENT_PROPERTY = "horizontalAlignment";
     public static final String FOCUSABLE_PROPERTY = "focusable";
 
-    private final List<TogglePanel> panels = new ArrayList<TogglePanel>();
+    private final List<TogglePanel> panels = new ArrayList<>();
     private boolean iconsVisible;
     private int horizontalAlignment = SwingConstants.LEADING;
     private boolean focusable = true;
