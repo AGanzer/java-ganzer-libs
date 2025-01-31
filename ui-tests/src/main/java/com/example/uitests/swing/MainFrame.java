@@ -2,6 +2,8 @@ package com.example.uitests.swing;
 
 import com.example.uitests.swing.tests.InputTestDialog;
 import de.ganzer.swing.actions.*;
+import de.ganzer.swing.controls.Accordion;
+import de.ganzer.swing.controls.TogglePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,6 +35,7 @@ public class MainFrame extends JFrame {
         initActions();
         initMenu();
         initToolBar();
+        initAccorion();
     }
 
     private void initLookAndFeel() {
@@ -173,6 +176,22 @@ public class MainFrame extends JFrame {
         toolBar.add(testMenu.createButton(CreateOptions.NO_BORDER));// | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
 
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
+    }
+
+    private void initAccorion() {
+        Accordion accordion = new Accordion();
+
+        for (int i = 0; i < 5; ++i) {
+            var content = new JPanel();
+            content.setBackground(Color.WHITE);
+            content.setPreferredSize(new Dimension(200, 200));
+
+            accordion.add(new TogglePanel("Panel " + (i + 1), content));
+        }
+
+        accordion.getPanels()[0].setCollapsed(false);
+
+        getContentPane().add(accordion, BorderLayout.WEST);
     }
 
     private void onExit(ActionEvent event) {
