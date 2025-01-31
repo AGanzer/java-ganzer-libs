@@ -6,7 +6,7 @@
 
     <groupId>de.ganzer.swing</groupId>
     <artifactId>de-ganzer-swing</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
