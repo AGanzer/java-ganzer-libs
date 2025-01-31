@@ -66,10 +66,7 @@ public class FileCopy extends FileErrorProvider {
         private boolean ignoreAllErrors;
         private final Set<FileError> ignoredErrors = new HashSet<>();
 
-        /**
-         * Creates a new instance.
-         */
-        public ProgressInfo(FileCopy machine) {
+        private ProgressInfo(FileCopy machine) {
             this.machine = machine;
         }
 

@@ -230,7 +230,6 @@ public final class FileNames {
      * <p>
      * The function that is used by this method is the one that is set at
      * construction or a default function if no other one is set.
-     * <p>
      *
      * @param name The name to make valid.
      *
@@ -260,7 +259,7 @@ public final class FileNames {
      *
      * @param path An absolute or relative path to make unique.
      * @param hint A hint that is included into the resulting name. This may be
-     *             a string like "Copy". If this is {@code null} or empty, not
+     *             a string like "Copy". If this is {@code null} or empty, no
      *             hint is used.
      *
      * @return A path that is unique. This may be equal to {@code path} if
@@ -291,7 +290,7 @@ public final class FileNames {
      *
      * @param path An absolute or relative path to make unique.
      * @param hint A hint that is included into the resulting name. This may be
-     *             a string like "Copy". If this is {@code null} or empty, not
+     *             a string like "Copy". If this is {@code null} or empty, no
      *             hint is used.
      *
      * @return A path that is unique. This may be equal to {@code path} if

@@ -44,6 +44,7 @@ public class BOMInputStreamReader extends Reader {
      * @param in The input stream to read.
      *
      * @throws NullPointerException {@code in} is {@code null}.
+     * @throws IOException If an I/O error occurs.
      */
     public BOMInputStreamReader(InputStream in) throws IOException {
         super(in);
@@ -61,6 +62,7 @@ public class BOMInputStreamReader extends Reader {
      * @throws NullPointerException {@code in} is {@code null}.
      * @throws IllegalArgumentException {@code charsetName} is {@code null}.
      * @throws UnsupportedEncodingException If the named charset is not supported.
+     * @throws IOException If an I/O error occurs.
      */
     public BOMInputStreamReader(InputStream in, String charsetName) throws IOException {
         super(in);

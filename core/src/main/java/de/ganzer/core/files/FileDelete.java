@@ -44,10 +44,7 @@ public class FileDelete extends FileErrorProvider {
         private long entriesAvail;
         private long entriesDeleted;
 
-        /**
-         * Creates a new instance.
-         */
-        public ProgressInfo(FileDelete machine) {
+        private ProgressInfo(FileDelete machine) {
             this.machine = machine;
         }
 
