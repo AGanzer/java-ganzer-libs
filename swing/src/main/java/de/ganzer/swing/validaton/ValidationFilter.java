@@ -22,7 +22,7 @@ public class InputTestDialog extends JDialog {
     private ValidationFilter inputFilter;
     // Other fields here.
 
-    private InputTestDialog(Frame owner) {
+    public InputTestDialog(Frame owner) {
         super(owner, "Input Test", true);
         initTextField();
         initButtons();
@@ -41,7 +41,7 @@ public class InputTestDialog extends JDialog {
     }
 
     // OK is clicked:
-    private void onOk(GActionEvent event) {
+    private void onOk(ActionEvent event) {
         if (!inputFilter.validate(ValidationBehavior.SET_VISUAL_HINTS))
             return;
 
