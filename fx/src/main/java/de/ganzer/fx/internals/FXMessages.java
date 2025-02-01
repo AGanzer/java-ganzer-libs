@@ -3,27 +3,33 @@ package de.ganzer.fx.internals;
 import java.util.ResourceBundle;
 
 public class FXMessages {
-    private static FXMessages _instance;
-    private final ResourceBundle _bundle;
+    public static ResourceBundle getBundle() {
+        return ResourceBundle.getBundle("de.ganzer.fx.messages");
+    }
+
+    public static String get(String key) {
+        return getInstance().getMessage(key);
+    }
+
+    public static String get(String key, Object... args) {
+        return String.format(getInstance().getMessage(key), args);
+    }
+
+    private static FXMessages instance;
+    private final ResourceBundle bundle;
 
     private FXMessages() {
-        _bundle = ResourceBundle.getBundle("de.ganzer.fx.messages");
+        this.bundle = getBundle();
     }
 
     private String getMessage(String id) {
-        return _bundle.getString(id);
+        return bundle.getString(id);
     }
 
-    /**
-     * Gets a localized message from the de.ganzer.core library.
-     *
-     * @param id The ID of the message to get.
-     * @return The localized message with the specified ID.
-     */
-    public static String get(String id) {
-        if (_instance == null)
-            _instance = new FXMessages();
+    private static FXMessages getInstance() {
+        if (instance == null)
+            instance = new FXMessages();
 
-        return _instance.getMessage(id);
+        return instance;
     }
 }

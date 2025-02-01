@@ -2,33 +2,34 @@ package de.ganzer.core.internals;
 
 import java.util.ResourceBundle;
 
-/**
- * Enables access to localized messages from the de.ganzer.core library.
- * <p>
- * This is an internally used class and should not be used by client code.
- */
 public class CoreMessages {
-    private static CoreMessages _instance;
-    private final ResourceBundle _bundle;
+    public static ResourceBundle getBundle() {
+        return ResourceBundle.getBundle("de.ganzer.core.messages");
+    }
+
+    public static String get(String key) {
+        return getInstance().getMessage(key);
+    }
+
+    public static String get(String key, Object... args) {
+        return String.format(getInstance().getMessage(key), args);
+    }
+
+    private static CoreMessages instance;
+    private final ResourceBundle bundle;
 
     private CoreMessages() {
-        _bundle = ResourceBundle.getBundle("de.ganzer.core.messages");
+        this.bundle = getBundle();
     }
 
     private String getMessage(String id) {
-        return _bundle.getString(id);
+        return bundle.getString(id);
     }
 
-    /**
-     * Gets a localized message from the de.ganzer.core library.
-     *
-     * @param id The ID of the message to get.
-     * @return The localized message with the specified ID.
-     */
-    public static String get(String id) {
-        if (_instance == null)
-            _instance = new CoreMessages();
+    private static CoreMessages getInstance() {
+        if (instance == null)
+            instance = new CoreMessages();
 
-        return _instance.getMessage(id);
+        return instance;
     }
 }
