@@ -1,0 +1,337 @@
+package de.ganzer.swing.dialogs;
+
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.GraphicsConfiguration;
+import java.awt.Window;
+import java.util.function.Consumer;
+
+/**
+ * An abstract dialog that implements parts of the {@link DataSupport} interface
+ * to make implementation of dialogs that supports modifiable data easier.
+ * <p>
+ * The following example shows how a derived dialog may be implemented:
+ * <p>
+ * {@code
+public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
+    public static class Data {
+        public String name;
+        public String password;
+    }
+
+    private final JTextField nameField = new JTextField(20);
+    private final JTextField passwordField = new JPasswordField(20);
+
+    public LoginDialog(Window owner, ModalityType modalityType) {
+        super(owner, modalityType);
+
+        init();
+        pack();
+    }
+
+    @Override
+    public void initControls(Data data) {
+        Objects.requireNonNull(data, "data must not be null.");
+
+        super.initControls(data);
+
+        nameField.setText(data.name);
+        passwordField.setText(data.password);
+    }
+
+    @Override
+    protected boolean validateModifiedData() {
+        // Validate input here.
+        return performLogin();
+    }
+
+    @Override
+    protected void updateData(Data data) {
+        data.name = nameField.getText();
+        data.password = passwordField.getText();
+    }
+
+    private void init() {
+        setTitle("Login");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(getParent());
+
+        initLayout();
+    }
+
+    private void initLayout() {
+        var nameLabel = new JLabel("Name:");
+        var passwordLabel = new JLabel("Password:");
+        var buttonPanel = initButtons();
+        var layout = new GroupLayout(getContentPane());
+
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+                                          .addGroup(layout.createParallelGroup()
+                                                            .addComponent(nameLabel)
+                                                            .addComponent(passwordLabel)
+                                          )
+                                          .addGroup(layout.createParallelGroup()
+                                                            .addComponent(nameField)
+                                                            .addComponent(passwordField)
+                                                            .addComponent(buttonPanel)
+                                          )
+        );
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                          .addComponent(nameLabel)
+                                                          .addComponent(nameField)
+                                        )
+                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                          .addComponent(passwordLabel)
+                                                          .addComponent(passwordField)
+                                        )
+                                        .addComponent(buttonPanel)
+        );
+
+        getContentPane().setLayout(layout);
+    }
+
+    private JPanel initButtons() {
+        var okButton = new JButton("OK");
+        okButton.addActionListener(e -> updateDataAndClose());
+        getRootPane().setDefaultButton(okButton);
+
+        var cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(e -> closeDialog(true));
+
+        var panel = new JPanel();
+        var layout = new GroupLayout(panel);
+
+        layout.setAutoCreateGaps(true);
+
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+                                          .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                          .addComponent(okButton)
+                                          .addComponent(cancelButton)
+        );
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup()
+                                                          .addComponent(okButton)
+                                                          .addComponent(cancelButton))
+        );
+        layout.linkSize(SwingConstants.HORIZONTAL, okButton, cancelButton);
+
+        panel.setLayout(layout);
+
+        return panel;
+    }
+
+    private void updateDataAndClose() {
+        if (applyChangedData())
+            closeDialog(false);
+    }
+}
+ * <p>
+ * This dialog may then be shown in this way:
+ * <p>
+ * {@code
+public class MyAppFrame extends JFrame {
+    // ...
+    private boolean login() {
+        var data = new LoginDialog.Data();
+        // Initialize data here if wanted.
+
+        var dialog = new LoginDialog(this);
+        dialog.initControls(data);
+        dialog.setDataConsumer(d -> System.out.printf("User logged in: %s\n", d.name));
+        dialog.setVisible(true);
+
+        if (dialog.isEscaped())
+            exit(1);
+    }
+    // ...
+}
+ * }
+ * <p>
+ * Or, because there is no Apply button in the dialog but just OK and Cancel:
+ * <p>
+ * {@code
+public class MyAppFrame extends JFrame {
+    // ...
+    private boolean login() {
+        var data = new LoginDialog.Data();
+        // Initialize data here if wanted.
+
+        var dialog = new LoginDialog(this);
+        dialog.initControls(data);
+        dialog.setVisible(true);
+
+        if(dialog.isEscaped())
+            exit(1);
+
+        System.out.printf("User logged in: %s\n", data.name);
+    }
+    // ...
+}
+ * }
+ * <p>
+ * @param <Data> The type of the supported modifiable data.
+ * <p>
+ * @see EscapableDialog
+ *
+ */
+@SuppressWarnings("unused")
+public abstract class AbstractModifiableDialog<Data> extends EscapableDialog implements DataSupport<Data> {
+    private Data data;
+    private Consumer<Data> dataConsumer;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Frame owner) {
+        super(owner);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Frame owner, String title) {
+        super(owner, title);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Frame owner, String title, GraphicsConfiguration gc) {
+        super(owner, title, gc);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Dialog owner) {
+        super(owner);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Dialog owner, String title) {
+        super(owner, title);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Dialog owner, String title, GraphicsConfiguration gc) {
+        super(owner, title, gc);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Window owner) {
+        super(owner);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Window owner, ModalityType modalityType) {
+        super(owner, modalityType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Window owner, String title) {
+        super(owner, title);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Window owner, String title, ModalityType modalityType) {
+        super(owner, title, modalityType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected AbstractModifiableDialog(Window owner, String title, ModalityType modalityType, GraphicsConfiguration gc) {
+        super(owner, title, modalityType, gc);
+    }
+
+    /**
+     * Gets the data that was applied by {@link #initControls}
+     *
+     * @return The data that ws given to {@link #initControls} or {@code null}
+     *         if no data was specified.
+     */
+    public Data getData() {
+        return data;
+    }
+
+    /**
+     * Invokes the set data consumer if the data is valid.
+     * <p>
+     * This implementation firstly calls {@link #validateModifiedData()}. If the
+     * data is not valid, the method returns {@code false}; otherwise,
+     * {@link #} is called and the set data consumer is invoked.
+     *
+     * @return {@code true} if the data is valid and the consumer is invoked;
+     *         otherwise, {@code false}.
+     */
+    public boolean applyChangedData() {
+        if (!validateModifiedData())
+            return false;
+
+        updateData(data);
+
+        if (dataConsumer != null)
+            dataConsumer.accept(data);
+
+        return true;
+    }
+
+    /**
+     * Called to apply the initial data to the controls.
+     * <p>
+     * Inheritors must call the base method to get the data by {@link #getData()}
+     * correctly.
+     *
+     * @param data The data to apply.
+     */
+    @Override
+    public void initControls(Data data) {
+        this.data = data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDataConsumer(Consumer<Data> dataConsumer) {
+        this.dataConsumer = dataConsumer;
+    }
+
+    /**
+     * Called to validate the user's input.
+     *
+     * @return {@code true} if the input is valid; otherwise, {@code false}.
+     */
+    protected abstract boolean validateModifiedData();
+
+    /**
+     * Called to update the data that was given to {@link #initControls} with
+     * the users input.
+     *
+     * @param data The data to update. This is identical to {@link #getData()}.
+     */
+    protected abstract void updateData(Data data);
+}

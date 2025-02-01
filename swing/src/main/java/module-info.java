@@ -3,5 +3,6 @@ module de.ganzer.swing {
     requires de.ganzer.core;
     exports de.ganzer.swing.actions;
     exports de.ganzer.swing.controls;
+    exports de.ganzer.swing.dialogs;
     exports de.ganzer.swing.validaton;
 }

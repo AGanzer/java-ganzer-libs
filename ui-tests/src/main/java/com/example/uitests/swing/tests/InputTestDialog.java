@@ -1,6 +1,5 @@
 package com.example.uitests.swing.tests;
 
-import de.ganzer.core.validation.NumberValidator;
 import de.ganzer.core.validation.PxPicValidator;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.swing.actions.GAction;
