@@ -1,4 +1,4 @@
-package de.ganzer.core.files;
+package de.ganzer.core.util;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

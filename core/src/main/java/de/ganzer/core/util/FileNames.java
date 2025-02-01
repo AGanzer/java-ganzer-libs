@@ -1,4 +1,4 @@
-package de.ganzer.core.files;
+package de.ganzer.core.util;
 
 import java.nio.file.Path;
 import java.util.Objects;
@@ -173,7 +173,7 @@ public final class FileNames {
      * @param name The name to check.
      *
      * @return {@code true} if {@code name} is valid; otherwise, {@code false}
-     * is returned.
+     *         is returned.
      *
      * @throws NullPointerException {@code name} is {@code null}.
      *
@@ -190,7 +190,7 @@ public final class FileNames {
      * @param name The name to check. This may contain jokers (? and *).
      *
      * @return {@code true} if {@code name} is valid; otherwise, {@code false}
-     * is returned.
+     *         is returned.
      *
      * @throws NullPointerException {@code name} is {@code null}.
      *
@@ -213,7 +213,7 @@ public final class FileNames {
      * @param name The name to make valid.
      *
      * @return {@code name} if {@code name} is valid; otherwise, a valid name
-     * built from {@code name}.
+     *         built from {@code name}.
      *
      * @throws NullPointerException {@code name} is {@code null}.
      *
