@@ -4,6 +4,7 @@ package de.ganzer.core.util;
  * An interface that can be implemented by classes that supports restorable
  * settings.
  */
+@SuppressWarnings("unused")
 public interface SettingsSupport {
     /**
      * Called to restore the internal settings of the implementer from
