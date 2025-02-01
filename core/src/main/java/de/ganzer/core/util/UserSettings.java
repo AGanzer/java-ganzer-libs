@@ -104,6 +104,7 @@ public class UserSettings extends Settings {
     /**
      * Writes the properties into the file within the user's configuration folder.
      */
+    @SuppressWarnings("unused")
     public void save() {
         try (FileOutputStream out = new FileOutputStream(getSettingsStoragePath())) {
             store(out, String.format("Settings of %s %s", appName, appVersion));
