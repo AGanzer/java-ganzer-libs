@@ -13,6 +13,6 @@ public class DuplicateSettingException extends RuntimeException {
      * @param name The file name of the duplicate settings.
      */
     public DuplicateSettingException(String name) {
-        super(String.format("A setting with the file name \"%s\" does already exist."));
+        super(String.format("A setting with the file name \"%s\" does already exist.", name));
     }
 }

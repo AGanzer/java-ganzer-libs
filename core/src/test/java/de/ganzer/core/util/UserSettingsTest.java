@@ -87,9 +87,10 @@ class UserSettingsTest {
     void createUserSettingsDuplicateEntry() {
         String appName = "test";
         String appVersion = "1.0.0";
+        String fileName = "testsettings";
 
-        new UserSettings(appName, appVersion);
+        var settings = new UserSettings(appName, appVersion, fileName);
         
-        assertThrows(DuplicateSettingException.class, () -> new UserSettings(appName, appVersion));
+        assertThrows(DuplicateSettingException.class, () -> new UserSettings(appName, appVersion, fileName));
     }
 }
