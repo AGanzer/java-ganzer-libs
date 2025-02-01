@@ -82,4 +82,14 @@ class UserSettingsTest {
 
         assertThrows(IllegalArgumentException.class, () -> new UserSettings(appName, appVersion));
     }
+
+    @Test
+    void createUserSettingsDuplicateEntry() {
+        String appName = "test";
+        String appVersion = "1.0.0";
+
+        new UserSettings(appName, appVersion);
+        
+        assertThrows(DuplicateSettingException.class, () -> new UserSettings(appName, appVersion));
+    }
 }

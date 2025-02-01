@@ -75,10 +75,12 @@ public class UserSettings extends Settings {
         this.appVersion = appVersion;
         this.fileName = fileName == null ? "settings" : fileName;
 
-        if (settings.get(this.fileName) != null)
+        var key = this.appName + this.appVersion + this.fileName;
+
+        if (settings.get(key) != null)
             throw new DuplicateSettingException(this.fileName);
 
-        settings.put(this.fileName, this);
+        settings.put(key, this);
         
         load();
     }
