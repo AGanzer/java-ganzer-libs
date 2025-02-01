@@ -40,7 +40,7 @@ public final class CreateOptions {
     public static final int IMAGE_LEADING = 0x08;
 
     /**
-     * The created buttons has no border.
+     * The created buttons have no border.
      * <p>
      * This sets the paint border property of a button and might not have any
      * effect. See {@link AbstractButton#setBorderPainted(boolean)} for more
