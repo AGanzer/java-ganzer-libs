@@ -104,25 +104,14 @@ public class TestController {
     }
 
     private String translate(int button) {
-        switch (button) {
-            case ModalResult.CANCEL:
-                return "Cancel";
-
-            case ModalResult.YES:
-                return "Yes";
-
-            case ModalResult.NO:
-                return "No";
-
-            case ModalResult.YES_TO_ALL:
-                return "Yes to all";
-
-            case ModalResult.NO_TO_ALL:
-                return "No to all";
-
-            default:
-                return "Unknown";
-        }
+        return switch (button) {
+            case ModalResult.CANCEL -> "Cancel";
+            case ModalResult.YES -> "Yes";
+            case ModalResult.NO -> "No";
+            case ModalResult.YES_TO_ALL -> "Yes to all";
+            case ModalResult.NO_TO_ALL -> "No to all";
+            default -> "Unknown";
+        };
     }
 
     public void showCharts(ActionEvent ignored) throws IOException {
