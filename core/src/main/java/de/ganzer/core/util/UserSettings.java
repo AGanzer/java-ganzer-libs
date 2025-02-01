@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
+import java.util.WeakHashMap;
 
 /**
  * Utility for reading and writing user specific settings.
@@ -18,6 +19,8 @@ import java.nio.file.Path;
  * on all other systems in "$HOME/.config"
  */
 public class UserSettings extends Settings {
+    private static final WeakHashMap<String, UserSettings> settings = new WeakHashMap<>();
+
     private final String appName;
     private final String appVersion;
     private final String fileName;
@@ -32,6 +35,8 @@ public class UserSettings extends Settings {
      *
      * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
      *         {@code null} or empty or contain only whitespaces.
+     * @throws DuplicateSettingException if a setting with the file name "settings"
+     *         does already exist.
      */
     public UserSettings(String appName, String appVersion) {
         this(appName, appVersion, null);
@@ -51,6 +56,8 @@ public class UserSettings extends Settings {
      *         {@code null} or empty or contain only whitespaces or {@code fileName}
      *         is empty or contains whitespaces only or is not a valid name for
      *         files.
+     * @throws DuplicateSettingException if a setting with the specified file name
+     *         does already exist.    
      */
     public UserSettings(String appName, String appVersion, String fileName) {
         if (Strings.isNullOrBlank(appName))
@@ -68,6 +75,11 @@ public class UserSettings extends Settings {
         this.appVersion = appVersion;
         this.fileName = fileName == null ? "settings" : fileName;
 
+        if (settings.get(this.fileName) != null)
+            throw new DuplicateSettingException(this.fileName);
+
+        settings.put(this.fileName, this);
+        
         load();
     }
 
