@@ -2,6 +2,7 @@ package com.example.uitests.swing;
 
 import com.example.uitests.swing.tests.GroupLayoutLoginDialog;
 import com.example.uitests.swing.tests.InputTestDialog;
+import de.ganzer.core.util.Settings;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.TogglePanel;
@@ -14,6 +15,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 
 public class MainFrame extends JFrame {
+    private static final String UI_KEY_FRAME = "MainFrame.frame";
+
     GActionGroup mainMenu;
     GActionGroup fileMenu;
     GActionGroup buttonsMenu;
@@ -37,6 +40,16 @@ public class MainFrame extends JFrame {
         initMenu();
         initToolBar();
         initAccorion();
+
+        SwingTestApp.getUiSettings().applySettings(UI_KEY_FRAME, this);
+    }
+
+    @Override
+    protected void processWindowEvent(WindowEvent e) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING)
+            SwingTestApp.getUiSettings().writeSettings(UI_KEY_FRAME, this);
+
+        super.processWindowEvent(e);
     }
 
     private void initLookAndFeel() {
