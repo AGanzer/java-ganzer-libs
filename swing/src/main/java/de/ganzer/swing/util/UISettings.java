@@ -8,6 +8,10 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Extends the {@link UserSettings} to enable Windows to save and restore their
+ * settings.
+ */
 @SuppressWarnings("unused")
 public class UISettings extends UserSettings {
     private static final String KEY_STATE = ".state";
@@ -41,7 +45,7 @@ public class UISettings extends UserSettings {
     }
 
     /**
-     * Writes the settings of the specified frame.
+     * Writes the bounds and state of the specified frame.
      *
      * @param key The ID of the settings to write.
      * @param frame The frame to write.
@@ -57,7 +61,7 @@ public class UISettings extends UserSettings {
     }
 
     /**
-     * Writes the settings of the specified dialog.
+     * Writes the bounds of the specified dialog.
      *
      * @param key The ID of the settings to write.
      * @param dialog The dialog to write.
@@ -70,7 +74,10 @@ public class UISettings extends UserSettings {
     }
 
     /**
-     * Applies the settings of the specified frame.
+     * Applies saved bounds and state to the specified frame.
+     * <p>
+     * If the top left corner of the dialog is not visible in the range of the
+     * current desktop, the frame is moved and maybe resized to be fully visible.
      *
      * @param key The ID of the settings to apply.
      * @param frame The frame to adjust.
@@ -86,7 +93,10 @@ public class UISettings extends UserSettings {
     }
 
     /**
-     * Applies the settings of the specified dialog.
+     * Applies saved bounds to the specified dialog.
+     * <p>
+     * If the top left corner of the dialog is not visible in the range of the
+     * current desktop, the dialog is moved and maybe resized to be fully visible.
      *
      * @param key The ID of the settings to apply.
      * @param dialog The dialog to adjust.
