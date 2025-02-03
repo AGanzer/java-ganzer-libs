@@ -46,7 +46,7 @@ public class UISettings extends UserSettings {
      * @param key The ID of the settings to write.
      * @param frame The frame to write.
      */
-    public void writeSettings(String key, JFrame frame) {
+    public void write(String key, JFrame frame) {
         Objects.requireNonNull(key, "key must not be null");
         Objects.requireNonNull(frame, "frame must not be null");
 
@@ -62,7 +62,7 @@ public class UISettings extends UserSettings {
      * @param key The ID of the settings to write.
      * @param dialog The dialog to write.
      */
-    public void writeSettings(String key, JDialog dialog) {
+    public void write(String key, JDialog dialog) {
         Objects.requireNonNull(key, "key must not be null");
         Objects.requireNonNull(dialog, "dialog must not be null");
 
@@ -75,7 +75,7 @@ public class UISettings extends UserSettings {
      * @param key The ID of the settings to apply.
      * @param frame The frame to adjust.
      */
-    public void applySettings(String key, JFrame frame) {
+    public void apply(String key, JFrame frame) {
         Objects.requireNonNull(key, "key must not be null");
         Objects.requireNonNull(frame, "frame must not be null");
 
@@ -91,7 +91,7 @@ public class UISettings extends UserSettings {
      * @param key The ID of the settings to apply.
      * @param dialog The dialog to adjust.
      */
-    public void applySettings(String key, JDialog dialog) {
+    public void apply(String key, JDialog dialog) {
         Objects.requireNonNull(key, "key must not be null");
         Objects.requireNonNull(dialog, "dialog must not be null");
 

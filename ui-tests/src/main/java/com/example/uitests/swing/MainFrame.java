@@ -40,13 +40,13 @@ public class MainFrame extends JFrame {
         initToolBar();
         initAccorion();
 
-        SwingTestApp.getUiSettings().applySettings(UI_KEY_FRAME, this);
+        SwingTestApp.getUiSettings().apply(UI_KEY_FRAME, this);
     }
 
     @Override
     protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING)
-            SwingTestApp.getUiSettings().writeSettings(UI_KEY_FRAME, this);
+            SwingTestApp.getUiSettings().write(UI_KEY_FRAME, this);
 
         super.processWindowEvent(e);
     }
