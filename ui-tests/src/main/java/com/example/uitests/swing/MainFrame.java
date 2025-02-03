@@ -1,6 +1,6 @@
 package com.example.uitests.swing;
 
-import com.example.uitests.swing.tests.GroupLayoutLoginDialog;
+import com.example.uitests.swing.tests.LoginDialog;
 import com.example.uitests.swing.tests.InputTestDialog;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
@@ -299,9 +299,9 @@ public class MainFrame extends JFrame {
     }
 
     private void onLoginTest(ActionEvent actionEvent) {
-        var data = new GroupLayoutLoginDialog.Data();
+        var data = new LoginDialog.Data();
 
-        if (GroupLayoutLoginDialog.showModal(this, data))
+        if (LoginDialog.showModal(this, data))
             System.out.printf("Login with user %s successful!\n", data.name);
         else
             System.out.println("Login canceled.");

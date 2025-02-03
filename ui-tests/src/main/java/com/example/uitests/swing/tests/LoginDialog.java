@@ -9,7 +9,7 @@ import java.awt.Dialog;
 import java.awt.Window;
 import java.util.Objects;
 
-public class GroupLayoutLoginDialog extends AbstractModifiableDialog<GroupLayoutLoginDialog.Data> {
+public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     public static class Data {
         public String name;
         public String password;
@@ -18,7 +18,7 @@ public class GroupLayoutLoginDialog extends AbstractModifiableDialog<GroupLayout
     private final JTextField nameField = new JTextField(20);
     private final JTextField passwordField = new JPasswordField(20);
 
-    private GroupLayoutLoginDialog(Window owner, Dialog.ModalityType modalityType) {
+    private LoginDialog(Window owner, Dialog.ModalityType modalityType) {
         super(owner, modalityType);
 
         init();
@@ -26,7 +26,7 @@ public class GroupLayoutLoginDialog extends AbstractModifiableDialog<GroupLayout
     }
 
     public static boolean showModal(Window owner, Data data) {
-        var dialog = new GroupLayoutLoginDialog(owner, DEFAULT_MODALITY_TYPE);
+        var dialog = new LoginDialog(owner, DEFAULT_MODALITY_TYPE);
         dialog.initControls(data);
         dialog.setVisible(true);
 
