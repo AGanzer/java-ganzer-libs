@@ -16,7 +16,11 @@ import java.util.WeakHashMap;
  * configuration folder of the current user.
  * <p>
  * On Windows, the configuration is file is located in "$HOME\AppDate\Roaming";
- * on all other systems in "$HOME/.config"
+ * on all other systems in "$HOME/.config".
+ * <p>
+ * To prevent multiple settings from using the same file and overwriting each
+ * other, a {@link DuplicateSettingException} is thrown if two settings with
+ * the same file name are created for the same application and version.
  */
 public class UserSettings extends Settings {
     private static final WeakHashMap<String, UserSettings> settings = new WeakHashMap<>();
@@ -36,7 +40,7 @@ public class UserSettings extends Settings {
      * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
      *         {@code null} or empty or contain only whitespaces.
      * @throws DuplicateSettingException if a setting with the file name "settings"
-     *         does already exist.
+     *         does already exist for {@code appName} and {@code appVersion}.
      */
     public UserSettings(String appName, String appVersion) {
         this(appName, appVersion, null);
@@ -57,7 +61,7 @@ public class UserSettings extends Settings {
      *         is empty or contains whitespaces only or is not a valid name for
      *         files.
      * @throws DuplicateSettingException if a setting with the specified file name
-     *         does already exist.    
+     *         does already exist for {@code appName} and {@code appVersion}.
      */
     public UserSettings(String appName, String appVersion, String fileName) {
         if (Strings.isNullOrBlank(appName))
