@@ -2,7 +2,6 @@ package com.example.uitests.swing;
 
 import com.example.uitests.swing.tests.GroupLayoutLoginDialog;
 import com.example.uitests.swing.tests.InputTestDialog;
-import de.ganzer.core.util.Settings;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.TogglePanel;
