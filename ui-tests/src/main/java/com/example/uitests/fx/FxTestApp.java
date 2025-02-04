@@ -1,5 +1,6 @@
 package com.example.uitests.fx;
 
+import de.ganzer.fx.util.UISettings;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,17 +14,27 @@ import java.util.Optional;
 public class FxTestApp extends Application {
     public static final String APP_TITLE = "Manual UI-Tests (ganzer-libs)";
 
+    private static final String UI_KEY_MAINFRAME = "mainframe";
+    private static final UISettings uiSettings = new UISettings("fx-ui-tests", "0.0.1");
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(FxTestApp.class.getResource("test-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle(APP_TITLE);
         stage.setScene(scene);
+        stage.setOnCloseRequest(event -> uiSettings.write(UI_KEY_MAINFRAME, stage));
+        stage.show();
+
+        uiSettings.apply(UI_KEY_MAINFRAME, stage);
+
         stage.show();
     }
 
     public static void main(String[] args) {
+        uiSettings.load();
         launch();
+        uiSettings.save();
     }
 
     public static void alertInfo(String message) {

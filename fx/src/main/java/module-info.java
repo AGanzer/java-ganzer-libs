@@ -7,4 +7,5 @@ module de.ganzer.fx {
     exports de.ganzer.fx.dialogs;
     exports de.ganzer.fx.actions;
     exports de.ganzer.fx.input;
+    exports de.ganzer.fx.util;
 }

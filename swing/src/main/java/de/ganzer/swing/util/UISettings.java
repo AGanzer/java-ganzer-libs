@@ -76,7 +76,7 @@ public class UISettings extends UserSettings {
     /**
      * Applies saved bounds and state to the specified frame.
      * <p>
-     * If the top left corner of the dialog is not visible in the range of the
+     * If the top left corner of the frame is not visible in the range of the
      * current desktop, the frame is moved and maybe resized to be fully visible.
      *
      * @param key The ID of the settings to apply.
@@ -109,8 +109,6 @@ public class UISettings extends UserSettings {
     }
 
     private void writeWindowSettings(String key, Window window, int state) {
-        set(key + KEY_STATE, state);
-
         if (isNotStateSet(state, JFrame.MAXIMIZED_HORIZ)) {
             set(key + KEY_X, window.getX());
             set(key + KEY_WIDTH, window.getWidth());
@@ -122,11 +120,11 @@ public class UISettings extends UserSettings {
         }
     }
 
-    private void applyWindowSettings(String frameId, Window window) {
-        int x = get(frameId + KEY_X, window.getX());
-        int y = get(frameId + KEY_Y, window.getY());
-        int width = get(frameId + KEY_WIDTH, window.getWidth());
-        int height = get(frameId + KEY_HEIGHT, window.getHeight());
+    private void applyWindowSettings(String key, Window window) {
+        int x = get(key + KEY_X, window.getX());
+        int y = get(key + KEY_Y, window.getY());
+        int width = get(key + KEY_WIDTH, window.getWidth());
+        int height = get(key + KEY_HEIGHT, window.getHeight());
 
         window.setBounds(x, y, width, height);
 
