@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -68,6 +69,7 @@ public class FxTestApp extends Application {
 
     private static void alert(Alert.AlertType type, String message) {
         var a = new Alert(type);
+        a.initOwner(Stage.getWindows().stream().filter(Window::isFocused).findFirst().orElse(null));
         a.setTitle(APP_TITLE);
         a.setHeaderText(null);
         a.setContentText(message);

@@ -1,5 +1,6 @@
 package com.example.uitests.fx.charts;
 
+import com.example.uitests.fx.FxTestApp;
 import de.ganzer.core.GMath;
 import de.ganzer.core.validation.NumberValidator;
 import de.ganzer.core.validation.TextFormat;
@@ -121,11 +122,7 @@ public class ChartsController implements Initializable {
     }
 
     private static void showValidationError(TextField field, ValidatorException e) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle("Validation failed");
-        a.setHeaderText("Invalid Input.");
-        a.setContentText(e.getMessage());
-        a.showAndWait();
+        FxTestApp.alertInfo(e.getLocalizedMessage());
 
         field.requestFocus();
         field.selectAll();
