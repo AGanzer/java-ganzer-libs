@@ -17,6 +17,8 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class TestController {
+    private static final String UI_KEY_CHARTS = "charts";
+
     public TabPane tabs;
     public Tab validatorTab;
     public Tab copyTab;
@@ -121,7 +123,10 @@ public class TestController {
 
         stage.setTitle("Charts");
         stage.setScene(scene);
-        stage.setMaximized(true);
+        stage.setOnCloseRequest(event -> FxTestApp.getUiSettings().write(UI_KEY_CHARTS, stage));
+
+        FxTestApp.getUiSettings().apply(UI_KEY_CHARTS, stage);
+
         stage.show();
     }
 }

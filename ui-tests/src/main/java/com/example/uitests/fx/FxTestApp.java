@@ -17,6 +17,10 @@ public class FxTestApp extends Application {
     private static final String UI_KEY_MAINFRAME = "mainframe";
     private static final UISettings uiSettings = new UISettings("fx-ui-tests", "0.0.1");
 
+    public static UISettings getUiSettings() {
+        return uiSettings;
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(FxTestApp.class.getResource("test-view.fxml"));
