@@ -355,10 +355,12 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
         dialog.initOwner(parent);
         dialog.initModality(modality);
         dialog.initStyle(style);
-        dialog.onShowingProperty().addListener((p, o, n) -> adjustPosition(parent, xPos, yPos));
         dialog.setOnCloseRequest(e -> controller.saveSettings(dialog));
+        dialog.onShowingProperty().addListener((p, o, n) -> {
+            controller.restoreSettings(dialog);
+            adjustPosition(parent, xPos, yPos);
+        });
 
-        controller.restoreSettings(dialog);
         controller.initControls(data);
     }
 
