@@ -2,11 +2,13 @@ package de.ganzer.core.util;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserSettingsTest {
     @Test
-    void createUserSettings() {
+    void createUserSettings() throws IOException {
         String appName = "test";
         String appVersion = "1.0.0";
         String fileName = "properties";
@@ -20,7 +22,7 @@ class UserSettingsTest {
     }
 
     @Test
-    void createUserSettingsDefaultFileName() {
+    void createUserSettingsDefaultFileName() throws IOException {
         String appName = "test";
         String appVersion = "1.0.0";
         String fileName = "settings";
@@ -84,7 +86,7 @@ class UserSettingsTest {
     }
 
     @Test
-    void createUserSettingsDuplicateEntry() {
+    void createUserSettingsDuplicateEntry() throws IOException {
         String appName = "test";
         String appVersion = "1.0.0";
         String fileName = "testsettings";

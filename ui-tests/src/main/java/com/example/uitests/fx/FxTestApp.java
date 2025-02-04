@@ -36,9 +36,19 @@ public class FxTestApp extends Application {
     }
 
     public static void main(String[] args) {
-        uiSettings.load();
+        try {
+            uiSettings.load();
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
+
         launch();
-        uiSettings.save();
+
+        try {
+            uiSettings.save();
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
     }
 
     public static void alertInfo(String message) {

@@ -5,6 +5,7 @@ import de.ganzer.core.internals.CoreMessages;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.WeakHashMap;
 
@@ -41,8 +42,10 @@ public class UserSettings extends Settings {
      *         {@code null} or empty or contain only whitespaces.
      * @throws DuplicateSettingException if a setting with the file name "settings"
      *         does already exist for {@code appName} and {@code appVersion}.
+     * @throws IOException On any I/O error when the settings are read. This does
+     *         not occur when the settings file does not exist.
      */
-    public UserSettings(String appName, String appVersion) {
+    public UserSettings(String appName, String appVersion) throws IOException {
         this(appName, appVersion, null);
     }
 
@@ -62,8 +65,10 @@ public class UserSettings extends Settings {
      *         files.
      * @throws DuplicateSettingException if a setting with the specified file name
      *         does already exist for {@code appName} and {@code appVersion}.
+     * @throws IOException On any I/O error when the settings are read. This does
+     *         not occur when the settings file does not exist.
      */
-    public UserSettings(String appName, String appVersion, String fileName) {
+    public UserSettings(String appName, String appVersion, String fileName) throws IOException {
         if (Strings.isNullOrBlank(appName))
             throw new IllegalArgumentException("appName must not be null or empty.");
 
@@ -121,14 +126,14 @@ public class UserSettings extends Settings {
 
     /**
      * Writes the properties into the file within the user's configuration folder.
+     *
+     * @throws IOException On any I/O error.
      */
-    @SuppressWarnings("unused")
-    public void save() {
+    public void save() throws IOException {
         try (FileOutputStream out = new FileOutputStream(getSettingsStoragePath())) {
             store(out, String.format("Settings of %s %s", appName, appVersion));
         } catch (Exception e) {
-            System.err.println(CoreMessages.get("error.cannotStoreSettings", getSettingsStoragePath()));
-            e.printStackTrace(System.err);
+            throw new IOException(CoreMessages.get("error.cannotStoreSettings", getSettingsStoragePath()), e);
         }
     }
 
@@ -137,8 +142,11 @@ public class UserSettings extends Settings {
      * <p>
      * This is automatically called at construction and can be used to reload the
      * settings.
+     *
+     * @throws IOException On any I/O error. This does not occur when the settings
+     *         file does not exist.
      */
-    public void load() {
+    public void load() throws IOException {
         try {
             if (!new File(getSettingsStoragePath()).exists())
                 return;
@@ -147,8 +155,7 @@ public class UserSettings extends Settings {
                 load(in);
             }
         } catch (Exception e) {
-            System.err.println(CoreMessages.get("error.cannotLoadSettings", getSettingsStoragePath()));
-            e.printStackTrace(System.err);
+            throw new IOException(CoreMessages.get("error.cannotLoadSettings", getSettingsStoragePath()), e);
         }
     }
 
