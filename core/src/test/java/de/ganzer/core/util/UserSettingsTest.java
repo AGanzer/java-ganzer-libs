@@ -91,7 +91,7 @@ class UserSettingsTest {
         String appVersion = "1.0.0";
         String fileName = "testsettings";
 
-        var settings = new UserSettings(appName, appVersion, fileName);
+        new UserSettings(appName, appVersion, fileName);
         
         assertThrows(DuplicateSettingException.class, () -> new UserSettings(appName, appVersion, fileName));
     }
