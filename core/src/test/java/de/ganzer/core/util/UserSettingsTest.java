@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserSettingsTest {
     @Test
-    void createUserSettings() throws IOException {
+    void createUserSettings() {
         String appName = "test";
         String appVersion = "1.0.0";
         String fileName = "properties";
@@ -22,7 +22,7 @@ class UserSettingsTest {
     }
 
     @Test
-    void createUserSettingsDefaultFileName() throws IOException {
+    void createUserSettingsDefaultFileName() {
         String appName = "test";
         String appVersion = "1.0.0";
         String fileName = "settings";
@@ -86,7 +86,7 @@ class UserSettingsTest {
     }
 
     @Test
-    void createUserSettingsDuplicateEntry() throws IOException {
+    void createUserSettingsDuplicateEntry() {
         String appName = "test";
         String appVersion = "1.0.0";
         String fileName = "testsettings";

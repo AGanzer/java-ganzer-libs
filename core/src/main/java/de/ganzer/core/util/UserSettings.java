@@ -32,6 +32,9 @@ public class UserSettings extends Settings {
 
     /**
      * Creates a new instance with a file name set to "settings".
+     * <p>
+     * After creation {@link #load()} should be called to read the settings from
+     * file.
      *
      * @param appName The name of the application where the name of the settings
      *         file is build from.
@@ -42,15 +45,16 @@ public class UserSettings extends Settings {
      *         {@code null} or empty or contain only whitespaces.
      * @throws DuplicateSettingException if a setting with the file name "settings"
      *         does already exist for {@code appName} and {@code appVersion}.
-     * @throws IOException On any I/O error when the settings are read. This does
-     *         not occur when the settings file does not exist.
      */
-    public UserSettings(String appName, String appVersion) throws IOException {
+    public UserSettings(String appName, String appVersion) {
         this(appName, appVersion, null);
     }
 
     /**
      * Creates a new instance and loads the settings from the settings file.
+     * <p>
+     * After creation {@link #load()} should be called to read the settings from
+     * file.
      *
      * @param appName The name of the application where the name of the settings
      *         file is build from.
@@ -65,10 +69,8 @@ public class UserSettings extends Settings {
      *         files.
      * @throws DuplicateSettingException if a setting with the specified file name
      *         does already exist for {@code appName} and {@code appVersion}.
-     * @throws IOException On any I/O error when the settings are read. This does
-     *         not occur when the settings file does not exist.
      */
-    public UserSettings(String appName, String appVersion, String fileName) throws IOException {
+    public UserSettings(String appName, String appVersion, String fileName) {
         if (Strings.isNullOrBlank(appName))
             throw new IllegalArgumentException("appName must not be null or empty.");
 
@@ -90,8 +92,6 @@ public class UserSettings extends Settings {
             throw new DuplicateSettingException(this.fileName);
 
         settings.put(key, this);
-        
-        load();
     }
 
     /**
