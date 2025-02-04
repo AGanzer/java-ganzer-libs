@@ -356,7 +356,9 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
         dialog.initModality(modality);
         dialog.initStyle(style);
         dialog.onShowingProperty().addListener((p, o, n) -> adjustPosition(parent, xPos, yPos));
+        dialog.setOnCloseRequest(e -> controller.saveSettings(dialog));
 
+        controller.restoreSettings(dialog);
         controller.initControls(data);
     }
 
@@ -367,10 +369,10 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
 
         double adjustedX = xPos != Double.MIN_VALUE
                 ? xPos
-                : parent.getX() + (parent.getWidth() - dialog.getWidth()) / 2;
+                : Math.max(0, parent.getX() + (parent.getWidth() - dialog.getWidth()) / 2);
         double adjustedY = yPos != Double.MIN_VALUE
                 ? yPos
-                : parent.getY() + (parent.getHeight() - dialog.getHeight()) / 2;
+                : Math.max(0, parent.getY() + (parent.getHeight() - dialog.getHeight()) / 2);
 
         dialog.setX(adjustedX);
         dialog.setY(adjustedY);

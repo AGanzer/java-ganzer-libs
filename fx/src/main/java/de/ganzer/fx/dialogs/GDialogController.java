@@ -1,5 +1,7 @@
 package de.ganzer.fx.dialogs;
 
+import javafx.stage.Stage;
+
 import java.util.function.Consumer;
 
 /**
@@ -101,5 +103,31 @@ public interface GDialogController<Data> {
      */
     default int getModalResult() {
         return ModalResult.CANCEL;
+    }
+
+    /**
+     * Called to restore dialog UI settings.
+     * <p>
+     * Implementers have to override this if the dialog shall save and restore
+     * settings.
+     *
+     * @param stage The stage where to apply the boundary settings to.
+     *        {@link de.ganzer.fx.util.UISettings#apply(String, Stage)} may
+     *        be used for this.
+     */
+    default void restoreSettings(Stage stage) {
+    }
+
+    /**
+     * Called to save dialog UI settings.
+     * <p>
+     * Implementers have to override this if the dialog shall save and restore
+     * settings.
+     *
+     * @param stage The stage where to write the boundary settings from.
+     *        {@link de.ganzer.fx.util.UISettings#write(String, Stage)} may
+     *        be used for this.
+     */
+    default void saveSettings(Stage stage) {
     }
 }
