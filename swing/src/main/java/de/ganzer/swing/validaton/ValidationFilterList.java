@@ -49,7 +49,7 @@ public class ValidationFilterList implements Iterable<ValidationFilter> {
      * {@link ValidationBehavior#SHOW_MESSAGE_BOX}, the validation stops at
      * the first fail. If {@code behavior} is
      * {@link ValidationBehavior#SET_VISUAL_HINTS}, all inputs are validated and
-     * each invalid input is marked with a visuell hint.
+     * each invalid input is marked with a visuel hint.
      *
      * @param behavior The behavior to use for validation.
      *

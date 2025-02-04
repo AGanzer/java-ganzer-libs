@@ -115,6 +115,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      * The style and the modality are set to {@code null}.
      *
      * @param dialogRoot The parent root of the dialog to show.
+     * @param controller The controller to use.
      * @param data The data that initializes the dialog and that may be changed
      *             by the user. This can be {@code null} if the dialog does not
      *             require any data.
@@ -136,6 +137,7 @@ public class GDialog<Controller extends GDialogController<Data>, Data> {
      *
      * @param title The title to set for the dialog to show.
      * @param dialogRoot The parent root of the dialog to show.
+     * @param controller The controller to use.
      * @param data The data that initializes the dialog and that may be changed
      *             by the user. This can be {@code null} if the dialog does not
      *             require any data.
