@@ -5,7 +5,6 @@ import de.ganzer.core.util.UserSettings;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.util.*;
 import java.util.List;
