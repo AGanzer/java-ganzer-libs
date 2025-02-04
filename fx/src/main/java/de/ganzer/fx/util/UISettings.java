@@ -92,7 +92,7 @@ public class UISettings extends UserSettings {
         stage.setWidth(bounds.getWidth());
         stage.setHeight(bounds.getHeight());
 
-        stage.setFullScreen(maximized);
+        stage.setMaximized(maximized);
     }
 
     private static Rectangle2D clamp(List<Rectangle2D> displays, Rectangle2D bounds) {
