@@ -4,6 +4,12 @@ import de.ganzer.swing.actions.GAction;
 
 import javax.swing.*;
 
+/**
+ * This is created by a {@link GAction} when a button shall be created.
+ * <p>
+ * The only difference to {@link JCheckBoxMenuItem} is, that {@code GCheckBoxMenuItem}
+ * recognizes the visibility of an action.
+ */
 @SuppressWarnings("unused")
 public class GCheckBoxMenuItem extends JCheckBoxMenuItem {
     /**
