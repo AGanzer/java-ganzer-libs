@@ -16,7 +16,7 @@ public final class CreateOptions {
     public static final int DEFAULT = 0x00;
 
     /**
-     * The created buttons are not focusable.
+     * The created buttons are focusable.
      */
     public static final int FOCUSABLE = 0x01;
 
