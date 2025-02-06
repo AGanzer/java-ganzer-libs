@@ -6,7 +6,7 @@ import java.util.EventListener;
  * The listener used to inform clients that a closable tab page is about to be
  * closed.
  *
- * @see ClosableTabbedPane
+ * @see TabbedClosablePane
  */
 public interface TabCloseListener extends EventListener {
     /**

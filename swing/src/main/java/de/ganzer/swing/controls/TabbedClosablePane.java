@@ -19,26 +19,26 @@ import java.util.Objects;
  * @see TabCloseListener
  */
 @SuppressWarnings("unused")
-public class ClosableTabbedPane extends JTabbedPane {
+public class TabbedClosablePane extends JTabbedPane {
     private boolean closable = true;
 
     /**
      * {@inheritDoc}
      */
-    public ClosableTabbedPane() {
+    public TabbedClosablePane() {
     }
 
     /**
      * {@inheritDoc}
      */
-    public ClosableTabbedPane(int tabPlacement) {
+    public TabbedClosablePane(int tabPlacement) {
         super(tabPlacement);
     }
 
     /**
      * {@inheritDoc}
      */
-    public ClosableTabbedPane(int tabPlacement, int tabLayoutPolicy) {
+    public TabbedClosablePane(int tabPlacement, int tabLayoutPolicy) {
         super(tabPlacement, tabLayoutPolicy);
     }
 
@@ -131,13 +131,13 @@ public class ClosableTabbedPane extends JTabbedPane {
     }
 
     private static class TabHeaderPanel extends JPanel implements ChangeListener {
-        private final ClosableTabbedPane pane;
+        private final TabbedClosablePane pane;
         private final Component component;
         private final JLabel label;
         private JLabel icon;
         private TabButton button;
 
-        public TabHeaderPanel(ClosableTabbedPane pane, Component component, String title, Icon icon) {
+        public TabHeaderPanel(TabbedClosablePane pane, Component component, String title, Icon icon) {
             super(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
             Objects.requireNonNull(pane, "pane must not be null");
