@@ -12,7 +12,7 @@ import java.util.EventListener;
  * action event occurs, that object's {@link #selectedActionChanged} method is invoked.
  *
  * @see GAction
- * @see GActionEvent
+ * @see GSelectedActionChangedEvent
  */
 public interface GSelectedActionChangedListener extends EventListener {
     /**
