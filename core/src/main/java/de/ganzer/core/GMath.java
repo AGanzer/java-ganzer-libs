@@ -83,8 +83,13 @@ public class GMath {
      *
      * @param <T> The type of the values to compare. These must implement
      *        {@link Comparable}.
+     *
+     * @throws NullPointerException {@code a} or {@code b} is {@code null}.
      */
     public static <T extends Comparable<T>> T min(T a, T b) {
+        Objects.requireNonNull(a, " a must not be null.");
+        Objects.requireNonNull(b, " b must not be null.");
+
         return a.compareTo(b) < 0 ? a : b;
     }
 
@@ -99,8 +104,13 @@ public class GMath {
      *
      * @param <T> The type of the values to compare. These must implement
      *        {@link Comparable}.
+     *
+     * @throws NullPointerException {@code a} or {@code b} is {@code null}.
      */
     public static <T extends Comparable<T>> T max(T a, T b) {
+        Objects.requireNonNull(a, " a must not be null.");
+        Objects.requireNonNull(b, " b must not be null.");
+
         return a.compareTo(b) > 0 ? a : b;
     }
 
