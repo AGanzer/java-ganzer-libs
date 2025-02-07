@@ -1,7 +1,10 @@
 package de.ganzer.core;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -194,5 +197,21 @@ class GMathTest {
         var res = GMath.isInRange(val, min, max);
 
         assertEquals(exp, res);
+    }
+
+    @Test
+    void testMin() {
+        LocalDateTime a = LocalDateTime.parse("2020-01-01T00:00:00");
+        LocalDateTime b = LocalDateTime.parse("2020-01-02T00:00:01");
+
+        assertEquals(a, GMath.min(a, b));
+    }
+
+    @Test
+    void testMax() {
+        LocalDateTime a = LocalDateTime.parse("2020-01-01T00:00:00");
+        LocalDateTime b = LocalDateTime.parse("2020-01-02T00:00:01");
+
+        assertEquals(b, GMath.max(a, b));
     }
 }

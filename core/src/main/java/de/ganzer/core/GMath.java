@@ -1,5 +1,7 @@
 package de.ganzer.core;
 
+import java.util.Objects;
+
 /**
  * This class provides mathematical utility methods.
  */
@@ -71,6 +73,38 @@ public class GMath {
     }
 
     /**
+     * Gets the smaller one of the given values.
+     *
+     * @param a The first value.
+     * @param b The second value.
+     *
+     * @return {@code a} if {@code a} is smaller than {@code b}; otherwise,
+     *         {@code b} is returned.
+     *
+     * @param <T> The type of the values to compare. These must implement
+     *        {@link Comparable}.
+     */
+    public static <T extends Comparable<T>> T min(T a, T b) {
+        return a.compareTo(b) < 0 ? a : b;
+    }
+
+    /**
+     * Gets the greater one of the given values.
+     *
+     * @param a The first value.
+     * @param b The second value.
+     *
+     * @return {@code a} if {@code a} is greater than {@code b}; otherwise,
+     *         {@code b} is returned.
+     *
+     * @param <T> The type of the values to compare. These must implement
+     *        {@link Comparable}.
+     */
+    public static <T extends Comparable<T>> T max(T a, T b) {
+        return a.compareTo(b) > 0 ? a : b;
+    }
+
+    /**
      * Returns the value that is in the range [{@code min}, {@code max}].
      *
      * @param value The value to adjust.
@@ -120,6 +154,25 @@ public class GMath {
      */
     public static double toRange(double value, double min, double max) {
         return Math.min(Math.max(value, min), max);
+    }
+
+    /**
+     * Returns the value that is in the range [{@code min}, {@code max}].
+     *
+     * @param value The value to adjust.
+     * @param min The minimum allowed value to return.
+     * @param max The maximum allowed value to return.
+     *
+     * @return The value that is in the range [{@code min}, {@code max}].
+     *
+     * @param <T> The type of the values to compare. These must implement
+     *        {@link Comparable}.
+     *
+     * @throws NullPointerException {@code value}, {@code min} or {@code max}
+     *         is {@code null}.
+     */
+    public static <T extends Comparable<T>> T toRange(T value, T min, T max) {
+        return GMath.min(GMath.max(value, min), max);
     }
 
     /**
@@ -180,5 +233,30 @@ public class GMath {
      */
     public static boolean isInRange(double value, double min, double max) {
         return min <= value && value <= max;
+    }
+
+    /**
+     * Determines whether the specified value is in the range
+     * [{@code min}, {@code max}].
+     *
+     * @param value The value to check.
+     * @param min The minimum allowed value.
+     * @param max The maximum allowed value.
+     *
+     * @return {@code true} if {@code value} is not less than {@code min} and
+     * not greater than {@code max}; otherwise, {@code false} is returned.
+     *
+     * @param <T> The type of the values to compare. These must implement
+     *        {@link Comparable}.
+     *
+     * @throws NullPointerException {@code value}, {@code min} or {@code max}
+     *         is {@code null}.
+     */
+    public static <T extends Comparable<T>> boolean isInRange(T value, T min, T max) {
+        Objects.requireNonNull(value, "value must not be null.");
+        Objects.requireNonNull(min, "min must not be null.");
+        Objects.requireNonNull(max, "max must not be null.");
+
+        return min.compareTo(value) <= 0 && value.compareTo(max) <= 0;
     }
 }
