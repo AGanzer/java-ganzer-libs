@@ -1,13 +1,9 @@
 package de.ganzer.swing.dialogs;
 
-import de.ganzer.swing.internals.SwingMessages;
-
-import javax.swing.JOptionPane;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Window;
-import java.awt.event.WindowEvent;
 import java.util.function.Consumer;
 
 /**
