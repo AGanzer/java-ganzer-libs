@@ -2,9 +2,7 @@ package de.ganzer.swing.dialogs;
 
 import de.ganzer.swing.internals.SwingMessages;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
