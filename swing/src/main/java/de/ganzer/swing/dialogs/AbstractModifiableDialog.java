@@ -1,9 +1,15 @@
 package de.ganzer.swing.dialogs;
 
+import de.ganzer.swing.internals.SwingMessages;
+
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Window;
+import java.awt.event.WindowEvent;
 import java.util.function.Consumer;
 
 /**
@@ -355,6 +361,58 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
     @Override
     public void setDataModified(boolean modified) {
         this.dataModified = modified;
+    }
+
+    /**
+     * Queries the user what to do with modified data if {@link #isDataModified()}
+     * is {@code true} and the event's ID is {@link WindowEvent#WINDOW_CLOSING}.
+     * <p>
+     * This implementation calls {@link #queryUserToSave()}. The only recognized
+     * answers are:
+     * <ul>
+     *     <li>{@link JOptionPane#YES_OPTION}: {@link #applyChangedData()} is
+     *          called. On success the window is closed; otherwise, the event
+     *          is consumed and the window is not closed.</li>
+     *     <li>{@link JOptionPane#CANCEL_OPTION}: The event is consumed and the
+     *          window is not closed.</li>
+     *     <li>All others: The window is closed without any further action.</li>
+     * </ul>
+     *
+     * @param e The window event.
+     */
+    @Override
+    protected void processWindowEvent(WindowEvent e) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING && isDataModified()) {
+            switch (queryUserToSave()) {
+                case JOptionPane.YES_OPTION:
+                    if (!applyChangedData())
+                        return;
+
+                    break;
+
+                case JOptionPane.CANCEL_OPTION:
+                    return;
+            }
+        }
+
+        super.processWindowEvent(e);
+    }
+
+    /**
+     * Called within {@link #processWindowEvent(WindowEvent)} when the window
+     * is closed but has modified data to query the user what to do.
+     * <p>
+     * This implementation does simply show a {@link JOptionPane} with a
+     * question whether the data shall be saved and Yes, No and Cancel buttons.
+     *
+     * @return The result of the user's choose.
+     */
+    protected int queryUserToSave() {
+        return JOptionPane.showConfirmDialog(
+                this,
+                SwingMessages.get("modifiableDialog.querySaveData"),
+                getTitle(),
+                JOptionPane.YES_NO_CANCEL_OPTION);
     }
 
     /**
