@@ -7,8 +7,9 @@ import java.awt.Window;
 import java.util.function.Consumer;
 
 /**
- * An abstract dialog that implements the {@link DataSupport} interface to make
- * implementation of dialogs that supports modifiable data easier.
+ * An abstract dialog that implements the {@link ModifiableDataSupport}
+ * interface to make implementation of dialogs that supports modifiable
+ * data easier.
  * <p>
  * The following example shows how a derived dialog may be implemented:
  * <p>
@@ -100,7 +101,7 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
         getRootPane().setDefaultButton(okButton);
 
         var cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(e -> closeDialog(true));
+        cancelButton.addActionListener(e -> closeWindow(true));
 
         var panel = new JPanel();
         var layout = new GroupLayout(panel);
@@ -127,9 +128,15 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
 
     private void updateDataAndClose() {
         if (applyChangedData())
-            closeDialog(false);
+            closeWindow(false);
+    }
+
+    private boolean performLogin() {
+        // Perform login here.
+        return true;
     }
 }
+ * }
  * <p>
  * This dialog may then be shown in this way:
  * <p>
@@ -177,10 +184,9 @@ public class MyAppFrame extends JFrame {
  * @param <Data> The type of the supported modifiable data.
  * <p>
  * @see EscapableDialog
- *
  */
 @SuppressWarnings("unused")
-public abstract class AbstractModifiableDialog<Data> extends EscapableDialog implements DataSupport<Data> {
+public abstract class AbstractModifiableDialog<Data> extends EscapableDialog implements ModifiableDataSupport<Data> {
     private Data data;
     private Consumer<Data> dataConsumer;
     private boolean dataModified = false;
