@@ -104,7 +104,7 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
         getRootPane().setDefaultButton(okButton);
 
         var cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(e -> closeDialog(true));
+        cancelButton.addActionListener(e -> closeWindow(true));
 
         var panel = new JPanel();
         var layout = new GroupLayout(panel);
@@ -131,6 +131,6 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
 
     private void updateDataAndClose() {
         if (applyChangedData())
-            closeDialog(false);
+            closeWindow(false);
     }
 }

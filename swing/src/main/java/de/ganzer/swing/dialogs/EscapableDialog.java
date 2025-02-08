@@ -14,7 +14,7 @@ import java.awt.event.WindowEvent;
  *
  * @see #createRootPane()
  */
-public class EscapableDialog extends JDialog {
+public class EscapableDialog extends JDialog implements EscapableWindow {
     private boolean escaped = true;
 
     /**
@@ -115,9 +115,12 @@ public class EscapableDialog extends JDialog {
     /**
      * Sends a {@link WindowEvent#WINDOW_CLOSING} event to this dialog.
      *
-     * @param escaped Indicates whether the dialog is closed by the Esc key.
+     * @param escaped Indicates whether the window is closed by the Esc key or
+     *        by the window's Close button or the Close menu or by a Cancel
+     *        button.
      */
-    public void closeDialog(boolean escaped) {
+    @Override
+    public void closeWindow(boolean escaped) {
         this.escaped = escaped;
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
@@ -141,7 +144,7 @@ public class EscapableDialog extends JDialog {
         root.getActionMap().put(ACTION_MAP_KEY, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                closeDialog(true);
+                closeWindow(true);
             }
         });
 

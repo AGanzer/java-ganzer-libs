@@ -7,8 +7,9 @@ import java.awt.Window;
 import java.util.function.Consumer;
 
 /**
- * An abstract dialog that implements parts of the {@link DataSupport} interface
- * to make implementation of dialogs that supports modifiable data easier.
+ * An abstract dialog that implements the {@link ModifiableDataWindow}
+ * interface to make implementation of dialogs that supports modifiable data
+ * easier.
  * <p>
  * The following example shows how a derived dialog may be implemented:
  * <p>
@@ -180,7 +181,7 @@ public class MyAppFrame extends JFrame {
  *
  */
 @SuppressWarnings("unused")
-public abstract class AbstractModifiableDialog<Data> extends EscapableDialog implements DataSupport<Data> {
+public abstract class AbstractModifiableDialog<Data> extends EscapableDialog implements ModifiableDataWindow<Data> {
     private Data data;
     private Consumer<Data> dataConsumer;
 
@@ -273,6 +274,7 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
      * @return The data that ws given to {@link #initControls} or {@code null}
      *         if no data was specified.
      */
+    @Override
     public Data getData() {
         return data;
     }
@@ -287,6 +289,7 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
      * @return {@code true} if the data is valid and the consumer is invoked;
      *         otherwise, {@code false}.
      */
+    @Override
     public boolean applyChangedData() {
         if (!validateModifiedData())
             return false;
