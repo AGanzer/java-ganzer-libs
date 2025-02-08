@@ -1,10 +1,7 @@
 package de.ganzer.swing.dialogs;
 
 import javax.swing.*;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -149,5 +146,20 @@ public class EscapableDialog extends JDialog implements EscapableWindow {
         });
 
         return root;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * This implementation sets the position relative to the currently focused
+     * window by calling {@link Window#setLocationRelativeTo(Component)}. The
+     * default close operation is set to {@link WindowConstants#DISPOSE_ON_CLOSE}.
+     */
+    @Override
+    protected void dialogInit() {
+        super.dialogInit();
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(FocusManager.getCurrentManager().getFocusedWindow());
     }
 }
