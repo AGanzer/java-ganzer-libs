@@ -7,9 +7,8 @@ import java.awt.Window;
 import java.util.function.Consumer;
 
 /**
- * An abstract dialog that implements the {@link ModifiableDataWindow}
- * interface to make implementation of dialogs that supports modifiable data
- * easier.
+ * An abstract dialog that implements the {@link DataSupport} interface to make
+ * implementation of dialogs that supports modifiable data easier.
  * <p>
  * The following example shows how a derived dialog may be implemented:
  * <p>
@@ -181,9 +180,10 @@ public class MyAppFrame extends JFrame {
  *
  */
 @SuppressWarnings("unused")
-public abstract class AbstractModifiableDialog<Data> extends EscapableDialog implements ModifiableDataWindow<Data> {
+public abstract class AbstractModifiableDialog<Data> extends EscapableDialog implements DataSupport<Data> {
     private Data data;
     private Consumer<Data> dataConsumer;
+    private boolean dataModified = false;
 
     /**
      * {@inheritDoc}
@@ -280,24 +280,36 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
     }
 
     /**
-     * Invokes the set data consumer if the data is valid.
+     * Invokes the set data consumer if the data is valid and modified.
      * <p>
      * This implementation firstly calls {@link #validateModifiedData()}. If the
      * data is not valid, the method returns {@code false}; otherwise,
-     * {@link #} is called and the set data consumer is invoked.
+     * {@link #} is called and the set data consumer is invoked and the
+     * modification flag is set to {@code false}.
+     * <p>
+     * if {@link #isDataModified()} is {@code false}, nothing is done and this
+     * implementation returns {@code true}.
      *
      * @return {@code true} if the data is valid and the consumer is invoked;
      *         otherwise, {@code false}.
+     *
+     * @see #isDataModified()
+     * @see #setDataModified(boolean)
      */
     @Override
     public boolean applyChangedData() {
+        if (!isDataModified())
+            return true;
+
         if (!validateModifiedData())
             return false;
 
-        updateData(data);
+        updateData(getData());
 
         if (dataConsumer != null)
             dataConsumer.accept(data);
+
+        setDataModified(false);
 
         return true;
     }
@@ -321,6 +333,22 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
     @Override
     public void setDataConsumer(Consumer<Data> dataConsumer) {
         this.dataConsumer = dataConsumer;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDataModified() {
+        return dataModified;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDataModified(boolean modified) {
+        this.dataModified = modified;
     }
 
     /**

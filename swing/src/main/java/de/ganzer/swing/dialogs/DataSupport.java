@@ -173,6 +173,22 @@ public class MyAppFrame extends JFrame {
  */
 public interface DataSupport<Data> {
     /**
+     * Gets the data that was applied by {@link #initControls}
+     *
+     * @return The data that ws given to {@link #initControls} or {@code null}
+     *         if no data was specified.
+     */
+    Data getData();
+
+    /**
+     * Invokes the set data consumer if the data is valid.
+     *
+     * @return {@code true} if the data is valid and the consumer is invoked;
+     *         otherwise, {@code false}.
+     */
+    boolean applyChangedData();
+
+    /**
      * Called to apply the initial data to the controls.
      * <p>
      * Implementors should store this data in a local variable to modify it when
@@ -191,4 +207,18 @@ public interface DataSupport<Data> {
      */
     @SuppressWarnings("unused")
     void setDataConsumer(Consumer<Data> dataConsumer);
+
+    /**
+     * Gets a value the indicates whether the data is modified by the user.
+     *
+     * @return {@code true} if the data is modified; otherwise, {@code false}.
+     */
+    boolean isDataModified();
+
+    /**
+     * Sets the modification flag of the data.
+     *
+     * @param modified {@code true} to mark the data as modified.
+     */
+    void setDataModified(boolean modified);
 }
