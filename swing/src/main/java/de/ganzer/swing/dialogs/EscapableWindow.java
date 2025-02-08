@@ -1,7 +1,5 @@
 package de.ganzer.swing.dialogs;
 
-import java.awt.event.WindowEvent;
-
 /**
  * An interface that should be implemented by windows that provide information
  * about how the window was closed.
