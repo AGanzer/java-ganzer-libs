@@ -317,7 +317,7 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
         updateData(getData());
 
         if (dataConsumer != null)
-            dataConsumer.accept(data);
+            dataConsumer.accept(getData());
 
         setDataModified(false);
 
