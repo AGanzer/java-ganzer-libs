@@ -54,6 +54,11 @@ public final class CreateOptions {
     public static final int SMALL_IMAGE = 0x20;
 
     /**
+     * The short name shall be used if available.
+     */
+    public static final int SHORT_NAME = 0x40;
+
+    /**
      * Gets a value that indicates whether the specified {@code value} is set
      * in the specified {@code options}.
      * <p>

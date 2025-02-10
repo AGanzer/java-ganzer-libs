@@ -15,6 +15,7 @@ import javax.swing.*;
 public class GToggleButton extends JToggleButton {
     private boolean hideImage;
     private boolean useSmallImage;
+    private boolean useShortName;
 
     /**
      * {@inheritDoc}
@@ -53,16 +54,20 @@ public class GToggleButton extends JToggleButton {
     /**
      * {@inheritDoc}
      */
-    public GToggleButton(Action a, boolean hideImage, boolean useSmallImage) {
+    public GToggleButton(Action a, boolean hideImage, boolean useSmallImage, boolean useShortName) {
         super(a);
         this.hideImage = hideImage;
         this.useSmallImage = useSmallImage;
+        this.useShortName = useShortName;
 
         if (a != null) {
             if (hideImage)
                 setIcon(null);
             else if (useSmallImage)
                 setIcon((Icon) a.getValue(Action.SMALL_ICON));
+
+            if (useShortName)
+                configureShortNameFromAction(a);
         }
     }
 
@@ -81,6 +86,17 @@ public class GToggleButton extends JToggleButton {
     }
 
     @Override
+    public void setHideActionText(boolean hideActionText) {
+        if (hideActionText == getHideActionText())
+            return;
+
+        super.setHideActionText(hideActionText);
+
+        if (useShortName)
+            configureShortNameFromAction(getAction());
+    }
+
+    @Override
     protected void configurePropertiesFromAction(Action action) {
         super.configurePropertiesFromAction(action);
         configureVisibilityFromAction(action);
@@ -90,6 +106,9 @@ public class GToggleButton extends JToggleButton {
                 setIcon(null);
             else if (useSmallImage)
                 setIcon((Icon) action.getValue(Action.SMALL_ICON));
+
+            if (useShortName)
+                configureShortNameFromAction(action);
         }
     }
 
@@ -97,6 +116,8 @@ public class GToggleButton extends JToggleButton {
     protected void actionPropertyChanged(Action action, String propertyName) {
         if (GAction.VISIBILITY_KEY.equals(propertyName))
             configureVisibilityFromAction(action);
+        else if (GAction.SHORT_NAME_KEY.equals(propertyName))
+            configureShortNameFromAction(action);
         else {
             super.actionPropertyChanged(action, propertyName);
 
@@ -105,6 +126,18 @@ public class GToggleButton extends JToggleButton {
             else if (useSmallImage)
                 setIcon((Icon) action.getValue(Action.SMALL_ICON));
         }
+    }
+
+    private void configureShortNameFromAction(Action action) {
+        if (action == null || getHideActionText())
+            return;
+
+        String shortName = (String) action.getValue(GAction.SHORT_NAME_KEY);
+
+        if (shortName != null)
+            setText(shortName);
+        else
+            setText((String) action.getValue(Action.NAME));
     }
 
     private void configureVisibilityFromAction(Action action) {

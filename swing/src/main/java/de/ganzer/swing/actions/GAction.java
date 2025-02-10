@@ -113,6 +113,7 @@ public class MainFrame extends JFrame {
 @SuppressWarnings("unused")
 public class GAction extends AbstractAction implements GActionItemBuilder {
     public static final String VISIBILITY_KEY = "visibility";
+    public static final String SHORT_NAME_KEY = "short name";
 
     private final EventListenerList actionListeners = new EventListenerList();
     private boolean selectable;
@@ -172,6 +173,66 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      */
     public String getName() {
         return (String) getValue(NAME);
+    }
+
+    /**
+     * Sets the short name of the action.
+     * <p>
+     * A short name is useful for buttons that should not display a large text.
+     * <p>
+     * Note: This does not work with any of the default Swing controls because
+     * these controls does not observe the visibility. The only controls that
+     * observes this are:
+     * <ul>
+     *     <li>{@link GButton}
+     *     <li>{@link GToggleButton}
+     * </ul>
+     *
+     * @param name The short name to set.
+     *
+     * @return {@code this}.
+     */
+    public GAction shortName(String name) {
+        putValue(SHORT_NAME_KEY, name);
+        return this;
+    }
+
+    /**
+     * Sets the short name of the action.
+     * <p>
+     * A short name is useful for buttons that should not display a large text.
+     * <p>
+     * Note: This does not work with any of the default Swing controls because
+     * these controls does not observe the visibility. The only controls that
+     * observes this are:
+     * <ul>
+     *     <li>{@link GButton}
+     *     <li>{@link GToggleButton}
+     * </ul>
+     *
+     * @param name The short name to set.
+     */
+    public void setShortName(String name) {
+        putValue(SHORT_NAME_KEY, name);
+    }
+
+    /**
+     * Gets the short name of the action.
+     * <p>
+     * A short name is useful for buttons that should not display a large text.
+     * <p>
+     * Note: This does not work with any of the default Swing controls because
+     * these controls does not observe the visibility. The only controls that
+     * observes this are:
+     * <ul>
+     *     <li>{@link GButton}
+     *     <li>{@link GToggleButton}
+     * </ul>
+     *
+     * @return The short name.
+     */
+    public String getShortName() {
+        return (String) getValue(SHORT_NAME_KEY);
     }
 
     /**
@@ -538,7 +599,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      * <p>
      * Note: This does not work with any of the default Swing controls because
      * these controls does not observe the visibility. The only controls that
-     * observes this are {@link GMenuItem}
+     * observes this are:
      * <ul>
      *     <li>{@link GMenu}
      *     <li>{@link GMenuItem}
@@ -562,7 +623,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      * <p>
      * Note: This does not work with any of the default Swing controls because
      * these controls does not observe the visibility. The only controls that
-     * observes this are {@link GMenuItem}
+     * observes this are:
      * <ul>
      *     <li>{@link GMenu}
      *     <li>{@link GMenuItem}
@@ -583,7 +644,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
      * <p>
      * Note: This does not work with any of the default Swing controls because
      * these controls does not observe the visibility. The only controls that
-     * observes this are {@link GMenuItem}
+     * observes this are:
      * <ul>
      *     <li>{@link GMenu}
      *     <li>{@link GMenuItem}
@@ -768,11 +829,12 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
 
         boolean hideImage = CreateOptions.isSet(options, CreateOptions.HIDE_IMAGE);
         boolean smallImage = CreateOptions.isSet(options, CreateOptions.SMALL_IMAGE);
+        boolean shortName = CreateOptions.isSet(options, CreateOptions.SHORT_NAME);
 
         if (exclusivelySelectable || selectable)
-            button = new GToggleButton(this, hideImage, smallImage);
+            button = new GToggleButton(this, hideImage, smallImage, shortName);
         else
-            button = new GButton(this, hideImage, smallImage);
+            button = new GButton(this, hideImage, smallImage, shortName);
 
         button.setFocusable(CreateOptions.isSet(options, CreateOptions.FOCUSABLE));
         button.setHideActionText(shouldHideText(options));
