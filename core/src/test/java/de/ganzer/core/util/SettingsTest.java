@@ -11,149 +11,149 @@ class SettingsTest {
     }
 
     @Test
-    void getDefaultInt() {
+    void readDefaultInt() {
         //noinspection MismatchedQueryAndUpdateOfCollection
         Settings settings = new Settings();
         String key = "test";
         int value = 1;
 
-        assertEquals(value, settings.get(key, value));
+        assertEquals(value, settings.read(key, value));
     }
 
     @Test
-    void getDefaultLong() {
+    void readDefaultLong() {
         //noinspection MismatchedQueryAndUpdateOfCollection
         Settings settings = new Settings();
         String key = "test";
         long value = 1;
 
-        assertEquals(value, settings.get(key, value));
+        assertEquals(value, settings.read(key, value));
     }
 
     @Test
-    void getDefaultFloat() {
+    void readDefaultFloat() {
         //noinspection MismatchedQueryAndUpdateOfCollection
         Settings settings = new Settings();
         String key = "test";
         float value = 1;
 
-        assertEquals(value, settings.get(key, value));
+        assertEquals(value, settings.read(key, value));
     }
 
     @Test
-    void getDefaultDouble() {
+    void readDefaultDouble() {
         //noinspection MismatchedQueryAndUpdateOfCollection
         Settings settings = new Settings();
         String key = "test";
         double value = 1;
 
-        assertEquals(value, settings.get(key, value));
+        assertEquals(value, settings.read(key, value));
     }
 
     @Test
-    void getDefaultString() {
+    void readDefaultString() {
         //noinspection MismatchedQueryAndUpdateOfCollection
         Settings settings = new Settings();
         String key = "test";
         String value = "1";
 
-        assertEquals(value, settings.get(key, value));
+        assertEquals(value, settings.read(key, value));
     }
 
     @Test
-    void getDefaultBoolean() {
+    void readDefaultBoolean() {
         //noinspection MismatchedQueryAndUpdateOfCollection
         Settings settings = new Settings();
         String key = "test";
         boolean value = true;
 
-        assertEquals(value, settings.get(key, value));
+        assertEquals(value, settings.read(key, value));
     }
 
     @Test
-    void getDefaultEnum() {
+    void readDefaultEnum() {
         //noinspection MismatchedQueryAndUpdateOfCollection
         Settings settings = new Settings();
         String key = "test";
         TestValue value = TestValue.ONE;
 
-        assertEquals(value, settings.get(key, value));
+        assertEquals(value, settings.read(key, value));
     }
 
     @Test
-    void setInt() {
+    void writeInt() {
         Settings settings = new Settings();
         String key = "test";
         int value = 1;
 
-        settings.set(key, value);
+        settings.write(key, value);
 
-        assertEquals(value, settings.get(key, 0));
+        assertEquals(value, settings.read(key, 0));
     }
 
     @Test
-    void setLong() {
+    void writeLong() {
         Settings settings = new Settings();
         String key = "test";
         long value = 1;
 
-        settings.set(key, value);
+        settings.write(key, value);
 
-        assertEquals(value, settings.get(key, 0L));
+        assertEquals(value, settings.read(key, 0L));
     }
 
     @Test
-    void setFloat() {
+    void writeFloat() {
         Settings settings = new Settings();
         String key = "test";
         float value = 1;
 
-        settings.set(key, value);
+        settings.write(key, value);
 
-        assertEquals(value, settings.get(key, .0f));
+        assertEquals(value, settings.read(key, .0f));
     }
 
     @Test
-    void setDouble() {
+    void writeDouble() {
         Settings settings = new Settings();
         String key = "test";
         double value = 1;
 
-        settings.set(key, value);
+        settings.write(key, value);
 
-        assertEquals(value, settings.get(key, .0));
+        assertEquals(value, settings.read(key, .0));
     }
 
     @Test
-    void setString() {
+    void writeString() {
         Settings settings = new Settings();
         String key = "test";
         String value = "1";
 
-        settings.set(key, value);
+        settings.write(key, value);
 
-        assertEquals(value, settings.get(key, ""));
+        assertEquals(value, settings.read(key, ""));
     }
 
     @Test
-    void setBoolean() {
+    void writeBoolean() {
         Settings settings = new Settings();
         String key = "test";
         boolean value = true;
 
-        settings.set(key, value);
+        settings.write(key, value);
 
-        assertEquals(value, settings.get(key, false));
+        assertEquals(value, settings.read(key, false));
     }
 
     @Test
-    void setEnum() {
+    void writeEnum() {
         Settings settings = new Settings();
         String key = "test";
         TestValue value = TestValue.ONE;
 
-        settings.set(key, value);
+        settings.write(key, value);
 
-        assertEquals(value, settings.get(key, TestValue.TWO));
+        assertEquals(value, settings.read(key, TestValue.TWO));
     }
 }

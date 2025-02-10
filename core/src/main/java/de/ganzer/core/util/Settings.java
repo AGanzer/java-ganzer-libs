@@ -19,7 +19,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public String get(String key, String defaultValue) {
+    public String read(String key, String defaultValue) {
         String value = getProperty(key);
         return value != null ? value : defaultValue;
     }
@@ -34,7 +34,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public int get(String key, int defaultValue) {
+    public int read(String key, int defaultValue) {
         String value = getProperty(key);
 
         try {
@@ -54,7 +54,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public long get(String key, long defaultValue) {
+    public long read(String key, long defaultValue) {
         String value = getProperty(key);
 
         try {
@@ -74,7 +74,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public float get(String key, float defaultValue) {
+    public float read(String key, float defaultValue) {
         String value = getProperty(key);
 
         try {
@@ -94,7 +94,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public double get(String key, double defaultValue) {
+    public double read(String key, double defaultValue) {
         String value = getProperty(key);
 
         try {
@@ -114,7 +114,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public boolean get(String key, boolean defaultValue) {
+    public boolean read(String key, boolean defaultValue) {
         String value = getProperty(key);
         return value != null ? Boolean.parseBoolean(value) : defaultValue;
     }
@@ -129,7 +129,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public <T extends Enum<T>> T get(String key, T defaultValue) {
+    public <T extends Enum<T>> T read(String key, T defaultValue) {
         String value = getProperty(key);
 
         try {
@@ -147,7 +147,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public void set(String key, String value) {
+    public void write (String key, String value) {
         setProperty(key, value);
     }
 
@@ -159,7 +159,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public void set(String key, long value) {
+    public void write(String key, long value) {
         setProperty(key, Long.toString(value));
     }
 
@@ -171,7 +171,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public void set(String key, double value) {
+    public void write(String key, double value) {
         setProperty(key, Double.toString(value));
     }
 
@@ -183,7 +183,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public void set(String key, boolean value) {
+    public void write(String key, boolean value) {
         setProperty(key, Boolean.toString(value));
     }
 
@@ -195,7 +195,7 @@ public class Settings extends Properties {
      *
      * @throws NullPointerException {@code key} returns {@code null}.
      */
-    public <T extends Enum<T>> void set(String key, T value) {
+    public <T extends Enum<T>> void write(String key, T value) {
         setProperty(key, value.name());
     }
 }

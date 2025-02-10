@@ -56,13 +56,13 @@ public class UISettings extends UserSettings {
         Objects.requireNonNull(stage, "stage must not be null");
 
         boolean maximized = stage.isMaximized();
-        set(key + KEY_STATE, maximized);
+        write(key + KEY_STATE, maximized);
 
         if (!maximized) {
-            set(key + KEY_X, stage.getX());
-            set(key + KEY_WIDTH, stage.getWidth());
-            set(key + KEY_Y, stage.getY());
-            set(key + KEY_HEIGHT, stage.getHeight());
+            write(key + KEY_X, stage.getX());
+            write(key + KEY_WIDTH, stage.getWidth());
+            write(key + KEY_Y, stage.getY());
+            write(key + KEY_HEIGHT, stage.getHeight());
         }
     }
 
@@ -79,11 +79,11 @@ public class UISettings extends UserSettings {
         Objects.requireNonNull(key, "key must not be null");
         Objects.requireNonNull(stage, "stage must not be null");
 
-        boolean maximized = get(key + KEY_STATE, false);
-        double x = get(key + KEY_X, stage.getX());
-        double y = get(key + KEY_Y, stage.getY());
-        double width = get(key + KEY_WIDTH, stage.getWidth());
-        double height = get(key + KEY_HEIGHT, stage.getHeight());
+        boolean maximized = read(key + KEY_STATE, false);
+        double x = read(key + KEY_X, stage.getX());
+        double y = read(key + KEY_Y, stage.getY());
+        double width = read(key + KEY_WIDTH, stage.getWidth());
+        double height = read(key + KEY_HEIGHT, stage.getHeight());
 
         Rectangle2D bounds = clamp(getDisplays(), new Rectangle2D(x, y, width, height));
 

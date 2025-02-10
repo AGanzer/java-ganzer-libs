@@ -55,7 +55,7 @@ public class UISettings extends UserSettings {
         Objects.requireNonNull(frame, "frame must not be null");
 
         int state = frame.getExtendedState();
-        set(key + KEY_STATE, state);
+        write(key + KEY_STATE, state);
 
         writeWindowSettings(key, frame, state);
     }
@@ -88,7 +88,7 @@ public class UISettings extends UserSettings {
 
         applyWindowSettings(key, frame);
 
-        int state = get(key + KEY_STATE, JFrame.NORMAL);
+        int state = read(key + KEY_STATE, JFrame.NORMAL);
         frame.setExtendedState(state &~ JFrame.ICONIFIED);
     }
 
@@ -110,21 +110,21 @@ public class UISettings extends UserSettings {
 
     private void writeWindowSettings(String key, Window window, int state) {
         if (isNotStateSet(state, JFrame.MAXIMIZED_HORIZ)) {
-            set(key + KEY_X, window.getX());
-            set(key + KEY_WIDTH, window.getWidth());
+            write(key + KEY_X, window.getX());
+            write(key + KEY_WIDTH, window.getWidth());
         }
 
         if (isNotStateSet(state, JFrame.MAXIMIZED_VERT)) {
-            set(key + KEY_Y, window.getY());
-            set(key + KEY_HEIGHT, window.getHeight());
+            write(key + KEY_Y, window.getY());
+            write(key + KEY_HEIGHT, window.getHeight());
         }
     }
 
     private void applyWindowSettings(String key, Window window) {
-        int x = get(key + KEY_X, window.getX());
-        int y = get(key + KEY_Y, window.getY());
-        int width = get(key + KEY_WIDTH, window.getWidth());
-        int height = get(key + KEY_HEIGHT, window.getHeight());
+        int x = read(key + KEY_X, window.getX());
+        int y = read(key + KEY_Y, window.getY());
+        int width = read(key + KEY_WIDTH, window.getWidth());
+        int height = read(key + KEY_HEIGHT, window.getHeight());
 
         window.setBounds(x, y, width, height);
 
