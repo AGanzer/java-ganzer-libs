@@ -6,11 +6,12 @@ import java.util.Properties;
  * Utility for reading and writing settings.
  * <p>
  * This implementation extends the {@link Properties} class with various methods
- * that make it easier to write, read and validate property values. To ensure
- * that all settings are written correctly as strings, use only the several
- * {@code write} methods or the inherited {@link #setProperty} method, because
- * the {@code set} method stores values as objects and not as string, so that
- * they cannot be restored on reading it rom a settings file.
+ * that make it easier to write, read and validate property values.
+ * <p>
+ * To ensure that all settings are written correctly as strings, use only the
+ * several {@code write} methods or the inherited {@link #setProperty} method,
+ * because the {@code set} method stores values as objects and not as string,
+ * so that they cannot be restored on reading it rom a settings file.
  */
 public class Settings extends Properties {
     /**
