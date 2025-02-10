@@ -766,10 +766,13 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public AbstractButton createButton(int options) {
         AbstractButton button;
 
+        boolean hideImage = CreateOptions.isSet(options, CreateOptions.HIDE_IMAGE);
+        boolean smallImage = CreateOptions.isSet(options, CreateOptions.SMALL_IMAGE);
+
         if (exclusivelySelectable || selectable)
-            button = new GToggleButton(this);
+            button = new GToggleButton(this, hideImage, smallImage);
         else
-            button = new GButton(this);
+            button = new GButton(this, hideImage, smallImage);
 
         button.setFocusable(CreateOptions.isSet(options, CreateOptions.FOCUSABLE));
         button.setHideActionText(shouldHideText(options));

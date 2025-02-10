@@ -8,10 +8,14 @@ import javax.swing.*;
  * This is created by a {@link GAction} when a button shall be created.
  * <p>
  * The only difference to {@link JButton} is, that {@code GButton} recognizes
- * the visibility of an action.
+ * the visibility of an action, hides the image if this should not be visible
+ * and uses the small image only if required.
  */
 @SuppressWarnings("unused")
 public class GButton extends JButton {
+    private boolean hideImage;
+    private boolean useSmallImage;
+
     /**
      * {@inheritDoc}
      */
@@ -35,8 +39,17 @@ public class GButton extends JButton {
     /**
      * {@inheritDoc}
      */
-    public GButton(Action a) {
+    public GButton(Action a, boolean hideImage, boolean useSmallImage) {
         super(a);
+        this.hideImage = hideImage;
+        this.useSmallImage = useSmallImage;
+
+        if (a != null) {
+            if (hideImage)
+                setIcon(null);
+            else if (useSmallImage)
+                setIcon((Icon) a.getValue(Action.SMALL_ICON));
+        }
     }
 
     /**
@@ -50,14 +63,27 @@ public class GButton extends JButton {
     protected void configurePropertiesFromAction(Action action) {
         super.configurePropertiesFromAction(action);
         configureVisibilityFromAction(action);
+
+        if (action != null) {
+            if (hideImage)
+                setIcon(null);
+            else if (useSmallImage)
+                setIcon((Icon) action.getValue(Action.SMALL_ICON));
+        }
     }
 
     @Override
     protected void actionPropertyChanged(Action action, String propertyName) {
         if (GAction.VISIBILITY_KEY.equals(propertyName))
             configureVisibilityFromAction(action);
-        else
+        else {
             super.actionPropertyChanged(action, propertyName);
+
+            if (hideImage)
+                setIcon(null);
+            else if (useSmallImage)
+                setIcon((Icon) action.getValue(Action.SMALL_ICON));
+        }
     }
 
     private void configureVisibilityFromAction(Action action) {
