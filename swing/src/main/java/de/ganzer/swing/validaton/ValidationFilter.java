@@ -277,8 +277,9 @@ public class ValidationFilter extends DocumentFilter {
                 if (!newText.equals(textField.getText())) {
                     updating = true;
                     textField.setText(newText);
-                    textField.selectAll();
                 }
+
+                textField.selectAll();
             }
 
             @Override
@@ -304,7 +305,7 @@ public class ValidationFilter extends DocumentFilter {
 
         if (validator.isValidInput(textToValidate, appending)) {
             return appending
-                    ? textToValidate.substring(orgTextLength)
+                    ? textToValidate.substring(offset)
                     : textToValidate.substring(offset, offset + text.length());
         }
 
