@@ -35,11 +35,6 @@ public final class CreateOptions {
     public static final int HIDE_IMAGE = 0x04;
 
     /**
-     * The small image shall be used even if there is a large image available.
-     */
-    public static final int SMALL_IMAGE = 0x04;
-
-    /**
      * The images of the buttons are not above the texts but leads them.
      */
     public static final int IMAGE_LEADING = 0x08;
@@ -52,6 +47,11 @@ public final class CreateOptions {
      * details.
      */
     public static final int NO_BORDER = 0x10;
+
+    /**
+     * The small image shall be used even if there is a large image available.
+     */
+    public static final int SMALL_IMAGE = 0x20;
 
     /**
      * Gets a value that indicates whether the specified {@code value} is set
