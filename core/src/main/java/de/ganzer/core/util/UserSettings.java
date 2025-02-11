@@ -24,11 +24,12 @@ import java.util.WeakHashMap;
  * the same file name are created for the same application and version.
  */
 public class UserSettings extends Settings {
-    private static final WeakHashMap<String, UserSettings> settings = new WeakHashMap<>();
+    private static final WeakHashMap<String, UserSettings> knownSettings = new WeakHashMap<>();
 
     private final String appName;
     private final String appVersion;
     private final String fileName;
+    private final boolean asXml;
 
     /**
      * Creates a new instance with a file name set to "settings".
@@ -47,7 +48,28 @@ public class UserSettings extends Settings {
      *         does already exist for {@code appName} and {@code appVersion}.
      */
     public UserSettings(String appName, String appVersion) {
-        this(appName, appVersion, null);
+        this(appName, appVersion, null, false);
+    }
+
+    /**
+     * Creates a new instance with a file name set to "settings".
+     * <p>
+     * After creation {@link #load()} should be called to read the settings from
+     * file.
+     *
+     * @param appName The name of the application where the name of the settings
+     *         file is build from.
+     * @param appVersion The version of the application where the name of the
+     *         settings sub folder is build from.
+     * @param asXml Indicates whether the settings file shall be written in XML.
+     *
+     * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
+     *         {@code null} or empty or contain only whitespaces.
+     * @throws DuplicateSettingException if a setting with the file name "settings"
+     *         does already exist for {@code appName} and {@code appVersion}.
+     */
+    public UserSettings(String appName, String appVersion, boolean asXml) {
+        this(appName, appVersion, null, asXml);
     }
 
     /**
@@ -71,6 +93,31 @@ public class UserSettings extends Settings {
      *         does already exist for {@code appName} and {@code appVersion}.
      */
     public UserSettings(String appName, String appVersion, String fileName) {
+        this(appName, appVersion, fileName, false);
+    }
+
+    /**
+     * Creates a new instance and loads the settings from the settings file.
+     * <p>
+     * After creation {@link #load()} should be called to read the settings from
+     * file.
+     *
+     * @param appName The name of the application where the name of the settings
+     *         file is build from.
+     * @param appVersion The version of the application where the name of the
+     *         settings sub folder is build from.
+     * @param fileName The name of the settings file. If this is {@code null},
+     *         "settings" is used. This must not contain any path information.
+     * @param asXml Indicates whether the settings file shall be written in XML.
+     *
+     * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
+     *         {@code null} or empty or contain only whitespaces or {@code fileName}
+     *         is empty or contains whitespaces only or is not a valid name for
+     *         files.
+     * @throws DuplicateSettingException if a setting with the specified file name
+     *         does already exist for {@code appName} and {@code appVersion}.
+     */
+    public UserSettings(String appName, String appVersion, String fileName, boolean asXml) {
         if (Strings.isNullOrBlank(appName))
             throw new IllegalArgumentException("appName must not be null or empty.");
 
@@ -82,16 +129,17 @@ public class UserSettings extends Settings {
                 throw new IllegalArgumentException("fileName is not a valid file name.");
         }
 
+        this.asXml = asXml;
         this.appName = appName;
         this.appVersion = appVersion;
         this.fileName = fileName == null ? "settings" : fileName;
 
         var key = this.appName + this.appVersion + this.fileName;
 
-        if (settings.get(key) != null)
+        if (knownSettings.get(key) != null)
             throw new DuplicateSettingException(this.fileName);
 
-        settings.put(key, this);
+        knownSettings.put(key, this);
     }
 
     /**
@@ -131,7 +179,10 @@ public class UserSettings extends Settings {
      */
     public void save() throws IOException {
         try (FileOutputStream out = new FileOutputStream(getSettingsStoragePath())) {
-            store(out, String.format("Settings of %s %s", appName, appVersion));
+            if (asXml)
+                storeToXML(out, String.format("Settings of %s %s", appName, appVersion));
+            else
+                store(out, String.format("Settings of %s %s", appName, appVersion));
         } catch (Exception e) {
             throw new IOException(CoreMessages.get("error.cannotStoreSettings", getSettingsStoragePath()), e);
         }
@@ -152,7 +203,10 @@ public class UserSettings extends Settings {
                 return;
 
             try (FileInputStream in = new FileInputStream(getSettingsStoragePath())) {
-                load(in);
+                if (asXml)
+                    loadFromXML(in);
+                else
+                    load(in);
             }
         } catch (Exception e) {
             throw new IOException(CoreMessages.get("error.cannotLoadSettings", getSettingsStoragePath()), e);

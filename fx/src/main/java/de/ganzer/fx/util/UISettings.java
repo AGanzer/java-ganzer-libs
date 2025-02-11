@@ -39,10 +39,35 @@ public class UISettings extends UserSettings {
     }
 
     /**
+     * Creates a new instance with a file name set to "ui".
+     *
+     * @param appName The name of the application where the name of the settings
+     *         file is build from.
+     * @param appVersion The version of the application where the name of the
+     *         settings sub folder is build from.
+     * @param asXml Indicates whether the settings file shall be written in XML.
+     *
+     * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
+     *         {@code null} or empty or contain only whitespaces.
+     * @throws DuplicateSettingException if a setting with the file name "ui"
+     *         does already exist for {@code appName} and {@code appVersion}.
+     */
+    public UISettings(String appName, String appVersion, boolean asXml) {
+        super(appName, appVersion, "ui", asXml);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public UISettings(String appName, String appVersion, String fileName) {
         super(appName, appVersion, fileName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public UISettings(String appName, String appVersion, String fileName, boolean asXml) {
+        super(appName, appVersion, fileName, asXml);
     }
 
     /**
