@@ -23,6 +23,7 @@ import java.util.WeakHashMap;
  * other, a {@link DuplicateSettingException} is thrown if two settings with
  * the same file name are created for the same application and version.
  */
+@SuppressWarnings("unused")
 public class UserSettings extends Settings {
     private static final WeakHashMap<String, UserSettings> knownSettings = new WeakHashMap<>();
 
