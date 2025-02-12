@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initLookAndFeel() {
-        for (var laf: UIManager.getInstalledLookAndFeels())
+        for (UIManager.LookAndFeelInfo laf: UIManager.getInstalledLookAndFeels())
             System.out.println(laf.getClassName());
 
         try {
@@ -69,7 +69,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initLayout() {
-        var pane = getContentPane();
+        Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
     }
 
@@ -175,7 +175,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initMenu() {
-        var menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         mainMenu.addMenus(menuBar);
         setJMenuBar(menuBar);
     }
@@ -197,7 +197,7 @@ public class MainFrame extends JFrame {
         Accordion accordion = new Accordion();
 
         for (int i = 0; i < 5; ++i) {
-            var content = new JPanel();
+            JPanel content = new JPanel();
             content.setBackground(Color.WHITE);
             content.setPreferredSize(new Dimension(200, 200));
 
@@ -235,8 +235,8 @@ public class MainFrame extends JFrame {
         boolean hide = !((GAction)event.getSource()).isSelected();
 
         for (int i = 0; i < toolBar.getComponentCount(); i++) {
-            if (toolBar.getComponent(i) instanceof AbstractButton button)
-                button.setHideActionText(hide);
+            if (toolBar.getComponent(i) instanceof AbstractButton)
+                ((AbstractButton) toolBar.getComponent(i)).setHideActionText(hide);
         }
     }
 
@@ -244,8 +244,8 @@ public class MainFrame extends JFrame {
         boolean smallButtons = ((GAction)event.getSource()).isSelected();
 
         for (int i = 0; i < toolBar.getComponentCount(); i++) {
-            if (toolBar.getComponent(i) instanceof AbstractButton button)
-                setImage((GAction)button.getAction(), smallButtons);
+            if (toolBar.getComponent(i) instanceof AbstractButton)
+                setImage((GAction)((AbstractButton) toolBar.getComponent(i)).getAction(), smallButtons);
         }
     }
 
@@ -299,7 +299,7 @@ public class MainFrame extends JFrame {
     }
 
     private void onLoginTest(ActionEvent actionEvent) {
-        var data = new LoginDialog.Data();
+        LoginDialog.Data data = new LoginDialog.Data();
 
         if (LoginDialog.showModal(this, data))
             System.out.printf("Login with user %s successful!\n", data.name);
@@ -308,7 +308,7 @@ public class MainFrame extends JFrame {
     }
 
     private void onInputTest(ActionEvent event) {
-        var data = new InputTestDialog.Data();
+        InputTestDialog.Data data = new InputTestDialog.Data();
         data.input = "abcd";
 
         if (InputTestDialog.showModal(this, data))

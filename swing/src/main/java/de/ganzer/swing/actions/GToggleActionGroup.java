@@ -96,7 +96,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     public GToggleActionGroup addAll(GAction... actions) {
         Objects.requireNonNull(actions);
 
-        for (var action: List.of(actions)) {
+        for (GAction action: actions) {
             Objects.requireNonNull(action, "actions must not contain null values.");
 
             if (action.isSelected())
@@ -175,7 +175,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
      */
     @Override
     public void addMenuItems(JMenu target) {
-        for (var action: actions)
+        for (GAction action: actions)
             action.addMenuItems(target);
     }
 
@@ -189,7 +189,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
      */
     @Override
     public void addMenuItems(JPopupMenu target) {
-        for (var action: actions)
+        for (GAction action: actions)
             action.addMenuItems(target);
     }
 
@@ -205,7 +205,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
      */
     @Override
     public void addButtons(JToolBar target, int options) {
-        for (var action: actions)
+        for (GAction action: actions)
             action.addButtons(target, options);
     }
 
@@ -218,7 +218,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     private boolean hasNoSelection() {
-        for (var action: actions) {
+        for (GAction action: actions) {
             if (action.isSelected())
                 return false;
         }
@@ -257,7 +257,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
             try {
                 inPropertyChangeEvent = true;
 
-                for (var action: actions) {
+                for (GAction action: actions) {
                     if (action != event.getSource())
                         action.selected(false);
                     else if (selectedAction != event.getSource()) {

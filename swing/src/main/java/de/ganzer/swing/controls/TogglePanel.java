@@ -1,19 +1,13 @@
 package de.ganzer.swing.controls;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.beans.BeanProperty;
-import java.beans.JavaBean;
+import java.awt.*;
 import java.util.Objects;
 
 /**
  * A collapsable panel that con be inserted into an {@link Accordion}.
  */
 @SuppressWarnings("unused")
-@JavaBean(defaultProperty = "title", description = "A component which provides a collapsable container.")
 public class TogglePanel extends JPanel {
     /**
      * The property name of the {@link #isCollapsed()} property.
@@ -167,14 +161,11 @@ public class TogglePanel extends JPanel {
      *
      * @param title The title to set.
      */
-    @BeanProperty(
-            visualUpdate = true,
-            description = "The title of the toggle panel.")
     public void setTitle(String title) {
         if (titleButton.getText().equals(title))
             return;
 
-        var orgTitle = titleButton.getText();
+        String orgTitle = titleButton.getText();
         titleButton.setText(title);
 
         firePropertyChange(TITLE_PROPERTY, orgTitle, title);
@@ -200,7 +191,7 @@ public class TogglePanel extends JPanel {
         if (this.contentPane == contentPane)
             return;
 
-        var orgPane = this.contentPane;
+        Container orgPane = this.contentPane;
         this.contentPane = contentPane;
 
         if (!isCollapsed()) {
@@ -233,7 +224,7 @@ public class TogglePanel extends JPanel {
         if (this.icons == icons)
             return;
 
-        var orgIcons = this.icons;
+        TogglePanelIcons orgIcons = this.icons;
         this.icons = icons;
 
         if (iconVisible)
@@ -258,20 +249,11 @@ public class TogglePanel extends JPanel {
      *        {@link SwingConstants#CENTER},  {@link SwingConstants#RIGHT},
      *        {@link SwingConstants#LEADING} or {@link SwingConstants#TRAILING}.
      */
-    @BeanProperty(
-            visualUpdate = true,
-            enumerationValues = {
-                "SwingConstants.LEFT",
-                "SwingConstants.CENTER",
-                "SwingConstants.RIGHT",
-                "SwingConstants.LEADING",
-                "SwingConstants.TRAILING"},
-            description = "The horizontal alignment of the text.")
     public void setHorizontalAlignment(int horizontalAlignment) {
         if (titleButton.getHorizontalAlignment() == horizontalAlignment)
             return;
 
-        var orgAlignment = titleButton.getHorizontalAlignment();
+        int orgAlignment = titleButton.getHorizontalAlignment();
         titleButton.setHorizontalAlignment(horizontalAlignment);
 
         firePropertyChange(HORIZONTAL_ALIGNMENT_PROPERTY, orgAlignment, titleButton.getHorizontalAlignment());
@@ -297,14 +279,11 @@ public class TogglePanel extends JPanel {
      *
      * @param iconVisible {@code false} to hide the icons.
      */
-    @BeanProperty(
-            visualUpdate = true,
-            description = "The visibility of the icon.")
     public void setIconVisible(boolean iconVisible) {
         if (this.isIconVisible() == iconVisible)
             return;
 
-        var orgIconVisible = this.iconVisible;
+        boolean orgIconVisible = this.iconVisible;
         this.iconVisible = iconVisible;
 
         if (iconVisible)
@@ -330,9 +309,6 @@ public class TogglePanel extends JPanel {
      * @param collapsed {@code true} to collapse the panel; {@code false} to
      *        expand it.
      */
-    @BeanProperty(
-            visualUpdate = true,
-            description = "The collapsed state of the toggle panel.")
     public void setCollapsed(boolean collapsed) {
         if (this.collapsed == collapsed)
             return;
@@ -349,7 +325,7 @@ public class TogglePanel extends JPanel {
 
         firePropertyChange(COLLAPSED_PROPERTY, !collapsed, collapsed);
 
-        var root = SwingUtilities.getRoot(this);
+        Component root = SwingUtilities.getRoot(this);
 
         if (root != null)
             SwingUtilities.updateComponentTreeUI(root);
@@ -366,15 +342,12 @@ public class TogglePanel extends JPanel {
     /**
      * {@inheritDoc}
      */
-    @BeanProperty(
-            visualUpdate = true,
-            description = "The focusable state of the toggle panel.")
     @Override
     public void setFocusable(boolean focusable) {
         if (titleButton.isFocusable() == focusable)
             return;
 
-        var orgFocusable = this.titleButton.isFocusable();
+        boolean orgFocusable = this.titleButton.isFocusable();
         titleButton.setFocusable(focusable);
 
         firePropertyChange(FOCUSABLE_PROPERTY, orgFocusable, focusable);
@@ -391,15 +364,12 @@ public class TogglePanel extends JPanel {
     /**
      * {@inheritDoc}
      */
-    @BeanProperty(
-            visualUpdate = true,
-            description = "The tool tip text of the toggle panel.")
     @Override
     public void setToolTipText(String text) {
         if (titleButton.getToolTipText().equals(text))
             return;
 
-        var orgToolTipText = this.titleButton.getToolTipText();
+        String orgToolTipText = this.titleButton.getToolTipText();
         super.setToolTipText(text);
 
         firePropertyChange(TOOL_TIP_TEXT_PROPERTY, orgToolTipText, text);
@@ -413,7 +383,7 @@ public class TogglePanel extends JPanel {
         if (!collapsed)
             return super.getMaximumSize();
 
-        var size = titleButton.getPreferredSize();
+        Dimension size = titleButton.getPreferredSize();
         size.width = super.getMaximumSize().width;
 
         return size;

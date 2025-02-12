@@ -220,13 +220,31 @@ public class BOMInputStreamReader extends Reader {
     private StreamDecoder getDecoder(Charset cs) throws IOException {
         Objects.requireNonNull(cs, "Charset must not be null");
 
-        Charset set = switch (getBOM()) {
-            case UTF_32_BE -> Charset.forName("UTF_32BE");
-            case UTF_32_LE -> Charset.forName("UTF_32LE");
-            case UTF_8 -> StandardCharsets.UTF_8;
-            case UTF_16_BE -> StandardCharsets.UTF_16BE;
-            case UTF_16_LE -> StandardCharsets.UTF_16LE;
-            default -> cs;
+        Charset set;
+
+        switch (getBOM()) {
+            case UTF_32_BE:
+                set = Charset.forName("UTF_32BE");
+                break;
+
+            case UTF_32_LE:
+                set = Charset.forName("UTF_32LE");
+                break;
+
+            case UTF_8:
+                set = StandardCharsets.UTF_8;
+                break;
+
+            case UTF_16_BE:
+                set = StandardCharsets.UTF_16BE;
+                break;
+
+            case UTF_16_LE:
+                set = StandardCharsets.UTF_16LE;
+                break;
+
+            default:
+                set = cs;
         };
 
         return StreamDecoder.forInputStreamReader(in, this, set);

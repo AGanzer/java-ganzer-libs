@@ -2,6 +2,7 @@ package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -90,7 +91,7 @@ public class RegularExpressionValidator extends CharCountValidator {
         if ((text.length() == 0))
             return true;
 
-        var end = firstFailurePoint(pattern, text.toString());
+        int end = firstFailurePoint(pattern, text.toString());
 
         return end == -1 || end == text.length();
     }
@@ -127,7 +128,7 @@ public class RegularExpressionValidator extends CharCountValidator {
 
     private static int firstFailurePoint(Pattern pattern, String text) {
         for (int i = 1; i <= text.length(); ++i) {
-            var m = pattern.matcher(text.substring(0, i));
+            Matcher m = pattern.matcher(text.substring(0, i));
 
             if (!m.matches() && !m.hitEnd())
                 return i - 1;

@@ -4,6 +4,7 @@ import de.ganzer.core.internals.CoreMessages;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -508,8 +509,8 @@ public class FileCopy extends FileErrorProvider {
         Objects.requireNonNull(sources, "sources");
         Objects.requireNonNull(target, "target");
 
-        var sourceFiles = sources.stream().map(File::new).collect(Collectors.toList());
-        var targetFile = new File(target);
+        List<File> sourceFiles = sources.stream().map(File::new).collect(Collectors.toList());
+        File targetFile = new File(target);
 
         clearError();
 
@@ -578,8 +579,8 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void verifyNonRecursive(File sourceFile, File targetFile) throws ErrorInfo {
-        var sourcePath = Path.of(sourceFile.getAbsolutePath());
-        var targetPath = Path.of(targetFile.getAbsolutePath());
+        Path sourcePath = Paths.get(sourceFile.getAbsolutePath());
+        Path targetPath = Paths.get(targetFile.getAbsolutePath());
 
         if (targetPath.equals(sourcePath) || targetPath.startsWith(sourcePath))
             throw new ErrorInfo(FileError.CREATE_DIR, String.format(CoreMessages.get("cannotCopyIntoItself"), sourceFile.getAbsolutePath()), true);
@@ -717,7 +718,7 @@ public class FileCopy extends FileErrorProvider {
     private void initializeCopy(File source) {
         reportInitializeProgress(source.getAbsolutePath(), 0);
 
-        for (var file : listFiles(source)) {
+        for (File file : listFiles(source)) {
             if (isDirectory(file))
                 initializeCopy(file);
             else
@@ -742,8 +743,8 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private String queryDestPath(File source, File target) {
-        Path srcPath = Path.of(source.getAbsolutePath());
-        Path dstPath = Path.of(target.getAbsolutePath(), source.getName());
+        Path srcPath = Paths.get(source.getAbsolutePath());
+        Path dstPath = Paths.get(target.getAbsolutePath(), source.getName());
 
         if (alternativeTargetPathFunction == null)
             return dstPath.toString();
@@ -799,8 +800,8 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void copyDirNoQuery(File source, String targetPath) {
-        for (var file : listFiles(source)) {
-            String newTargetPath = Path.of(targetPath, file.getName()).toString();
+        for (File file : listFiles(source)) {
+            String newTargetPath = Paths.get(targetPath, file.getName()).toString();
 
             if (isDirectory(file))
                 copyDir(file, newTargetPath);

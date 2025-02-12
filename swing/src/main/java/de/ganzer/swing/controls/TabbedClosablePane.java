@@ -93,9 +93,9 @@ public class TabbedClosablePane extends JTabbedPane {
      * @param tabIndex The zero-based index of the header.
      */
     public void fireCloseTabEvent(int tabIndex) {
-        var closeListeners = getListeners(TabCloseListener.class);
+        TabCloseListener[] closeListeners = getListeners(TabCloseListener.class);
 
-        for (var closeListener : closeListeners) {
+        for (TabCloseListener closeListener : closeListeners) {
             closeListener.closeTabPerformed(tabIndex);
         }
     }

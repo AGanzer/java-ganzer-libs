@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.WeakHashMap;
 
 /**
@@ -135,7 +136,7 @@ public class UserSettings extends Settings {
         this.appVersion = appVersion;
         this.fileName = fileName == null ? "settings" : fileName;
 
-        var key = this.appName + this.appVersion + this.fileName;
+        String key = this.appName + this.appVersion + this.fileName;
 
         if (knownSettings.get(key) != null)
             throw new DuplicateSettingException(this.fileName);
@@ -220,13 +221,13 @@ public class UserSettings extends Settings {
         String path;
 
         if (osName.startsWith("Windows"))
-            path = Path.of(home, "AppData", "Roaming", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString();
+            path = Paths.get(home, "AppData", "Roaming", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString();
         else
-            path = Path.of(home, ".config", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString();
+            path = Paths.get(home, ".config", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString();
 
         File file = new File(path);
         file.mkdirs();
 
-        return Path.of(path, fileName).toString();
+        return Paths.get(path, fileName).toString();
     }
 }

@@ -17,7 +17,7 @@ public class InputTestDialog extends JDialog {
     }
 
     public static boolean showModal(Frame owner, Data data) {
-        var dialog = new InputTestDialog(owner, data);
+        InputTestDialog dialog = new InputTestDialog(owner, data);
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setLocationRelativeTo(owner);
         dialog.setVisible(true);
@@ -54,9 +54,9 @@ public class InputTestDialog extends JDialog {
     }
 
     private void initTextField() {
-        var inputField = new JTextField(30);
+        JTextField inputField = new JTextField(30);
 
-        var pane = new JPanel();
+        JPanel pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
         pane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 

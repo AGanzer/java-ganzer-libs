@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class FilterValidatorTest {
     @Test
     void constructEmpty() {
-        var val = new FilterValidator();
+        FilterValidator val = new FilterValidator();
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals("", val.getValidMask());
@@ -16,7 +16,7 @@ class FilterValidatorTest {
 
     @Test
     void constructWithOption() {
-        var val = new FilterValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
+        FilterValidator val = new FilterValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals("", val.getValidMask());
@@ -26,7 +26,7 @@ class FilterValidatorTest {
     @Test
     void constructWithMask() {
         String vm = "0-9";
-        var val = new FilterValidator(vm);
+        FilterValidator val = new FilterValidator(vm);
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(vm, val.getValidMask());
@@ -36,7 +36,7 @@ class FilterValidatorTest {
     @Test
     void constructWithMaskAndOption() {
         String vm = "0-9";
-        var val = new FilterValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, vm);
+        FilterValidator val = new FilterValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, vm);
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(vm, val.getValidMask());
@@ -47,7 +47,7 @@ class FilterValidatorTest {
     void constructWithMasks() {
         String vm = "0-9";
         String im = "56";
-        var val = new FilterValidator(vm, im);
+        FilterValidator val = new FilterValidator(vm, im);
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(vm, val.getValidMask());
@@ -58,7 +58,7 @@ class FilterValidatorTest {
     void constructWithMasksAndOption() {
         String vm = "0-9";
         String im = "56";
-        var val = new FilterValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, vm, im);
+        FilterValidator val = new FilterValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, vm, im);
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(vm, val.getValidMask());
@@ -68,7 +68,7 @@ class FilterValidatorTest {
     @Test
     void setValidMask() {
         String vm = "0-9";
-        var val = new FilterValidator();
+        FilterValidator val = new FilterValidator();
 
         val.setValidMask(vm);
         assertEquals(vm, val.getValidMask());
@@ -78,7 +78,7 @@ class FilterValidatorTest {
     @Test
     void setInvalidMask() {
         String im = "0-9";
-        var val = new FilterValidator();
+        FilterValidator val = new FilterValidator();
 
         val.setInvalidMask(im);
         assertEquals("", val.getValidMask());
@@ -89,7 +89,7 @@ class FilterValidatorTest {
     void doInputValidation() {
         String vm = "0-9+-";
         String im = "56";
-        var val = new FilterValidator(vm, im);
+        FilterValidator val = new FilterValidator(vm, im);
 
         assertTrue(val.isValidInput(new StringBuilder(), false));
         assertFalse(val.isValidInput(new StringBuilder("12345"), false));
@@ -100,7 +100,7 @@ class FilterValidatorTest {
     void doValidate() {
         String vm = "0-9+-";
         String im = "56";
-        var val = new FilterValidator(vm, im);
+        FilterValidator val = new FilterValidator(vm, im);
 
         assertThrows(ValidatorException.class, () -> val.validate(""));
         assertThrows(ValidatorException.class, () -> val.validate("12345"));

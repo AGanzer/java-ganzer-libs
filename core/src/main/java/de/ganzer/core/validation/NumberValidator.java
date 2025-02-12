@@ -244,11 +244,11 @@ public class NumberValidator extends Validator {
         if (!super.doInputValidation(text, autoFill))
             return false;
 
-        if (text.isEmpty())
+        if (text.length() == 0)
             return true;
 
-        var t = text.toString();
-        var d = DecimalStyle.ofDefaultLocale();
+        String t = text.toString();
+        DecimalStyle d = DecimalStyle.ofDefaultLocale();
 
         if (numDecimals == 0 && t.indexOf(d.getDecimalSeparator()) != -1)
             return false;
@@ -287,7 +287,7 @@ public class NumberValidator extends Validator {
         if (text.isEmpty())
             return true;
 
-        var d = DecimalStyle.ofDefaultLocale();
+        DecimalStyle d = DecimalStyle.ofDefaultLocale();
 
         if (numDecimals == 0 && text.indexOf(d.getDecimalSeparator()) != -1) {
             er.setException(new ValidatorException(getErrorMessage() != null ? getErrorMessage() : CoreMessages.get("inputIsNotInteger")));

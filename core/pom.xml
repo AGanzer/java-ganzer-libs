@@ -6,7 +6,7 @@
 
     <groupId>de.ganzer.core</groupId>
     <artifactId>de-ganzer-core</artifactId>
-    <version>5.0.0</version>
+    <version>1.0.0</version>
     <name>de-ganzer-core</name>
     
     <dependencies>
@@ -28,8 +28,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <build>

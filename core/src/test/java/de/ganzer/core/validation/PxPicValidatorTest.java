@@ -8,12 +8,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PxPicValidatorTest {
-    private record DataPair(String input, String expected) {
+    private static class DataPair {
+        public final String input;
+        public final String expected;
+
+        private DataPair(String input, String expected) {
+            this.input = input;
+            this.expected = expected;
+        }
     }
 
     @Test
     void constructEmpty() {
-        var val = new PxPicValidator();
+        PxPicValidator val = new PxPicValidator();
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals("", val.getPicture());
@@ -21,7 +28,7 @@ class PxPicValidatorTest {
 
     @Test
     void constructWithOption() {
-        var val = new PxPicValidator(ValidatorOptions.AUTO_FILL);
+        PxPicValidator val = new PxPicValidator(ValidatorOptions.AUTO_FILL);
 
         assertEquals(ValidatorOptions.AUTO_FILL, val.getOptions());
         assertEquals("", val.getPicture());
@@ -29,8 +36,8 @@ class PxPicValidatorTest {
 
     @Test
     void constructWithPic() {
-        var pic = "*#";
-        var val = new PxPicValidator(pic);
+        String pic = "*#";
+        PxPicValidator val = new PxPicValidator(pic);
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(pic, val.getPicture());
@@ -43,8 +50,8 @@ class PxPicValidatorTest {
 
     @Test
     void constructWithPicAndOption() {
-        var pic = "*#";
-        var val = new PxPicValidator(ValidatorOptions.AUTO_FILL, pic);
+        String pic = "*#";
+        PxPicValidator val = new PxPicValidator(ValidatorOptions.AUTO_FILL, pic);
 
         assertEquals(ValidatorOptions.AUTO_FILL, val.getOptions());
         assertEquals(pic, val.getPicture());
@@ -57,8 +64,8 @@ class PxPicValidatorTest {
 
     @Test
     void setPicture() {
-        var pic = "*#";
-        var val = new PxPicValidator();
+        String pic = "*#";
+        PxPicValidator val = new PxPicValidator();
 
         val.setPicture(pic);
         assertEquals(pic, val.getPicture());
@@ -66,13 +73,13 @@ class PxPicValidatorTest {
 
     @Test
     void setPictureInvalid() {
-        var val = new PxPicValidator();
+        PxPicValidator val = new PxPicValidator();
         assertThrows(IllegalArgumentException.class, () -> val.setPicture("[*#"));
     }
 
     @Test
     void checkSyntax() {
-        var val = new PxPicValidator();
+        PxPicValidator val = new PxPicValidator();
 
         assertTrue(val.checkSyntax(""));
         assertTrue(val.checkSyntax("{White,Gr{ay,een},B{l{ack,ue},rown},Red}"));
@@ -91,7 +98,7 @@ class PxPicValidatorTest {
 
     @Test
     void doInputValidationColorsAutoFill() {
-        var val = new PxPicValidator("{White,Gr{ay,een},B{l{ack,ue},rown},Red}");
+        PxPicValidator val = new PxPicValidator("{White,Gr{ay,een},B{l{ack,ue},rown},Red}");
 
         List<DataPair> validData = Arrays.asList(
                 new DataPair("W", "White"),
@@ -110,25 +117,25 @@ class PxPicValidatorTest {
                 new DataPair("Gray1", "Gray1"));
 
         for (DataPair d: validData) {
-            var input = new StringBuilder(d.input());
-            var result = val.isValidInput(input, true);
+            StringBuilder input = new StringBuilder(d.input);
+            boolean result = val.isValidInput(input, true);
 
-            assertEquals(d.expected(), input.toString());
+            assertEquals(d.expected, input.toString());
             assertTrue(result);
         }
 
         for (DataPair d: invalidData) {
-            var input = new StringBuilder(d.input());
-            var result = val.isValidInput(input, true);
+            StringBuilder input = new StringBuilder(d.input);
+            boolean result = val.isValidInput(input, true);
 
-            assertEquals(d.expected(), input.toString());
+            assertEquals(d.expected, input.toString());
             assertFalse(result);
         }
     }
 
     @Test
     void doInputValidationColorsNoAutoFill() {
-        var val = new PxPicValidator(ValidatorOptions.NONE, "{White,Gr{ay,een},B{l{ack,ue},rown},Red}");
+        PxPicValidator val = new PxPicValidator(ValidatorOptions.NONE, "{White,Gr{ay,een},B{l{ack,ue},rown},Red}");
 
         List<DataPair> validData = Arrays.asList(
                 new DataPair("W", "W"),
@@ -142,17 +149,17 @@ class PxPicValidatorTest {
                 new DataPair("r", "R"));
 
         for (DataPair d: validData) {
-            var input = new StringBuilder(d.input());
-            var result = val.isValidInput(input, true);
+            StringBuilder input = new StringBuilder(d.input);
+            boolean result = val.isValidInput(input, true);
 
-            assertEquals(d.expected(), input.toString());
+            assertEquals(d.expected, input.toString());
             assertTrue(result);
         }
     }
 
     @Test
     void doInputValidationDateAutoFill() {
-        var val = new PxPicValidator("##/##/##[##]");
+        PxPicValidator val = new PxPicValidator("##/##/##[##]");
 
         List<DataPair> validData = Arrays.asList(
                 new DataPair("1", "1"),
@@ -168,25 +175,25 @@ class PxPicValidatorTest {
 
 
         for (DataPair d: validData) {
-            var input = new StringBuilder(d.input());
-            var result = val.isValidInput(input, true);
+            StringBuilder input = new StringBuilder(d.input);
+            boolean result = val.isValidInput(input, true);
 
-            assertEquals(d.expected(), input.toString());
+            assertEquals(d.expected, input.toString());
             assertTrue(result);
         }
 
         for (DataPair d: invalidData) {
-            var input = new StringBuilder(d.input());
-            var result = val.isValidInput(input, true);
+            StringBuilder input = new StringBuilder(d.input);
+            boolean result = val.isValidInput(input, true);
 
-            assertEquals(d.expected(), input.toString());
+            assertEquals(d.expected, input.toString());
             assertFalse(result);
         }
     }
 
     @Test
     void doInputValidationDateNoAutoFill() {
-        var val = new PxPicValidator(ValidatorOptions.NONE, "##/##/##[##]");
+        PxPicValidator val = new PxPicValidator(ValidatorOptions.NONE, "##/##/##[##]");
 
         List<DataPair> validData = Arrays.asList(
                 new DataPair("1", "1"),
@@ -194,17 +201,17 @@ class PxPicValidatorTest {
                 new DataPair("12/", "12/"));
 
         for (DataPair d: validData) {
-            var input = new StringBuilder(d.input());
-            var result = val.isValidInput(input, true);
+            StringBuilder input = new StringBuilder(d.input);
+            boolean result = val.isValidInput(input, true);
 
-            assertEquals(d.expected(), input.toString());
+            assertEquals(d.expected, input.toString());
             assertTrue(result);
         }
     }
 
     @Test
     void doValidateColors() {
-        var val = new PxPicValidator("{White,Gr{ay,een},B{l{ack,ue},rown},Red}");
+        PxPicValidator val = new PxPicValidator("{White,Gr{ay,een},B{l{ack,ue},rown},Red}");
 
         List<String> validInput = Arrays.asList(
                 "White",
@@ -230,7 +237,7 @@ class PxPicValidatorTest {
 
     @Test
     void doValidateDate() {
-        var val = new PxPicValidator("##/##/##[##]");
+        PxPicValidator val = new PxPicValidator("##/##/##[##]");
 
         List<String> validInput = Arrays.asList(
                 "12/12/12",

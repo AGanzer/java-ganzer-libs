@@ -64,11 +64,11 @@ class GMathTest {
             "12, 0, 11, 11"
     })
     void testToRangeInt(String value, String minimum, String maximum, String expected) {
-        var val = Integer.parseInt(value);
-        var min = Integer.parseInt(minimum);
-        var max = Integer.parseInt(maximum);
-        var exp = Integer.parseInt(expected);
-        var res = GMath.toRange(val, min, max);
+        int val = Integer.parseInt(value);
+        int min = Integer.parseInt(minimum);
+        int max = Integer.parseInt(maximum);
+        int exp = Integer.parseInt(expected);
+        int res = GMath.toRange(val, min, max);
 
         assertEquals(exp, res);
     }
@@ -82,11 +82,11 @@ class GMathTest {
             "12, 0, 11, 11"
     })
     void testToRangeLong(String value, String minimum, String maximum, String expected) {
-        var val = Long.parseLong(value);
-        var min = Long.parseLong(minimum);
-        var max = Long.parseLong(maximum);
-        var exp = Long.parseLong(expected);
-        var res = GMath.toRange(val, min, max);
+        long val = Long.parseLong(value);
+        long min = Long.parseLong(minimum);
+        long max = Long.parseLong(maximum);
+        long exp = Long.parseLong(expected);
+        long res = GMath.toRange(val, min, max);
 
         assertEquals(exp, res);
     }
@@ -100,11 +100,11 @@ class GMathTest {
             "12, 0, 11, 11"
     })
     void testToRangeFloat(String value, String minimum, String maximum, String expected) {
-        var val = Float.parseFloat(value);
-        var min = Float.parseFloat(minimum);
-        var max = Float.parseFloat(maximum);
-        var exp = Float.parseFloat(expected);
-        var res = GMath.toRange(val, min, max);
+        float val = Float.parseFloat(value);
+        float min = Float.parseFloat(minimum);
+        float max = Float.parseFloat(maximum);
+        float exp = Float.parseFloat(expected);
+        float res = GMath.toRange(val, min, max);
 
         assertEquals(exp, res);
     }
@@ -118,11 +118,11 @@ class GMathTest {
             "12, 0, 11, 11"
     })
     void testToRangeDouble(String value, String minimum, String maximum, String expected) {
-        var val = Double.parseDouble(value);
-        var min = Double.parseDouble(minimum);
-        var max = Double.parseDouble(maximum);
-        var exp = Double.parseDouble(expected);
-        var res = GMath.toRange(val, min, max);
+        double val = Double.parseDouble(value);
+        double min = Double.parseDouble(minimum);
+        double max = Double.parseDouble(maximum);
+        double exp = Double.parseDouble(expected);
+        double res = GMath.toRange(val, min, max);
 
         assertEquals(exp, res);
     }
@@ -136,11 +136,11 @@ class GMathTest {
             "12, 0, 11, false"
     })
     void testIsInRangeInt(String value, String minimum, String maximum, String expected) {
-        var val = Integer.parseInt(value);
-        var min = Integer.parseInt(minimum);
-        var max = Integer.parseInt(maximum);
-        var exp = expected.equals("true");
-        var res = GMath.isInRange(val, min, max);
+        int val = Integer.parseInt(value);
+        int min = Integer.parseInt(minimum);
+        int max = Integer.parseInt(maximum);
+        boolean exp = expected.equals("true");
+        boolean res = GMath.isInRange(val, min, max);
 
         assertEquals(exp, res);
     }
@@ -154,11 +154,11 @@ class GMathTest {
             "12, 0, 11, false"
     })
     void testIsInRangeLong(String value, String minimum, String maximum, String expected) {
-        var val = Long.parseLong(value);
-        var min = Long.parseLong(minimum);
-        var max = Long.parseLong(maximum);
-        var exp = expected.equals("true");
-        var res = GMath.isInRange(val, min, max);
+        long val = Long.parseLong(value);
+        long min = Long.parseLong(minimum);
+        long max = Long.parseLong(maximum);
+        boolean exp = expected.equals("true");
+        boolean res = GMath.isInRange(val, min, max);
 
         assertEquals(exp, res);
     }
@@ -172,11 +172,11 @@ class GMathTest {
             "12, 0, 11, false"
     })
     void testIsInRangeFloat(String value, String minimum, String maximum, String expected) {
-        var val = Float.parseFloat(value);
-        var min = Float.parseFloat(minimum);
-        var max = Float.parseFloat(maximum);
-        var exp = expected.equals("true");
-        var res = GMath.isInRange(val, min, max);
+        float val = Float.parseFloat(value);
+        float min = Float.parseFloat(minimum);
+        float max = Float.parseFloat(maximum);
+        boolean exp = expected.equals("true");
+        boolean res = GMath.isInRange(val, min, max);
 
         assertEquals(exp, res);
     }
@@ -190,11 +190,11 @@ class GMathTest {
             "12, 0, 11, false"
     })
     void testIsInRangeDouble(String value, String minimum, String maximum, String expected) {
-        var val = Double.parseDouble(value);
-        var min = Double.parseDouble(minimum);
-        var max = Double.parseDouble(maximum);
-        var exp = expected.equals("true");
-        var res = GMath.isInRange(val, min, max);
+        double val = Double.parseDouble(value);
+        double min = Double.parseDouble(minimum);
+        double max = Double.parseDouble(maximum);
+        boolean exp = expected.equals("true");
+        boolean res = GMath.isInRange(val, min, max);
 
         assertEquals(exp, res);
     }

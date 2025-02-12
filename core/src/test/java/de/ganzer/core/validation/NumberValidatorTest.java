@@ -16,7 +16,7 @@ class NumberValidatorTest {
 
     @Test
     void constructEmpty() {
-        var val = new NumberValidator();
+        NumberValidator val = new NumberValidator();
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(Long.MIN_VALUE, val.getMinValue());
@@ -28,7 +28,7 @@ class NumberValidatorTest {
 
     @Test
     void constructWithOption() {
-        var val = new NumberValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
+        NumberValidator val = new NumberValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(Long.MIN_VALUE, val.getMinValue());
@@ -40,9 +40,9 @@ class NumberValidatorTest {
 
     @Test
     void constructWithValues() {
-        var min = -100.0;
-        var max = 100.0;
-        var val = new NumberValidator(min, max);
+        double min = -100.0;
+        double max = 100.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(min, val.getMinValue());
@@ -54,9 +54,9 @@ class NumberValidatorTest {
 
     @Test
     void constructWithValuesAndOption() {
-        var min = -100.0;
-        var max = 100.0;
-        var val = new NumberValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, min, max);
+        double min = -100.0;
+        double max = 100.0;
+        NumberValidator val = new NumberValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, min, max);
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(min, val.getMinValue());
@@ -68,10 +68,10 @@ class NumberValidatorTest {
 
     @Test
     void setMinValue() {
-        var min = -100.0;
-        var max = 100.0;
-        var newMin = 0.0;
-        var val = new NumberValidator(min, max);
+        double min = -100.0;
+        double max = 100.0;
+        double newMin = 0.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         val.setMinValue(newMin);
         assertEquals(newMin, val.getMinValue());
@@ -80,10 +80,10 @@ class NumberValidatorTest {
 
     @Test
     void setMinValueGreaterThanMax() {
-        var min = -100.0;
-        var max = 100.0;
-        var newMin = 200.0;
-        var val = new NumberValidator(min, max);
+        double min = -100.0;
+        double max = 100.0;
+        double newMin = 200.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         val.setMinValue(newMin);
         assertEquals(newMin, val.getMinValue());
@@ -92,10 +92,10 @@ class NumberValidatorTest {
 
     @Test
     void setMaxValue() {
-        var min = -100.0;
-        var max = 100.0;
-        var newMax = 0.0;
-        var val = new NumberValidator(min, max);
+        double min = -100.0;
+        double max = 100.0;
+        double newMax = 0.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         val.setMaxValue(newMax);
         assertEquals(min, val.getMinValue());
@@ -104,10 +104,10 @@ class NumberValidatorTest {
 
     @Test
     void setMaxValueLessThanMin() {
-        var min = -100.0;
-        var max = 100.0;
-        var newMax = -200.0;
-        var val = new NumberValidator(min, max);
+        double min = -100.0;
+        double max = 100.0;
+        double newMax = -200.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         val.setMaxValue(newMax);
         assertEquals(newMax, val.getMinValue());
@@ -116,9 +116,9 @@ class NumberValidatorTest {
 
     @Test
     void setRange() {
-        var val = new NumberValidator();
-        var min = -100.0;
-        var max = 100.0;
+        NumberValidator val = new NumberValidator();
+        double min = -100.0;
+        double max = 100.0;
 
         val.setRange(min, max);
 
@@ -128,16 +128,16 @@ class NumberValidatorTest {
 
     @Test
     void setRangeIllegal() {
-        var val = new NumberValidator();
-        var min = -100.0;
-        var max = 100.0;
+        NumberValidator val = new NumberValidator();
+        double min = -100.0;
+        double max = 100.0;
 
         assertThrows(IllegalArgumentException.class, () -> val.setRange(max, min));
     }
 
     @Test
     void setNumDecimals() {
-        var val = new NumberValidator();
+        NumberValidator val = new NumberValidator();
 
         val.setNumDecimals(2);
         assertEquals(2, val.getNumDecimals());
@@ -145,8 +145,8 @@ class NumberValidatorTest {
 
     @Test
     void setDisplayFormat() {
-        var format = "%.2f";
-        var val = new NumberValidator();
+        String format = "%.2f";
+        NumberValidator val = new NumberValidator();
 
         val.setDisplayFormat(format);
         assertEquals(format, val.getDisplayFormat());
@@ -158,8 +158,8 @@ class NumberValidatorTest {
 
     @Test
     void setEditFormat() {
-        var format = "%.2f";
-        var val = new NumberValidator();
+        String format = "%.2f";
+        NumberValidator val = new NumberValidator();
 
         val.setEditFormat(format);
         assertEquals(format, val.getEditFormat());
@@ -171,9 +171,9 @@ class NumberValidatorTest {
 
     @Test
     void doInputValidation() {
-        var min = -100.0;
-        var max = 100.0;
-        var val = new NumberValidator(min, max);
+        double min = -100.0;
+        double max = 100.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         assertTrue(val.isValidInput(new StringBuilder("-100"), false));
         assertTrue(val.isValidInput(new StringBuilder("100"), false));
@@ -184,9 +184,9 @@ class NumberValidatorTest {
 
     @Test
     void doInputValidationNegativeOnly() {
-        var min = -100.0;
-        var max = -50.0;
-        var val = new NumberValidator(min, max);
+        double min = -100.0;
+        double max = -50.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         assertTrue(val.isValidInput(new StringBuilder("-"), false));
         assertFalse(val.isValidInput(new StringBuilder("+"), false));
@@ -195,9 +195,9 @@ class NumberValidatorTest {
 
     @Test
     void doInputValidationPositiveOnly() {
-        var min = 0.0;
-        var max = 100.0;
-        var val = new NumberValidator(min, max);
+        double min = 0.0;
+        double max = 100.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         assertFalse(val.isValidInput(new StringBuilder("+"), false));
         assertFalse(val.isValidInput(new StringBuilder("-"), false));
@@ -206,9 +206,9 @@ class NumberValidatorTest {
 
     @Test
     void doInputValidationDecimalsAllowed() {
-        var min = 0.0;
-        var max = 100.0;
-        var val = new NumberValidator(min, max);
+        double min = 0.0;
+        double max = 100.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         val.setNumDecimals(1);
         assertTrue(val.isValidInput(new StringBuilder("100,0"), false));
@@ -217,9 +217,9 @@ class NumberValidatorTest {
 
     @Test
     void doValidate() {
-        var min = -100.0;
-        var max = 100.0;
-        var val = new NumberValidator(min, max);
+        double min = -100.0;
+        double max = 100.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         assertDoesNotThrow(() -> val.validate("-100"));
         assertDoesNotThrow(() -> val.validate("100"));
@@ -233,9 +233,9 @@ class NumberValidatorTest {
 
     @Test
     void doValidateNegativeOnly() {
-        var min = -100.0;
-        var max = -50.0;
-        var val = new NumberValidator(min, max);
+        double min = -100.0;
+        double max = -50.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         assertDoesNotThrow(() -> val.validate("-100"));
         assertThrows(ValidatorException.class, () -> val.validate("101"));
@@ -243,9 +243,9 @@ class NumberValidatorTest {
 
     @Test
     void doValidatePositiveOnly() {
-        var min = 0.0;
-        var max = 50.0;
-        var val = new NumberValidator(min, max);
+        double min = 0.0;
+        double max = 50.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         assertDoesNotThrow(() -> val.validate("50"));
         assertThrows(ValidatorException.class, () -> val.validate("-1"));
@@ -253,9 +253,9 @@ class NumberValidatorTest {
 
     @Test
     void doValidateDecimalsAllowed() {
-        var min = 0.0;
-        var max = 50.0;
-        var val = new NumberValidator(min, max);
+        double min = 0.0;
+        double max = 50.0;
+        NumberValidator val = new NumberValidator(min, max);
 
         val.setNumDecimals(1);
         assertDoesNotThrow(() -> val.validate("5,1"));
@@ -264,7 +264,7 @@ class NumberValidatorTest {
 
     @Test
     void doFormatTextDisplay() {
-        var val = new NumberValidator();
+        NumberValidator val = new NumberValidator();
 
         assertEquals("12.345", val.formatText("12345", TextFormat.DISPLAY));
         assertEquals("12.456", val.formatText("12456,01", TextFormat.DISPLAY));
@@ -272,7 +272,7 @@ class NumberValidatorTest {
 
     @Test
     void doFormatTextEdit() {
-        var val = new NumberValidator();
+        NumberValidator val = new NumberValidator();
 
         assertEquals("12345", val.formatText("12.345", TextFormat.EDIT));
         assertEquals("12456", val.formatText("12.456,01", TextFormat.EDIT));
@@ -280,7 +280,7 @@ class NumberValidatorTest {
 
     @Test
     void doFormatTextDisplayWithDecimals() {
-        var val = new NumberValidator();
+        NumberValidator val = new NumberValidator();
 
         val.setNumDecimals(2);
         assertEquals("12.345,00", val.formatText("12345", TextFormat.DISPLAY));
@@ -289,7 +289,7 @@ class NumberValidatorTest {
 
     @Test
     void doFormatTextEditWithDecimals() {
-        var val = new NumberValidator();
+        NumberValidator val = new NumberValidator();
 
         val.setNumDecimals(2);
         assertEquals("12345", val.formatText("12.345", TextFormat.EDIT));

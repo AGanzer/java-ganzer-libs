@@ -75,8 +75,8 @@ public class PxPicValidator extends CharCountValidator {
             // literal characters from the picture over to the text:
             //
             if (result == Status.INCOMPLETE && fill) {
-                var reprocess = false;
-                var specchars = "#?&!@*{}[],";
+                boolean reprocess = false;
+                String specchars = "#?&!@*{}[],";
 
                 while (idxPic < picture.length() && specchars.indexOf(picture.charAt(idxPic)) < 0) {
                     if (picture.charAt(idxPic) == ';')
@@ -530,9 +530,9 @@ public class PxPicValidator extends CharCountValidator {
         if (lastChar == '*' && (picture.length() < 2 || prevLastChar != ';'))
             return false;
 
-        var brk_level = 0;
-        var brc_level = 0;
-        var groups = "[]{}";
+        int brk_level = 0;
+        int brc_level = 0;
+        String groups = "[]{}";
 
         for (int p = 0; p < picture.length(); ++p) {
             switch (picture.charAt(p)) {

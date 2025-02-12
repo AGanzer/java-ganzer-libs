@@ -26,7 +26,7 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     }
 
     public static boolean showModal(Window owner, Data data) {
-        var dialog = new LoginDialog(owner, DEFAULT_MODALITY_TYPE);
+        LoginDialog dialog = new LoginDialog(owner, DEFAULT_MODALITY_TYPE);
         dialog.initControls(data);
         dialog.setVisible(true);
 
@@ -64,10 +64,10 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     }
 
     private void initLayout() {
-        var nameLabel = new JLabel("Name:");
-        var passwordLabel = new JLabel("Password:");
-        var buttonPanel = initButtons();
-        var layout = new GroupLayout(getContentPane());
+        JLabel nameLabel = new JLabel("Name:");
+        JLabel passwordLabel = new JLabel("Password:");
+        JPanel buttonPanel = initButtons();
+        GroupLayout layout = new GroupLayout(getContentPane());
 
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
@@ -99,15 +99,15 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     }
 
     private JPanel initButtons() {
-        var okButton = new JButton("OK");
+        JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> updateDataAndClose());
         getRootPane().setDefaultButton(okButton);
 
-        var cancelButton = new JButton("Cancel");
+        JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(e -> closeWindow(true));
 
-        var panel = new JPanel();
-        var layout = new GroupLayout(panel);
+        JPanel panel = new JPanel();
+        GroupLayout layout = new GroupLayout(panel);
 
         layout.setAutoCreateGaps(true);
 

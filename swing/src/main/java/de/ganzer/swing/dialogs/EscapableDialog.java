@@ -131,9 +131,9 @@ public class EscapableDialog extends JDialog implements EscapableWindow {
      */
     @Override
     protected JRootPane createRootPane() {
-        final var ACTION_MAP_KEY = "EscKeyClick-de.ganzer.swing";
+        final String ACTION_MAP_KEY = "EscKeyClick-de.ganzer.swing";
 
-        var root = super.createRootPane();
+        JRootPane root = super.createRootPane();
 
         root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),

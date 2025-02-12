@@ -225,7 +225,7 @@ public class ValidationFilter extends DocumentFilter {
      *         {@link ValidationBehavior#THROW_EXCEPTION}.
      */
     public boolean validate(ValidationBehavior behavior) {
-        var e = doValidation();
+        ValidatorException e = doValidation();
 
         if (e == null) {
             resetVisualHints();
@@ -245,7 +245,7 @@ public class ValidationFilter extends DocumentFilter {
             super.insertString(fb, offset, string, attr);
             updating = false;
         } else {
-            var textToInsert = doInputValidation(fb, offset, 0, string);
+            String textToInsert = doInputValidation(fb, offset, 0, string);
 
             if (textToInsert != null)
                 fb.insertString(offset, textToInsert, attr);
@@ -261,7 +261,7 @@ public class ValidationFilter extends DocumentFilter {
             super.replace(fb, offset, length, text, attrs);
             updating = false;
         } else {
-            var textToInsert = doInputValidation(fb, offset, length, text);
+            String textToInsert = doInputValidation(fb, offset, length, text);
 
             if (textToInsert != null)
                 fb.replace(offset, length, textToInsert, attrs);
@@ -272,7 +272,7 @@ public class ValidationFilter extends DocumentFilter {
         textField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                var newText = validator.formatText(textField.getText(), TextFormat.EDIT);
+                String newText = validator.formatText(textField.getText(), TextFormat.EDIT);
 
                 if (!newText.equals(textField.getText())) {
                     updating = true;
@@ -287,7 +287,7 @@ public class ValidationFilter extends DocumentFilter {
                 if (validateOnFocusLost)
                     validate(ValidationBehavior.SET_VISUAL_HINTS);
 
-                var newText = validator.formatText(textField.getText(), TextFormat.DISPLAY);
+                String newText = validator.formatText(textField.getText(), TextFormat.DISPLAY);
 
                 if (!newText.equals(textField.getText())) {
                     updating = true;
@@ -298,10 +298,10 @@ public class ValidationFilter extends DocumentFilter {
     }
 
     private String doInputValidation(FilterBypass fb, int offset, int length, String text) throws BadLocationException {
-        var textToValidate = getCompleteText(fb, offset, length, text);
-        var fullTextLength = textToValidate.length();
-        var orgTextLength = textField.getDocument().getLength();
-        var appending = isAppending(orgTextLength, length, offset);
+        StringBuilder textToValidate = getCompleteText(fb, offset, length, text);
+        int fullTextLength = textToValidate.length();
+        int orgTextLength = textField.getDocument().getLength();
+        boolean appending = isAppending(orgTextLength, length, offset);
 
         if (validator.isValidInput(textToValidate, appending)) {
             return appending
@@ -313,8 +313,8 @@ public class ValidationFilter extends DocumentFilter {
     }
 
     private StringBuilder getCompleteText(FilterBypass fb, int offset, int length, String text) throws BadLocationException {
-        var textLength = textField.getDocument().getLength();
-        var completeText = new StringBuilder(fb.getDocument().getText(0, textLength));
+        int textLength = textField.getDocument().getLength();
+        StringBuilder completeText = new StringBuilder(fb.getDocument().getText(0, textLength));
 
         completeText.replace(offset, offset + length, text);
 

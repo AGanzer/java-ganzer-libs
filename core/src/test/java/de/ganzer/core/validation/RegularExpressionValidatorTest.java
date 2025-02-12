@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RegularExpressionValidatorTest {
     @Test
     void constructEmpty() {
-        var val = new RegularExpressionValidator();
+        RegularExpressionValidator val = new RegularExpressionValidator();
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertNull(val.getPattern());
@@ -17,7 +17,7 @@ class RegularExpressionValidatorTest {
 
     @Test
     void constructWithOption() {
-        var val = new RegularExpressionValidator(ValidatorOptions.BLANKS_VALID);
+        RegularExpressionValidator val = new RegularExpressionValidator(ValidatorOptions.BLANKS_VALID);
 
         assertEquals(ValidatorOptions.BLANKS_VALID, val.getOptions());
         assertNull(val.getPattern());
@@ -25,8 +25,8 @@ class RegularExpressionValidatorTest {
 
     @Test
     void constructWithPic() {
-        var pat = Pattern.compile("\\d*");
-        var val = new RegularExpressionValidator(pat);
+        Pattern pat = Pattern.compile("\\d*");
+        RegularExpressionValidator val = new RegularExpressionValidator(pat);
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(pat, val.getPattern());
@@ -34,8 +34,8 @@ class RegularExpressionValidatorTest {
 
     @Test
     void constructWithPicAndOption() {
-        var pat = Pattern.compile("\\d*");
-        var val = new RegularExpressionValidator(ValidatorOptions.BLANKS_VALID, pat);
+        Pattern pat = Pattern.compile("\\d*");
+        RegularExpressionValidator val = new RegularExpressionValidator(ValidatorOptions.BLANKS_VALID, pat);
 
         assertEquals(ValidatorOptions.BLANKS_VALID, val.getOptions());
         assertEquals(pat, val.getPattern());
@@ -43,8 +43,8 @@ class RegularExpressionValidatorTest {
     
     @Test
     void setPattern() {
-        var pat = Pattern.compile("\\d*");
-        var val = new RegularExpressionValidator();
+        Pattern pat = Pattern.compile("\\d*");
+        RegularExpressionValidator val = new RegularExpressionValidator();
 
         val.setPattern(pat);
         assertEquals(pat, val.getPattern());
@@ -52,7 +52,7 @@ class RegularExpressionValidatorTest {
 
     @Test
     void doInputValidation() {
-        var val = new RegularExpressionValidator(Pattern.compile("\\d\\d\\d \\d"));
+        RegularExpressionValidator val = new RegularExpressionValidator(Pattern.compile("\\d\\d\\d \\d"));
 
         assertTrue(val.isValidInput(new StringBuilder("0"), false));
         assertTrue(val.isValidInput(new StringBuilder("456"), false));
@@ -66,7 +66,7 @@ class RegularExpressionValidatorTest {
 
     @Test
     void doValidate() {
-        var val = new RegularExpressionValidator(Pattern.compile("\\d*3 \\d"));
+        RegularExpressionValidator val = new RegularExpressionValidator(Pattern.compile("\\d*3 \\d"));
 
         assertDoesNotThrow(() -> val.validate("123 5"));
         assertThrows(ValidatorException.class, () -> val.validate("123 "));
@@ -77,7 +77,7 @@ class RegularExpressionValidatorTest {
 
     @Test
     void doValidate2() {
-        var val = new RegularExpressionValidator(Pattern.compile("\\d*3 "));
+        RegularExpressionValidator val = new RegularExpressionValidator(Pattern.compile("\\d*3 "));
 
         assertDoesNotThrow(() -> val.validate("123 "));
         assertThrows(ValidatorException.class, () -> val.validate("123"));

@@ -59,8 +59,8 @@ class BOMInputStreamReaderTest {
     }
 
     private static void write(Charset cs, byte[] bom) {
-        try (var fos = new FileOutputStream(cs.name());
-             var osw = new OutputStreamWriter(fos, cs)
+        try (FileOutputStream fos = new FileOutputStream(cs.name());
+             OutputStreamWriter osw = new OutputStreamWriter(fos, cs)
         ) {
             if (bom != null)
                 fos.write(bom, 0, bom.length);
@@ -72,10 +72,10 @@ class BOMInputStreamReaderTest {
     }
 
     private static String read(String filename) {
-        try (var fis = new FileInputStream(filename);
-             var isr = new BOMInputStreamReader(fis, StandardCharsets.ISO_8859_1)
+        try (FileInputStream fis = new FileInputStream(filename);
+             BOMInputStreamReader isr = new BOMInputStreamReader(fis, StandardCharsets.ISO_8859_1)
         ) {
-            var bir = new BufferedReader(isr);
+            BufferedReader bir = new BufferedReader(isr);
             return bir.readLine();
         } catch (IOException e) {
             e.printStackTrace(System.err);

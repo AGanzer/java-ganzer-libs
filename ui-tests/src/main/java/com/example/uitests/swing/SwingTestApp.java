@@ -20,7 +20,7 @@ public class SwingTestApp {
             e.printStackTrace(System.err);
         }
 
-        var frame = new MainFrame();
+        MainFrame frame = new MainFrame();
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent ignored) {

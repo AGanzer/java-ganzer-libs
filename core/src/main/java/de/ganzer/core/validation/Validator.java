@@ -77,7 +77,7 @@ public class Validator {
      * @param errorMessage The error message to use if a text is invalid.
      */
     public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage == null || errorMessage.isBlank() || errorMessage.isEmpty()
+        this.errorMessage = errorMessage == null || errorMessage.trim().isEmpty() || errorMessage.isEmpty()
                 ? null
                 : errorMessage;
     }

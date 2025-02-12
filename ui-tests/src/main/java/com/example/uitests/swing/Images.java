@@ -1,10 +1,11 @@
 package com.example.uitests.swing;
 
 import javax.swing.*;
+import java.net.URL;
 
 public final class Images {
     public static Icon load(String id) {
-        var imageUrl = Images.class.getResource("images/" + id + ".png");
+        URL imageUrl = Images.class.getResource("images/" + id + ".png");
 
         if (imageUrl == null)
             return null;

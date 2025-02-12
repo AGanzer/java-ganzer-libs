@@ -26,6 +26,6 @@ public final class Strings {
      *         only whitespaces.
      */
     public static boolean isNullOrBlank(final String str) {
-        return str == null || str.isBlank();
+        return str == null || str.trim().isEmpty();
     }
 }

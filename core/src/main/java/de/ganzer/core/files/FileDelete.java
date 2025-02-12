@@ -241,7 +241,7 @@ public class FileDelete extends FileErrorProvider {
     public boolean start(List<String> sources, boolean suppressInit) {
         Objects.requireNonNull(sources, "sources");
 
-        var sourceFiles = sources.stream().map(File::new).collect(Collectors.toList());
+        List<File> sourceFiles = sources.stream().map(File::new).collect(Collectors.toList());
 
         clearError();
 
@@ -315,7 +315,7 @@ public class FileDelete extends FileErrorProvider {
     private void initializeDelete(File source) {
         reportInitializeProgress(source.getAbsolutePath(), 1);
 
-        for (var file : listFiles(source)) {
+        for (File file : listFiles(source)) {
             if (isDirectory(file))
                 initializeDelete(file);
             else
@@ -396,7 +396,7 @@ public class FileDelete extends FileErrorProvider {
     }
 
     private void deleteDirNoQuery(File source) {
-        for (var file : listFiles(source)) {
+        for (File file : listFiles(source)) {
             if (isDirectory(file)) {
                 deleteDir(file);
                 reportDelete(file, DeleteProgressStatus.DELETE_DIRECTORY);

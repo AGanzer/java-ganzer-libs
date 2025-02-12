@@ -4,8 +4,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import java.awt.Component;
-import java.beans.BeanProperty;
-import java.beans.JavaBean;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +13,6 @@ import java.util.List;
  * Defines a panel that contains collapsable panels to create an accordion panel.
  */
 @SuppressWarnings("unused")
-@JavaBean(defaultProperty = "iconsVisible", description = "A component which provides a collection of collapsable containers.")
 public class Accordion extends JPanel implements Iterable<TogglePanel> {
     public static final String ICON_VISIBLE_PROPERTY = "iconVisible";
     public static final String HORIZONTAL_ALIGNMENT_PROPERTY = "horizontalAlignment";
@@ -65,17 +62,14 @@ public class Accordion extends JPanel implements Iterable<TogglePanel> {
      *
      * @param iconsVisible {@code false} to hide the icons.
      */
-    @BeanProperty(
-            visualUpdate = true,
-            description = "The visibility of the icons in the contained toggle panels.")
     public void setIconsVisible(boolean iconsVisible) {
         if (this.iconsVisible == iconsVisible)
             return;
 
-        var orgIconVisible = this.iconsVisible;
+        boolean orgIconVisible = this.iconsVisible;
         this.iconsVisible = iconsVisible;
 
-        for (var panel: panels)
+        for (TogglePanel panel: panels)
             panel.setIconVisible(iconsVisible);
 
         firePropertyChange(ICON_VISIBLE_PROPERTY, orgIconVisible, iconsVisible);
@@ -99,23 +93,14 @@ public class Accordion extends JPanel implements Iterable<TogglePanel> {
      *        {@link SwingConstants#CENTER},  {@link SwingConstants#RIGHT},
      *        {@link SwingConstants#LEADING} or {@link SwingConstants#TRAILING}.
      */
-    @BeanProperty(
-            visualUpdate = true,
-            enumerationValues = {
-                    "SwingConstants.LEFT",
-                    "SwingConstants.CENTER",
-                    "SwingConstants.RIGHT",
-                    "SwingConstants.LEADING",
-                    "SwingConstants.TRAILING"},
-            description = "The horizontal alignment of the text of the contained toggle panels.")
     public void setHorizontalAlignment(int horizontalAlignment) {
         if (this.horizontalAlignment == horizontalAlignment)
             return;
 
-        var orgAlignment = this.horizontalAlignment;
+        int orgAlignment = this.horizontalAlignment;
         this.horizontalAlignment = horizontalAlignment;
 
-        for (var panel: panels)
+        for (TogglePanel panel: panels)
             panel.setHorizontalAlignment(orgAlignment);
 
         firePropertyChange(HORIZONTAL_ALIGNMENT_PROPERTY, orgAlignment, this.horizontalAlignment);
@@ -141,18 +126,15 @@ public class Accordion extends JPanel implements Iterable<TogglePanel> {
     /**
      * {@inheritDoc}
      */
-    @BeanProperty(
-            visualUpdate = true,
-            description = "The focusable state of the contained toggle panels.")
     @Override
     public void setFocusable(boolean focusable) {
         if (this.focusable == focusable)
             return;
 
-        var orgFocusable = this.focusable;
+        boolean orgFocusable = this.focusable;
         this.focusable = focusable;
 
-        for (var panel: panels)
+        for (TogglePanel panel: panels)
             panel.setFocusable(focusable);
 
         firePropertyChange(FOCUSABLE_PROPERTY, orgFocusable, focusable);
@@ -167,7 +149,7 @@ public class Accordion extends JPanel implements Iterable<TogglePanel> {
 
         int newWidth = getWidth();
 
-        for (var panel: panels)
+        for (TogglePanel panel: panels)
             panel.setSize(newWidth, panel.getHeight());
     }
 
@@ -195,8 +177,10 @@ public class Accordion extends JPanel implements Iterable<TogglePanel> {
      */
     @Override
     protected void addImpl(Component comp, Object constraints, int index) {
-        if (!(comp instanceof TogglePanel panel))
+        if (!(comp instanceof TogglePanel))
             throw new IllegalArgumentException("Panels must be of type TogglePanel");
+
+        TogglePanel panel = (TogglePanel) comp;
 
         panel.setCollapsed(true);
         panel.setIconVisible(iconsVisible);

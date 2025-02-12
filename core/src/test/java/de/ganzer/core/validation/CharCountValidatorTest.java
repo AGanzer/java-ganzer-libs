@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CharCountValidatorTest {
     @Test
     void constructEmpty() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
 
         assertNull(val.getErrorMessage());
         assertNull(val.getTag());
@@ -18,7 +18,7 @@ class CharCountValidatorTest {
 
     @Test
     void constructWithOption() {
-        var val = new CharCountValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
 
         assertNull(val.getErrorMessage());
         assertNull(val.getTag());
@@ -29,7 +29,7 @@ class CharCountValidatorTest {
 
     @Test
     void setOptions() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
         val.setOptions(ValidatorOptions.AUTO_FILL);
 
         assertEquals(ValidatorOptions.AUTO_FILL, val.getOptions());
@@ -37,7 +37,7 @@ class CharCountValidatorTest {
 
     @Test
     void setMaxLength() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
         val.setMinLength(0);
         val.setMaxLength(10);
 
@@ -47,7 +47,7 @@ class CharCountValidatorTest {
 
     @Test
     void setMaxLess() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
         val.setMinLength(10);
         val.setMaxLength(5);
 
@@ -57,7 +57,7 @@ class CharCountValidatorTest {
 
     @Test
     void setMinLength() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
         val.setMaxLength(10);
         val.setMinLength(0);
 
@@ -67,7 +67,7 @@ class CharCountValidatorTest {
 
     @Test
     void setMinGreat() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
         val.setMaxLength(10);
         val.setMinLength(20);
 
@@ -77,7 +77,7 @@ class CharCountValidatorTest {
 
     @Test
     void setMaxLengthAdjustMinLength() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
         val.setMinLength(20);
         val.setMaxLength(10);
 
@@ -87,7 +87,7 @@ class CharCountValidatorTest {
 
     @Test
     void setMinLengthAdjustMaxLength() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
         val.setMaxLength(10);
         val.setMinLength(20);
 
@@ -97,8 +97,8 @@ class CharCountValidatorTest {
 
     @Test
     void setErrorMessage() {
-        var m = "New Message!";
-        var val = new CharCountValidator();
+        String m = "New Message!";
+        CharCountValidator val = new CharCountValidator();
         val.setErrorMessage(m);
 
         assertEquals(m, val.getErrorMessage());
@@ -106,8 +106,8 @@ class CharCountValidatorTest {
 
     @Test
     void setErrorMessageNull() {
-        var m = "New Message!";
-        var val = new CharCountValidator();
+        String m = "New Message!";
+        CharCountValidator val = new CharCountValidator();
         val.setErrorMessage(m);
         val.setErrorMessage(null);
 
@@ -116,8 +116,8 @@ class CharCountValidatorTest {
 
     @Test
     void setErrorMessageEmpty() {
-        var m = "New Message!";
-        var val = new CharCountValidator();
+        String m = "New Message!";
+        CharCountValidator val = new CharCountValidator();
         val.setErrorMessage(m);
         val.setErrorMessage("");
 
@@ -126,8 +126,8 @@ class CharCountValidatorTest {
 
     @Test
     void setErrorMessageBlank() {
-        var m = "New Message!";
-        var val = new CharCountValidator();
+        String m = "New Message!";
+        CharCountValidator val = new CharCountValidator();
         val.setErrorMessage(m);
         val.setErrorMessage("   ");
 
@@ -136,8 +136,8 @@ class CharCountValidatorTest {
 
     @Test
     void setTag() {
-        var o = new Object();
-        var val = new CharCountValidator();
+        Object o = new Object();
+        CharCountValidator val = new CharCountValidator();
         val.setTag(o);
 
         assertEquals(o, val.getTag());
@@ -145,7 +145,7 @@ class CharCountValidatorTest {
 
     @Test
     void hasOption() {
-        var val = new CharCountValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
 
         assertTrue(val.hasOption(ValidatorOptions.NEEDS_INPUT));
         assertTrue(val.hasOption(ValidatorOptions.AUTO_FILL));
@@ -155,26 +155,26 @@ class CharCountValidatorTest {
 
     @Test
     void isInputValidEmpty() {
-        var s = new StringBuilder();
-        var val = new CharCountValidator(ValidatorOptions.NONE);
+        StringBuilder s = new StringBuilder();
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.NONE);
 
         assertTrue(val.isValidInput(s, false));
     }
 
     @Test
     void isInputValidBlank() {
-        var s = new StringBuilder("   ");
-        var val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
+        StringBuilder s = new StringBuilder("   ");
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
 
         assertTrue(val.isValidInput(s, false));
     }
 
     @Test
     void isInputValidMinLength() {
-        var s1 = new StringBuilder("123456789");
-        var s2 = new StringBuilder("1234567890");
-        var s3 = new StringBuilder("12345678");
-        var val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
+        StringBuilder s1 = new StringBuilder("123456789");
+        StringBuilder s2 = new StringBuilder("1234567890");
+        StringBuilder s3 = new StringBuilder("12345678");
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
         val.setMinLength(9);
 
         assertTrue(val.isValidInput(s1, false));
@@ -184,10 +184,10 @@ class CharCountValidatorTest {
 
     @Test
     void isInputValidMaxLength() {
-        var s1 = new StringBuilder("123456789");
-        var s2 = new StringBuilder("1234567890");
-        var s3 = new StringBuilder("12345678");
-        var val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
+        StringBuilder s1 = new StringBuilder("123456789");
+        StringBuilder s2 = new StringBuilder("1234567890");
+        StringBuilder s3 = new StringBuilder("12345678");
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
         val.setMaxLength(9);
 
         assertTrue(val.isValidInput(s1, false));
@@ -197,34 +197,34 @@ class CharCountValidatorTest {
 
     @Test
     void validateWithExceptionEmptyTrue() {
-        var val = new CharCountValidator(ValidatorOptions.NONE);
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.NONE);
         assertDoesNotThrow(() -> val.validate(""));
     }
 
     @Test
     void validateWithExceptionFalse() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
         assertThrows(ValidatorException.class, () -> val.validate(""));
     }
 
     @Test
     void validateWithExceptionBlankTrue() {
-        var val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
         assertDoesNotThrow(() -> val.validate("   "));
     }
 
     @Test
     void validateWithExceptionBlankFalse() {
-        var val = new CharCountValidator();
+        CharCountValidator val = new CharCountValidator();
         assertThrows(ValidatorException.class, () -> val.validate("   "));
     }
 
     @Test
     void validateWithExceptionMinLength() {
-        var s1 = "123456789";
-        var s2 = "1234567890";
-        var s3 = "12345678";
-        var val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
+        String s1 = "123456789";
+        String s2 = "1234567890";
+        String s3 = "12345678";
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
         val.setMinLength(9);
 
         assertDoesNotThrow(() -> val.validate(s1));
@@ -234,10 +234,10 @@ class CharCountValidatorTest {
 
     @Test
     void validateWithExceptionMaxLength() {
-        var s1 = "123456789";
-        var s2 = "1234567890";
-        var s3 = "12345678";
-        var val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
+        String s1 = "123456789";
+        String s2 = "1234567890";
+        String s3 = "12345678";
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
         val.setMaxLength(9);
 
         assertDoesNotThrow(() -> val.validate(s1));
@@ -247,10 +247,10 @@ class CharCountValidatorTest {
 
     @Test
     void validateWithExceptionRef() {
-        var s1 = "123456789";
-        var s2 = "1234567890";
-        var s3 = "12345678";
-        var val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
+        String s1 = "123456789";
+        String s2 = "1234567890";
+        String s3 = "12345678";
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.BLANKS_VALID);
         val.setMinLength(9);
 
         ValidatorExceptionRef er = new ValidatorExceptionRef();
@@ -268,9 +268,9 @@ class CharCountValidatorTest {
 
     @Test
     void formatText() {
-        var t1 = "1.234,00";
-        var t2 = "001234,0000";
-        var val = new CharCountValidator();
+        String t1 = "1.234,00";
+        String t2 = "001234,0000";
+        CharCountValidator val = new CharCountValidator();
 
         assertEquals(t1, val.formatText(t1,TextFormat.EDIT));
         assertEquals(t1, val.formatText(t1,TextFormat.DISPLAY));
