@@ -245,7 +245,7 @@ public class BOMInputStreamReader extends Reader {
 
             default:
                 set = cs;
-        };
+        }
 
         return StreamDecoder.forInputStreamReader(in, this, set);
     }
