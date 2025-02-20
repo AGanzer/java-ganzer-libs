@@ -1,5 +1,7 @@
 package de.ganzer.swing.dialogs;
 
+import de.ganzer.swing.internals.SwingMessages;
+
 import javax.swing.JOptionPane;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -434,7 +436,7 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
     protected int queryUserToSave() {
         return JOptionPane.showConfirmDialog(
                 this,
-                "Die Daten haben sich geändert. Möchten Sie diese speichern?",
+                SwingMessages.get("modifiableDialog.dataHasChanged"),
                 getTitle(),
                 JOptionPane.YES_NO_CANCEL_OPTION);
     }
