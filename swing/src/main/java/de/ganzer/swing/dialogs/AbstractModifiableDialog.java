@@ -307,11 +307,11 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
     }
 
     /**
-     * Invokes the set data consumer if the data is valid and modified.
+     * Invokes the set data consumer.
      * <p>
      * This implementation firstly calls {@link #validateModifiedData()}. If the
      * data is not valid, the method returns {@code false}; otherwise,
-     * {@link #} is called and the set data consumer is invoked and the
+     * {@link #updateData} is called and the set data consumer is invoked and the
      * modification flag is set to {@code false}.
      * <p>
      * if {@link #isDataModified()} is {@code false}, nothing is done and this
@@ -325,9 +325,6 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
      */
     @Override
     public boolean applyChangedData() {
-        if (!isDataModified())
-            return true;
-
         if (!validateModifiedData())
             return false;
 
@@ -382,8 +379,7 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
      * Handles the {@link WindowEvent#WINDOW_CLOSING} event.
      * <p>
      * If the dialog is modal, {@link #applyChangedData()} is invoked if
-     * {@link #isDataModified()} is {@code true} and {@link #isEscaped()} is
-     * {@code false}.
+     * {@link #isEscaped()} is {@code false}.
      * <p>
      * If the dialog is not modal, the {@link #queryUserToSave()} is invoked
      * if {@link #isDataModified()} is {@code true}.
@@ -403,11 +399,11 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
      */
     @Override
     protected void processWindowEvent(WindowEvent e) {
-        if (e.getID() == WindowEvent.WINDOW_CLOSING && isDataModified()) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
             if (isModal()) {
                 if (!isEscaped() && !applyChangedData())
                     return;
-            } else {
+            } else if (isDataModified()) {
                 switch (queryUserToSave()) {
                     case JOptionPane.YES_OPTION:
                         if (!applyChangedData())
