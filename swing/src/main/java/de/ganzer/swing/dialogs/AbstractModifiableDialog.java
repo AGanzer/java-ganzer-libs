@@ -1,9 +1,11 @@
 package de.ganzer.swing.dialogs;
 
+import javax.swing.JOptionPane;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Window;
+import java.awt.event.WindowEvent;
 import java.util.function.Consumer;
 
 /**
@@ -38,6 +40,8 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
 
         nameField.setText(data.name);
         passwordField.setText(data.password);
+
+        setDataModified(false);
     }
 
     @Override
@@ -56,6 +60,26 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
         setTitle("Login");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getParent());
+
+        class TextFieldListener implements DocumentListener {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setDataModified(true);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                setDataModified(true);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                setDataModified(true);
+            }
+        }
+
+        nameField.getDocument().addDocumentListener(new TextFieldListener());
+        passwordField.getDocument().addDocumentListener(new TextFieldListener());
 
         initLayout();
     }
@@ -97,7 +121,7 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
 
     private JPanel initButtons() {
         var okButton = new JButton("OK");
-        okButton.addActionListener(e -> updateDataAndClose());
+        okButton.addActionListener(e -> closeWindow(false));
         getRootPane().setDefaultButton(okButton);
 
         var cancelButton = new JButton("Cancel");
@@ -124,11 +148,6 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
         panel.setLayout(layout);
 
         return panel;
-    }
-
-    private void updateDataAndClose() {
-        if (applyChangedData())
-            closeWindow(false);
     }
 
     private boolean performLogin() {
@@ -355,6 +374,69 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
     @Override
     public void setDataModified(boolean modified) {
         this.dataModified = modified;
+    }
+
+    /**
+     * Handles the {@link WindowEvent#WINDOW_CLOSING} event.
+     * <p>
+     * If the dialog is modal, {@link #applyChangedData()} is invoked if
+     * {@link #isDataModified()} is {@code true} and {@link #isEscaped()} is
+     * {@code false}.
+     * <p>
+     * If the dialog is not modal, the {@link #queryUserToSave()} is invoked
+     * if {@link #isDataModified()} is {@code true}.
+     * <p>
+     * This implementation calls {@link #queryUserToSave()}. The only recognized
+     * answers are:
+     * <ul>
+     *     <li>{@link JOptionPane#YES_OPTION}: {@link #applyChangedData()} is
+     *          called. On success the window is closed; otherwise, the event
+     *          is consumed and the window is not closed.</li>
+     *     <li>{@link JOptionPane#CANCEL_OPTION}: The event is consumed and the
+     *          window is not closed.</li>
+     *     <li>All others: The window is closed without any further action.</li>
+     * </ul>
+     *
+     * @param e The window event.
+     */
+    @Override
+    protected void processWindowEvent(WindowEvent e) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING && isDataModified()) {
+            if (isModal()) {
+                if (!isEscaped() && !applyChangedData())
+                    return;
+            } else {
+                switch (queryUserToSave()) {
+                    case JOptionPane.YES_OPTION:
+                        if (!applyChangedData())
+                            return;
+
+                        break;
+
+                    case JOptionPane.CANCEL_OPTION:
+                        return;
+                }
+            }
+        }
+
+        super.processWindowEvent(e);
+    }
+
+    /**
+     * Called within {@link #processWindowEvent(WindowEvent)} when the window
+     * is closed but has modified data to query the user what to do.
+     * <p>
+     * This implementation does simply show a {@link JOptionPane} with a
+     * question whether the data shall be saved and Yes, No and Cancel buttons.
+     *
+     * @return The result of the user's choose.
+     */
+    protected int queryUserToSave() {
+        return JOptionPane.showConfirmDialog(
+                this,
+                "Die Daten haben sich geändert. Möchten Sie diese speichern?",
+                getTitle(),
+                JOptionPane.YES_NO_CANCEL_OPTION);
     }
 
     /**

@@ -5,8 +5,11 @@ import de.ganzer.swing.dialogs.AbstractModifiableDialog;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.Dialog;
 import java.awt.Window;
+import java.awt.event.KeyAdapter;
 import java.util.Objects;
 
 public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
@@ -41,6 +44,8 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
 
         nameField.setText(data.name);
         passwordField.setText(data.password);
+
+        setDataModified(false);
     }
 
     @Override
@@ -59,6 +64,26 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
         setTitle("Test Dialog");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getParent());
+
+        class TextFieldListener implements DocumentListener {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setDataModified(true);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                setDataModified(true);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                setDataModified(true);
+            }
+        }
+
+        nameField.getDocument().addDocumentListener(new TextFieldListener());
+        passwordField.getDocument().addDocumentListener(new TextFieldListener());
 
         initLayout();
     }
@@ -100,7 +125,7 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
 
     private JPanel initButtons() {
         JButton okButton = new JButton("OK");
-        okButton.addActionListener(e -> updateDataAndClose());
+        okButton.addActionListener(e -> closeWindow(false));
         getRootPane().setDefaultButton(okButton);
 
         JButton cancelButton = new JButton("Cancel");
@@ -127,10 +152,5 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
         panel.setLayout(layout);
 
         return panel;
-    }
-
-    private void updateDataAndClose() {
-        if (applyChangedData())
-            closeWindow(false);
     }
 }
