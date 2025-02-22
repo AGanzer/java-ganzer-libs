@@ -98,6 +98,19 @@ public class EscapableDialog extends JDialog implements EscapableWindow {
     }
 
     /**
+     * Sends a {@link WindowEvent#WINDOW_CLOSING} event to this dialog.
+     *
+     * @param escaped Indicates whether the window is closed by the Esc key or
+     *        by the window's Close button or the Close menu or by a Cancel
+     *        button.
+     */
+    @Override
+    public void closeWindow(boolean escaped) {
+        this.escaped = escaped;
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+
+    /**
      * Gets a value that indicates whether the dialog is closed by the Esc key
      * or by the frames Close button or Close menu or by a Cancel button.
      *
@@ -110,16 +123,15 @@ public class EscapableDialog extends JDialog implements EscapableWindow {
     }
 
     /**
-     * Sends a {@link WindowEvent#WINDOW_CLOSING} event to this dialog.
+     * Resets the escaped flag to its origin value.
+     * <p>
+     * Inheritors can use this to reset the flag when a dialog cannot be closed
+     * by te OK button because of invalid data.
      *
-     * @param escaped Indicates whether the window is closed by the Esc key or
-     *        by the window's Close button or the Close menu or by a Cancel
-     *        button.
+     * @see #isEscaped()
      */
-    @Override
-    public void closeWindow(boolean escaped) {
-        this.escaped = escaped;
-        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    protected void resetEscaped() {
+        escaped = true;
     }
 
     /**

@@ -346,8 +346,10 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
      */
     @Override
     public boolean applyChangedData() {
-        if (!validateModifiedData())
+        if (!validateModifiedData()) {
+            resetEscaped();
             return false;
+        }
 
         updateData(getData());
 
