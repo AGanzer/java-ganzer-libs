@@ -9,8 +9,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.Dialog;
 import java.awt.Window;
-import java.awt.event.KeyAdapter;
-import java.util.Objects;
 
 public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     public static class Data {
@@ -21,31 +19,18 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     private final JTextField nameField = new JTextField(20);
     private final JTextField passwordField = new JPasswordField(20);
 
-    private LoginDialog(Window owner, Dialog.ModalityType modalityType) {
-        super(owner, modalityType);
+    private LoginDialog(Window owner, Dialog.ModalityType modalityType, Data data) {
+        super(owner, modalityType, data);
 
         init();
         pack();
     }
 
     public static boolean showModal(Window owner, Data data) {
-        LoginDialog dialog = new LoginDialog(owner, DEFAULT_MODALITY_TYPE);
-        dialog.initControls(data);
+        LoginDialog dialog = new LoginDialog(owner, DEFAULT_MODALITY_TYPE, data);
         dialog.setVisible(true);
 
         return !dialog.isEscaped();
-    }
-
-    @Override
-    public void initControls(Data data) {
-        Objects.requireNonNull(data, "data must not be null.");
-
-        super.initControls(data);
-
-        nameField.setText(data.name);
-        passwordField.setText(data.password);
-
-        setDataModified(false);
     }
 
     @Override
@@ -81,6 +66,9 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
                 setDataModified(true);
             }
         }
+
+        nameField.setText(getData().name);
+        passwordField.setText(getData().password);
 
         nameField.getDocument().addDocumentListener(new TextFieldListener());
         passwordField.getDocument().addDocumentListener(new TextFieldListener());

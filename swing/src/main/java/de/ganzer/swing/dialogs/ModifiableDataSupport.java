@@ -39,8 +39,11 @@ public class LoginDialog extends EscapableDialog implements ModifiableDataSuppor
     private final JTextField nameField = new JTextField(20);
     private final JTextField passwordField = new JPasswordField(20);
 
-    public LoginDialog(Window owner) {
+    public LoginDialog(Window owner, Data data) {
         super(owner, DEFAULT_MODALITY_TYPE);
+
+        Objects.requireNonNull(data, "data must not be null.");
+        this.data = data;
 
         init();
         pack();
@@ -49,16 +52,6 @@ public class LoginDialog extends EscapableDialog implements ModifiableDataSuppor
     @Override
     public Data getData() {
         return data;
-    }
-
-    @Override
-    public void initControls(Data data) {
-        Objects.requireNonNull(data, "data must not be null.");
-
-        this.data = data;
-
-        nameField.setText(data.name);
-        passwordField.setText(data.password);
     }
 
     @Override
@@ -98,6 +91,9 @@ public class LoginDialog extends EscapableDialog implements ModifiableDataSuppor
         setTitle("Login");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getParent());
+
+        nameField.setText(data.name);
+        passwordField.setText(data.password);
 
         nameField.getDocument().addDocumentListener(new MyDocumentListener());
         passwordField.getDocument().addDocumentListener(new MyDocumentListener());
