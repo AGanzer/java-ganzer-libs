@@ -8,6 +8,7 @@ import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Window;
 import java.awt.event.WindowEvent;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -27,23 +28,11 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     private final JTextField nameField = new JTextField(20);
     private final JTextField passwordField = new JPasswordField(20);
 
-    public LoginDialog(Window owner, ModalityType modalityType) {
-        super(owner, modalityType);
+    public LoginDialog(Window owner, ModalityType modalityType, Data data) {
+        super(owner, modalityType, data);
 
         init();
         pack();
-    }
-
-    @Override
-    public void initControls(Data data) {
-        Objects.requireNonNull(data, "data must not be null.");
-
-        super.initControls(data);
-
-        nameField.setText(data.name);
-        passwordField.setText(data.password);
-
-        setDataModified(false);
     }
 
     @Override
@@ -79,6 +68,9 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
                 setDataModified(true);
             }
         }
+
+        nameField.setText(getData().name);
+        passwordField.setText(getData().password);
 
         nameField.getDocument().addDocumentListener(new TextFieldListener());
         passwordField.getDocument().addDocumentListener(new TextFieldListener());
@@ -208,98 +200,130 @@ public class MyAppFrame extends JFrame {
  */
 @SuppressWarnings("unused")
 public abstract class AbstractModifiableDialog<Data> extends EscapableDialog implements ModifiableDataSupport<Data> {
-    private Data data;
+    private final Data data;
     private Consumer<Data> dataConsumer;
     private boolean dataModified = false;
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog() {
+    protected AbstractModifiableDialog(Data data) {
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Frame owner) {
+    protected AbstractModifiableDialog(Frame owner, Data data) {
         super(owner);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Frame owner, String title) {
+    protected AbstractModifiableDialog(Frame owner, String title, Data data) {
         super(owner, title);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Frame owner, String title, GraphicsConfiguration gc) {
+    protected AbstractModifiableDialog(Frame owner, String title, GraphicsConfiguration gc, Data data) {
         super(owner, title, gc);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Dialog owner) {
+    protected AbstractModifiableDialog(Dialog owner, Data data) {
         super(owner);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Dialog owner, String title) {
+    protected AbstractModifiableDialog(Dialog owner, String title, Data data) {
         super(owner, title);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Dialog owner, String title, GraphicsConfiguration gc) {
+    protected AbstractModifiableDialog(Dialog owner, String title, GraphicsConfiguration gc, Data data) {
         super(owner, title, gc);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Window owner) {
+    protected AbstractModifiableDialog(Window owner, Data data) {
         super(owner);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Window owner, ModalityType modalityType) {
+    protected AbstractModifiableDialog(Window owner, ModalityType modalityType, Data data) {
         super(owner, modalityType);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Window owner, String title) {
+    protected AbstractModifiableDialog(Window owner, String title, Data data) {
         super(owner, title);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Window owner, String title, ModalityType modalityType) {
+    protected AbstractModifiableDialog(Window owner, String title, ModalityType modalityType, Data data) {
         super(owner, title, modalityType);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected AbstractModifiableDialog(Window owner, String title, ModalityType modalityType, GraphicsConfiguration gc) {
+    protected AbstractModifiableDialog(Window owner, String title, ModalityType modalityType, GraphicsConfiguration gc, Data data) {
         super(owner, title, modalityType, gc);
+
+        Objects.requireNonNull(data, "data cannot be null.");
+        this.data = data;
     }
 
     /**
-     * Gets the data that was applied by {@link #initControls}
-     *
-     * @return The data that ws given to {@link #initControls} or {@code null}
-     *         if no data was specified.
+     * {@inheritDoc}
      */
     @Override
     public Data getData() {
@@ -333,19 +357,6 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
         setDataModified(false);
 
         return true;
-    }
-
-    /**
-     * Called to apply the initial data to the controls.
-     * <p>
-     * Inheritors must call the base method to get the data by {@link #getData()}
-     * correctly.
-     *
-     * @param data The data to apply.
-     */
-    @Override
-    public void initControls(Data data) {
-        this.data = data;
     }
 
     /**
