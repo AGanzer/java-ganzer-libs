@@ -9,8 +9,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.Dialog;
 import java.awt.Window;
-import java.awt.event.KeyAdapter;
-import java.util.Objects;
 
 public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     public static class Data {

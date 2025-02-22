@@ -453,8 +453,7 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
     protected abstract boolean validateModifiedData();
 
     /**
-     * Called to update the data that was given to {@link #initControls} with
-     * the users input.
+     * Called to update the data with the users input.
      *
      * @param data The data to update. This is identical to {@link #getData()}.
      */
