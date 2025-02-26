@@ -444,8 +444,4 @@ public class ScreenDC implements DC {
 
         return lockCount;
     }
-
-    static {
-        init(null);
-    }
 }
