@@ -83,9 +83,9 @@ public interface DC {
      * @param bounds The region to fill.
      * @param ch The character where to fill the region with.
      *
-     * @see #getClipRect()
-     *
      * @throws NullPointerException {@code bounds} is {@code null}.
+     *
+     * @see #getClipRect()
      */
     void fill(Rectangle bounds, char ch);
 
@@ -116,10 +116,10 @@ public interface DC {
      * @param bounds The region to fill.
      * @param ch The character where to fill the region with.
      *
-     * @see #getClipRect()
-     *
      * @throws NullPointerException {@code bounds} or {@code ch} is
      *         {@code null}.
+     *
+     * @see #getClipRect()
      */
     void fill(Rectangle bounds, TextCharacter ch);
 
@@ -136,9 +136,9 @@ public interface DC {
      *        nothing is done.
      * @param ch The character where to fill the region with.
      *
-     * @see #getClipRect()
-     *
      * @throws NullPointerException {@code ch} is {@code null}.
+     *
+     * @see #getClipRect()
      */
     void fill(int column, int row, int count, TextCharacter ch);
 
@@ -157,9 +157,9 @@ public interface DC {
      *        this is less than 1, nothing is done.
      * @param str The string to write.
      *
-     * @see #getClipRect()
-     *
      * @throws NullPointerException {@code str} is {@code null}.
+     *
+     * @see #getClipRect()
      */
     void write(int column, int row, int count, String str);
 
@@ -189,9 +189,9 @@ public interface DC {
      * @param row The zero-based line where to write the attributes.
      * @param ch The character to write.
      *
-     * @see #getClipRect()
-     *
      * @throws NullPointerException {@code ch} is {@code null}.
+     *
+     * @see #getClipRect()
      */
     void put(int column, int row, TextCharacter ch);
 }

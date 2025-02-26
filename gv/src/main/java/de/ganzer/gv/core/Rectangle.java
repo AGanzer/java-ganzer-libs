@@ -106,7 +106,7 @@ public class Rectangle extends TerminalRectangle {
      *
      * @return The new rectangle.
      */
-    public Rectangle moveBy(int dx, int dy) {
+    public Rectangle movedBy(int dx, int dy) {
         return new Rectangle(x + dx, y + dy, width, height);
     }
 

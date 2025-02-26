@@ -28,7 +28,7 @@ public class ScreenDC implements DC {
      * @throws IllegalStateException If {@link #init} was not called before.
      */
     public ScreenDC() {
-        checkInit();
+        verifyInit();
         clipRect = new Rectangle(Position.NULL, screen.getTerminalSize());
     }
 
@@ -58,8 +58,8 @@ public class ScreenDC implements DC {
      * @throws IllegalStateException If {@link #init} was not called before.
      */
     @Override
-    public final Rectangle getExtent() {
-        checkInit();
+    public Rectangle getExtent() {
+        verifyInit();
         return new Rectangle(Position.NULL, screen.getTerminalSize());
     }
 
@@ -69,7 +69,7 @@ public class ScreenDC implements DC {
      * @return The current clipping region.
      */
     @Override
-    public final Rectangle getClipRect() {
+    public Rectangle getClipRect() {
         return clipRect;
     }
 
@@ -88,9 +88,9 @@ public class ScreenDC implements DC {
      * @throws IllegalStateException If {@link #init} was not called before.
      */
     @Override
-    public final void setClipRect(Rectangle clipRect) {
+    public void setClipRect(Rectangle clipRect) {
         Objects.requireNonNull(clipRect, "clipRect must not be null.");
-        checkInit();
+        verifyInit();
 
         this.clipRect = clipRect.intersectedBy(clipRegion);
     }
@@ -136,7 +136,7 @@ public class ScreenDC implements DC {
      */
     @Override
     public void fill(Rectangle bounds, char ch) {
-        checkInit();
+        verifyInit();
 
         bounds = bounds.intersectedBy(clipRect);
 
@@ -173,7 +173,7 @@ public class ScreenDC implements DC {
      */
     @Override
     public void fill(int column, int row, int count, char ch) {
-        checkInit();
+        verifyInit();
         fill(new Rectangle(column, row, count, 1), ch);
     }
 
@@ -197,7 +197,7 @@ public class ScreenDC implements DC {
     public void fill(Rectangle bounds, TextCharacter ch) {
         Objects.requireNonNull(bounds, "bounds must not be null.");
         Objects.requireNonNull(ch, "ch must not be null.");
-        checkInit();
+        verifyInit();
 
         bounds = bounds.intersectedBy(clipRect);
 
@@ -235,7 +235,7 @@ public class ScreenDC implements DC {
     @Override
     public void fill(int column, int row, int count, TextCharacter ch) {
         Objects.requireNonNull(ch, "ch must not be null.");
-        checkInit();
+        verifyInit();
 
         fill(new Rectangle(column, row, count, 1), ch);
     }
@@ -263,7 +263,7 @@ public class ScreenDC implements DC {
     @Override
     public void write(int column, int row, int count, String str) {
         Objects.requireNonNull(str, "str must not be null.");
-        checkInit();
+        verifyInit();
 
         var bounds = clipRect.intersectedBy(new Rectangle(column, row, count, 1));
 
@@ -298,7 +298,7 @@ public class ScreenDC implements DC {
      */
     @Override
     public void put(int column, int row, char ch) {
-        checkInit();
+        verifyInit();
 
         if (!clipRect.contains(column, row))
             return;
@@ -329,7 +329,7 @@ public class ScreenDC implements DC {
     @Override
     public void put(int column, int row, TextCharacter ch) {
         Objects.requireNonNull(ch, "ch must not be null.");
-        checkInit();
+        verifyInit();
 
         if (!clipRect.contains(column, row))
             return;
@@ -347,7 +347,7 @@ public class ScreenDC implements DC {
      * @throws IllegalStateException If {@link #init} was not called before.
      */
     public static void flush() {
-        checkInit();
+        verifyInit();
 
         try {
             screen.refresh();
@@ -399,6 +399,16 @@ public class ScreenDC implements DC {
     }
 
     /**
+     * Verifies that the DC is initialized.
+     *
+     * @throws IllegalStateException If the DC ist not initialized.
+     */
+    protected static void verifyInit() {
+        if (screen == null)
+            throw new IllegalStateException("The screen is not initialized.");
+    }
+
+    /**
      * Increments or decrements a lock counter.
      * <p>
      * The DC is buffered as long as the lock counter is greater than 0. The
@@ -418,7 +428,7 @@ public class ScreenDC implements DC {
      *         {@code false} or {@link #init} was not called before.
      */
     private static synchronized int lockScreen(boolean increment) {
-        checkInit();
+        verifyInit();
 
         if (increment) {
             ++lockCount;
@@ -433,11 +443,6 @@ public class ScreenDC implements DC {
             flush();
 
         return lockCount;
-    }
-
-    private static void checkInit() {
-        if (screen == null)
-            throw new IllegalStateException("The screen is not initialized.");
     }
 
     static {
