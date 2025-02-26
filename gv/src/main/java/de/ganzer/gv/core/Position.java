@@ -4,6 +4,11 @@ import com.googlecode.lanterna.TerminalPosition;
 
 public class Position extends TerminalPosition {
     /**
+     * A position where all properties are set to 0.
+     */
+    public static final Position NULL = new Position(0, 0);
+
+    /**
      * Creates a new TerminalPosition object, which represents a location on the
      * screen. There is no check to verify that the position you specified is
      * within the size of the current terminal, and you can specify negative
@@ -28,5 +33,24 @@ public class Position extends TerminalPosition {
      */
     public Position movedBy(int dx, int dy) {
         return new Position(getColumn() + dx, getRow() + dy);
+    }
+
+    /**
+     * Compares the position with the specified object.
+     *
+     * @param obj The other position to compare with.
+     *
+     * @return {@code true} if this is equal to {@code other}; otherwise,
+     *         {@code false}.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof TerminalPosition other))
+            return false;
+
+        return getColumn() == other.getColumn() && getRow() == other.getRow();
     }
 }
