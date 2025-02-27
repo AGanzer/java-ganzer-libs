@@ -3,17 +3,17 @@ package de.ganzer.gv.events;
 /**
  * The basic event of all events.
  *
- * @param <T> The type of the sender of the event.
+ * @param <S> The type of the sender of the event.
  */
-public class Event<T> {
-    private final T sender;
+public class Event<S> {
+    private final S sender;
 
     /**
      * Creates a new instance.
      *
      * @param sender The sender of the event.
      */
-    public Event(T sender) {
+    public Event(S sender) {
         this.sender = sender;
     }
 
@@ -22,7 +22,7 @@ public class Event<T> {
      *
      * @return The sender.
      */
-    public T getSender() {
+    public S getSender() {
         return sender;
     }
 }

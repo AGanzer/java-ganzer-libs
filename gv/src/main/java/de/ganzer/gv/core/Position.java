@@ -1,6 +1,7 @@
 package de.ganzer.gv.core;
 
 import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
 
 public class Position extends TerminalPosition {
     /**
@@ -24,6 +25,15 @@ public class Position extends TerminalPosition {
     }
 
     /**
+     * Converts this position to a size.
+     *
+     * @return The size that corresponds to this position.
+     */
+    public Size toSize() {
+        return new Size(getColumn(), getRow());
+    }
+
+    /**
      * Gets a new position that is relatively moved to this.
      *
      * @param dx The number of columns to move.
@@ -33,6 +43,28 @@ public class Position extends TerminalPosition {
      */
     public Position movedBy(int dx, int dy) {
         return new Position(getColumn() + dx, getRow() + dy);
+    }
+
+    /**
+     * Gets a new position that is relatively moved to this.
+     *
+     * @param delta The number of columns and rows to move.
+     *
+     * @return The new position.
+     */
+    public Position movedBy(TerminalPosition delta) {
+        return new Position(getColumn() + delta.getColumn(), getRow() + delta.getRow());
+    }
+
+    /**
+     * Gets a new position that is relatively moved to this.
+     *
+     * @param delta The number of columns and rows to move.
+     *
+     * @return The new position.
+     */
+    public Position movedBy(TerminalSize delta) {
+        return new Position(getColumn() + delta.getColumns(), getRow() + delta.getRows());
     }
 
     /**

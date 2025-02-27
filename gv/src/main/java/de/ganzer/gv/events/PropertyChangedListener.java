@@ -5,11 +5,11 @@ package de.ganzer.gv.events;
  *
  * @param <S> The type of the sender of the event.
  */
-public interface DisposedListener<S> {
+public interface PropertyChangedListener<S> {
     /**
-     * Called when a disposable object is disposed.
+     * Called when a property has changed.
      *
      * @param event The event.
      */
-    void onDisposed(Event<S> event);
+    void onPropertyChanged(PropertyChangedEvent<S> event);
 }

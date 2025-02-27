@@ -111,6 +111,28 @@ public class Rectangle extends TerminalRectangle {
     }
 
     /**
+     * Gets a new rectangle that is relatively moved to this.
+     *
+     * @param delta The number of columns and rows to move.
+     *
+     * @return The new rectangle.
+     */
+    public Rectangle movedBy(TerminalPosition delta) {
+        return new Rectangle(x + delta.getColumn(), y + delta.getRow(), width, height);
+    }
+
+    /**
+     * Gets a new rectangle that is relatively moved to this.
+     *
+     * @param delta The number of columns and rows to move.
+     *
+     * @return The new rectangle.
+     */
+    public Rectangle movedBy(TerminalSize delta) {
+        return new Rectangle(x + delta.getColumns(), y + delta.getRows(), width, height);
+    }
+
+    /**
      * Gets a new rectangle that is relatively grown to this.
      * <p>
      * Expanding a rectangle does not affect the position but does resize the
@@ -125,6 +147,38 @@ public class Rectangle extends TerminalRectangle {
      */
     public Rectangle grownBy(int dx, int dy) {
         return new Rectangle(x, y, width + dx, height + dy);
+    }
+
+    /**
+     * Gets a new rectangle that is relatively grown to this.
+     * <p>
+     * Expanding a rectangle does not affect the position but does resize the
+     * new rectangle only.
+     * <p>
+     * A negative amount shrinks the size of the new rectangle.
+     *
+     * @param delta The number of columns and rows to grow.
+     *
+     * @return The new rectangle.
+     */
+    public Rectangle grownBy(TerminalPosition delta) {
+        return new Rectangle(x, y, width + delta.getColumn(), height + delta.getRow());
+    }
+
+    /**
+     * Gets a new rectangle that is relatively grown to this.
+     * <p>
+     * Expanding a rectangle does not affect the position but does resize the
+     * new rectangle only.
+     * <p>
+     * A negative amount shrinks the size of the new rectangle.
+     *
+     * @param delta The number of columns and rows to grow.
+     *
+     * @return The new rectangle.
+     */
+    public Rectangle grownBy(TerminalSize delta) {
+        return new Rectangle(x, y, width + delta.getColumns(), height + delta.getRows());
     }
 
     /**

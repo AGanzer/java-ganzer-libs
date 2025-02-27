@@ -5,6 +5,7 @@ import de.ganzer.gv.ApplicationSettings;
 import de.ganzer.gv.View;
 import de.ganzer.gv.core.Position;
 import de.ganzer.gv.core.Rectangle;
+import de.ganzer.gv.core.Size;
 
 import java.util.Objects;
 
@@ -15,12 +16,14 @@ public class ViewDC extends ScreenDC {
     private View view;
     private Rectangle viewClipRect;
     private Rectangle shadowedClipRect;
-    private Position delta;
+    private Size delta;
 
     /**
      * Creates a new instance that draws into the given view.
      *
      * @param view The view where to write into.
+     *
+     * @throws NullPointerException {@code view} is {@code null}.
      */
     public ViewDC(View view) {
         Objects.requireNonNull(view, "view must not be null.");
@@ -31,26 +34,23 @@ public class ViewDC extends ScreenDC {
 
         if (view.isVisible() && view.isExposed() && (!view.isInIcon() || view.isDrawInIcon())) {
             shadowedClipRect = view.getBounds();
-            delta = view.getPosition();
+            delta = view.getPosition().toSize();
 
-            if (view.hasShadow()) {
-                shadowedClipRect = shadowedClipRect.grownBy(
-                        ApplicationSettings.getShadowSize().getColumns(),
-                        ApplicationSettings.getShadowSize().getRows());
-            }
+            if (view.hasShadow())
+                shadowedClipRect = shadowedClipRect.grownBy(ApplicationSettings.getShadowSize());
 
             for (View parent = view.getParent(); parent != null; parent = parent.getParent()) {
-                shadowedClipRect = shadowedClipRect.movedBy(parent.getPosition().getColumn(), parent.getPosition().getRow());
+                shadowedClipRect = shadowedClipRect.movedBy(parent.getPosition());
                 shadowedClipRect = shadowedClipRect.intersectedBy(parent.getBounds());
 
-                delta.movedBy(parent.getPosition().getColumn(), parent.getPosition().getRow());
+                delta.increasedBy(parent.getPosition());
 
                 if (!shadowedClipRect.isExposed())
                     break;
             }
 
             viewClipRect = view.getExtent()
-                    .movedBy(delta.getColumn(), delta.getRow())
+                    .movedBy(delta)
                     .intersectedBy(shadowedClipRect);
         }
     }
@@ -80,7 +80,7 @@ public class ViewDC extends ScreenDC {
      */
     @Override
     public Rectangle getClipRect() {
-        return super.getClipRect().movedBy(-delta.getColumn(), -delta.getRow());
+        return super.getClipRect().movedBy(-delta.getColumns(), -delta.getRows());
     }
 
     /**
@@ -95,11 +95,12 @@ public class ViewDC extends ScreenDC {
      * @param clipRect The clipping region to set.
      *
      * @throws NullPointerException {@code clipRect} is {@code null}.
-     * @throws IllegalStateException If {@link #init} was not called before.
+     * @throws IllegalStateException If {@link #init} was not called before or
+     *         the view is already disposed.
      */
     @Override
     public void setClipRect(Rectangle clipRect) {
-        super.setClipRect(clipRect.movedBy(delta.getColumn(), delta.getRow()).intersectedBy(viewClipRect));
+        super.setClipRect(clipRect.movedBy(delta).intersectedBy(viewClipRect));
     }
 
     /**
@@ -118,13 +119,13 @@ public class ViewDC extends ScreenDC {
                                          ApplicationSettings.getShadowSize().getRows(),
                                          ApplicationSettings.getShadowSize().getColumns(),
                                          view.getBounds().height - ApplicationSettings.getShadowSize().getRows())
-                               .movedBy(delta.getColumn(), delta.getRow()),
+                                   .movedBy(delta),
                            ApplicationSettings.getShadowAttributes());
             super.fillAttr(new Rectangle(ApplicationSettings.getShadowSize().getColumns(),
                                          view.getBounds().height,
                                          view.getBounds().width,
                                          ApplicationSettings.getShadowSize().getRows())
-                               .movedBy(delta.getColumn(), delta.getRow()),
+                                   .movedBy(delta),
                            ApplicationSettings.getShadowAttributes());
         } finally {
             super.setClipRect(viewClipRect);
@@ -143,11 +144,13 @@ public class ViewDC extends ScreenDC {
      *
      * @throws NullPointerException {@code bounds} or {@code ch} is
      *         {@code null}.
+     *
      * @see #getClipRect()
      */
     @Override
     public void fillAttr(Rectangle bounds, TextCharacter attr) {
-        super.fillAttr(bounds, attr);
+        super.setClipRect(viewClipRect);
+        super.fillAttr(bounds.movedBy(delta), attr);
     }
 
     /**
@@ -164,11 +167,13 @@ public class ViewDC extends ScreenDC {
      * @param attr The attributes where to fill the region with.
      *
      * @throws NullPointerException {@code ch} is {@code null}.
+     *
      * @see #getClipRect()
      */
     @Override
     public void fillAttr(int column, int row, int count, TextCharacter attr) {
-        super.fillAttr(column, row, count, attr);
+        super.setClipRect(viewClipRect);
+        super.fillAttr(column + delta.getColumns(), row + delta.getRows(), count, attr);
     }
 
     /**
@@ -188,7 +193,8 @@ public class ViewDC extends ScreenDC {
      */
     @Override
     public void fillChar(Rectangle bounds, char ch) {
-        super.fillChar(bounds, ch);
+        super.setClipRect(viewClipRect);
+        super.fillChar(bounds.movedBy(delta), ch);
     }
 
     /**
@@ -210,7 +216,8 @@ public class ViewDC extends ScreenDC {
      */
     @Override
     public void fillChar(int column, int row, int count, char ch) {
-        super.fillChar(column, row, count, ch);
+        super.setClipRect(viewClipRect);
+        super.fillChar(column + delta.getColumns(), row + delta.getRows(), count, ch);
     }
 
     /**
@@ -231,7 +238,8 @@ public class ViewDC extends ScreenDC {
      */
     @Override
     public void fill(Rectangle bounds, TextCharacter ch) {
-        super.fill(bounds, ch);
+        super.setClipRect(viewClipRect);
+        super.fill(bounds.movedBy(delta), ch);
     }
 
     /**
@@ -254,7 +262,8 @@ public class ViewDC extends ScreenDC {
      */
     @Override
     public void fill(int column, int row, int count, TextCharacter ch) {
-        super.fill(column, row, count, ch);
+        super.setClipRect(viewClipRect);
+        super.fill(column + delta.getColumns(), row + delta.getRows(), count, ch);
     }
 
     /**
@@ -279,7 +288,8 @@ public class ViewDC extends ScreenDC {
      */
     @Override
     public void write(int column, int row, int count, String str) {
-        super.write(column, row, count, str);
+        super.setClipRect(viewClipRect);
+        super.write(column + delta.getColumns(), row + delta.getRows(), count, str);
     }
 
     /**
@@ -299,11 +309,13 @@ public class ViewDC extends ScreenDC {
      * @param attr The attributes to use.
      *
      * @throws NullPointerException {@code str} or {@code attr} is {@code null}.
+     *
      * @see #getClipRect()
      */
     @Override
     public void write(int column, int row, int count, String str, TextCharacter attr) {
-        super.write(column, row, count, str, attr);
+        super.setClipRect(viewClipRect);
+        super.write(column + delta.getColumns(), row + delta.getRows(), count, str, attr);
     }
 
     /**
@@ -323,7 +335,8 @@ public class ViewDC extends ScreenDC {
      */
     @Override
     public void put(int column, int row, char ch) {
-        super.put(column, row, ch);
+        super.setClipRect(viewClipRect);
+        super.put(column + delta.getColumns(), row + delta.getRows(), ch);
     }
 
     /**
@@ -344,10 +357,15 @@ public class ViewDC extends ScreenDC {
      */
     @Override
     public void put(int column, int row, TextCharacter ch) {
-        super.put(column, row, ch);
+        super.put(column + delta.getColumns(), row + delta.getRows(), ch);
     }
 
-    private void verifyViewState() {
+    /**
+     * Verifies that the view ist not disposed.
+     *
+     * @throws IllegalStateException If the view is already disposed.
+     */
+    protected void verifyViewState() {
         if (view == null)
             throw new IllegalStateException("The view is already disposed.");
     }

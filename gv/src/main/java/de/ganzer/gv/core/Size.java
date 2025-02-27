@@ -1,5 +1,6 @@
 package de.ganzer.gv.core;
 
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 
 public class Size extends TerminalSize {
@@ -17,6 +18,15 @@ public class Size extends TerminalSize {
      */
     public Size(int columns, int rows) {
         super(columns, rows);
+    }
+
+    /**
+     * Converts this size to a position.
+     *
+     * @return The position that corresponds to this size.
+     */
+    public Position toPosition() {
+        return new Position(getColumns(), getRows());
     }
 
     /**
@@ -43,6 +53,38 @@ public class Size extends TerminalSize {
      */
     public Size increasedBy(int amount) {
         return new Size(getColumns() + amount, getRows() + amount);
+    }
+
+    /**
+     * Creates a new size that is a copy of this size where the width and the
+     * height are increased by the specified amount.
+     * <p>
+     * A negative amount decreases the width and the height of the returned
+     * object.
+     *
+     * @param amount The amount where to increase the width and the height of
+     *        the returned object by.
+     *
+     * @return The new size.
+     */
+    public Size increasedBy(TerminalPosition amount) {
+        return new Size(getColumns() + amount.getColumn(), getRows() + amount.getRow());
+    }
+
+    /**
+     * Creates a new size that is a copy of this size where the width and the
+     * height are increased by the specified amount.
+     * <p>
+     * A negative amount decreases the width and the height of the returned
+     * object.
+     *
+     * @param amount The amount where to increase the width and the height of
+     *        the returned object by.
+     *
+     * @return The new size.
+     */
+    public Size increasedBy(TerminalSize amount) {
+        return new Size(getColumns() + amount.getColumns(), getRows() + amount.getRows());
     }
 
     /**
