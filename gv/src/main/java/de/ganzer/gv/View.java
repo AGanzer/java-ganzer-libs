@@ -134,7 +134,7 @@ public class View implements Disposable {
     }
 
     public DragResult dragByMouse(DragMode mode, MouseEvent event) {
-        return new DragResult(true, event.action.getPosition(), false);
+        return new DragResult(true, event.position, false);
     }
 
     @Override

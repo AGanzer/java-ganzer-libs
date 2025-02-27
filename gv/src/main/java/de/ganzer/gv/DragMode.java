@@ -5,7 +5,7 @@ import de.ganzer.gv.core.Position;
 /**
  * Defines the kinds of dragging and moving.
  *
- * @see View#dragByMouse(DragMode, Position)
+ * @see View#dragByMouse
  */
 public enum DragMode {
     /**
