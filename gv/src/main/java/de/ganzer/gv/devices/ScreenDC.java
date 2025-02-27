@@ -120,6 +120,65 @@ public class ScreenDC implements DC {
     }
 
     /**
+     * Fills the specified region with the given attributes. The characters are
+     * not changed.
+     * <p>
+     * Each part of the given region that is outside the clipping region, is not
+     * filled.
+     *
+     * @param bounds The region to fill.
+     * @param attr The attributes where to fill the region with.
+     *
+     * @throws NullPointerException {@code bounds} or {@code ch} is
+     *         {@code null}.
+     *
+     * @see #getClipRect()
+     */
+    @Override
+    public void fillAttr(Rectangle bounds, TextCharacter attr) {
+        Objects.requireNonNull(bounds, "bounds must not be null.");
+        Objects.requireNonNull(attr, "attr must not be null.");
+        verifyInit();
+
+        bounds = bounds.intersectedBy(clipRect);
+
+        if (!bounds.isExposed())
+            return;
+
+        for (int x = bounds.x; x < bounds.xAndWidth; ++x) {
+            for (int y = bounds.y; y < bounds.yAndHeight; ++y) {
+                var c = screen.getBackCharacter(x, y);
+                screen.setCharacter(x, y, attr.withCharacter(c.getCharacterString().charAt(0)));
+            }
+        }
+
+        if (lockCount == 0)
+            flush();
+    }
+
+    /**
+     * Fills {@code count} cells of the specified line with the given attributes,
+     * starting at {@code column}. The characters  are not changed.
+     * <p>
+     * Each part of the given region that is outside the clipping region, is not
+     * filled.
+     *
+     * @param column The zero-based column where to start.
+     * @param row The zero-based line to fill.
+     * @param count The number of columns to fill. If this is less than 1,
+     *         nothing is done.
+     * @param attr The attributes where to fill the region with.
+     *
+     * @throws NullPointerException {@code ch} is {@code null}.
+     *
+     * @see #getClipRect()
+     */
+    @Override
+    public void fillAttr(int column, int row, int count, TextCharacter attr) {
+        fillAttr(new Rectangle(column, row, count, 1), attr);
+    }
+
+    /**
      * Fills the specified region with the given character. The attributes are
      * not changed.
      * <p>
@@ -135,7 +194,7 @@ public class ScreenDC implements DC {
      * @see #getClipRect()
      */
     @Override
-    public void fill(Rectangle bounds, char ch) {
+    public void fillChar(Rectangle bounds, char ch) {
         verifyInit();
 
         bounds = bounds.intersectedBy(clipRect);
@@ -172,9 +231,8 @@ public class ScreenDC implements DC {
      * @see #getClipRect()
      */
     @Override
-    public void fill(int column, int row, int count, char ch) {
-        verifyInit();
-        fill(new Rectangle(column, row, count, 1), ch);
+    public void fillChar(int column, int row, int count, char ch) {
+        fillChar(new Rectangle(column, row, count, 1), ch);
     }
 
     /**
@@ -234,9 +292,6 @@ public class ScreenDC implements DC {
      */
     @Override
     public void fill(int column, int row, int count, TextCharacter ch) {
-        Objects.requireNonNull(ch, "ch must not be null.");
-        verifyInit();
-
         fill(new Rectangle(column, row, count, 1), ch);
     }
 
@@ -274,6 +329,46 @@ public class ScreenDC implements DC {
             for (int y = bounds.y; y < bounds.yAndHeight; ++y) {
                 var c = screen.getBackCharacter(x, y);
                 screen.setCharacter(x, y, c.withCharacter(str.charAt(i)));
+            }
+        }
+
+        if (lockCount == 0)
+            flush();
+    }
+
+    /**
+     * Writes {@code count} characters of {@code str} and the attributes into
+     * the given line, starting at {@code column}.
+     * <p>
+     * Each part of the given region that is outside the clipping region, is not
+     * filled.
+     *
+     * @param column The zero-based column where to start.
+     * @param row The zero-based line to fill.
+     * @param count The number of columns to fill. Is this is greater than the
+     *         length of {@code count}, left cells are not changed. If this is
+     *         less than the length of {@code str}, the string is truncated. If
+     *         this is less than 1, nothing is done.
+     * @param str The string to write.
+     * @param attr The attributes to use.
+     *
+     * @throws NullPointerException {@code str} or {@code attr} is {@code null}.
+     * @see #getClipRect()
+     */
+    @Override
+    public void write(int column, int row, int count, String str, TextCharacter attr) {
+        Objects.requireNonNull(str, "str must not be null.");
+        Objects.requireNonNull(attr, "attr must not be null.");
+        verifyInit();
+
+        var bounds = clipRect.intersectedBy(new Rectangle(column, row, count, 1));
+
+        if (!bounds.isExposed())
+            return;
+
+        for (int x = bounds.x, i = 0; x < bounds.xAndWidth && i < str.length(); ++x, ++i) {
+            for (int y = bounds.y; y < bounds.yAndHeight; ++y) {
+                screen.setCharacter(x, y, attr.withCharacter(str.charAt(i)));
             }
         }
 

@@ -108,28 +108,69 @@ public class ViewDC extends ScreenDC {
      * @throws IllegalStateException If {@link #init} was not called before or
      *         the view is already disposed.
      */
-    public void drawShodow() {
+    public void drawShadow() {
         verifyInit();
 
         super.setClipRect(shadowedClipRect);
 
         try {
-            super.fill(new Rectangle(view.getBounds().width,
-                                     ApplicationSettings.getShadowSize().getRows(),
-                                     ApplicationSettings.getShadowSize().getColumns(),
-                                     view.getBounds().height - ApplicationSettings.getShadowSize().getRows())
+            super.fillChar(new Rectangle(view.getBounds().width,
+                                         ApplicationSettings.getShadowSize().getRows(),
+                                         ApplicationSettings.getShadowSize().getColumns(),
+                                         view.getBounds().height - ApplicationSettings.getShadowSize().getRows())
                                .movedBy(delta.getColumn(), delta.getRow()),
-                       ' '); // TODO: Hier doch Attribute einfügen!!!
-            super.fill(new Rectangle(ApplicationSettings.getShadowSize().getColumns(),
-                                     view.getBounds().height,
-                                     view.getBounds().width,
-                                     ApplicationSettings.getShadowSize().getRows())
+                           ' '); // TODO: Hier doch Attribute einfügen!!!
+            super.fillChar(new Rectangle(ApplicationSettings.getShadowSize().getColumns(),
+                                         view.getBounds().height,
+                                         view.getBounds().width,
+                                         ApplicationSettings.getShadowSize().getRows())
                                .movedBy(delta.getColumn(), delta.getRow()),
-                       ' '); // TODO: Hier doch Attribute einfügen!!!
+                           ' '); // TODO: Hier doch Attribute einfügen!!!
         } finally {
             super.setClipRect(viewClipRect);
         }
     }
+
+    /**
+     * Fills the specified region with the given attributes. The characters are
+     * not changed.
+     * <p>
+     * Each part of the given region that is outside the clipping region, is not
+     * filled.
+     *
+     * @param bounds The region to fill.
+     * @param attr The attributes where to fill the region with.
+     *
+     * @throws NullPointerException {@code bounds} or {@code ch} is
+     *         {@code null}.
+     * @see #getClipRect()
+     */
+    @Override
+    public void fillAttr(Rectangle bounds, TextCharacter attr) {
+        super.fillAttr(bounds, attr);
+    }
+
+    /**
+     * Fills {@code count} cells of the specified line with the given attributes,
+     * starting at {@code column}. The characters  are not changed.
+     * <p>
+     * Each part of the given region that is outside the clipping region, is not
+     * filled.
+     *
+     * @param column The zero-based column where to start.
+     * @param row The zero-based line to fill.
+     * @param count The number of columns to fill. If this is less than 1,
+     *         nothing is done.
+     * @param attr The attributes where to fill the region with.
+     *
+     * @throws NullPointerException {@code ch} is {@code null}.
+     * @see #getClipRect()
+     */
+    @Override
+    public void fillAttr(int column, int row, int count, TextCharacter attr) {
+        super.fillAttr(column, row, count, attr);
+    }
+
     /**
      * Fills the specified region with the given character. The attributes are
      * not changed.
@@ -146,8 +187,8 @@ public class ViewDC extends ScreenDC {
      * @see #getClipRect()
      */
     @Override
-    public void fill(Rectangle bounds, char ch) {
-        super.fill(bounds, ch);
+    public void fillChar(Rectangle bounds, char ch) {
+        super.fillChar(bounds, ch);
     }
 
     /**
@@ -168,8 +209,8 @@ public class ViewDC extends ScreenDC {
      * @see #getClipRect()
      */
     @Override
-    public void fill(int column, int row, int count, char ch) {
-        super.fill(column, row, count, ch);
+    public void fillChar(int column, int row, int count, char ch) {
+        super.fillChar(column, row, count, ch);
     }
 
     /**
@@ -239,6 +280,30 @@ public class ViewDC extends ScreenDC {
     @Override
     public void write(int column, int row, int count, String str) {
         super.write(column, row, count, str);
+    }
+
+    /**
+     * Writes {@code count} characters of {@code str} and the attributes into
+     * the given line, starting at {@code column}.
+     * <p>
+     * Each part of the given region that is outside the clipping region, is not
+     * filled.
+     *
+     * @param column The zero-based column where to start.
+     * @param row The zero-based line to fill.
+     * @param count The number of columns to fill. Is this is greater than the
+     *         length of {@code count}, left cells are not changed. If this is
+     *         less than the length of {@code str}, the string is truncated. If
+     *         this is less than 1, nothing is done.
+     * @param str The string to write.
+     * @param attr The attributes to use.
+     *
+     * @throws NullPointerException {@code str} or {@code attr} is {@code null}.
+     * @see #getClipRect()
+     */
+    @Override
+    public void write(int column, int row, int count, String str, TextCharacter attr) {
+        super.write(column, row, count, str, attr);
     }
 
     /**

@@ -74,6 +74,42 @@ public interface DC {
     int lock(boolean increment);
 
     /**
+     * Fills the specified region with the given attributes. The characters are
+     * not changed.
+     * <p>
+     * Each part of the given region that is outside the clipping region, is not
+     * filled.
+     *
+     * @param bounds The region to fill.
+     * @param attr The attributes where to fill the region with.
+     *
+     * @throws NullPointerException {@code bounds} or {@code ch} is
+     *         {@code null}.
+     *
+     * @see #getClipRect()
+     */
+    void fillAttr(Rectangle bounds, TextCharacter attr);
+
+    /**
+     * Fills {@code count} cells of the specified line with the given attributes,
+     * starting at {@code column}. The characters  are not changed.
+     * <p>
+     * Each part of the given region that is outside the clipping region, is not
+     * filled.
+     *
+     * @param column The zero-based column where to start.
+     * @param row The zero-based line to fill.
+     * @param count The number of columns to fill. If this is less than 1,
+     *        nothing is done.
+     * @param attr The attributes where to fill the region with.
+     *
+     * @throws NullPointerException {@code ch} is {@code null}.
+     *
+     * @see #getClipRect()
+     */
+    void fillAttr(int column, int row, int count, TextCharacter attr);
+
+    /**
      * Fills the specified region with the given character. The attributes are
      * not changed.
      * <p>
@@ -87,7 +123,7 @@ public interface DC {
      *
      * @see #getClipRect()
      */
-    void fill(Rectangle bounds, char ch);
+    void fillChar(Rectangle bounds, char ch);
 
     /**
      * Fills {@code count} cells of the specified line with the given character,
@@ -104,7 +140,7 @@ public interface DC {
      *
      * @see #getClipRect()
      */
-    void fill(int column, int row, int count, char ch);
+    void fillChar(int column, int row, int count, char ch);
 
     /**
      * Fills the specified region with the given character. The attributes are
@@ -162,6 +198,28 @@ public interface DC {
      * @see #getClipRect()
      */
     void write(int column, int row, int count, String str);
+
+    /**
+     * Writes {@code count} characters of {@code str} and the attributes into
+     * the given line, starting at {@code column}.
+     * <p>
+     * Each part of the given region that is outside the clipping region, is not
+     * filled.
+     *
+     * @param column The zero-based column where to start.
+     * @param row The zero-based line to fill.
+     * @param count The number of columns to fill. Is this is greater than the
+     *        length of {@code count}, left cells are not changed. If this is
+     *        less than the length of {@code str}, the string is truncated. If
+     *        this is less than 1, nothing is done.
+     * @param str The string to write.
+     * @param attr The attributes to use.
+     *
+     * @throws NullPointerException {@code str} or {@code attr} is {@code null}.
+     *
+     * @see #getClipRect()
+     */
+    void write(int column, int row, int count, String str, TextCharacter attr);
 
     /**
      * Writes the specified character at the specified point into the screen.
