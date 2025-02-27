@@ -8,7 +8,10 @@ import java.util.Objects;
  * @param <S> The type of the sender.
  */
 public class PropertyChangedEvent<S> extends Event<S> {
-    private final String propertyName;
+    /**
+     * The name of the property.
+     */
+    public final String propertyName;
 
     /**
      * Creates a new instance.
@@ -23,14 +26,5 @@ public class PropertyChangedEvent<S> extends Event<S> {
 
         Objects.requireNonNull(propertyName, "propertyName must not be null.");
         this.propertyName = propertyName;
-    }
-
-    /**
-     * Gets the name of the property.
-     *
-     * @return The name of the property.
-     */
-    public String getPropertyName() {
-        return propertyName;
     }
 }

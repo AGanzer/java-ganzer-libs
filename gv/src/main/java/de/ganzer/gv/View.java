@@ -1,5 +1,6 @@
 package de.ganzer.gv;
 
+import com.googlecode.lanterna.TerminalPosition;
 import de.ganzer.gv.core.Position;
 import de.ganzer.gv.core.Rectangle;
 import de.ganzer.gv.events.*;
@@ -7,6 +8,31 @@ import de.ganzer.gv.events.*;
 import java.util.Objects;
 
 public class View implements Disposable {
+    /**
+     * No limit is set.
+     */
+    public static final int DRAG_LIMIT_NONE = 0;
+    /**
+     * The view cannot be dragged outside the left edge of the parent group.
+     */
+    public static final int DRAG_LIMIT_LEFT = 0x01;
+    /**
+     * The view cannot be dragged outside the right edge of the parent group.
+     */
+    public static final int DRAG_LIMIT_RIGHT = 0x02;
+    /**
+     * The view cannot be dragged outside the top edge of the parent group.
+     */
+    public static final int DRAG_LIMIT_TOP = 0x04;
+    /**
+     * The view cannot be dragged outside the bottom edge of the parent group.
+     */
+    public static final int DRAG_LIMIT_BOTTOM = 0x08;
+    /**
+     * The view cannot be dragged outside any edge of the parent group.
+     */
+    public static final int DRAG_LIMIT_ALL = 0x0F;
+
     private static final int STATE_NONE = 0;
     private static final int STATE_VISIBLE = 0x0001;
     private static final int STATE_IN_ICON = 0x0002;
@@ -48,6 +74,18 @@ public class View implements Disposable {
 
     private Rectangle bounds;
     private View parent;
+
+    public static class DragResult {
+        public final boolean canceled;
+        public final TerminalPosition dropPosition;
+        public final boolean boundsChanged;
+
+        public DragResult(boolean canceled, TerminalPosition dropPosition, boolean boundsChanged) {
+            this.canceled = canceled;
+            this.dropPosition = dropPosition;
+            this.boundsChanged = boundsChanged;
+        }
+    }
 
     public boolean isVisible() {
         return false;
@@ -95,6 +133,15 @@ public class View implements Disposable {
         propertyChangedSupport.fireEvent(new PropertyChangedEvent<>(null, "bounds"));
     }
 
+    public DragResult dragByMouse(DragMode mode, MouseEvent event) {
+        return new DragResult(true, event.action.getPosition(), false);
+    }
+
+    @Override
+    public void dispose() {
+        disposedSupport.fireEvent(new Event<View>(this));
+    }
+
     public void addDisposedListener(DisposedListener<View> listener) {
         disposedSupport.addListener(listener);
     }
@@ -113,10 +160,5 @@ public class View implements Disposable {
 
     protected void firePropertyChangedEvent(PropertyChangedEvent<View> event) {
         propertyChangedSupport.fireEvent(event);
-    }
-
-    @Override
-    public void dispose() {
-        disposedSupport.fireEvent(new Event<View>(this));
     }
 }
