@@ -114,18 +114,18 @@ public class ViewDC extends ScreenDC {
         super.setClipRect(shadowedClipRect);
 
         try {
-            super.fillChar(new Rectangle(view.getBounds().width,
+            super.fillAttr(new Rectangle(view.getBounds().width,
                                          ApplicationSettings.getShadowSize().getRows(),
                                          ApplicationSettings.getShadowSize().getColumns(),
                                          view.getBounds().height - ApplicationSettings.getShadowSize().getRows())
                                .movedBy(delta.getColumn(), delta.getRow()),
-                           ' '); // TODO: Hier doch Attribute einfügen!!!
-            super.fillChar(new Rectangle(ApplicationSettings.getShadowSize().getColumns(),
+                           ApplicationSettings.getShadowAttributes());
+            super.fillAttr(new Rectangle(ApplicationSettings.getShadowSize().getColumns(),
                                          view.getBounds().height,
                                          view.getBounds().width,
                                          ApplicationSettings.getShadowSize().getRows())
                                .movedBy(delta.getColumn(), delta.getRow()),
-                           ' '); // TODO: Hier doch Attribute einfügen!!!
+                           ApplicationSettings.getShadowAttributes());
         } finally {
             super.setClipRect(viewClipRect);
         }

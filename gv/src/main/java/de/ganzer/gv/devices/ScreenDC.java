@@ -148,7 +148,11 @@ public class ScreenDC implements DC {
         for (int x = bounds.x; x < bounds.xAndWidth; ++x) {
             for (int y = bounds.y; y < bounds.yAndHeight; ++y) {
                 var c = screen.getBackCharacter(x, y);
-                screen.setCharacter(x, y, attr.withCharacter(c.getCharacterString().charAt(0)));
+                var t = TextCharacter.fromString(c.getCharacterString(),
+                                                 attr.getForegroundColor(),
+                                                 attr.getBackgroundColor(),
+                                                 attr.getModifiers());
+                screen.setCharacter(x, y, t[0]);
             }
         }
 
