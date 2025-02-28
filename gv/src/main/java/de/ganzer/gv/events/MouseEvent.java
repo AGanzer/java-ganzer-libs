@@ -8,6 +8,7 @@ import java.util.Objects;
 /**
  * The event that is used when a mouse event occurs.
  */
+@Deprecated() // Perhaps this is not required because we create the specialized events later
 public class MouseEvent extends Event<View> {
     /**
      * The first button is clicked.
@@ -106,7 +107,6 @@ public class MouseEvent extends Event<View> {
      * The type of the mouse event.
      */
     public final int type;
-
     /**
      * The position of the mouse.
      */
