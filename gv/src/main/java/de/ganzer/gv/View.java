@@ -226,6 +226,7 @@ public class View implements Disposable {
 
     private Rectangle bounds;
     private View parent;
+    private int status;
 
     public static class DragResult {
         public final boolean canceled;
@@ -239,11 +240,77 @@ public class View implements Disposable {
         }
     }
 
+    /**
+     * Gets a value, indicating if the view is visible.
+     * <p>
+     * The view may not be visible, even if {@code isVisible} returns {@code true}.
+     * A view is in fact visible if {@link #isExposed()} is {@code true} and all
+     * parent groups are visible and exposed and if the view is not within a
+     * minimized group (excepted, {@link #isDrawInIcon()} is {@code true}).
+     *
+     * @return {@code true} if the view is visible.
+     */
     public boolean isVisible() {
+        return (status & STATE_VISIBLE) != 0;
+    }
+
+    /**
+     * Gets a value that indicates whether this view is exposed.
+     *
+     * @return {@code true} if {@link #isVisible()} of this view and of all
+     *         chained parent groups returns {@code true}.
+     */
+    public boolean isExposed() {
+        return (status & STATE_EXPOSED) != 0;
+    }
+
+    /**
+     * Gets a value, indicating if this view is enabled to interact with the user.
+     *
+     * @return {@code true} if the view is enabled.
+     */
+    public boolean isEnabled() {
+        return (status & STATE_ENABLED) != 0;
+    }
+
+    /**
+     * Enables or disables the view.
+     * <p>
+     * Setting this property to {@code true} may not enable the view in fact.
+     * The view is in fact enabled if all parent views are enabled too (see also
+     * {@link #canInteract()}).
+     * <p>
+     * Setting this property does not automatically redraw the view. If the view
+     * shall be redrawn, the view must call {@link #draw()} by listening to the
+     * "enabled" {@link PropertyChangedEvent} event or by overriding
+     * {@link #firePropertyChangedEvent}.
+     *
+     * @param enabled {@code true} to enable the view.
+     */
+    public void setEnabled(boolean enabled) {
+        if (isEnabled() == enabled)
+            return;
+
+        if (enabled)
+            status |= STATE_ENABLED;
+        else
+            status &= ~STATE_ENABLED;
+
+        if (parent != null) {
+            if (isFocused())
+                parent.focusNext(FocusOrigin.CURRENT, false, false, true);
+            else if (isSelectable())
+                parent.resetCurrent(false);
+        }
+
+        firePropertyChangedEvent(new PropertyChangedEvent<>(this, "enabled"));
+    }
+
+    public boolean isSelectable() {
         return false;
     }
 
-    public boolean isExposed() {
+    public boolean isFocused() {
         return false;
     }
 
@@ -257,6 +324,20 @@ public class View implements Disposable {
 
     public boolean hasShadow() {
         return false;
+    }
+
+    /**
+     * Gets a value indicating whether the view can interact with the user.
+     * <p>
+     * A view can interact with the user if the view is enabled and visible and
+     * all parent views are enabled and visible too.
+     *
+     * @return {@code true} if the user is able to interact with this view.
+     */
+    public boolean canInteract() {
+        return parent != null
+                ? isEnabled() && isVisible() && parent.canInteract()
+                : isEnabled() && isVisible();
     }
 
     public View getParent() {
@@ -282,11 +363,30 @@ public class View implements Disposable {
             return;
 
         this.bounds = bounds;
-        propertyChangedSupport.fireEvent(new PropertyChangedEvent<>(null, "bounds"));
+        firePropertyChangedEvent(new PropertyChangedEvent<>(null, "bounds"));
     }
 
     public void insertView(View view) {
 
+    }
+
+    /**
+     * Draws this view into the screen.
+     *
+     * If <see cref="Paint"/> is set to an event handler, the handler must draw
+     * 		/// the view content (but not the sub views). If no handler is set, the view
+     * 		/// is drawn in <see cref="Draw(IDC)"/>.
+     */
+    public final void draw() {
+        if (!isExposed())
+            return;
+
+        if (parent == null)
+            drawView();
+        else if (hasShadow())
+            parent.drawSubViews(bounds.grownBy(ApplicationSettings.getShadowSize()), this, null);
+        else
+            parent.drawSubViews(bounds, this, null);
     }
 
     FocusNextResult focusNext(FocusOrigin origin, boolean forward, boolean nested, boolean wrap) {
@@ -295,6 +395,24 @@ public class View implements Disposable {
 
     public DragResult dragByMouse(DragMode mode, TerminalPosition position) {
         return new DragResult(true, position, false);
+    }
+
+    /**
+     * Sets the input focus to the given view.
+     * <p>
+     * This operation fails if this group is minimized of it may also fail if
+     * the given view is not selectable or if the currently focused view cannot
+     * release the input focus.
+     *
+     * @param view The view to focus.
+     *
+     * @return {@code true} if the view got the input focus.
+     *
+     * @throws IllegalArgumentException if {@code view} is not a subview of this
+     *         view.
+     */
+    public final boolean focusView(View view) {
+        return false;
     }
 
     @Override
@@ -320,5 +438,26 @@ public class View implements Disposable {
 
     protected void firePropertyChangedEvent(PropertyChangedEvent<View> event) {
         propertyChangedSupport.fireEvent(event);
+    }
+
+    /**
+     * Selects the most top or the most bottom selectable view.
+     *
+     * This does not set the input focus if this group is not focused. To set
+     * the input focus too, use {@link #focusView}.
+     *
+     * @param first If this is {@code true}, the most bottom selectable view is
+     *        selected. Otherwise, the most top selectable view is selected.
+     */
+    protected void resetCurrent(boolean first) {
+
+    }
+
+    private void drawView() {
+
+    }
+
+    private void drawSubViews(Rectangle clip, View start, View terminate) {
+
     }
 }
