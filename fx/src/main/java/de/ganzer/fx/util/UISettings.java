@@ -134,7 +134,7 @@ public class UISettings extends UserSettings {
                 .toList();
 
         if (intersections.size() == 1)
-            return clampTo(intersections.get(0), bounds);
+            return intersections.get(0);
 
         for (Rectangle2D r: intersections) {
             if (r.contains(bounds))
