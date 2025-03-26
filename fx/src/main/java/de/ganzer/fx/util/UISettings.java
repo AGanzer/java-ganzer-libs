@@ -154,11 +154,11 @@ public class UISettings extends UserSettings {
         double width = stageBounds.getWidth();
         double height = stageBounds.getHeight();
 
-        if (x + width > screenBounds.getWidth())
-            x = (int)screenBounds.getWidth() - width;
+        if (x + width > screenBounds.getMinX() + screenBounds.getWidth())
+            x -= (x + width) - (screenBounds.getMinX() + screenBounds.getWidth());
 
-        if (y + height > screenBounds.getHeight())
-            y = (int)screenBounds.getHeight() - height;
+        if (y + height > screenBounds.getMinY() + screenBounds.getHeight())
+            y -= (y + height) - (screenBounds.getMinY() + screenBounds.getHeight());
 
         if (x < 0)
             x = 0;
