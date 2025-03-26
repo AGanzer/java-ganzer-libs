@@ -173,9 +173,12 @@ public class UISettings extends UserSettings {
                     .filter(r -> !r.isEmpty())
                     .collect(Collectors.toList());
 
-            if (intersections.size() == 1)
-                clampTo(intersections.get(0), window);
-            else for (Rectangle r: intersections) {
+            if (intersections.size() == 1) {
+                window.setBounds(intersections.get(0));
+                return;
+            }
+
+            for (Rectangle r: intersections) {
                 if (r.contains(bounds.getLocation()))
                     return;
             }

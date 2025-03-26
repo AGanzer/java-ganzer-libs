@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/fx/pom.xml" />
         <option value="$PROJECT_DIR$/ui-tests/pom.xml" />
         <option value="$PROJECT_DIR$/swing/pom.xml" />
+        <option value="$PROJECT_DIR$/gv/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
