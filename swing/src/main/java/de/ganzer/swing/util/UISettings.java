@@ -169,12 +169,11 @@ public class UISettings extends UserSettings {
             }
 
             List<Rectangle> intersections = displays.stream()
-                    .map(bounds::intersection)
-                    .filter(r -> !r.isEmpty())
+                    .filter(r -> !bounds.intersection(r).isEmpty())
                     .collect(Collectors.toList());
 
             if (intersections.size() == 1) {
-                window.setBounds(intersections.get(0));
+                clampTo(intersections.get(0), window);
                 return;
             }
 
