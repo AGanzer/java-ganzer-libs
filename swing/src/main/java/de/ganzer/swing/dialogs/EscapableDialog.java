@@ -8,6 +8,8 @@ import java.awt.event.WindowEvent;
 
 /**
  * A dialog that enables closing it by the Esc key.
+ * <p>
+ * The default closing operation is set to {@link WindowConstants#DISPOSE_ON_CLOSE}.
  *
  * @see #createRootPane()
  */
@@ -163,15 +165,12 @@ public class EscapableDialog extends JDialog implements EscapableWindow {
     /**
      * {@inheritDoc}
      *
-     * This implementation sets the position relative to the currently focused
-     * window by calling {@link Window#setLocationRelativeTo(Component)}. The
-     * default close operation is set to {@link WindowConstants#DISPOSE_ON_CLOSE}.
+     * This implementation sets the default close operation is set to
+     * {@link WindowConstants#DISPOSE_ON_CLOSE}.
      */
     @Override
     protected void dialogInit() {
         super.dialogInit();
-
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(FocusManager.getCurrentManager().getFocusedWindow());
     }
 }
