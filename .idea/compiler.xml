@@ -7,14 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
-        <module name="fx" />
         <module name="ui-tests" />
         <module name="de-ganzer-core" />
         <module name="de-ganzer-swing" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="de-ganzer-fx" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
