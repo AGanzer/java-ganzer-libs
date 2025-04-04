@@ -12,10 +12,8 @@
         <module name="ui-tests" />
         <module name="de-ganzer-core" />
         <module name="de-ganzer-swing" />
+        <module name="de-ganzer-gv" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="de-ganzer-gv" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
