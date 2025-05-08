@@ -23,166 +23,166 @@ import java.util.function.Function;
  * of radio menu items can be created and how the buttons can be inserted into
  * a toolbar:
  * <p>
- * {@code
-public class MainWindowController implements Initializable {
-    @FXML private MenuBar menuBar;
-    @FXML private ToolBar toolbar;
-
-    private Action saveAction;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        createMenu();
-    }
-
-    private void createMenu() {
-        Action newAction;
-        Action openAction;
-        menuBar.getMenus().add(new ActionGroup("_File").addAll(
-                newAction = new Action("_New")
-                        .accelerator(KeyCombination.valueOf("Ctrl+N"))
-                        .menuImage(new ImageView(new Image("images/new16.png")))
-                        .buttonImage(new ImageView(new Image("images/new22.png")))
-                        .notBindButton(BindNot.COMMAND_TEXT)
-                        .onAction(e -> newFile()),
-                openAction = new Action("_Open...")
-                        .accelerator(KeyCombination.valueOf("Ctrl+O"))
-                        .menuImage(new ImageView(new Image("images/open16.png")))
-                        .buttonImage(new ImageView(new Image("images/open22.png")))
-                        .notBindButton(BindNot.COMMAND_TEXT)
-                        .onAction(e -> openFile()),
-                saveAction = new Action("_Save")
-                        .accelerator(KeyCombination.valueOf("Ctrl+N"))
-                        .menuImage(new ImageView(new Image("images/save16.png")))
-                        .buttonImage(new ImageView(new Image("images/save22.png")))
-                        .notBindButton(BindNot.COMMAND_TEXT)
-                        .onAction(e -> saveFile()),
-                new Action("Save _As...")
-                        .menuImage(new ImageView(new Image("images/saveAs16.png")))
-                        .buttonImage(new ImageView(new Image("images/saveAs22.png")))
-                        .notBindButton(BindNot.COMMAND_TEXT)
-                        .onAction(e -> saveFileAs()),
-                new SeparatorAction(),
-                new Action("E_xit")
-                        .accelerator(KeyCombination.valueOf("Alt+F4"))
-                        .menuImage(new ImageView(new Image("images/exit16.png")))
-                        .buttonImage(new ImageView(new Image("images/exit22.png")))
-                        .notBindButton(BindNot.COMMAND_TEXT)
-                        .onAction(e -> exitApp())
-        ).createMenu());
-
-        ToggleActionGroup taGroup = new ToggleActionGroup();
-        menuBar.getMenus().add(new ActionGroup("_Format").addAll(
-                // We want a group of exclusive toggle actions:
-                taGroup.addAll(
-                        new Action("_Left")
-                                .exclusiveSelectable(true)
-                                .selected(true)
-                                .menuImage(new ImageView(new Image("images/left16.png")))
-                                .buttonImage(new ImageView(new Image("images/left22.png")))
-                                .notBindButton(BindNot.COMMAND_TEXT)
-                                .onAction(e -> adjustLeft()),
-                        new Action("_Center")
-                                .exclusiveSelectable(true)
-                                .menuImage(new ImageView(new Image("images/center16.png")))
-                                .buttonImage(new ImageView(new Image("images/center22.png")))
-                                .notBindButton(BindNot.COMMAND_TEXT)
-                                .onAction(e -> adjustCenter()),
-                        new Action("_Right")
-                                .exclusiveSelectable(true)
-                                .menuImage(new ImageView(new Image("images/right16.png")))
-                                .buttonImage(new ImageView(new Image("images/right22.png")))
-                                .notBindButton(BindNot.COMMAND_TEXT)
-                                .onAction(e -> adjustRight())
-                )
-        ).createMenu());
-
-        // Add the File buttons separately, because we don't want all in the toolbar:
-        toolbar.getItems().addAll(newAction.createButtons(false));
-        toolbar.getItems().addAll(openAction.createButtons(false));
-        toolbar.getItems().addAll(saveAction.createButtons(false));
-        toolbar.getItems().add(new Separator());
-        // Add all the format toggle buttons:
-        toolbar.getItems().addAll(taGroup.createButtons(false));
-    }
-
-    private void newFile() {
-        // New ...
-        saveAction.setDisabled(true); // <- Disables menu item and button.
-    }
-
-    private void openFile() {
-        // Open ...
-        saveAction.setDisabled(true);
-    }
-
-    private void saveFile() {
-        // Save ...
-        saveAction.setDisabled(true);
-    }
-
-    private void editorChanged() {
-        saveAction.setDisabled(false); // <- Enables menu item and button.
-    }
-
-    // Further methods and handlers here.
-}
+ * <pre>{@code
+ * public class MainWindowController implements Initializable {
+ *     @FXML private MenuBar menuBar;
+ *     @FXML private ToolBar toolbar;
+ *
+ *     private Action saveAction;
+ *
+ *     @Override
+ *     public void initialize(URL url, ResourceBundle resourceBundle) {
+ *         createMenu();
+ *     }
+ *
+ *     private void createMenu() {
+ *         Action newAction;
+ *         Action openAction;
+ *         menuBar.getMenus().add(new ActionGroup("_File").addAll(
+ *                 newAction = new Action("_New")
+ *                         .accelerator(KeyCombination.valueOf("Ctrl+N"))
+ *                         .menuImage(new ImageView(new Image("images/new16.png")))
+ *                         .buttonImage(new ImageView(new Image("images/new22.png")))
+ *                         .notBindButton(BindNot.COMMAND_TEXT)
+ *                         .onAction(e -> newFile()),
+ *                 openAction = new Action("_Open...")
+ *                         .accelerator(KeyCombination.valueOf("Ctrl+O"))
+ *                         .menuImage(new ImageView(new Image("images/open16.png")))
+ *                         .buttonImage(new ImageView(new Image("images/open22.png")))
+ *                         .notBindButton(BindNot.COMMAND_TEXT)
+ *                         .onAction(e -> openFile()),
+ *                 saveAction = new Action("_Save")
+ *                         .accelerator(KeyCombination.valueOf("Ctrl+N"))
+ *                         .menuImage(new ImageView(new Image("images/save16.png")))
+ *                         .buttonImage(new ImageView(new Image("images/save22.png")))
+ *                         .notBindButton(BindNot.COMMAND_TEXT)
+ *                         .onAction(e -> saveFile()),
+ *                 new Action("Save _As...")
+ *                         .menuImage(new ImageView(new Image("images/saveAs16.png")))
+ *                         .buttonImage(new ImageView(new Image("images/saveAs22.png")))
+ *                         .notBindButton(BindNot.COMMAND_TEXT)
+ *                         .onAction(e -> saveFileAs()),
+ *                 new SeparatorAction(),
+ *                 new Action("E_xit")
+ *                         .accelerator(KeyCombination.valueOf("Alt+F4"))
+ *                         .menuImage(new ImageView(new Image("images/exit16.png")))
+ *                         .buttonImage(new ImageView(new Image("images/exit22.png")))
+ *                         .notBindButton(BindNot.COMMAND_TEXT)
+ *                         .onAction(e -> exitApp())
+ *         ).createMenu());
+ *
+ *         ToggleActionGroup taGroup = new ToggleActionGroup();
+ *         menuBar.getMenus().add(new ActionGroup("_Format").addAll(
+ *                 // We want a group of exclusive toggle actions:
+ *                 taGroup.addAll(
+ *                         new Action("_Left")
+ *                                 .exclusiveSelectable(true)
+ *                                 .selected(true)
+ *                                 .menuImage(new ImageView(new Image("images/left16.png")))
+ *                                 .buttonImage(new ImageView(new Image("images/left22.png")))
+ *                                 .notBindButton(BindNot.COMMAND_TEXT)
+ *                                 .onAction(e -> adjustLeft()),
+ *                         new Action("_Center")
+ *                                 .exclusiveSelectable(true)
+ *                                 .menuImage(new ImageView(new Image("images/center16.png")))
+ *                                 .buttonImage(new ImageView(new Image("images/center22.png")))
+ *                                 .notBindButton(BindNot.COMMAND_TEXT)
+ *                                 .onAction(e -> adjustCenter()),
+ *                         new Action("_Right")
+ *                                 .exclusiveSelectable(true)
+ *                                 .menuImage(new ImageView(new Image("images/right16.png")))
+ *                                 .buttonImage(new ImageView(new Image("images/right22.png")))
+ *                                 .notBindButton(BindNot.COMMAND_TEXT)
+ *                                 .onAction(e -> adjustRight())
+ *                 )
+ *         ).createMenu());
+ *
+ *         // Add the File buttons separately, because we don't want all in the toolbar:
+ *         toolbar.getItems().addAll(newAction.createButtons(false));
+ *         toolbar.getItems().addAll(openAction.createButtons(false));
+ *         toolbar.getItems().addAll(saveAction.createButtons(false));
+ *         toolbar.getItems().add(new Separator());
+ *         // Add all the format toggle buttons:
+ *         toolbar.getItems().addAll(taGroup.createButtons(false));
+ *     }
+ *
+ *     private void newFile() {
+ *         // New ...
+ *         saveAction.setDisabled(true); // <- Disables menu item and button.
+ *     }
+ *
+ *     private void openFile() {
+ *         // Open ...
+ *         saveAction.setDisabled(true);
+ *     }
+ *
+ *     private void saveFile() {
+ *         // Save ...
+ *         saveAction.setDisabled(true);
+ *     }
+ *
+ *     private void editorChanged() {
+ *         saveAction.setDisabled(false); // <- Enables menu item and button.
+ *     }
+ *
+ *     // Further methods and handlers here.
  * }
+ * }</pre>
  *
  * Another example shows how to use this class with already existing menu items
  * and buttons:
- * {@code
-public class MainWindowController implements Initializable {
-    @FXML private MenuItem saveItem;
-    @FXML private RadioMenuItem leftItem;
-    @FXML private RadioMenuItem centerItem;
-    @FXML private RadioMenuItem rightItem;
-    @FXML private Button saveButton;
-    @FXML private ToggleButton leftButton;
-    @FXML private ToggleButton centerButton;
-    @FXML private ToggleButton rightButton;
-
-    private Action saveAction;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        saveAction = new Action("_Save")
-                .accelerator(KeyCombination.valueOf("Ctrl+N"))
-                .menuImage(new ImageView(new Image("images/save16.png")))
-                .buttonImage(new ImageView(new Image("images/save22.png")))
-                .onAction(e -> saveFile())
-                .bindTo(saveItem)
-                .bindTo(saveButton, BindNot.COMMAND_TEXT);
-
-        new ToggleActionGroup().addAll(
-                new Action("_Left")
-                        .exclusiveSelectable(true)
-                        .selected(true),
-                        .menuImage(new ImageView(new Image("images/left16.png")))
-                        .buttonImage(new ImageView(new Image("images/left22.png")))
-                        .onAction(e -> adjustLeft())
-                        .bindTo(leftItem)
-                        .bindTo(leftButton, BindNot.COMMAND_TEXT),
-                new Action("_Center")
-                        .exclusiveSelectable(true)
-                        .menuImage(new ImageView(new Image("images/center16.png")))
-                        .buttonImage(new ImageView(new Image("images/center22.png")))
-                        .onAction(e -> adjustCenter())
-                        .bindTo(centerItem)
-                        .bindTo(centerButton, BindNot.COMMAND_TEXT),
-                new Action("_Right")
-                        .exclusiveSelectable(true)
-                        .menuImage(new ImageView(new Image("images/right16.png")))
-                        .buttonImage(new ImageView(new Image("images/right22.png")))
-                        .onAction(e -> adjustRight())
-                        .bindTo(rightItem)
-                        .bindTo(rightButton, BindNot.COMMAND_TEXT)
-        );
-    }
-
-    // Further methods and handlers here.
-}
+ * <pre>{@code
+ * public class MainWindowController implements Initializable {
+ *     @FXML private MenuItem saveItem;
+ *     @FXML private RadioMenuItem leftItem;
+ *     @FXML private RadioMenuItem centerItem;
+ *     @FXML private RadioMenuItem rightItem;
+ *     @FXML private Button saveButton;
+ *     @FXML private ToggleButton leftButton;
+ *     @FXML private ToggleButton centerButton;
+ *     @FXML private ToggleButton rightButton;
+ *
+ *     private Action saveAction;
+ *
+ *     @Override
+ *     public void initialize(URL url, ResourceBundle resourceBundle) {
+ *         saveAction = new Action("_Save")
+ *                 .accelerator(KeyCombination.valueOf("Ctrl+N"))
+ *                 .menuImage(new ImageView(new Image("images/save16.png")))
+ *                 .buttonImage(new ImageView(new Image("images/save22.png")))
+ *                 .onAction(e -> saveFile())
+ *                 .bindTo(saveItem)
+ *                 .bindTo(saveButton, BindNot.COMMAND_TEXT);
+ *
+ *         new ToggleActionGroup().addAll(
+ *                 new Action("_Left")
+ *                         .exclusiveSelectable(true)
+ *                         .selected(true),
+ *                         .menuImage(new ImageView(new Image("images/left16.png")))
+ *                         .buttonImage(new ImageView(new Image("images/left22.png")))
+ *                         .onAction(e -> adjustLeft())
+ *                         .bindTo(leftItem)
+ *                         .bindTo(leftButton, BindNot.COMMAND_TEXT),
+ *                 new Action("_Center")
+ *                         .exclusiveSelectable(true)
+ *                         .menuImage(new ImageView(new Image("images/center16.png")))
+ *                         .buttonImage(new ImageView(new Image("images/center22.png")))
+ *                         .onAction(e -> adjustCenter())
+ *                         .bindTo(centerItem)
+ *                         .bindTo(centerButton, BindNot.COMMAND_TEXT),
+ *                 new Action("_Right")
+ *                         .exclusiveSelectable(true)
+ *                         .menuImage(new ImageView(new Image("images/right16.png")))
+ *                         .buttonImage(new ImageView(new Image("images/right22.png")))
+ *                         .onAction(e -> adjustRight())
+ *                         .bindTo(rightItem)
+ *                         .bindTo(rightButton, BindNot.COMMAND_TEXT)
+ *         );
+ *     }
+ *
+ *     // Further methods and handlers here.
  * }
+ * }</pre>
  */
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public class Action implements ActionItemBuilder {

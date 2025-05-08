@@ -4,17 +4,17 @@ package de.ganzer.core.validation;
  * This class is used by the {@link Validator} class to get an error message on
  * invalid input when you don't want to implement a try-catch block.
  * <p>
- * {@code
- public bool validateInput(String input, Validator validator) {
-     ValidatorExceptionRef er = new ValidatorExceptionRef();
-
-     if (validator.validate(input, er))
-          return true;
-
-     System.out.println(er.getException().getMessage());
-     return false;
- }
+ * <pre>{@code
+ * public bool validateInput(String input, Validator validator) {
+ *     ValidatorExceptionRef er = new ValidatorExceptionRef();
+ *
+ *     if (validator.validate(input, er))
+ *       return true;
+ *
+ *     System.out.println(er.getException().getMessage());
+ *     return false;
  * }
+ * }</pre>
  */
 public class ValidatorExceptionRef {
     private ValidatorException exception;
