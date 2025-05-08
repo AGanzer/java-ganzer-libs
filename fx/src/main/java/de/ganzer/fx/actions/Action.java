@@ -625,24 +625,13 @@ public class Action implements ActionItemBuilder {
             ((ToggleButton)button).selectedProperty().bindBidirectional(selected);
 
         if (imageSize == ImageSize.NONE || shouldBind(not, BindNot.IMAGE)) {
-            ObjectProperty<Node> property;
+            ObjectProperty<Node> property = switch (imageSize) {
+                case SMALL -> smallButtonImage;
+                case MEDIUM -> mediumButtonImage;
+                case LARGE -> largeButtonImage;
+                default -> throw new IllegalArgumentException("imageSize is invalid.");
+            };
 
-            switch (imageSize) {
-                case SMALL:
-                    property = smallButtonImage;
-                    break;
-
-                case MEDIUM:
-                    property = mediumButtonImage;
-                    break;
-
-                case LARGE:
-                    property = largeButtonImage;
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("imageSize is invalid.");
-            }
             button.graphicProperty().bind(new ObjectBinding<>() {
                 {
                     this.bind(property);
