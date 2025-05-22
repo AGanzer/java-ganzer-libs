@@ -81,6 +81,9 @@ public final class FileNames {
      *
      * @param countedFormat The format string to set. If this is {@code null},
      *        {@link #DEFAULT_COUNTED_FORMAT} is set.
+     *
+     * @see #getValidName(String)
+     * @see #getValidMaskedName(String)
      */
     public static void setCountedFormat(String countedFormat) {
         FileNames.countedFormat = countedFormat == null ? DEFAULT_COUNTED_FORMAT : countedFormat;
@@ -106,6 +109,10 @@ public final class FileNames {
      *
      * @param hintFormat The format string to set. If this is {@code null},
      *        {@link #DEFAULT_HINT_FORMAT} is set.
+     *
+     * @see #getValidName(String)
+     * @see #getValidMaskedName(String)
+     * @see #getUniqueName(Path, String)
      */
     public static void setHintFormat(String hintFormat) {
         FileNames.hintFormat = hintFormat == null ? DEFAULT_HINT_FORMAT : hintFormat;
@@ -134,6 +141,10 @@ public final class FileNames {
      *
      * @param countedHintFormat The format string to set. If this is {@code null},
      *        {@link #DEFAULT_COUNTED_HINT_FORMAT} is set.
+     *
+     * @see #getValidName(String)
+     * @see #getValidMaskedName(String)
+     * @see #getUniqueName(Path, String)
      */
     public static void setCountedHintFormat(String countedHintFormat) {
         FileNames.countedHintFormat = countedHintFormat == null ? DEFAULT_COUNTED_HINT_FORMAT : countedHintFormat;
@@ -156,7 +167,7 @@ public final class FileNames {
      * {@link #getValidName(String)} to replace invalid characters.
      *
      * @param charReplacement The replacement function to set. If this is
-     *        {@code null}, invalid characters are replaced with its two digits
+     *        {@code null}, invalid characters are replaced with its two-digit
      *        Unicode value and a preceding % character.
      */
     public static void setCharReplacement(Function<Character, String> charReplacement) {
@@ -204,8 +215,8 @@ public final class FileNames {
      * Changes all invalid characters in the given name to build a valid
      * filename for the current operating system.
      * <p>
-     * The function that is used by this method is the one that is set at
-     * construction or a default function if no other one is set.
+     * The function used by this method is the one that is set by
+     * {@link #setCharReplacement(Function)}.
      * <p>
      * Note that unter Linux and Mac/OS the jokers ? and * are valid for
      * filenames.
@@ -228,8 +239,8 @@ public final class FileNames {
      * Changes all invalid characters in the given name to build a valid
      * filename that may contain jokers for the current operating system.
      * <p>
-     * The function that is used by this method is the one that is set at
-     * construction or a default function if no other one is set.
+     * The function used by this method is the one that is set by
+     * {@link #setCharReplacement(Function)}.
      *
      * @param name The name to make valid.
      *
@@ -254,11 +265,15 @@ public final class FileNames {
      * {@code path} does not contain a directory, the current working directory
      * is used.
      * <p>
+     * The format strings for the modification of the filename are set by
+     * {@link #setHintFormat(String)}, {@link #setCountedHintFormat(String)} and
+     * {@link #setCountedFormat(String)}.
+     * <p>
      * Note: This method does not validate {@code path}. The resulting path
      * may be invalid if {@code path} is invalid.
      *
      * @param path An absolute or relative path to make unique.
-     * @param hint A hint that is included into the resulting name. This may be
+     * @param hint A hint that is included in the resulting name. This may be
      *             a string like "Copy". If this is {@code null} or empty, no
      *             hint is used.
      *
@@ -285,11 +300,15 @@ public final class FileNames {
      * {@code path} does not contain a directory, the current working directory
      * is used.
      * <p>
+     * The format strings for the modification of the filename are set by
+     * {@link #setHintFormat(String)}, {@link #setCountedHintFormat(String)} and
+     * {@link #setCountedFormat(String)}.
+     * <p>
      * Note: This method does not validate {@code path}. The resulting path
      * may be invalid if {@code path} is invalid.
      *
      * @param path An absolute or relative path to make unique.
-     * @param hint A hint that is included into the resulting name. This may be
+     * @param hint A hint that is included in the resulting name. This may be
      *             a string like "Copy". If this is {@code null} or empty, no
      *             hint is used.
      *
