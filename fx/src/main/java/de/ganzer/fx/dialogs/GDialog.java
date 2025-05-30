@@ -21,27 +21,27 @@ import java.util.function.Consumer;
  * <p>
  * The following example shows how the {@code GDialog} class can be used:
  * <p>
- * {@code
-public class MainWindowController {
-    // Other code here ...
-
-    public void showDialogModal(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
-        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
-
-        if (dialog.showAndWait(findMyWindow()) != ModalResult.CANCEL)
-            workWithInput(dialog.getData());
-    }
-
-    public void showDialog(ActionEvent ignored) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
-        GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
-
-        dialog.setApplyDataConsumer(input -> workWithInput(input));
-        dialog.show(null);
-    }
-}
+ * <pre>{@code
+ * public class MainWindowController {
+ *     // Other code here ...
+ *
+ *     public void showDialogModal(ActionEvent ignored) throws IOException {
+ *         FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
+ *         GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
+ *
+ *         if (dialog.showAndWait(findMyWindow()) != ModalResult.CANCEL)
+ *             workWithInput(dialog.getData());
+ *     }
+ *
+ *     public void showDialog(ActionEvent ignored) throws IOException {
+ *         FXMLLoader fxmlLoader = new FXMLLoader(MyApplication.class.getResource("input-dialog-view.fxml"));
+ *         GDialog<InputDialogController, InputDialogData> dialog = new GDialog<>(fxmlLoader, new InputDialogData());
+ *
+ *         dialog.setApplyDataConsumer(input -> workWithInput(input));
+ *         dialog.show(null);
+ *     }
  * }
+ * }</pre>
  *
  * @param <Controller> The Controller class that is created by
  *                     the {@link FXMLLoader} that is given to the constructor.

@@ -17,38 +17,38 @@ import java.util.function.Consumer;
  * <p>
  * Example how to use it in a simple input dialog:
  * <p>
- * {@code
-public class InputTestDialog extends JDialog {
-    private ValidationFilter inputFilter;
-    // Other fields here.
-
-    public InputTestDialog(Frame owner) {
-        super(owner, "Input Test", true);
-        initTextField();
-        initButtons();
-    }
-
-    private void initTextField() {
-        var inputField = new JTextField(30);
-        // Set the validator:
-        inputFilter = new ValidationFilter(new NumberValidator(0.0, 100.0), inputField);
-
-        getContentPane().add(inputField);
-    }
-
-    private void initButtons() {
-        // Init OK and Cancel buttons here.
-    }
-
-    // OK is clicked:
-    private void onOk(ActionEvent event) {
-        if (!inputFilter.validate(ValidationBehavior.SET_VISUAL_HINTS))
-            return;
-
-        // Update dialog data here.
-    }
-}
+ * <pre>{@code
+ * public class InputTestDialog extends JDialog {
+ *     private ValidationFilter inputFilter;
+ *     // Other fields here.
+ *
+ *     public InputTestDialog(Frame owner) {
+ *         super(owner, "Input Test", true);
+ *         initTextField();
+ *         initButtons();
+ *     }
+ *
+ *     private void initTextField() {
+ *         var inputField = new JTextField(30);
+ *         // Set the validator:
+ *         inputFilter = new ValidationFilter(new NumberValidator(0.0, 100.0), inputField);
+ *
+ *         getContentPane().add(inputField);
+ *     }
+ *
+ *     private void initButtons() {
+ *         // Init OK and Cancel buttons here.
+ *     }
+ *
+ *     // OK is clicked:
+ *     private void onOk(ActionEvent event) {
+ *         if (!inputFilter.validate(ValidationBehavior.SET_VISUAL_HINTS))
+ *             return;
+ *
+ *         // Update dialog data here.
+ *     }
  * }
+ * }</pre>
  */
 @SuppressWarnings("unused")
 public class ValidationFilter extends DocumentFilter {
