@@ -398,7 +398,7 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
      * answers are:
      * <ul>
      *     <li>{@link JOptionPane#YES_OPTION}: {@link #applyChangedData()} is
-     *          called. On success the window is closed; otherwise, the event
+     *          called. On success, the window is closed; otherwise, the event
      *          is consumed and the window is not closed.</li>
      *     <li>{@link JOptionPane#CANCEL_OPTION}: The event is consumed and the
      *          window is not closed.</li>
@@ -437,7 +437,7 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
      * This implementation does simply show a {@link JOptionPane} with a
      * question whether the data shall be saved and Yes, No and Cancel buttons.
      *
-     * @return The result of the user's choose.
+     * @return The result of the user's choice.
      */
     protected int queryUserToSave() {
         return JOptionPane.showConfirmDialog(
@@ -455,7 +455,7 @@ public abstract class AbstractModifiableDialog<Data> extends EscapableDialog imp
     protected abstract boolean validateModifiedData();
 
     /**
-     * Called to update the data with the users input.
+     * Called to update the data with the user's input.
      *
      * @param data The data to update. This is identical to {@link #getData()}.
      */

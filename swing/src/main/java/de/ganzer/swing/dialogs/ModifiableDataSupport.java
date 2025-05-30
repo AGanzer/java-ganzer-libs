@@ -224,7 +224,7 @@ public interface ModifiableDataSupport<Data> extends DataSupport<Data> {
     boolean applyChangedData();
 
     /**
-     * Sets the consumer that is invoked when the dialog is closed by the OK
+     * Sets the consumer to be invoked when the dialog is closed by the OK
      * button or whenever an Apply button is clicked within the dialog to
      * notify the client about changed data.
      *
@@ -234,7 +234,7 @@ public interface ModifiableDataSupport<Data> extends DataSupport<Data> {
     void setDataConsumer(Consumer<Data> dataConsumer);
 
     /**
-     * Gets a value the indicates whether the data is modified by the user.
+     * Gets a value that indicates whether the data is modified by the user.
      *
      * @return {@code true} if the data is modified; otherwise, {@code false}.
      */
