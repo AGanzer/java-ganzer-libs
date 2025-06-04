@@ -128,7 +128,7 @@ public class EscapableDialog extends JDialog implements EscapableWindow {
      * Resets the escaped flag to its origin value.
      * <p>
      * Inheritors can use this to reset the flag when a dialog cannot be closed
-     * by te OK button because of invalid data.
+     * by the OK button because of invalid data.
      *
      * @see #isEscaped()
      */
