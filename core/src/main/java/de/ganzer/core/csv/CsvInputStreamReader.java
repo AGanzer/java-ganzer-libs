@@ -144,11 +144,11 @@ public class CsvInputStreamReader extends InputStreamReader {
                 values.add(value.toString());
                 value.setLength(0);
 
-                if (stopReading()) {
-                    checkEOL();
+                if (stopReading())
                     break;
-                }
             }
+
+            checkEOL();
         } while (values.isEmpty() && lastRead != -1); // This skips empty lines!
 
         return values;
