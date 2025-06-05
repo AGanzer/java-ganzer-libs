@@ -465,6 +465,6 @@ public class FileDelete extends FileErrorProvider {
     }
 
     private void cancel() throws ErrorInfo {
-        throw new ErrorInfo(FileError.CANCELED, CoreMessages.get("operationCanceled"), true);
+        throw new ErrorInfo(FileError.CANCELED, CoreMessages.get("operationCanceled"), false);
     }
 }
