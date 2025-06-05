@@ -399,17 +399,18 @@ public class FileDelete extends FileErrorProvider {
         for (var file : listFiles(source)) {
             if (isDirectory(file)) {
                 deleteDir(file);
-                reportDelete(file, DeleteProgressStatus.DELETE_DIRECTORY);
-
-                try {
-                    if (!file.delete())
-                        throw new ErrorInfo(FileError.DELETE_DIR, String.format(CoreMessages.get("cannotDeleteDir"), file.getAbsolutePath()), true);
-                } catch (SecurityException e) {
-                    throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), file.getAbsolutePath()), true);
-                }
             } else {
                 deleteFile(file);
             }
+        }
+
+        reportDelete(source, DeleteProgressStatus.DELETE_DIRECTORY);
+
+        try {
+            if (!source.delete())
+                throw new ErrorInfo(FileError.DELETE_DIR, String.format(CoreMessages.get("cannotDeleteDir"), source.getAbsolutePath()), true);
+        } catch (SecurityException e) {
+            throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), source.getAbsolutePath()), true);
         }
     }
 
