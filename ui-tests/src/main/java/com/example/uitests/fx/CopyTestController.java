@@ -3,6 +3,7 @@ package com.example.uitests.fx;
 import de.ganzer.core.files.FileCopy;
 import de.ganzer.core.files.FileError;
 import de.ganzer.core.files.CopyProgressContinuation;
+import de.ganzer.core.util.FileNames;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.core.validation.ValidatorException;
 import de.ganzer.fx.validation.ValidatorTextFormatter;
@@ -89,7 +90,8 @@ public class CopyTestController implements TestProvider {
                             }
                         },
                         new QueryCopyError(),
-                        new QueryOverwrite());
+                        new QueryOverwrite(),
+                        path -> FileNames.getUniqueName(path, "Copy"));
 
                 copy.start(sourcePath.getText(), targetPath.getText(), suppressInit.isSelected());
 
