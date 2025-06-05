@@ -319,7 +319,7 @@ public class FileDelete extends FileErrorProvider {
             if (isDirectory(file))
                 initializeDelete(file);
             else
-                reportInitializeProgress(file.getAbsolutePath(), file.length());
+                reportInitializeProgress(file.getAbsolutePath(), 1);
         }
     }
 
@@ -329,7 +329,6 @@ public class FileDelete extends FileErrorProvider {
 
             if (isDirectory(source)) {
                 deleteDir(source);
-                reportDelete(source, DeleteProgressStatus.DELETE_DIRECTORY);
             } else {
                 deleteFile(source);
             }
