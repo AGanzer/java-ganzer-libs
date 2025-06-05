@@ -308,18 +308,18 @@ public class FileDelete extends FileErrorProvider {
             if (source.isDirectory())
                 initializeDelete(source);
             else
-                reportInitializeProgress(source.getAbsolutePath(), 1);
+                reportInitializeProgress(source.getAbsolutePath());
         });
     }
 
     private void initializeDelete(File source) {
-        reportInitializeProgress(source.getAbsolutePath(), 1);
+        reportInitializeProgress(source.getAbsolutePath());
 
         for (var file : listFiles(source)) {
             if (isDirectory(file))
                 initializeDelete(file);
             else
-                reportInitializeProgress(file.getAbsolutePath(), 1);
+                reportInitializeProgress(file.getAbsolutePath());
         }
     }
 
@@ -441,9 +441,9 @@ public class FileDelete extends FileErrorProvider {
             cancel();
     }
 
-    private void reportInitializeProgress(String sourcePath, long addEntries) {
+    private void reportInitializeProgress(String sourcePath) {
         progress.path = sourcePath;
-        progress.entriesAvail += addEntries;
+        ++progress.entriesAvail;
 
         reportProgress();
     }
