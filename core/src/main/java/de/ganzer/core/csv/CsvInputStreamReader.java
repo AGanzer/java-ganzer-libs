@@ -1,6 +1,7 @@
 package de.ganzer.core.csv;
 
 import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.core.io.BOMInputStreamReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +20,7 @@ import java.util.List;
  * or in the <a href="https://www.rfc-editor.org/rfc/rfc4180">RFC Editor</a>.
  */
 @SuppressWarnings("unused")
-public class CsvInputStreamReader extends InputStreamReader {
+public class CsvInputStreamReader extends BOMInputStreamReader {
     private char valueSeparator = ',';
     private char maskChar = '"';
     private boolean readEmptyLineAsEmptyValue;
@@ -31,29 +32,22 @@ public class CsvInputStreamReader extends InputStreamReader {
     /**
      * {@inheritDoc}
      */
-    public CsvInputStreamReader(InputStream in) {
+    public CsvInputStreamReader(InputStream in) throws IOException {
         super(in);
     }
 
     /**
      * {@inheritDoc}
      */
-    public CsvInputStreamReader(InputStream in, String charsetName) throws UnsupportedEncodingException {
+    public CsvInputStreamReader(InputStream in, String charsetName) throws IOException {
         super(in, charsetName);
     }
 
     /**
      * {@inheritDoc}
      */
-    public CsvInputStreamReader(InputStream in, Charset cs) {
+    public CsvInputStreamReader(InputStream in, Charset cs) throws IOException {
         super(in, cs);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public CsvInputStreamReader(InputStream in, CharsetDecoder dec) {
-        super(in, dec);
     }
 
     /**

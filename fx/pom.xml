@@ -6,7 +6,7 @@
 
     <groupId>de.ganzer.fx</groupId>
     <artifactId>de-ganzer-fx</artifactId>
-    <version>5.0.0</version>
+    <version>5.1.0</version>
     <name>de-ganzer-fx</name>
 
     <properties>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
-            <version>5.0.0</version>
+            <version>5.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
