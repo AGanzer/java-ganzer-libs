@@ -4,9 +4,7 @@ import de.ganzer.core.validation.*;
 import de.ganzer.swing.internals.SwingMessages;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.text.*;
-import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Objects;
@@ -52,14 +50,12 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings("unused")
 public class ValidationFilter extends DocumentFilter {
-    private static Border errorBorder = BorderFactory.createLineBorder(Color.RED, 1);
     private static Consumer<ValidatorException> errorConsumer;
+    private static ValidationHintProvider hintProvider = new BorderValidationHint();
 
     private final JTextComponent textField;
     private Validator validator;
     private boolean validateOnFocusLost;
-    private String orgTooltip;
-    private Border orgBorder;
     private boolean hintsVisible;
     private boolean updating;
 
@@ -105,24 +101,22 @@ public class ValidationFilter extends DocumentFilter {
     }
 
     /**
-     * Gets the border to use for marking a text field with invalid input.
+     * Gets the currently used hint provider.
      *
-     * @return The set border. The default is a red thin border.
+     * @return The currently used hint provider.
      */
-    public static Border getErrorBorder() {
-        return errorBorder;
+    public static ValidationHintProvider getHintProvider() {
+        return hintProvider;
     }
 
     /**
-     * Sets the border to use for marking a text field with invalid input.
+     * Sets the hint provider to use.
      *
-     * @param errorBorder The border to set.
-     *
-     * @throws NullPointerException {@code border} is {@code null}.
+     * @param hintProvider The provider to set or {@code null} to use the
+     *         default provider (an instance of {@link BorderValidationHint}).
      */
-    public static void setErrorBorder(Border errorBorder) {
-        Objects.requireNonNull(errorBorder, "errorBorder must not be null.");
-        ValidationFilter.errorBorder = errorBorder;
+    public static void setHintProvider(ValidationHintProvider hintProvider) {
+        ValidationFilter.hintProvider = hintProvider == null ? new BorderValidationHint() : hintProvider;
     }
 
     /**
@@ -220,7 +214,7 @@ public class ValidationFilter extends DocumentFilter {
      *
      * @param behavior The behavior to use for validation.
      *
-     * @return {@code true} if all input is valid; otherwise, {@code false}.
+     * @return {@code true} if the input is valid; otherwise, {@code false}.
      *         Remark that there is no return if {@code behavior} is
      *         {@link ValidationBehavior#THROW_EXCEPTION}.
      */
@@ -371,22 +365,15 @@ public class ValidationFilter extends DocumentFilter {
         if (!hintsVisible)
             return;
 
-        textField.setToolTipText(orgTooltip);
-        textField.setBorder(orgBorder);
-
+        hintProvider.hideHints(textField);
         hintsVisible = false;
-        orgTooltip = null;
-        orgBorder = null;
     }
 
     private void setVisualHints(ValidatorException e) {
-        if (!hintsVisible) {
-            orgTooltip = textField.getToolTipText();
-            orgBorder = textField.getBorder();
-            hintsVisible = true;
-        }
+        if (hintsVisible)
+            return;
 
-        textField.setToolTipText(e.getLocalizedMessage());
-        textField.setBorder(errorBorder);
+        hintProvider.showHints(textField, e);
+        hintsVisible = true;
     }
 }
