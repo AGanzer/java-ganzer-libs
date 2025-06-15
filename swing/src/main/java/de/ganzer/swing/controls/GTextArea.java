@@ -1,14 +1,8 @@
 package de.ganzer.swing.controls;
 
-import javax.swing.AbstractAction;
 import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
 import javax.swing.text.Document;
 import javax.swing.undo.UndoManager;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 
 /**
  * Extends {@link JTextArea} with the ability to control undo/redo operations
