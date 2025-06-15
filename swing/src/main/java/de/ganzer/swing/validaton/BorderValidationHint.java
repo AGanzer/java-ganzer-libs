@@ -84,7 +84,7 @@ public class BorderValidationHint implements ValidationHintProvider {
      *
      * @return {@code true} if tooltips are not changed.
      */
-    public boolean isToolTipKept() {
+    public boolean shouldKeepToolTip() {
         return keepToolTip;
     }
 
@@ -96,7 +96,9 @@ public class BorderValidationHint implements ValidationHintProvider {
      */
     @Override
     public void showHints(JTextComponent target, ValidatorException e) {
-        orgTooltip = target.getToolTipText();
+        if (!shouldKeepToolTip())
+            orgTooltip = target.getToolTipText();
+
         orgBorder = target.getBorder();
 
         target.setToolTipText(e.getLocalizedMessage());
@@ -110,7 +112,9 @@ public class BorderValidationHint implements ValidationHintProvider {
      */
     @Override
     public void hideHints(JTextComponent target) {
-        target.setToolTipText(orgTooltip);
+        if (!shouldKeepToolTip())
+            target.setToolTipText(orgTooltip);
+
         target.setBorder(orgBorder);
 
         orgTooltip = null;
