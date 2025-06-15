@@ -18,10 +18,10 @@ public enum ValidationBehavior {
     SHOW_MESSAGE_BOX,
 
     /**
-     * Invalid input ist marked by a colored border and the tooltip is changed
-     * to show the validators error message.
+     * Invalid input ist marked by a visual hint to show the validator's error
+     * message.
      *
-     * @see ValidationFilter#setErrorBorder(Border)
+     * @see ValidationFilter#setHintProvider(ValidationHintProvider)
      */
     SET_VISUAL_HINTS,
 

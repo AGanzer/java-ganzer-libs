@@ -178,7 +178,7 @@ public class NumberValidator extends Validator {
      * @return The format that is used for formatting the text in display mode
      * or {@code null} to use default formatting.
      *
-     * @see #doFormatText;
+     * @see #doFormatText(String, TextFormat)
      */
     public String getDisplayFormat() {
         return displayFormat;
@@ -191,7 +191,7 @@ public class NumberValidator extends Validator {
      *                      formatting. If this is an empty String, {@code null}
      *                      is set.
      *
-     * @see #doFormatText;
+     * @see #doFormatText(String, TextFormat)
      */
     public void setDisplayFormat(String displayFormat) {
         if (displayFormat != null && displayFormat.isEmpty())
@@ -206,7 +206,7 @@ public class NumberValidator extends Validator {
      * @return The format that is used for formatting the text in edit mode
      * or {@code null} to use default formatting.
      *
-     * @see #doFormatText;
+     * @see #doFormatText(String, TextFormat)
      */
     public String getEditFormat() {
         return editFormat;
@@ -219,7 +219,7 @@ public class NumberValidator extends Validator {
      *                   formatting. If this is an empty String, {@code null}
      *                   is set.
      *
-     * @see #doFormatText;
+     * @see #doFormatText(String, TextFormat)
      */
     public void setEditFormat(String editFormat) {
         if (editFormat != null && editFormat.isEmpty())
