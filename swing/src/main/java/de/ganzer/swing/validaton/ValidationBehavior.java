@@ -1,6 +1,5 @@
 package de.ganzer.swing.validaton;
 
-import javax.swing.border.Border;
 import java.util.function.Consumer;
 
 /**
