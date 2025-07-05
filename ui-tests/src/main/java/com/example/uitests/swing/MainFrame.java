@@ -22,6 +22,7 @@ public class MainFrame extends JFrame {
     private GActionGroup buttonsMenu;
     private GActionGroup othersMenu;
     private GActionGroup testMenu;
+    private GAction enableTabAction;
     private JToolBar toolBar;
     private ClosableTabsPane tabPane;
 
@@ -59,7 +60,7 @@ public class MainFrame extends JFrame {
 
         try {
 //            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -161,7 +162,8 @@ public class MainFrame extends JFrame {
                                 new GAction("New Tab")
                                         .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK))
                                         .onAction(this::onNewTab),
-                                new GAction("Enable/Disable Tab")
+                                enableTabAction = new GAction("Enable/Disable Tab")
+                                        .enabled(false)
                                         .onAction(this::onToggleTabEnabled)
                         ),
                 new GActionGroup("Extras").addAll(
@@ -226,6 +228,7 @@ public class MainFrame extends JFrame {
             if (c != null)
                 tabPane.remove(c);
         });
+        tabPane.addChangeListener(e -> enableTabAction.setEnabled(tabPane.getTabCount() > 1));
     }
 
     private void onExit(ActionEvent event) {
