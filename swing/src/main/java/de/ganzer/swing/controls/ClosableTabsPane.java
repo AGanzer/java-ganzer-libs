@@ -511,7 +511,7 @@ public class ClosableTabsPane extends JTabbedPane {
         var closeListeners = getListeners(TabCloseListener.class);
 
         for (var closeListener : closeListeners) {
-            closeListener.closeTabPerformed(tabIndex);
+            closeListener.closeTabPerformed(tabIndex, getComponentAt(tabIndex));
         }
     }
 
@@ -536,7 +536,7 @@ public class ClosableTabsPane extends JTabbedPane {
             this.pane = pane;
             this.component = component;
 
-            setOpaque(true);
+            setOpaque(false);
             setTitle(title);
             setIcon(icon);
             setClosable(pane.isClosable());
@@ -548,13 +548,13 @@ public class ClosableTabsPane extends JTabbedPane {
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    if (!pane.isEnabledAt(pane.indexOfTabComponent(TabHeaderPanel.this)))
+                    if (isEnabled())
                         pane.setSelectedComponent(component);
                 }
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    if (!pane.isEnabledAt(pane.indexOfTabComponent(TabHeaderPanel.this)))
+                    if (!isEnabled())
                         return;
 
                     titleLabel.setForeground(UIManager.getColor("TabbedPane.hoverForeground"));
@@ -563,7 +563,7 @@ public class ClosableTabsPane extends JTabbedPane {
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    if (pane.isEnabledAt(pane.indexOfTabComponent(TabHeaderPanel.this)))
+                    if (isEnabled())
                         adjustColors();
                 }
             });
@@ -578,7 +578,9 @@ public class ClosableTabsPane extends JTabbedPane {
         @Override
         public void setForeground(Color fg) {
             super.setForeground(fg);
-            adjustColors();
+
+            if (pane != null)
+                adjustColors();
         }
 
         @Override
@@ -590,7 +592,7 @@ public class ClosableTabsPane extends JTabbedPane {
         @Override
         public void setBackground(Color bg) {
             super.setBackground(bg);
-            adjustColors();
+            setOpaque(bg != null);
         }
 
         @Override
@@ -608,6 +610,19 @@ public class ClosableTabsPane extends JTabbedPane {
 
             super.setEnabled(enabled);
             adjustColors();
+
+            if (titleLabel != null)
+                titleLabel.setEnabled(enabled);
+
+            if (iconLabel != null) {
+                if (disabledIcon != null)
+                    iconLabel.setIcon(enabled ? icon : disabledIcon);
+                else
+                    iconLabel.setEnabled(enabled);
+            }
+
+            if (closeButton != null)
+                closeButton.setVisible(enabled);
         }
 
         public int getDisplayedMnemonicIndex() {
@@ -710,22 +725,16 @@ public class ClosableTabsPane extends JTabbedPane {
         }
 
         private void adjustColors() {
-            if (!pane.isEnabledAt(pane.indexOfTabComponent(TabHeaderPanel.this))) {
+            if (!isEnabled()) {
                 if (titleLabel != null)
                     titleLabel.setForeground(UIManager.getColor("TabbedPane.disabledForeground"));
-
-                setBackground(UIManager.getColor("TabbedPane.background"));
             } else {
                 if (pane.getSelectedComponent() == component) {
                     if (titleLabel != null)
                         titleLabel.setForeground(UIManager.getColor("TabbedPane.selectedForeground"));
-
-                    setBackground(UIManager.getColor("TabbedPane.selectedBackground"));
                 } else {
                     if (titleLabel != null)
                         titleLabel.setForeground(getForeground());
-
-                    setBackground(getBackground());
                 }
             }
         }
@@ -767,6 +776,8 @@ public class ClosableTabsPane extends JTabbedPane {
                     g2.translate(1, 1);
 
                 g2.setStroke(new BasicStroke(2));
+
+                setVisible(isEnabled());
 
                 if (getModel().isRollover())
                     g2.setColor(Color.MAGENTA);

@@ -99,7 +99,7 @@ public class TabbedClosablePane extends JTabbedPane {
         var closeListeners = getListeners(TabCloseListener.class);
 
         for (var closeListener : closeListeners) {
-            closeListener.closeTabPerformed(tabIndex);
+            closeListener.closeTabPerformed(tabIndex, getComponentAt(tabIndex));
         }
     }
 

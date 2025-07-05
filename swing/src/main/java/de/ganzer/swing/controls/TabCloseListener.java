@@ -1,5 +1,6 @@
 package de.ganzer.swing.controls;
 
+import java.awt.Component;
 import java.util.EventListener;
 
 /**
@@ -14,5 +15,5 @@ public interface TabCloseListener extends EventListener {
      *
      * @param index The zero-based index of the page that's button was clicked.
      */
-    void closeTabPerformed(int index);
+    void closeTabPerformed(int index, Component component);
 }

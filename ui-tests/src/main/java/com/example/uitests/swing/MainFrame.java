@@ -4,6 +4,7 @@ import com.example.uitests.swing.tests.LoginDialog;
 import com.example.uitests.swing.tests.InputTestDialog;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
+import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TogglePanel;
 
 import javax.swing.*;
@@ -16,13 +17,14 @@ import java.awt.event.WindowEvent;
 public class MainFrame extends JFrame {
     private static final String UI_KEY_FRAME = "MainFrame.frame";
 
-    GActionGroup mainMenu;
-    GActionGroup fileMenu;
-    GActionGroup buttonsMenu;
-    GActionGroup othersMenu;
-    GActionGroup testMenu;
-    GActionGroup optionsMenu;
-    JToolBar toolBar;
+    private GActionGroup mainMenu;
+    private GActionGroup fileMenu;
+    private GActionGroup buttonsMenu;
+    private GActionGroup othersMenu;
+    private GActionGroup testMenu;
+    private GActionGroup optionsMenu;
+    private JToolBar toolBar;
+    private ClosableTabsPane tabPane;
 
     @Override
     protected void frameInit() {
@@ -39,6 +41,7 @@ public class MainFrame extends JFrame {
         initMenu();
         initToolBar();
         initAccorion();
+        initTabPane();
 
         SwingTestApp.getUiSettings().apply(UI_KEY_FRAME, this);
     }
@@ -56,8 +59,8 @@ public class MainFrame extends JFrame {
             System.out.println(laf.getClassName());
 
         try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -154,7 +157,13 @@ public class MainFrame extends JFrame {
                                 new GAction("Input Dialog Test")
                                         .onAction(this::onInputTest),
                                 new GAction("Login Dialog Test")
-                                        .onAction(this::onLoginTest)
+                                        .onAction(this::onLoginTest),
+                                new GSeparatorAction(),
+                                new GAction("New Tab")
+                                        .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK))
+                                        .onAction(this::onNewTab),
+                                new GAction("Enable/Disable Tab")
+                                        .onAction(this::onToggleTabEnabled)
                         ),
                 optionsMenu = new GActionGroup("Extras").addAll(
                         new GAction("Show Text In Buttons")
@@ -207,6 +216,17 @@ public class MainFrame extends JFrame {
         accordion.getPanels()[0].setCollapsed(false);
 
         getContentPane().add(accordion, BorderLayout.WEST);
+    }
+
+    private void initTabPane() {
+        tabPane = new ClosableTabsPane();
+        getContentPane().add(tabPane, BorderLayout.CENTER);
+        addNewTab(false);
+
+        tabPane.addCloseListener((i, c) -> {
+            if (c != null)
+                tabPane.remove(c);
+        });
     }
 
     private void onExit(ActionEvent event) {
@@ -313,5 +333,24 @@ public class MainFrame extends JFrame {
 
         if (InputTestDialog.showModal(this, data))
             System.out.println("Your input: " + data.input);
+    }
+
+    private static int tabCounter;
+
+    private void addNewTab(boolean closable) {
+        var panel = new JPanel();
+        panel.setBorder(BorderFactory.createLoweredBevelBorder());
+        tabPane.addTab("Tab " + ++tabCounter, Images.load("hand_count_three-16"), panel);
+        tabPane.setSelectedComponent(panel);
+        tabPane.setClosableAt(tabPane.getSelectedIndex(), closable);
+    }
+
+    private void onNewTab(ActionEvent event) {
+        addNewTab(true);
+    }
+
+    private void onToggleTabEnabled(ActionEvent event) {
+        if (tabPane.getTabCount() > 1)
+            tabPane.setEnabledAt(1, !tabPane.isEnabledAt(1));
     }
 }
