@@ -23,6 +23,7 @@ public class MainFrame extends JFrame {
     private GActionGroup othersMenu;
     private GActionGroup testMenu;
     private GAction enableTabAction;
+    private GAction colorTabAction;
     private JToolBar toolBar;
     private ClosableTabsPane tabPane;
 
@@ -164,7 +165,10 @@ public class MainFrame extends JFrame {
                                         .onAction(this::onNewTab),
                                 enableTabAction = new GAction("Enable/Disable Tab")
                                         .enabled(false)
-                                        .onAction(this::onToggleTabEnabled)
+                                        .onAction(this::onToggleTabEnabled),
+                                colorTabAction = new GAction("Toggle Tab Colors")
+                                        .enabled(false)
+                                        .onAction(this::onChangeTabColor)
                         ),
                 new GActionGroup("Extras").addAll(
                         new GAction("Show Text In Buttons")
@@ -228,7 +232,10 @@ public class MainFrame extends JFrame {
             if (c != null)
                 tabPane.remove(c);
         });
-        tabPane.addChangeListener(e -> enableTabAction.setEnabled(tabPane.getTabCount() > 1));
+        tabPane.addChangeListener(e -> {
+            enableTabAction.setEnabled(tabPane.getTabCount() > 1);
+            colorTabAction.setEnabled(tabPane.getTabCount() > 2);
+        });
     }
 
     private void onExit(ActionEvent event) {
@@ -354,5 +361,21 @@ public class MainFrame extends JFrame {
     private void onToggleTabEnabled(ActionEvent event) {
         if (tabPane.getTabCount() > 1)
             tabPane.setEnabledAt(1, !tabPane.isEnabledAt(1));
+    }
+
+    private Color lastTabBackgroundColor = new Color (128, 128, 255);
+    private Color lastTabForegroundColor = new Color (0, 255, 0);
+
+    private void onChangeTabColor(ActionEvent event) {
+        if (tabPane.getTabCount() > 2) {
+            Color backgroundColorToSet = lastTabBackgroundColor;
+            Color foregroundColorToSet = lastTabForegroundColor;
+
+            lastTabBackgroundColor = tabPane.getBackgroundAt(2);
+            lastTabForegroundColor = tabPane.getForegroundAt(2);
+
+            tabPane.setBackgroundAt(2, backgroundColorToSet);
+            tabPane.setForegroundAt(2, foregroundColorToSet);
+        }
     }
 }

@@ -554,11 +554,8 @@ public class ClosableTabsPane extends JTabbedPane {
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    if (!isEnabled())
-                        return;
-
-                    titleLabel.setForeground(UIManager.getColor("TabbedPane.hoverForeground"));
-                    setBackground(UIManager.getColor("TabbedPane.hoverColor"));
+                    if (isEnabled())
+                        titleLabel.setForeground(UIManager.getColor("TabbedPane.hoverForeground"));
                 }
 
                 @Override
@@ -581,18 +578,6 @@ public class ClosableTabsPane extends JTabbedPane {
 
             if (pane != null)
                 adjustColors();
-        }
-
-        @Override
-        public Color getBackground() {
-            Color color = super.getBackground();
-            return color != null ? color : UIManager.getColor("TabbedPane.background");
-        }
-
-        @Override
-        public void setBackground(Color bg) {
-            super.setBackground(bg);
-            setOpaque(bg != null);
         }
 
         @Override
