@@ -16,9 +16,12 @@ import java.util.Objects;
 /**
  * Defines a pane with tab headers that contain a close button.
  *
+ * @deprecated Use {@link ClosableTabsPane} instead.
+ *
  * @see TabCloseListener
  */
 @SuppressWarnings("unused")
+@Deprecated(since = "5.2", forRemoval = true)
 public class TabbedClosablePane extends JTabbedPane {
     private boolean closable = true;
 
@@ -262,6 +265,7 @@ public class TabbedClosablePane extends JTabbedPane {
             }
 
             protected void paintComponent(Graphics g) {
+                //noinspection DuplicatedCode - ClosableTabsPane
                 super.paintComponent(g);
 
                 Graphics2D g2 = (Graphics2D) g.create();
