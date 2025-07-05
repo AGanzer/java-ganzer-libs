@@ -22,7 +22,6 @@ public class MainFrame extends JFrame {
     private GActionGroup buttonsMenu;
     private GActionGroup othersMenu;
     private GActionGroup testMenu;
-    private GActionGroup optionsMenu;
     private JToolBar toolBar;
     private ClosableTabsPane tabPane;
 
@@ -165,7 +164,7 @@ public class MainFrame extends JFrame {
                                 new GAction("Enable/Disable Tab")
                                         .onAction(this::onToggleTabEnabled)
                         ),
-                optionsMenu = new GActionGroup("Extras").addAll(
+                new GActionGroup("Extras").addAll(
                         new GAction("Show Text In Buttons")
                                 .shortDescription("Shows/hides the toolbar's buttons texts.")
                                 .selectable(true)
