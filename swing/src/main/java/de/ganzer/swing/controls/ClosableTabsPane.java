@@ -132,6 +132,33 @@ public class ClosableTabsPane extends JTabbedPane {
     }
 
     /**
+     * Inserts a new tab for the given component, at the given index,
+     * represented by the given title and/or icon, either of which may
+     * be {@code null}.
+     *
+     * @param title the title to be displayed on the tab
+     * @param icon the icon to be displayed on the tab
+     * @param component the component to be displayed when this tab is clicked.
+     * @param tip the tooltip to be displayed for this tab
+     * @param index the position to insert this new tab
+     *         ({@code > 0 and <= getTabCount()})
+     *
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *         ({@code < 0 or > getTabCount()})
+     *
+     * @see #addTab
+     * @see #removeTabAt
+     */
+    @Override
+    public void insertTab(String title, Icon icon, Component component, String tip, int index) {
+        super.insertTab(title, icon, component, tip, index);
+        setTabComponentAt(index, new TabHeaderPanel(this, component, title, icon));
+
+        if (getTabCount() == 1)
+            fireStateChanged();
+    }
+
+    /**
      * Sets the selected index for this tabbedpane. The index must be
      * a valid tab index or -1, which indicates that no tab should be selected
      * (can also be used when there are no tabs in the tabbedpane).  If a -1
