@@ -135,7 +135,7 @@ public class ListValidator extends Validator {
         if (super.doInputValidation(text, autoFill))
             return false;
 
-        if (validInputs == null || validInputs.isEmpty())
+        if (validInputs == null || validInputs.isEmpty() || text.isEmpty())
             return true;
 
         String input = text.toString();
@@ -166,7 +166,7 @@ public class ListValidator extends Validator {
         if (!super.doValidate(text, er))
             return false;
 
-        if (validInputs == null || validInputs.isEmpty())
+        if (validInputs == null || validInputs.isEmpty() || text.isEmpty())
             return true;
 
         boolean result;
