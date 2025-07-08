@@ -132,7 +132,7 @@ public class ListValidator extends Validator {
      */
     @Override
     protected boolean doInputValidation(StringBuilder text, boolean autoFill) {
-        if (super.doInputValidation(text, autoFill))
+        if (!super.doInputValidation(text, autoFill))
             return false;
 
         if (validInputs == null || validInputs.isEmpty() || text.isEmpty())
