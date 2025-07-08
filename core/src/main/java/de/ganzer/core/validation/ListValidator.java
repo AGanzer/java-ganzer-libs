@@ -12,7 +12,7 @@ public class ListValidator extends Validator {
     private boolean ignoreCase;
 
     /**
-     * Creates a new instance of the validator.
+     * Creates a new instance of the validator where all inputs are valid.
      * <p>
      * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
      */
@@ -20,7 +20,7 @@ public class ListValidator extends Validator {
     }
 
     /**
-     * Creates a new instance of the validator.
+     * Creates a new instance of the validator where all inputs are valid.
      *
      * @param options The options to set. This may be any combination of the
      *         {@link ValidatorOptions} constants.
