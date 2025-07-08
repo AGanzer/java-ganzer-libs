@@ -37,7 +37,6 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        initLookAndFeel();
         initLayout();
         initActions();
         initMenu();
@@ -54,23 +53,6 @@ public class MainFrame extends JFrame {
             SwingTestApp.getUiSettings().write(UI_KEY_FRAME, this);
 
         super.processWindowEvent(e);
-    }
-
-    private void initLookAndFeel() {
-        for (var laf: UIManager.getInstalledLookAndFeels())
-            System.out.println(laf.getClassName());
-
-        try {
-//            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-        } catch (Exception e) {
-            System.err.println("Cannot set look and feel. Using default.");
-            e.printStackTrace(System.err);
-        }
     }
 
     private void initLayout() {

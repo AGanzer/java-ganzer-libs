@@ -14,6 +14,8 @@ public class SwingTestApp {
     }
 
     public static void main(String[] args) {
+        CommandLineParser.parse(args);
+
         try {
             uiSettings.load();
         } catch (IOException e) {
