@@ -18,7 +18,7 @@ public class CommandLineParser {
             if (arg.startsWith("--theme=")) {
                 adjustLaf(arg.substring(8));
             } else if (arg.equals("--version")) {
-                System.out.println("swing-ui-tests");
+                System.out.println("Swing Test Application");
                 System.out.println("Version 0.0.1");
                 System.exit(0);
             }
