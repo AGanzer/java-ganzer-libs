@@ -6,7 +6,7 @@
 
     <groupId>de.ganzer.swing</groupId>
     <artifactId>de-ganzer-swing</artifactId>
-    <version>5.2.0</version>
+    <version>5.2.1</version>
     <name>de-ganzer-swing</name>
     
     <properties>
