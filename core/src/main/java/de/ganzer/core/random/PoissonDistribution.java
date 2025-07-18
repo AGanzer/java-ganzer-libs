@@ -6,7 +6,7 @@ import java.util.Random;
  * Produces random non-negative integer values.
  * <p>
  * The value obtained is the probability of exactly i occurrences of a random
- * event if the expected, mean number of its occurrence under the same
+ * event if the expected mean number of its occurrence under the same
  * conditions (on the same time/space interval) is mean.
  */
 public class PoissonDistribution implements Distribution<Long> {
