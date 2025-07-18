@@ -81,10 +81,9 @@ class ListValidatorTest {
     @Test
     void setIgnoreCase() {
         var val = new ListValidator();
+        val.setIgnoreCase(true);
 
-        assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
-        assertNull(val.getValidInputs());
-        assertFalse(val.isIgnoreCase());
+        assertTrue(val.isIgnoreCase());
     }
 
     @ParameterizedTest
