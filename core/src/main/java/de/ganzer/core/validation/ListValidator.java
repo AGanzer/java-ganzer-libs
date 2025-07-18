@@ -140,10 +140,19 @@ public class ListValidator extends Validator {
 
         String input = text.toString();
 
-        if (ignoreCase)
-            return validInputs.stream().anyMatch(s -> s.equalsIgnoreCase(input));
-        else
-            return validInputs.contains(input);
+        if (ignoreCase) {
+            for (String validInput : validInputs) {
+                if (validInput.toLowerCase().startsWith(input.toLowerCase()))
+                    return true;
+            }
+        } else {
+            for (String validInput : validInputs) {
+                if (validInput.startsWith(input))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     /**
