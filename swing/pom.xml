@@ -6,12 +6,11 @@
 
     <groupId>de.ganzer.swing</groupId>
     <artifactId>de-ganzer-swing</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>de-ganzer-swing</name>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <junit.version>5.8.2</junit.version>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -22,7 +21,7 @@
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
