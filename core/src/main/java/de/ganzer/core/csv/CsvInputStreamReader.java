@@ -123,6 +123,7 @@ public class CsvInputStreamReader extends BOMInputStreamReader {
      *
      * @return The values of the read line or an empty collection if there are
      * no more values to read.
+     *
      * @throws IOException         If an I/O error occurs.
      * @throws InvalidCsvException If the CSV stream is malformed.
      */

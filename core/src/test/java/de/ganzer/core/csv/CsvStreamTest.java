@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("TextBlockMigration")
 public class CsvStreamTest {
     @Test
     void testEmptyReadWrite() throws IOException {
@@ -16,12 +17,30 @@ public class CsvStreamTest {
 
         Assertions.assertEquals(csvContent, writtenContent);
     }
+
     @Test
     void testEmptyValueReadWrite() throws IOException {
         String csvContent = "123\n\n123\n";
         String writtenContent = doReadWrite(csvContent, false, "\n", true);
 
         Assertions.assertEquals(csvContent, writtenContent);
+    }
+
+    @Test
+    void testEmptyValueReadWrite2() throws IOException {
+        String csvContent = "123\n\n123\n\n\n";
+        String writtenContent = doReadWrite(csvContent, false, "\n", true);
+
+        Assertions.assertEquals(csvContent, writtenContent);
+    }
+
+    @Test
+    void testEmptyValueReadWrite3() throws IOException {
+        String csvContent = "123\n\n123\n\n\n";
+        String expected = "123\n123\n";
+        String writtenContent = doReadWrite(csvContent, false, "\n", false);
+
+        Assertions.assertEquals(expected, writtenContent);
     }
 
     @Test
