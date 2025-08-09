@@ -25,6 +25,7 @@ public class CsvInputStreamReader extends BOMInputStreamReader {
     private int currentLine = 1;
     private int currentColumn;
     private boolean skipRead;
+    private boolean eol;
 
     /**
      * {@inheritDoc}
@@ -132,121 +133,147 @@ public class CsvInputStreamReader extends BOMInputStreamReader {
         StringBuilder value = new StringBuilder();
 
         do {
-            while (readValue(value)) {
+            ++currentColumn;
+
+            if (skipRead)
+                skipRead = false;
+            else
+                lastRead = read();
+
+            if (lastRead == -1)
+                break;
+
+            if (lastRead == maskChar) {
+                readMaskedValue(value);
+
                 values.add(value.toString());
                 value.setLength(0);
 
-                if (stopReading())
+                if (eol) {
+                    skipAndCountLine();
                     break;
-            }
+                }
+            } else if (lastRead == valueSeparator) {
+                values.add("");
+            } else if (isEOL(lastRead)) {
+                skipAndCountLine();
 
-            checkEOL();
-        } while (values.isEmpty() && lastRead != -1); // This skips empty lines!
+                if (values.isEmpty() && !readEmptyLineAsEmptyValue)
+                    continue;
+
+                values.add("");
+                break;
+            } else {
+                value.append((char) lastRead);
+                readUnmaskedValue(value);
+
+                values.add(value.toString());
+                value.setLength(0);
+
+                if (eol) {
+                    skipAndCountLine();
+                    break;
+                }
+            }
+        } while (lastRead != -1);
 
         return values;
     }
 
-    private boolean stopReading() {
-        return lastRead == -1 || lastRead == '\r' || lastRead == '\n';
-    }
-
-    private boolean readValue(StringBuilder value) throws IOException, InvalidCsvException {
-        ++currentColumn;
-
-        if (skipRead)
-            skipRead = false;
-        else
-            lastRead = read();
-
-        if (lastRead == -1)
-            return false;
-
-        if (lastRead == maskChar)
-            return readMaskedValue(value);
-
-        if (stopReading())
-            return isEmptyValue();
-
-        if (lastRead == valueSeparator)
-            return true;
-
-        value.append((char)lastRead);
-
-        return readUnmaskedValue(value);
-    }
-
-    private boolean isEmptyValue() {
-        return currentColumn != 1 || readEmptyLineAsEmptyValue;
-    }
-
-    private boolean readMaskedValue(StringBuilder value) throws IOException, InvalidCsvException {
+    private void readUnmaskedValue(StringBuilder value) throws IOException {
         while (true) {
             ++currentColumn;
 
             lastRead = read();
 
-            if (endOfMaskedValueReached(lastRead))
+            if (lastRead == -1 || lastRead == valueSeparator)
                 break;
 
-            value.append((char)lastRead);
+            if (isEOL(lastRead)) {
+                eol = true;
+                break;
+            }
+
+            value.append((char) lastRead);
         }
-
-        if (lastRead == -1)
-            throw new InvalidCsvException(String.format(CoreMessages.get("unexpectedEndOfData"), currentLine, currentColumn));
-
-        if (!endOfValueReached(lastRead))
-            throw new InvalidCsvException(String.format(CoreMessages.get("separatorExpected"), currentLine, currentColumn));
-
-        return !value.isEmpty();
     }
 
-    private boolean endOfMaskedValueReached(int c) throws IOException {
-        if (c == -1)
-            return true;
-
-        if (c != maskChar)
-            return false;
-
-        lastRead = read();
-
-        return lastRead != maskChar;
-    }
-
-    private boolean readUnmaskedValue(StringBuilder value) throws IOException {
+    private void readMaskedValue(StringBuilder value) throws IOException {
         while (true) {
             ++currentColumn;
 
-            lastRead = read();
+            if (skipRead)
+                skipRead = false;
+            else
+                lastRead = read();
 
-            if (endOfValueReached(lastRead))
-                break;
+            if (lastRead == -1)
+                throw new InvalidCsvException(CoreMessages.get("unexpectedEndOfData", currentLine, currentColumn));
 
-            value.append((char)lastRead);
+            if (lastRead != maskChar) {
+                if (!isEOL(lastRead)) {
+                    value.append((char) lastRead);
+                } else {
+                    countLine();
+
+                    if (lastRead == '\n')
+                        value.append('\n');
+                    else if (lastRead == '\r') {
+                        value.append('\r');
+
+                        lastRead = read();
+
+                        if (lastRead == '\n')
+                            value.append('\n');
+                        else
+                            skipRead = true;
+                    }
+                }
+            } else {
+                lastRead = read();
+
+                if (lastRead == maskChar) {
+                    value.append(maskChar);
+                } else {
+                    if (isEOL(lastRead)) {
+                        eol = true;
+                        break;
+                    }
+
+                    if (lastRead == valueSeparator)
+                        break;
+
+                    throw new InvalidCsvException(CoreMessages.get("separatorExpected", currentLine, currentColumn));
+                }
+            }
         }
-
-        return !value.isEmpty();
     }
 
-    private boolean endOfValueReached(int c) {
-        return c == valueSeparator || c == '\n' || c == '\r' || c == -1;
+    private void skipAndCountLine() throws IOException {
+        skipLine();
+        countLine();
     }
 
-    private void checkEOL() throws IOException {
-        if (lastRead == '\n') {
-            countLine();
-        } else if (lastRead == '\r') {
-            countLine();
+    private void skipLine() throws IOException {
+        if (lastRead == '\n')
+            lastRead = read();
+        else if (lastRead == '\r') {
+            lastRead = read();
 
             if (lastRead == '\n')
                 lastRead = read();
         }
+
+        skipRead = true;
     }
 
-    private void countLine() throws IOException {
+    private void countLine() {
         ++currentLine;
         currentColumn = 0;
+        eol=false;
+    }
 
-        lastRead = read();
-        skipRead = true;
+    private boolean isEOL(int lastRead) {
+        return lastRead == '\r' || lastRead == '\n';
     }
 }
