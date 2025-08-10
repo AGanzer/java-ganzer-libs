@@ -186,7 +186,9 @@ public class ListValidator extends Validator {
             result = validInputs.contains(text);
 
         if (!result)
-            er.setException(new ValidatorException(CoreMessages.get("inputDoesNotMatchList")));
+            er.setException(new ValidatorException(getErrorMessage() == null
+                                                           ? CoreMessages.get("inputDoesNotMatchList")
+                                                           : getErrorMessage()));
 
         return result;
     }
