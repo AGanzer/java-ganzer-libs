@@ -5,6 +5,18 @@ package de.ganzer.core.util;
  */
 public final class Strings {
     /**
+     * Gets a value that indicates whether the specified string array is
+     * {@code null} or empty.
+     *
+     * @param str The string array to query.
+     *
+     * @return {@code true} if {@code str} is {@code null} or empty.
+     */
+    public static boolean isNullOrEmpty(final String[] str) {
+        return str == null || str.length == 0;
+    }
+
+    /**
      * Gets a value that indicates whether the specified string is {@code null}
      * or empty.
      *
