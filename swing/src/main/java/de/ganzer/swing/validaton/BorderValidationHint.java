@@ -96,12 +96,12 @@ public class BorderValidationHint implements ValidationHintProvider {
      */
     @Override
     public void showHints(JTextComponent target, ValidatorException e) {
-        if (!shouldKeepToolTip())
+        if (!shouldKeepToolTip()) {
             orgTooltip = target.getToolTipText();
+            target.setToolTipText(e.getLocalizedMessage());
+        }
 
         orgBorder = target.getBorder();
-
-        target.setToolTipText(e.getLocalizedMessage());
         target.setBorder(errorBorder);
     }
 

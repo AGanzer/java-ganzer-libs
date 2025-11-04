@@ -114,10 +114,13 @@ import java.util.*;
 public class GAction extends AbstractAction implements GActionItemBuilder {
     public static final String VISIBILITY_KEY = "visibility";
     public static final String SHORT_NAME_KEY = "short name";
+    public static final String TAG_KEY = "tag";
 
     private final EventListenerList actionListeners = new EventListenerList();
+
     private boolean selectable;
     private boolean exclusivelySelectable;
+    private Object tag;
 
     /**
      * {@inheritDoc}
@@ -671,6 +674,45 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public GAction enabled(boolean enabled) {
         setEnabled(enabled);
         return this;
+    }
+
+    /**
+     * Calls {@link #putValue}{@code (TAG_KEY, tag)}.
+     * <p>
+     * Ths tag is not used by the action nor any control but can be used as
+     * container for additional information that relates to this action.
+     *
+     * @param tag The tag to set.
+     *
+     * @return {@code this}.
+     */
+    public GAction tag(Object tag) {
+        putValue(TAG_KEY, tag);
+        return this;
+    }
+
+    /**
+     * Calls {@link #putValue}{@code (TAG_KEY, name)}.
+     * <p>
+     * Ths tag is not used by the action nor any control but can be used as
+     * container for additional information that relates to this action.
+     *
+     * @param tag The tag to set.
+     */
+    public void setTag(Object tag) {
+        putValue(TAG_KEY, tag);
+    }
+
+    /**
+     * Gets the name of the action.
+     * <p>
+     * Ths tag is not used by the action nor any control but can be used as
+     * container for additional information that relates to this action.
+     *
+     * @return The name or {@code null} if it is not set.
+     */
+    public Object getTag() {
+        return getValue(TAG_KEY);
     }
 
     /**

@@ -67,6 +67,21 @@ class NumberValidatorTest {
     }
 
     @Test
+    void constructWithValuesAndDecimalsAndOption() {
+        var min = -100.0;
+        var max = 100.0;
+        int dec = 2;
+        var val = new NumberValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, min, max, dec);
+
+        assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
+        assertEquals(min, val.getMinValue());
+        assertEquals(max, val.getMaxValue());
+        assertEquals(dec, val.getNumDecimals());
+        assertNull(val.getDisplayFormat());
+        assertNull(val.getEditFormat());
+    }
+
+    @Test
     void setMinValue() {
         var min = -100.0;
         var max = 100.0;
@@ -124,6 +139,20 @@ class NumberValidatorTest {
 
         assertEquals(min, val.getMinValue());
         assertEquals(max, val.getMaxValue());
+    }
+
+    @Test
+    void setRangeWithDecimals() {
+        var val = new NumberValidator();
+        var min = -100.0;
+        var max = 100.0;
+        int dec = 2;
+
+        val.setRange(min, max, dec);
+
+        assertEquals(min, val.getMinValue());
+        assertEquals(max, val.getMaxValue());
+        assertEquals(dec, val.getNumDecimals());
     }
 
     @Test

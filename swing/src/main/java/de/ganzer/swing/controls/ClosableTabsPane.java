@@ -483,6 +483,37 @@ public class ClosableTabsPane extends JTabbedPane {
     }
 
     /**
+     * Gets the font of the tab at the specified index.
+     *
+     * @param index The index of the tab.
+     *
+     * @return The font of the tab at {@code index} or {@code null} if
+     *         {@code index} is invalid or the font is not set.
+     */
+    public Font getFontAt(int index) {
+        var tab = getTabComponentAt(index);
+
+        if (tab != null)
+            return tab.getFont();
+
+        return null;
+    }
+
+    /**
+     * Sets the font of the tab at the specified index.
+     *
+     * @param index The index of the tab.
+     *
+     * @param font The font to set.
+     */
+    public void setFontAt(int index, Font font) {
+        var tab = getTabComponentAt(index);
+
+        if (tab != null)
+            tab.setFont(font);
+    }
+
+    /**
      * Adds a close listener that is called when a close button of one of the
      * tab headers is clicked.
      *

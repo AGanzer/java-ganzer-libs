@@ -24,6 +24,7 @@ public class MainFrame extends JFrame {
     private GActionGroup testMenu;
     private GAction enableTabAction;
     private GAction colorTabAction;
+    private GAction fontTabAction;
     private JToolBar toolBar;
     private ClosableTabsPane tabPane;
 
@@ -36,7 +37,6 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        initLookAndFeel();
         initLayout();
         initActions();
         initMenu();
@@ -53,23 +53,6 @@ public class MainFrame extends JFrame {
             SwingTestApp.getUiSettings().write(UI_KEY_FRAME, this);
 
         super.processWindowEvent(e);
-    }
-
-    private void initLookAndFeel() {
-        for (var laf: UIManager.getInstalledLookAndFeels())
-            System.out.println(laf.getClassName());
-
-        try {
-//            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-        } catch (Exception e) {
-            System.err.println("Cannot set look and feel. Using default.");
-            e.printStackTrace(System.err);
-        }
     }
 
     private void initLayout() {
@@ -168,7 +151,10 @@ public class MainFrame extends JFrame {
                                         .onAction(this::onToggleTabEnabled),
                                 colorTabAction = new GAction("Toggle Tab Colors")
                                         .enabled(false)
-                                        .onAction(this::onChangeTabColor)
+                                        .onAction(this::onChangeTabColor),
+                                fontTabAction = new GAction("Toggle Tab Font")
+                                        .enabled(false)
+                                        .onAction(this::onChangeTabFont)
                         ),
                 new GActionGroup("Extras").addAll(
                         new GAction("Show Text In Buttons")
@@ -235,6 +221,7 @@ public class MainFrame extends JFrame {
         tabPane.addChangeListener(e -> {
             enableTabAction.setEnabled(tabPane.getTabCount() > 1);
             colorTabAction.setEnabled(tabPane.getTabCount() > 2);
+            fontTabAction.setEnabled(tabPane.getTabCount() > 2);
         });
     }
 
@@ -376,6 +363,16 @@ public class MainFrame extends JFrame {
 
             tabPane.setBackgroundAt(2, backgroundColorToSet);
             tabPane.setForegroundAt(2, foregroundColorToSet);
+        }
+    }
+
+    private Font lastTabFont;
+
+    private void onChangeTabFont(ActionEvent event) {
+        if (tabPane.getTabCount() > 2) {
+            Font fontToSet = lastTabFont == null ? tabPane.getFontAt(2).deriveFont(Font.BOLD) : lastTabFont;
+            lastTabFont = tabPane.getFontAt(2);
+            tabPane.setFontAt(2, fontToSet);
         }
     }
 }
