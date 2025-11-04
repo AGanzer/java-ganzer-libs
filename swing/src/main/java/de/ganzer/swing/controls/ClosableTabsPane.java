@@ -159,10 +159,10 @@ public class ClosableTabsPane extends JTabbedPane {
     }
 
     /**
-     * Sets the selected index for this tabbedpane. The index must be
+     * Sets the selected index for this pane. The index must be
      * a valid tab index or -1, which indicates that no tab should be selected
-     * (can also be used when there are no tabs in the tabbedpane).  If a -1
-     * value is specified when the tabbedpane contains one or more tabs, then
+     * (can also be used when there are no tabs in the pane).  If a -1
+     * value is specified when the pane contains one or more tabs, then
      * the results will be implementation defined.
      *
      * @param index the index to be selected
@@ -251,7 +251,7 @@ public class ClosableTabsPane extends JTabbedPane {
     /**
      * Sets the icon at <code>index</code> to <code>icon</code> which can be
      * <code>null</code>. This does not set disabled icon at <code>icon</code>.
-     * If the new Icon is different than the current Icon and disabled icon
+     * If the new Icon is different from the current Icon and disabled icon
      * is not explicitly set, the LookAndFeel will be asked to generate a disabled
      * Icon. To explicitly set disabled icon, use <code>setDisableIconAt()</code>.
      * The icon is not shown if a tab component for this tab was specified.
@@ -328,7 +328,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * Sets the background color at <code>index</code> to
      * <code>background</code>
      * which can be <code>null</code>, in which case the tab's background color
-     * will default to the background color of the <code>tabbedpane</code>.
+     * will default to the background color of the pane.
      * An internal exception is raised if there is no tab at that index.
      * <p>
      * It is up to the look and feel to honor this property, some may
@@ -356,7 +356,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * Sets the foreground color at <code>index</code> to
      * <code>foreground</code> which can be
      * <code>null</code>, in which case the tab's foreground color
-     * will default to the foreground color of this <code>tabbedpane</code>.
+     * will default to the foreground color of this pane.
      * An internal exception is raised if there is no tab at that index.
      * <p>
      * It is up to the look and feel to honor this property, some may
@@ -381,11 +381,11 @@ public class ClosableTabsPane extends JTabbedPane {
     }
 
     /**
-     * Sets whether or not the tab at <code>index</code> is enabled.
+     * Sets whether the tab at <code>index</code> is enabled.
      * An internal exception is raised if there is no tab at that index.
      *
      * @param index the tab index which should be enabled/disabled
-     * @param enabled whether or not the tab should be enabled
+     * @param enabled whether the tab should be enabled
      *
      * @throws IndexOutOfBoundsException if index is out of range
      *         {@code (index < 0 || index >= tab count)}
@@ -458,7 +458,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * <code>java.awt.event.KeyEvent.getExtendedKeyCodeForChar</code>.
      * Mnemonics are case-insensitive, therefore a key event
      * with the corresponding keycode would cause the button to be
-     * activated whether or not the Shift modifier was pressed.
+     * activated whether the Shift modifier was pressed.
      * <p>
      * This will update the displayed mnemonic property for the specified
      * tab.
