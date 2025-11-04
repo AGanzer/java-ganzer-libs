@@ -783,7 +783,6 @@ public class ClosableTabsPane extends JTabbedPane {
             }
 
             protected void paintComponent(Graphics g) {
-                //noinspection DuplicatedCode - TabbedClosablePane
                 super.paintComponent(g);
 
                 Graphics2D g2 = (Graphics2D) g.create();
