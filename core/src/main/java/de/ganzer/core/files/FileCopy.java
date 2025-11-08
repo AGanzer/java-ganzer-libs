@@ -301,7 +301,8 @@ public class FileCopy extends FileErrorProvider {
      *                             the target is overwritten only if
      *                             {@link #getDefaultFileOverwriteAction}
      *                             respective {@link #getDefaultDirOverwriteAction}
-     *                             returns {@link OverwriteAction#NOT}.
+     *                             returns {@link OverwriteAction#ONE}
+     *                             or {@link OverwriteAction#ALL}.
      */
     public FileCopy(ProgressFunction progressFunction, QueryOverwriteAction queryOverwriteAction) {
         this.progressFunction = progressFunction;
@@ -340,8 +341,8 @@ public class FileCopy extends FileErrorProvider {
      *                             already exist. If this is {@code null},
      *                             the target is overwritten only if
      *                             {@link #getDefaultFileOverwriteAction}
-     *                             respective {@link #getDefaultDirOverwriteAction}
-     *                             returns {@link OverwriteAction#NOT}.
+     *                             returns {@link OverwriteAction#ONE}
+     *                             or {@link OverwriteAction#ALL}.
      */
     public FileCopy(ProgressFunction progressFunction, QueryErrorAction queryErrorAction, QueryOverwriteAction queryOverwriteAction) {
         this.progressFunction = progressFunction;
