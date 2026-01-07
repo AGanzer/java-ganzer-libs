@@ -65,6 +65,15 @@ public class DefaultLogFormatter extends LogFormatter {
     }
 
     /**
+     * Gets the used format string.
+     *
+     * @return The format string.
+     */
+    public String getFormatString() {
+        return formatString;
+    }
+
+    /**
      * Called to format a message from the specified info.
      *
      * @param info The info where to format the message from.
