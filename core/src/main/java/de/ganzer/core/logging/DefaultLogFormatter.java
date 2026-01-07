@@ -14,7 +14,7 @@ public class DefaultLogFormatter extends LogFormatter {
     /**
      * The format string that is used if no other is specified.
      * <p>
-     * Ths string separates each information by Tab characters and includes the
+     * This string separates each information by Tab characters and includes the
      * thread information into parenthesis. Escape sequences in the format
      * string are used in the following way:
      *
