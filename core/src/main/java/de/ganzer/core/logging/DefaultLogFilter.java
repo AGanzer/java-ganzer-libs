@@ -19,6 +19,6 @@ public class DefaultLogFilter implements LogFilter {
      */
     @Override
     public boolean shouldWrite(int messageLevel, int targetLevel) {
-        return false;
+        return messageLevel <= targetLevel;
     }
 }

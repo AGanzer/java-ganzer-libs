@@ -2,16 +2,15 @@ package de.ganzer.core.logging;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 /**
  * This class defines the default formatter for formatting log outputs.
  * <p>
  * This class do the default formatting and is used by each target of type
- *  {@link FormattedLogTarget} with {@link #DEFAULT_FORMAT} if no other
- *  formatter is specified for the target.
+ * {@link FormattedLogTarget} with {@link #DEFAULT_FORMAT} if no other
+ * formatter is specified for the target.
  */
-public class DefaultLogFormatter extends LogFormatter {
+public class DefaultLogFormatter implements LogFormatter {
     /**
      * The format string that is used if no other is specified.
      * <p>
@@ -48,20 +47,10 @@ public class DefaultLogFormatter extends LogFormatter {
     /**
      * Creates a new instance from the specified argument.
      *
-     * @param locale The locale to use for formatting numbers and times.
+     * @param formatString The formatstring to use for formatting numbers and
+     *        times.
      */
-    public DefaultLogFormatter(Locale locale) {
-        super(locale);
-        formatString = DEFAULT_FORMAT;
-    }
-
-    /**
-     * Creates a new instance from the specified argument.
-     *
-     * @param locale The locale to use for formatting numbers and times.
-     */
-    public DefaultLogFormatter(String formatString, Locale locale) {
-        super(locale);
+    public DefaultLogFormatter(String formatString) {
         this.formatString = formatString;
     }
 
@@ -145,10 +134,10 @@ public class DefaultLogFormatter extends LogFormatter {
      * @param time The time of the message.
      *
      * @return The formatted time. This implementation returns
-     *         {@code DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS", getLocale()).format(time)}.
+     *         {@code DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").format(time)}.
      */
     protected String formatTime(LocalDateTime time) {
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS", getLocale());
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         return formatter.format(time);
     }
 
