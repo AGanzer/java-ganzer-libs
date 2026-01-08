@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 /**
  * The LogTarget class defines an abstract target for log messages.
+ *
+ * @see Logger
  */
 public abstract class LogTarget {
     private Logger owner;
