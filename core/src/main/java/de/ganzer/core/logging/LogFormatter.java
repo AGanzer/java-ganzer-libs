@@ -4,10 +4,10 @@ import java.util.Locale;
 
 /**
  * This class defines an abstract base for formatting messages that are written
- * a {@link LogTarget} instance.
+ * into a {@link FormattedLogTarget} instance.
  * <p>
- * Logged messages are formatted before they are written into the physical
- * target. An instance of this class is used to format the message.
+ * Logged messages can be formatted before they are written into the physical
+ * target. An instance of each derived class can be used to format the message.
  */
 public abstract class LogFormatter {
     private final Locale locale;

@@ -7,8 +7,9 @@ import java.util.Locale;
 /**
  * This class defines the default formatter for formatting log outputs.
  * <p>
- * This class do the default formatting and is used by each target with
- * {@link #DEFAULT_FORMAT} if no other formatter is specified for a target.
+ * This class do the default formatting and is used by each target of type
+ *  {@link FormattedLogTarget} with {@link #DEFAULT_FORMAT} if no other
+ *  formatter is specified for the target.
  */
 public class DefaultLogFormatter extends LogFormatter {
     /**
