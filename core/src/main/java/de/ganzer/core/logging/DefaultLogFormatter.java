@@ -15,8 +15,9 @@ public class DefaultLogFormatter implements LogFormatter {
      * The format string that is used if no other is specified.
      * <p>
      * This string separates each information by Tab characters and includes the
-     * thread information into parenthesis. Escape sequences in the format
-     * string are used in the following way:
+     * thread information into parenthesis: "%1$s\t(%2$s - %3$s)\t%4$s\t%5$s\t%6$s"
+     * <p>
+     * Escape sequences in the format string are used in the following way:
      *
      * <ul>
      *     <li>Sequence %1$s is used for the sequence number gotten by
