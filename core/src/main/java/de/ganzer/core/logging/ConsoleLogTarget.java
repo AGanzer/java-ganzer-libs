@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
- * A base class for log targets that wont to write all log message information
- * with a single preformatted string.
+ * Writes log messages into {@link System#out} respective {@link System#err}
+ * if {@link #isErrorLevel(int)} indicates an error.
  */
-public abstract class FormattedLogTarget extends LogTarget {
-    private final LogFormatter formatter;
-
+public class ConsoleLogTarget extends FormattedLogTarget {
     /**
      * Creates a new instance from the specified argument with a formatter of
      * type {@link DefaultLogFormatter}, a filter of an instance of
@@ -17,10 +15,10 @@ public abstract class FormattedLogTarget extends LogTarget {
      *
      * @param level The level of the log messages to write.
      *
-     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
+     * @see #ConsoleLogTarget(int, LogFormatter, LogFilter, int)
      */
-    public FormattedLogTarget(int level) {
-        this(level, null, null, 0);
+    public ConsoleLogTarget(int level) {
+        super(level);
     }
 
     /**
@@ -32,10 +30,10 @@ public abstract class FormattedLogTarget extends LogTarget {
      *         If this is {@code null}, an instance of {@link DefaultLogFilter} is
      *         used.
      *
-     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
+     * @see #ConsoleLogTarget(int, LogFormatter, LogFilter, int)
      */
-    public FormattedLogTarget(int level, LogFilter filter) {
-        this(level, null, filter, 0);
+    public ConsoleLogTarget(int level, LogFilter filter) {
+        super(level, filter);
     }
 
     /**
@@ -49,10 +47,10 @@ public abstract class FormattedLogTarget extends LogTarget {
      *         for a more detailed explanation. If this is less than 1,
      *         incoming messages are not joined.
      *
-     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
+     * @see #ConsoleLogTarget(int, LogFormatter, LogFilter, int)
      */
-    public FormattedLogTarget(int level, int messageWaitTimeout) {
-        this(level, null, null, messageWaitTimeout);
+    public ConsoleLogTarget(int level, int messageWaitTimeout) {
+        super(level, messageWaitTimeout);
     }
 
     /**
@@ -68,11 +66,12 @@ public abstract class FormattedLogTarget extends LogTarget {
      *         for a more detailed explanation. If this is less than 1,
      *         incoming messages are not joined.
      *
-     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
+     * @see #ConsoleLogTarget(int, LogFormatter, LogFilter, int)
      */
-    public FormattedLogTarget(int level, LogFilter filter, int messageWaitTimeout) {
-        this(level, null, filter, messageWaitTimeout);
+    public ConsoleLogTarget(int level, LogFilter filter, int messageWaitTimeout) {
+        super(level, filter, messageWaitTimeout);
     }
+
     /**
      * Creates a new instance from the specified argument with a formatter of
      * type {@link DefaultLogFormatter}, a filter of an instance of
@@ -80,12 +79,12 @@ public abstract class FormattedLogTarget extends LogTarget {
      *
      * @param level The level of the log messages to write.
      * @param formatter The formatter to use. If this is {@code null}, an instance
-     *        of {@link DefaultLogFormatter} is used.
+     *         of {@link DefaultLogFormatter} is used.
      *
-     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
+     * @see #ConsoleLogTarget(int, LogFormatter, LogFilter, int)
      */
-    public FormattedLogTarget(int level, LogFormatter formatter) {
-        this(level, formatter, null, 0);
+    public ConsoleLogTarget(int level, LogFormatter formatter) {
+        super(level, formatter);
     }
 
     /**
@@ -94,15 +93,15 @@ public abstract class FormattedLogTarget extends LogTarget {
      *
      * @param level The level of the log messages to write.
      * @param formatter The formatter to use. If this is {@code null}, an instance
-     *        of {@link DefaultLogFormatter} is used.
+     *         of {@link DefaultLogFormatter} is used.
      * @param filter the filter to use to determine whether a message is written.
      *         If this is {@code null}, an instance of {@link DefaultLogFilter} is
      *         used.
      *
-     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
+     * @see #ConsoleLogTarget(int, LogFormatter, LogFilter, int)
      */
-    public FormattedLogTarget(int level, LogFormatter formatter, LogFilter filter) {
-        this(level, formatter, filter, 0);
+    public ConsoleLogTarget(int level, LogFormatter formatter, LogFilter filter) {
+        super(level, formatter, filter);
     }
 
     /**
@@ -112,16 +111,16 @@ public abstract class FormattedLogTarget extends LogTarget {
      *
      * @param level The level of the log messages to write.
      * @param formatter The formatter to use. If this is {@code null}, an instance
-     *        of {@link DefaultLogFormatter} is used.
+     *         of {@link DefaultLogFormatter} is used.
      * @param messageWaitTimeout The timeout in milliseconds to wait until
      *         messages are joined to a single message. See {@link #write(LogInfo[])}
      *         for a more detailed explanation. If this is less than 1,
      *         incoming messages are not joined.
      *
-     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
+     * @see #ConsoleLogTarget(int, LogFormatter, LogFilter, int)
      */
-    public FormattedLogTarget(int level, LogFormatter formatter, int messageWaitTimeout) {
-        this(level, formatter, null, messageWaitTimeout);
+    public ConsoleLogTarget(int level, LogFormatter formatter, int messageWaitTimeout) {
+        super(level, formatter, messageWaitTimeout);
     }
 
     /**
@@ -129,7 +128,7 @@ public abstract class FormattedLogTarget extends LogTarget {
      *
      * @param level The level of the log messages to write.
      * @param formatter The formatter to use. If this is {@code null}, an instance
-     *        of {@link DefaultLogFormatter} is used.
+     *         of {@link DefaultLogFormatter} is used.
      * @param filter the filter to use to determine whether a message is written.
      *         If this is {@code null}, an instance of {@link DefaultLogFilter} is
      *         used.
@@ -138,18 +137,8 @@ public abstract class FormattedLogTarget extends LogTarget {
      *         for a more detailed explanation. If this is less than 1,
      *         incoming messages are not joined.
      */
-    public FormattedLogTarget(int level, LogFormatter formatter, LogFilter filter, int messageWaitTimeout) {
-        super(level, filter, messageWaitTimeout);
-        this.formatter = formatter != null ? formatter : new DefaultLogFormatter();
-    }
-
-    /**
-     * Gets the used formatter.
-     *
-     * @return The used formatter.
-     */
-    public LogFormatter getFormatter() {
-        return formatter;
+    public ConsoleLogTarget(int level, LogFormatter formatter, LogFilter filter, int messageWaitTimeout) {
+        super(level, formatter, filter, messageWaitTimeout);
     }
 
     /**
@@ -167,9 +156,8 @@ public abstract class FormattedLogTarget extends LogTarget {
      * These elements should be connected to one message in an implementation of
      * this method to perform only a single write action for each message.
      * <p>
-     * This implementation formats and joins the messages (separated by '\n')
-     * and calls {@link #write(int, String)} to write them into a physical
-     * target at once.
+     * This implementation calls {@link #write(int, String)} for each single log
+     * info to write the formatted message into the physical target.
      *
      * @param info The information about the messages to write.
      *
@@ -177,27 +165,44 @@ public abstract class FormattedLogTarget extends LogTarget {
      */
     @Override
     protected void write(LogInfo[] info) throws IOException {
-        StringBuilder sb = new StringBuilder();
-
-        for (var i = 0; i < info.length; i++) {
-            if (i > 0)
-                sb.append('\n');
-
-            sb.append(formatter.format(info[i]));
-        }
-
-        write(info.length == 1 ? info[0].getLevel() : Integer.MIN_VALUE, sb.toString());
+        for (LogInfo logInfo : info)
+            write(logInfo.getLevel(), getFormatter().format(logInfo));
     }
 
     /**
      * Called by {@link #write(LogInfo[])} to write the messages that are not
      * discarded by a filter into the physical target.
+     * <p>
+     * This implementation calls {@link #isErrorLevel(int)} to query whether
+     * the message should be written into {@link System#err} instead of
+     * {@link System#out}.
      *
      * @param level The log level of the message to log. This is given as
-     *        information and should not be inserted into {@code messsage}.
-     *        The level of joined messages is {@link Integer#MIN_VALUE}.
+     *         information and should not be inserted into {@code messsage}.
+     *         The level of joined messages is {@link Integer#MIN_VALUE}.
      * @param message The message to write. This is already formatted and must
-     *        simply be written into the target as is.
+     *         simply be written into the target as is.
      */
-    protected abstract void write(int level, String message) throws IOException;
+    @Override
+    protected void write(int level, String message) throws IOException {
+        if (isErrorLevel(level))
+            System.err.println(message);
+        else
+            System.out.println(message);
+    }
+
+    /**
+     * Called to get the information whether a log level indicates an error.
+     * <p>
+     * Inheritors should override this to implement its own error level
+     * detection.
+     *
+     * @param level The level to query.
+     *
+     * @return {@code true} if {@code level} indicates an error. This
+     *         implementation returns {@code level == 0}.
+     */
+    protected boolean isErrorLevel(int level) {
+        return level == 0;
+    }
 }
