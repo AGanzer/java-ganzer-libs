@@ -2,6 +2,7 @@ package de.ganzer.core.logging;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * This class defines the default formatter for formatting log outputs.
@@ -47,11 +48,32 @@ public class DefaultLogFormatter implements LogFormatter {
 
     /**
      * Creates a new instance from the specified argument.
+     * <p>
+     * Escape sequences in the specified format string are used in the following
+     * way:
+     *
+     * <ul>
+     *     <li>Sequence %1$s is used for the sequence number gotten by
+     *        {@link #formatMessageNumber(int)}
+     *     <li>Sequence %2$s is used for the thread ID gotten by
+     *        {@link #formatThreadID(long)}
+     *     <li>Sequence %3$s is used for the thread name gotten by
+     *        {@link #formatThreadName(String)}
+     *     <li>Sequence %4$s is used for the message level gotten by
+     *        {@link #formatLevel(int)}
+     *     <li>Sequence %5$s is used for the message time gotten by
+     *        {@link #formatTime(LocalDateTime)}
+     *     <li>Sequence %6$s is used for the message itself gotten by
+     *        {@link #formatMessage(String)}
+     * </ul>
      *
      * @param formatString The formatstring to use for formatting numbers and
      *        times.
+     *
+     * @throws NullPointerException {@code formatString} is {@code null}.
      */
     public DefaultLogFormatter(String formatString) {
+        Objects.requireNonNull(formatString, "formatString must not be null.");
         this.formatString = formatString;
     }
 
