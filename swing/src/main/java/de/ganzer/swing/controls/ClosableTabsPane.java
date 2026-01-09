@@ -43,7 +43,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * Creates an empty <code>TabbedPane</code> with a default
      * tab placement of <code>JTabbedPane.TOP</code>.
      *
-     * @param closable Sets whether th tabs are generally closable. If this is
+     * @param closable Sets whether the tabs are generally closable. If this is
      *        {@code false}, invoking {@link #setClosableAt} has no effect.
      *
      * @see #addTab
@@ -226,6 +226,7 @@ public class ClosableTabsPane extends JTabbedPane {
     /**
      * Sets the title at <code>index</code> to <code>title</code> which
      * can be <code>null</code>.
+     * <p>
      * The title is not shown if a tab component for this tab was specified.
      * An internal exception is raised if there is no tab at that index.
      *
@@ -250,7 +251,9 @@ public class ClosableTabsPane extends JTabbedPane {
 
     /**
      * Sets the icon at <code>index</code> to <code>icon</code> which can be
-     * <code>null</code>. This does not set disabled icon at <code>icon</code>.
+     * <code>null</code>.
+     * <p>
+     * This does not set disabled icon at <code>icon</code>.
      * If the new Icon is different from the current Icon and disabled icon
      * is not explicitly set, the LookAndFeel will be asked to generate a disabled
      * Icon. To explicitly set disabled icon, use <code>setDisableIconAt()</code>.
@@ -281,6 +284,7 @@ public class ClosableTabsPane extends JTabbedPane {
     /**
      * Sets the disabled icon at <code>index</code> to <code>icon</code>
      * which can be <code>null</code>.
+     * <p>
      * An internal exception is raised if there is no tab at that index.
      *
      * @param index the tab index where the disabled icon should be set
@@ -304,6 +308,7 @@ public class ClosableTabsPane extends JTabbedPane {
     /**
      * Sets the tooltip text at <code>index</code> to <code>toolTipText</code>
      * which can be <code>null</code>.
+     * <p>
      * An internal exception is raised if there is no tab at that index.
      *
      * @param index the tab index where the tooltip text should be set
@@ -325,10 +330,10 @@ public class ClosableTabsPane extends JTabbedPane {
     }
 
     /**
-     * Sets the background color at <code>index</code> to
-     * <code>background</code>
+     * Sets the background color at <code>index</code> to <code>background</code>
      * which can be <code>null</code>, in which case the tab's background color
      * will default to the background color of the pane.
+     * <p>
      * An internal exception is raised if there is no tab at that index.
      * <p>
      * It is up to the look and feel to honor this property, some may
@@ -353,10 +358,10 @@ public class ClosableTabsPane extends JTabbedPane {
     }
 
     /**
-     * Sets the foreground color at <code>index</code> to
-     * <code>foreground</code> which can be
-     * <code>null</code>, in which case the tab's foreground color
+     * Sets the foreground color at <code>index</code> to <code>foreground</code>
+     * which can be <code>null</code>, in which case the tab's foreground color
      * will default to the foreground color of this pane.
+     * <p>
      * An internal exception is raised if there is no tab at that index.
      * <p>
      * It is up to the look and feel to honor this property, some may
@@ -382,6 +387,7 @@ public class ClosableTabsPane extends JTabbedPane {
 
     /**
      * Sets whether the tab at <code>index</code> is enabled.
+     * <p>
      * An internal exception is raised if there is no tab at that index.
      *
      * @param index the tab index which should be enabled/disabled
@@ -404,7 +410,9 @@ public class ClosableTabsPane extends JTabbedPane {
 
     /**
      * Provides a hint to the look and feel as to which character in the
-     * text should be decorated to represent the mnemonic. Not all look and
+     * text should be decorated to represent the mnemonic.
+     * <p>
+     * Not all look and
      * feels may support this. A value of -1 indicates either there is
      * no mnemonic for this tab, or you do not wish the mnemonic to be
      * displayed for this tab.
