@@ -1,6 +1,5 @@
 package de.ganzer.core.logging;
 
-import java.io.Closeable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
