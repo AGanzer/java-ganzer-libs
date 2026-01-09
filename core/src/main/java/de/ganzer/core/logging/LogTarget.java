@@ -29,7 +29,8 @@ public abstract class LogTarget {
     private MessageWakeup messageWakeup;
 
     /**
-     * Creates a new instance from the specified argument.
+     * Creates a new instance from the specified argument with a filter of an
+     * instance of {@link DefaultLogFilter} and a message wait timeout of 0.
      *
      * @param level The level of the log messages to write.
      *
@@ -42,7 +43,8 @@ public abstract class LogTarget {
     }
 
     /**
-     * Creates a new instance from the specified arguments.
+     * Creates a new instance from the specified arguments with a message wait
+     * timeout of 0.
      *
      * @param level The level of the log messages to write.
      * @param filter the filter to use to determine whether a message is written.
@@ -58,7 +60,8 @@ public abstract class LogTarget {
     }
 
     /**
-     * Creates a new instance from the specified arguments.
+     * Creates a new instance from the specified arguments with a filter of an
+     *      * instance of {@link DefaultLogFilter}.
      *
      * @param level The level of the log messages to write.
      * @param messageWaitTimeout The timeout in milliseconds to wait until
