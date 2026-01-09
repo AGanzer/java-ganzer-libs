@@ -1,5 +1,6 @@
 package de.ganzer.core.logging;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
@@ -171,9 +172,11 @@ public abstract class FormattedLogTarget extends LogTarget {
      * target at once.
      *
      * @param info The information about the messages to write.
+     *
+     * @throws IOException on any I/O error.
      */
     @Override
-    protected final void write(LogInfo[] info) {
+    protected final void write(LogInfo[] info) throws IOException {
         StringBuilder sb = new StringBuilder();
 
         for (var i = 0; i < info.length; i++) {
@@ -196,5 +199,5 @@ public abstract class FormattedLogTarget extends LogTarget {
      * @param message The message to write. This is already formatted and must
      *        simply be written into the target as is.
      */
-    protected abstract void write(int level, String message);
+    protected abstract void write(int level, String message) throws IOException;
 }

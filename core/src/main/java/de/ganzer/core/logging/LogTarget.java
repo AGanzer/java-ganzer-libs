@@ -1,6 +1,6 @@
 package de.ganzer.core.logging;
 
-import java.io.Closeable;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -184,9 +184,14 @@ public abstract class LogTarget implements AutoCloseable {
 
         var info = new LogInfo(++messageNumber, level, time, Thread.currentThread().getId(), Thread.currentThread().getName(), message);
 
-        if (messageWaitTimeout < 1)
-            write(new LogInfo[]{info});
-        else {
+        if (messageWaitTimeout < 1) {
+            try {
+                write(new LogInfo[] {info});
+            } catch (Exception e) {
+                // This must not throw any exception!
+                e.printStackTrace(System.err);
+            }
+        } else {
             synchronized (pendingMessages) {
                 pendingMessages.add(info);
             }
@@ -210,10 +215,12 @@ public abstract class LogTarget implements AutoCloseable {
      *
      * @param info The information about the messages to write.
      *
+     * @throws IOException on any I/O error.
+     *
      * @see #LogTarget(int, int)
      * @see #LogTarget(int, LogFilter, int)
      */
-    protected abstract void write(LogInfo[] info);
+    protected abstract void write(LogInfo[] info) throws IOException;
 
     final Logger getOwner() {
         return owner;
@@ -263,8 +270,15 @@ public abstract class LogTarget implements AutoCloseable {
                         infos = new ArrayList<>(pendingMessages);
                     }
 
-                    if (!infos.isEmpty())
+                    if (infos.isEmpty())
+                        continue;
+
+                    try {
                         write(infos.toArray(new LogInfo[0]));
+                    } catch (Exception e) {
+                        // This must not throw any exception!
+                        e.printStackTrace(System.err);
+                    }
                 }
             } catch (InterruptedException e) {
                 // Ignore.
