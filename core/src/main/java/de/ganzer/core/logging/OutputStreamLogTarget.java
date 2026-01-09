@@ -4,6 +4,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
+/**
+ * A target that writes log messages into a stream.
+ *
+ * @since 5.4.0
+ */
 public class OutputStreamLogTarget extends StreamWriterLogTarget {
     private final OutputStream stream;
 

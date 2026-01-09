@@ -10,6 +10,8 @@ import java.util.Objects;
  * This class do the default formatting and is used by each target of type
  * {@link FormattedLogTarget} with {@link #DEFAULT_FORMAT} if no other
  * formatter is specified for the target.
+ *
+ * @since 5.4.0
  */
 public class DefaultLogFormatter implements LogFormatter {
     /**

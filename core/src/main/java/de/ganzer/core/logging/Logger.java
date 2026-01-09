@@ -16,6 +16,8 @@ import java.util.Objects;
  * targets. A target can be activated or suspended by activateTarget().
  * <p>
  * All methods of this class are thread safe.
+ *
+ * @since 5.4.0
  */
 public class Logger implements AutoCloseable {
     private static class TargetInfo {

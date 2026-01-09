@@ -7,6 +7,8 @@ package de.ganzer.core.logging;
  * Logged messages can be formatted before they are written into the physical
  * target. An instance of each implementing class can be used to format the
  * message.
+ *
+ * @since 5.4.0
  */
 public interface LogFormatter {
     /**

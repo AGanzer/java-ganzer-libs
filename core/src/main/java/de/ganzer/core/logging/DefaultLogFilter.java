@@ -5,6 +5,8 @@ package de.ganzer.core.logging;
  * <p>
  * An instance of this class is used by each target if no other filter function
  * is specified for that.
+ *
+ * @since 5.4.0
  */
 public class DefaultLogFilter implements LogFilter {
     /**

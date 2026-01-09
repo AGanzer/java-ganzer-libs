@@ -15,6 +15,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * The LogTarget class defines an abstract target for log messages.
  *
  * @see Logger
+ *
+ * @since 5.4.0
  */
 public abstract class LogTarget implements AutoCloseable {
     private final int level;

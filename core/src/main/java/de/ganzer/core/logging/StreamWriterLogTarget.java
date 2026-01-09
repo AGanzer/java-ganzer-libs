@@ -5,7 +5,9 @@ import java.io.OutputStreamWriter;
 import java.util.Objects;
 
 /**
- * A log target that writes log messages into a stream.
+ * A log target that writes log messages into a stream writer.
+ *
+ * @since 5.4.0
  */
 public class StreamWriterLogTarget extends FormattedLogTarget {
     private final OutputStreamWriter target;
