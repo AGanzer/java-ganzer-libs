@@ -2,6 +2,8 @@ package de.ganzer.core.logging;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class LogTargetTest {
@@ -88,5 +90,13 @@ class LogTargetTest {
         target.close();
 
         assertTrue(target.isClosed());
+    }
+
+    @Test
+    void closedWrite() throws Exception {
+        var target = new MyTarget(0);
+        target.close();
+
+        assertThrows(IllegalStateException.class, () -> target.write(0, LocalDateTime.now(), ""));
     }
 }
