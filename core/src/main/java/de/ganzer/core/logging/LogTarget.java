@@ -20,12 +20,12 @@ public abstract class LogTarget implements AutoCloseable {
     private final int level;
     private final LogFilter filter;
     private final int messageWaitTimeout;
-    private final Queue<LogInfo> pendingMessages;
-    private final ReentrantLock writeLock;
-    private final Condition writeCondition;
+    private final Queue<LogInfo> pendingMessages = new LinkedList<>();
 
     private Logger owner;
     private int messageNumber;
+    private ReentrantLock writeLock;
+    private Condition writeCondition;
     private MessageWorker messageWorker;
     private MessageWakeup messageWakeup;
     private boolean closed;
@@ -93,13 +93,14 @@ public abstract class LogTarget implements AutoCloseable {
         this.messageWaitTimeout = messageWaitTimeout;
 
         if (messageWaitTimeout > 0) {
-            pendingMessages = new LinkedList<>();
             writeLock = new ReentrantLock();
             writeCondition = writeLock.newCondition();
-        } else  {
-            pendingMessages = null;
-            writeLock = null;
-            writeCondition = null;
+
+            messageWorker = new MessageWorker();
+            messageWakeup = new MessageWakeup();
+
+            messageWorker.start();
+            messageWakeup.start();
         }
     }
 
@@ -159,6 +160,18 @@ public abstract class LogTarget implements AutoCloseable {
      */
     @Override
     public void close() throws Exception {
+        if (messageWaitTimeout > 0) {
+            messageWakeup.cancel();
+            messageWorker.cancel();
+
+            try {
+                messageWakeup.wait();
+                messageWorker.wait();
+            } catch (InterruptedException e) {
+                // Ignore;
+            }
+        }
+
         closed = true;
     }
 
@@ -227,27 +240,7 @@ public abstract class LogTarget implements AutoCloseable {
     }
 
     final void setOwner(Logger owner) {
-        if (this.owner != null) {
-            messageWakeup.cancel();
-            messageWorker.cancel();
-
-            try {
-                messageWakeup.wait();
-                messageWorker.wait();
-            } catch (InterruptedException e) {
-                // Ignore;
-            }
-        }
-
         this.owner = owner;
-
-        if (this.owner != null) {
-            messageWorker = new MessageWorker();
-            messageWakeup = new MessageWakeup();
-
-            messageWorker.start();
-            messageWakeup.start();
-        }
     }
 
     private class MessageWorker extends Thread {
