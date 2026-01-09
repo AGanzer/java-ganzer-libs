@@ -159,7 +159,7 @@ public abstract class LogTarget implements AutoCloseable {
      * @throws Exception if this resource cannot be closed.
      */
     @Override
-    public void close() throws Exception {
+    synchronized public void close() throws Exception {
         if (messageWaitTimeout > 0) {
             messageWakeup.cancel();
             messageWorker.cancel();
