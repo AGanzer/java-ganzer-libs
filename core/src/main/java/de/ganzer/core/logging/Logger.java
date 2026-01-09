@@ -1,5 +1,6 @@
 package de.ganzer.core.logging;
 
+import java.io.Closeable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Objects;
  * <p>
  * All methods of this class are thread safe.
  */
-public class Logger {
+public class Logger implements AutoCloseable {
     private static class TargetInfo {
         public final LogTarget target;
         public boolean active;
@@ -29,6 +30,8 @@ public class Logger {
     }
 
     private final Map<String, TargetInfo> targets = new HashMap<>();
+
+    private boolean closed;
 
     /**
      * Adds the specified target to this logger instance.
@@ -68,12 +71,16 @@ public class Logger {
      * @throws NullPointerException {@code id} or {@code target} is {@code null}.
      * @throws IllegalArgumentException {@code target} is already used by another
      *         logger instance or is added twice to this instance.
+     * @throws IllegalStateException If this instance has been closed.
      *
      * @see #getTarget(String)
      */
     synchronized public void addTarget(String id, LogTarget target, boolean inactive) {
         Objects.requireNonNull(id, "id must not be null.");
         Objects.requireNonNull(target, "target must not be null.");
+
+        if (closed)
+            throw new IllegalStateException("Logger has been closed.");
 
         if (target.getOwner() != null)
             throw new IllegalArgumentException("target is already owned by a logger.");
@@ -158,6 +165,15 @@ public class Logger {
     }
 
     /**
+     * Gets a value indicating whether this instance is closed.
+     *
+     * @return {@code true} if {@link #close()} has been called.
+     */
+    synchronized boolean isClosed() {
+        return closed;
+    }
+
+    /**
      * Writes the specified message with the specified level into all active
      * targets.
      * <p>
@@ -167,13 +183,44 @@ public class Logger {
      * @param level The level of the message to write.
      * @param message The message to write. An emtpy string is written if this
      *        is {@code null}.
+     *
+     * @throws IllegalStateException If this instance has been closed.
      */
     synchronized void write(int level, String message) {
+        if (closed)
+            throw new IllegalStateException("Logger has been closed.");
+
         var time = LocalDateTime.now();
 
         for (var info : this.targets.values()) {
             if (info.active)
-                info.target.write(level, time, message);
+                info.target.write(level, time, message != null ? message : "");
         }
+    }
+
+    /**
+     * Closes and removes all targets.
+     * <p>
+     * This method is invoked automatically on objects managed by the
+     * {@code try}-with-resources statement.
+     * <p>
+     * This implementation closes and removes all targets. Inheritors that
+     * override this method must call the base method to ensure a valid state.
+     *
+     * @throws Exception if this resource cannot be closed
+     */
+    @Override
+    synchronized public void close() throws Exception {
+        if (closed)
+            return;
+
+        for (var info : this.targets.values()) {
+            info.target.close();
+            info.target.setOwner(null);
+        }
+
+        targets.clear();
+
+        closed = true;
     }
 }

@@ -1,5 +1,6 @@
 package de.ganzer.core.logging;
 
+import java.io.Closeable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @see Logger
  */
-public abstract class LogTarget {
+public abstract class LogTarget implements AutoCloseable {
     private final int level;
     private final LogFilter filter;
     private final int messageWaitTimeout;
@@ -27,6 +28,7 @@ public abstract class LogTarget {
     private int messageNumber;
     private MessageWorker messageWorker;
     private MessageWakeup messageWakeup;
+    private boolean closed;
 
     /**
      * Creates a new instance from the specified argument with a filter of an
@@ -135,6 +137,32 @@ public abstract class LogTarget {
     }
 
     /**
+     * Gets a value indicating whether this target is closed.
+     *
+     * @return {@code true} if {@link #close()} has been called.
+     */
+    synchronized boolean isClosed() {
+        return closed;
+    }
+
+    /**
+     * Closes this resource, relinquishing any underlying resources.
+     * <p>
+     * This method is invoked automatically on objects managed by the
+     * {@code try}-with-resources statement.
+     * <p>
+     * This implementation sets {@link #isClosed()} to true. Inheritors that
+     * override this must call the base method after it has closed its used
+     * resources.
+     *
+     * @throws Exception if this resource cannot be closed.
+     */
+    @Override
+    public void close() throws Exception {
+        closed = true;
+    }
+
+    /**
      * Writes the specified message into the target by calling
      * {@link #write(LogInfo[])}.
      * <p>
@@ -144,8 +172,13 @@ public abstract class LogTarget {
      * @param level The log level of the message to log.
      * @param time The time the message was logged by the logger.
      * @param message The message to write.
+     *
+     * @throws IllegalStateException If this target has been closed.
      */
     public final void write(int level, LocalDateTime time, String message) {
+        if (closed)
+            throw new IllegalStateException("Target has been closed.");
+
         if (!filter.shouldWrite(level, this.level))
             return;
 
