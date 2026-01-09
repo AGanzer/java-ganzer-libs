@@ -21,6 +21,7 @@ public abstract class LogTarget implements AutoCloseable {
     private final LogFilter filter;
     private final int messageWaitTimeout;
     private final Queue<LogInfo> pendingMessages = new LinkedList<>();
+    private final AtomicBoolean closed = new AtomicBoolean(false);
 
     private Logger owner;
     private int messageNumber;
@@ -28,7 +29,6 @@ public abstract class LogTarget implements AutoCloseable {
     private Condition writeCondition;
     private MessageWorker messageWorker;
     private MessageWakeup messageWakeup;
-    private boolean closed;
 
     /**
      * Creates a new instance from the specified argument with a filter of an
@@ -142,8 +142,8 @@ public abstract class LogTarget implements AutoCloseable {
      *
      * @return {@code true} if {@link #close()} has been called.
      */
-    synchronized boolean isClosed() {
-        return closed;
+    public boolean isClosed() {
+        return closed.get();
     }
 
     /**
@@ -159,20 +159,13 @@ public abstract class LogTarget implements AutoCloseable {
      * @throws Exception if this resource cannot be closed.
      */
     @Override
-    synchronized public void close() throws Exception {
+    public void close() throws Exception {
         if (messageWaitTimeout > 0) {
             messageWakeup.cancel();
             messageWorker.cancel();
-
-            try {
-                messageWakeup.wait();
-                messageWorker.wait();
-            } catch (InterruptedException e) {
-                // Ignore;
-            }
         }
 
-        closed = true;
+        closed.set(true);
     }
 
     /**
@@ -189,7 +182,7 @@ public abstract class LogTarget implements AutoCloseable {
      * @throws IllegalStateException If this target has been closed.
      */
     public final void write(int level, LocalDateTime time, String message) {
-        if (closed)
+        if (closed.get())
             throw new IllegalStateException("Target has been closed.");
 
         if (!filter.shouldWrite(level, this.level))
