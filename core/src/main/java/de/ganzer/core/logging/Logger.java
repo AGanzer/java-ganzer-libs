@@ -52,7 +52,7 @@ public class Logger implements AutoCloseable {
      * @see #getTarget(String)
      */
     synchronized public void addTarget(String id, LogTarget target) {
-        addTarget(id, target, true);
+        addTarget(id, target, false);
     }
 
     /**
@@ -66,7 +66,7 @@ public class Logger implements AutoCloseable {
      *        If there is already another target with this ID added, the
      *        previous one is replaced.
      * @param target The target to add.
-     * @param inactive {@code true} to deactivate the target be default.
+     * @param inactive {@code true} to deactivate the target by default.
      *
      * @throws NullPointerException {@code id} or {@code target} is {@code null}.
      * @throws IllegalArgumentException {@code target} is already used by another
