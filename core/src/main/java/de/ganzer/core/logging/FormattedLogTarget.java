@@ -1,7 +1,6 @@
 package de.ganzer.core.logging;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * A base class for log targets that wont to write all log message information
@@ -17,9 +16,7 @@ public abstract class FormattedLogTarget extends LogTarget {
      *
      * @param level The level of the log messages to write.
      *
-     * @see #FormattedLogTarget(int, int)
-     * @see #FormattedLogTarget(int, LogFilter, int)
-     * @see #getMessageWaitTimeout()
+     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
      */
     public FormattedLogTarget(int level) {
         this(level, null, null, 0);
@@ -34,9 +31,7 @@ public abstract class FormattedLogTarget extends LogTarget {
      *         If this is {@code null}, an instance of {@link DefaultLogFilter} is
      *         used.
      *
-     * @see #FormattedLogTarget(int, int)
-     * @see #FormattedLogTarget(int, LogFilter, int)
-     * @see #getMessageWaitTimeout()
+     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
      */
     public FormattedLogTarget(int level, LogFilter filter) {
         this(level, null, filter, 0);
@@ -52,6 +47,8 @@ public abstract class FormattedLogTarget extends LogTarget {
      *         messages are joined to a single message. See {@link #write(LogInfo[])}
      *         for a more detailed explanation. If this is less than 1,
      *         incoming messages are not joined.
+     *
+     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
      */
     public FormattedLogTarget(int level, int messageWaitTimeout) {
         this(level, null, null, messageWaitTimeout);
@@ -69,6 +66,8 @@ public abstract class FormattedLogTarget extends LogTarget {
      *         messages are joined to a single message. See {@link #write(LogInfo[])}
      *         for a more detailed explanation. If this is less than 1,
      *         incoming messages are not joined.
+     *
+     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
      */
     public FormattedLogTarget(int level, LogFilter filter, int messageWaitTimeout) {
         this(level, null, filter, messageWaitTimeout);
@@ -82,9 +81,7 @@ public abstract class FormattedLogTarget extends LogTarget {
      * @param formatter The formatter to use. If this is {@code null}, an instance
      *        of {@link DefaultLogFormatter} is used.
      *
-     * @see #FormattedLogTarget(int, int)
-     * @see #FormattedLogTarget(int, LogFilter, int)
-     * @see #getMessageWaitTimeout()
+     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
      */
     public FormattedLogTarget(int level, LogFormatter formatter) {
         this(level, formatter, null, 0);
@@ -101,9 +98,7 @@ public abstract class FormattedLogTarget extends LogTarget {
      *         If this is {@code null}, an instance of {@link DefaultLogFilter} is
      *         used.
      *
-     * @see #FormattedLogTarget(int, int)
-     * @see #FormattedLogTarget(int, LogFilter, int)
-     * @see #getMessageWaitTimeout()
+     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
      */
     public FormattedLogTarget(int level, LogFormatter formatter, LogFilter filter) {
         this(level, formatter, filter, 0);
@@ -121,6 +116,8 @@ public abstract class FormattedLogTarget extends LogTarget {
      *         messages are joined to a single message. See {@link #write(LogInfo[])}
      *         for a more detailed explanation. If this is less than 1,
      *         incoming messages are not joined.
+     *
+     * @see #FormattedLogTarget(int, LogFormatter, LogFilter, int)
      */
     public FormattedLogTarget(int level, LogFormatter formatter, int messageWaitTimeout) {
         this(level, formatter, null, messageWaitTimeout);
@@ -143,6 +140,15 @@ public abstract class FormattedLogTarget extends LogTarget {
     public FormattedLogTarget(int level, LogFormatter formatter, LogFilter filter, int messageWaitTimeout) {
         super(level, filter, messageWaitTimeout);
         this.formatter = formatter != null ? formatter : new DefaultLogFormatter();
+    }
+
+    /**
+     * Gets the used formatter.
+     *
+     * @return The used formatter.
+     */
+    public LogFormatter getFormatter() {
+        return formatter;
     }
 
     /**
