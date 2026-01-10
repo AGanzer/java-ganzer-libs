@@ -154,7 +154,12 @@ public class MainFrame extends JFrame {
                                         .onAction(this::onChangeTabColor),
                                 fontTabAction = new GAction("Toggle Tab Font")
                                         .enabled(false)
-                                        .onAction(this::onChangeTabFont)
+                                        .onAction(this::onChangeTabFont),
+                                new GSeparatorAction(),
+                                new GAction("Sequential logging")
+                                        .onAction(this::onSequentialLogging),
+                                new GAction("Parallel logging")
+                                        .onAction(this::onParallelLogging)
                         ),
                 new GActionGroup("Extras").addAll(
                         new GAction("Show Text In Buttons")
@@ -334,10 +339,15 @@ public class MainFrame extends JFrame {
     private static int tabCounter;
 
     private void addNewTab(boolean closable) {
-        var panel = new JPanel();
+        var panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createLoweredBevelBorder());
-        tabPane.addTab("Tab " + ++tabCounter, Images.load("hand_count_three-16"), panel);
-        tabPane.setSelectedComponent(panel);
+
+        addNewTab(closable, Images.load("hand_count_three-16"), panel);
+    }
+
+    private void addNewTab(boolean closable, Icon icon, Component component) {
+        tabPane.addTab("Tab " + ++tabCounter, icon, component);
+        tabPane.setSelectedComponent(component);
         tabPane.setClosableAt(tabPane.getSelectedIndex(), closable);
     }
 
@@ -375,4 +385,14 @@ public class MainFrame extends JFrame {
             tabPane.setFontAt(2, fontToSet);
         }
     }
+
+    private void onSequentialLogging(ActionEvent actionEvent) {
+
+    }
+
+    private void onParallelLogging(ActionEvent actionEvent) {
+
+    }
+
+
 }
