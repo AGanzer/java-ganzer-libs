@@ -22,6 +22,8 @@ import java.util.Objects;
  * @see #isErrorLevel(int)
  * @see #isWarningLevel(int)
  * @see #write(int, String)
+ *
+ * @since 5.4.0
  */
 public class TextComponentLogTarget extends FormattedLogTarget {
     private final JTextComponent component;
