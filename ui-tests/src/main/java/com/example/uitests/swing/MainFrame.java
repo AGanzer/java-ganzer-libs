@@ -219,10 +219,7 @@ public class MainFrame extends JFrame {
         getContentPane().add(tabPane, BorderLayout.CENTER);
         addNewTab(false);
 
-        tabPane.addCloseListener((i, c) -> {
-            if (c != null)
-                tabPane.remove(c);
-        });
+        tabPane.addCloseListener((i, c) -> tabPane.remove(c));
         tabPane.addChangeListener(e -> {
             enableTabAction.setEnabled(tabPane.getTabCount() > 1);
             colorTabAction.setEnabled(tabPane.getTabCount() > 2);
