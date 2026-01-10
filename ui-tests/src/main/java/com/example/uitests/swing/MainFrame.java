@@ -41,7 +41,7 @@ public class MainFrame extends JFrame {
         initActions();
         initMenu();
         initToolBar();
-        initAccorion();
+        initAccordion();
         initTabPane();
 
         SwingTestApp.getUiSettings().apply(UI_KEY_FRAME, this);
@@ -198,7 +198,7 @@ public class MainFrame extends JFrame {
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
     }
 
-    private void initAccorion() {
+    private void initAccordion() {
         Accordion accordion = new Accordion();
 
         for (int i = 0; i < 5; ++i) {
