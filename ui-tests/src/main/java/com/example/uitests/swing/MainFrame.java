@@ -65,21 +65,21 @@ public class MainFrame extends JFrame {
                 fileMenu = new GActionGroup("File").addAll(
                         new GAction("Exit")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK))
-                                .smallIcon(Images.load("close-16"))
-                                .largeIcon(Images.load("close-48"))
+                                .smallIcon(SVGProvider.get("close", 16))
+                                .largeIcon(SVGProvider.get("close", 48))
                                 .shortDescription("Quits this application.")
                                 .onAction(this::onExit)
                 ),
                 buttonsMenu = new GActionGroup("Buttons").addAll(
                         new GAction("Any Option")
-                                .smallIcon(Images.load("stroller-16"))
-                                .largeIcon(Images.load("stroller-48"))
+                                .smallIcon(SVGProvider.get("stroller", 16))
+                                .largeIcon(SVGProvider.get("stroller", 48))
                                 .shortDescription("Sets the option 1.")
                                 .selectable(true)
                                 .onAction(this::onAnyOption),
                         new GAction("Another Option")
-                                .smallIcon(Images.load("car_compact2-16"))
-                                .largeIcon(Images.load("car_compact2-48"))
+                                .smallIcon(SVGProvider.get("car_compact2", 16))
+                                .largeIcon(SVGProvider.get("car_compact2", 48))
                                 .shortDescription("Sets the option 2.")
                                 .selectable(true)
                                 .selected(true)
@@ -89,25 +89,25 @@ public class MainFrame extends JFrame {
                                 .onSelectedActionChanged(this::onChooseChanged)
                                 .addAll(
                                         new GAction("Choose 1")
-                                                .smallIcon(Images.load("calendar_1-16"))
-                                                .largeIcon(Images.load("calendar_1-48"))
+                                                .smallIcon(SVGProvider.get("calendar_1", 16))
+                                                .largeIcon(SVGProvider.get("calendar_1", 48))
                                                 .shortDescription("Choose the number 1.")
                                                 .exclusivelySelectable(true)
                                                 .selected(true),
                                         new GAction("Choose 2")
-                                                .smallIcon(Images.load("hand_count_three-16"))
-                                                .largeIcon(Images.load("hand_count_three-48"))
+                                                .smallIcon(SVGProvider.get("hand_count_three", 16))
+                                                .largeIcon(SVGProvider.get("hand_count_three", 48))
                                                 .shortDescription("Choose the number 2.")
                                                 .exclusivelySelectable(true),
                                         new GAction("Choose 3")
-                                                .smallIcon(Images.load("calendar_3-16"))
-                                                .largeIcon(Images.load("calendar_3-48"))
+                                                .smallIcon(SVGProvider.get("calendar_3", 16))
+                                                .largeIcon(SVGProvider.get("calendar_3", 48))
                                                 .shortDescription("Choose the number 3.")
                                                 .exclusivelySelectable(true)
                                 )
                 ),
                 othersMenu = new GActionGroup("Others")
-                        .largeIcon(Images.load("hamburger-48"))
+                        .largeIcon(SVGProvider.get("hamburger", 48))
                         .shortDescription("Further options.")
                         .addAll(
                                 new GActionGroup("Sub Menu 1").addAll(
@@ -135,7 +135,7 @@ public class MainFrame extends JFrame {
                                 new GAction("Dummy 6")
                         ),
                 testMenu = new GActionGroup("Tests")
-                        .largeIcon(Images.load("multimeter_analog-48"))
+                        .largeIcon(SVGProvider.get("multimeter_analog", 48))
                         .shortDescription("Several Tests.")
                         .addAll(
                                 new GAction("Input Dialog Test")
@@ -275,40 +275,39 @@ public class MainFrame extends JFrame {
     }
 
     private void setImage(GAction action, boolean small) {
-        String size = small ? "-32" : "-48";
         String image;
 
         switch (action.getName()) {
             case "Exit":
-                image = "close" + size;
+                image = "close";
                 break;
 
             case "Any Option":
-                image = "stroller" + size;
+                image = "stroller";
                 break;
 
             case "Another Option":
-                image = "car_compact2" + size;
+                image = "car_compact2";
                 break;
 
             case "Choose 1":
-                image = "calendar_1" + size;
+                image = "calendar_1";
                 break;
 
             case "Choose 2":
-                image = "hand_count_three" + size;
+                image = "hand_count_three";
                 break;
 
             case "Choose 3":
-                image = "calendar_3" + size;
+                image = "calendar_3";
                 break;
 
             case "Others":
-                image = "hamburger" + size;
+                image = "hamburger";
                 break;
 
             case "Tests":
-                image = "multimeter_analog" + size;
+                image = "multimeter_analog";
                 break;
 
             default:
@@ -316,7 +315,7 @@ public class MainFrame extends JFrame {
                 return;
         }
 
-        action.largeIcon(Images.load(image));
+        action.largeIcon(SVGProvider.get(image, small ? 32 : 48));
     }
 
     private void onLoginTest(ActionEvent actionEvent) {
@@ -342,7 +341,7 @@ public class MainFrame extends JFrame {
         var panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createLoweredBevelBorder());
 
-        addNewTab(closable, Images.load("hand_count_three-16"), panel);
+        addNewTab(closable, SVGProvider.get("hand_count_three", 16), panel);
     }
 
     private void addNewTab(boolean closable, Icon icon, Component component) {
