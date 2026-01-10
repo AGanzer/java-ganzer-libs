@@ -1,7 +1,7 @@
 package de.ganzer.core.logging;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Objects;
 
 /**
@@ -9,8 +9,8 @@ import java.util.Objects;
  *
  * @since 5.4.0
  */
-public class StreamWriterLogTarget extends FormattedLogTarget {
-    private final OutputStreamWriter target;
+public class WriterLogTarget extends FormattedLogTarget {
+    private final Writer writer;
 
     /**
      * Creates a new instance from the specified argument with a formatter of
@@ -18,14 +18,14 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      * {@link DefaultLogFilter} and a message wait timeout of 0.
      *
      * @param level The level of the log messages to write.
-     * @param target The target where to write the messages into.
+     * @param writer The target where to write the messages into.
      *
      * @throws NullPointerException {@code target} is {@code null}.
      *
-     * @see #StreamWriterLogTarget(int, OutputStreamWriter, LogFormatter, LogFilter, int)
+     * @see #WriterLogTarget(int, Writer, LogFormatter, LogFilter, int)
      */
-    public StreamWriterLogTarget(int level, OutputStreamWriter target) {
-        this(level, target, null, null, 0);
+    public WriterLogTarget(int level, Writer writer) {
+        this(level, writer, null, null, 0);
     }
 
     /**
@@ -33,17 +33,17 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      * type {@link DefaultLogFormatter} and a message wait timeout of 0.
      *
      * @param level The level of the log messages to write.
-     * @param target The target where to write the messages into.
+     * @param writer The target where to write the messages into.
      * @param filter the filter to use to determine whether a message is written.
      *         If this is {@code null}, an instance of {@link DefaultLogFilter} is
      *         used.
      *
      * @throws NullPointerException {@code target} is {@code null}.
      *
-     * @see #StreamWriterLogTarget(int, OutputStreamWriter, LogFormatter, LogFilter, int)
+     * @see #WriterLogTarget(int, Writer, LogFormatter, LogFilter, int)
      */
-    public StreamWriterLogTarget(int level, OutputStreamWriter target, LogFilter filter) {
-        this(level, target, null, filter, 0);
+    public WriterLogTarget(int level, Writer writer, LogFilter filter) {
+        this(level, writer, null, filter, 0);
     }
 
     /**
@@ -52,7 +52,7 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      * {@link DefaultLogFilter}.
      *
      * @param level The level of the log messages to write.
-     * @param target The target where to write the messages into.
+     * @param writer The target where to write the messages into.
      * @param messageWaitTimeout The timeout in milliseconds to wait until
      *         messages are joined to a single message. See {@link #write(LogInfo[])}
      *         for a more detailed explanation. If this is less than 1,
@@ -60,10 +60,10 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      *
      * @throws NullPointerException {@code target} is {@code null}.
      *
-     * @see #StreamWriterLogTarget(int, OutputStreamWriter, LogFormatter, LogFilter, int)
+     * @see #WriterLogTarget(int, Writer, LogFormatter, LogFilter, int)
      */
-    public StreamWriterLogTarget(int level, OutputStreamWriter target, int messageWaitTimeout) {
-        this(level, target, null, null, messageWaitTimeout);
+    public WriterLogTarget(int level, Writer writer, int messageWaitTimeout) {
+        this(level, writer, null, null, messageWaitTimeout);
     }
 
     /**
@@ -71,7 +71,7 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      * type {@link DefaultLogFormatter}.
      *
      * @param level The level of the log messages to write.
-     * @param target The target where to write the messages into.
+     * @param writer The target where to write the messages into.
      * @param filter the filter to use to determine whether a message is written.
      *         If this is {@code null}, an instance of {@link DefaultLogFilter} is
      *         used.
@@ -82,10 +82,10 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      *
      * @throws NullPointerException {@code target} is {@code null}.
      *
-     * @see #StreamWriterLogTarget(int, OutputStreamWriter, LogFormatter, LogFilter, int)
+     * @see #WriterLogTarget(int, Writer, LogFormatter, LogFilter, int)
      */
-    public StreamWriterLogTarget(int level, OutputStreamWriter target, LogFilter filter, int messageWaitTimeout) {
-        this(level, target, null, filter, messageWaitTimeout);
+    public WriterLogTarget(int level, Writer writer, LogFilter filter, int messageWaitTimeout) {
+        this(level, writer, null, filter, messageWaitTimeout);
     }
 
     /**
@@ -94,16 +94,16 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      * {@link DefaultLogFilter} and a message wait timeout of 0.
      *
      * @param level The level of the log messages to write.
-     * @param target The target where to write the messages into.
+     * @param writer The target where to write the messages into.
      * @param formatter The formatter to use. If this is {@code null}, an instance
      *         of {@link DefaultLogFormatter} is used.
      *
      * @throws NullPointerException {@code target} is {@code null}.
      *
-     * @see #StreamWriterLogTarget(int, OutputStreamWriter, LogFormatter, LogFilter, int)
+     * @see #WriterLogTarget(int, Writer, LogFormatter, LogFilter, int)
      */
-    public StreamWriterLogTarget(int level, OutputStreamWriter target, LogFormatter formatter) {
-        this(level, target, formatter, null, 0);
+    public WriterLogTarget(int level, Writer writer, LogFormatter formatter) {
+        this(level, writer, formatter, null, 0);
     }
 
     /**
@@ -111,7 +111,7 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      * type {@link DefaultLogFormatter} and a message wait timeout of 0.
      *
      * @param level The level of the log messages to write.
-     * @param target The target where to write the messages into.
+     * @param writer The target where to write the messages into.
      * @param formatter The formatter to use. If this is {@code null}, an instance
      *         of {@link DefaultLogFormatter} is used.
      * @param filter the filter to use to determine whether a message is written.
@@ -120,10 +120,10 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      *
      * @throws NullPointerException {@code target} is {@code null}.
      *
-     * @see #StreamWriterLogTarget(int, OutputStreamWriter, LogFormatter, LogFilter, int)
+     * @see #WriterLogTarget(int, Writer, LogFormatter, LogFilter, int)
      */
-    public StreamWriterLogTarget(int level, OutputStreamWriter target, LogFormatter formatter, LogFilter filter) {
-        this(level, target, formatter, filter, 0);
+    public WriterLogTarget(int level, Writer writer, LogFormatter formatter, LogFilter filter) {
+        this(level, writer, formatter, filter, 0);
     }
 
     /**
@@ -132,7 +132,7 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      * {@link DefaultLogFilter}.
      *
      * @param level The level of the log messages to write.
-     * @param target The target where to write the messages into.
+     * @param writer The target where to write the messages into.
      * @param formatter The formatter to use. If this is {@code null}, an instance
      *         of {@link DefaultLogFormatter} is used.
      * @param messageWaitTimeout The timeout in milliseconds to wait until
@@ -142,17 +142,17 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      *
      * @throws NullPointerException {@code target} is {@code null}.
      *
-     * @see #StreamWriterLogTarget(int, OutputStreamWriter, LogFormatter, LogFilter, int)
+     * @see #WriterLogTarget(int, Writer, LogFormatter, LogFilter, int)
      */
-    public StreamWriterLogTarget(int level, OutputStreamWriter target, LogFormatter formatter, int messageWaitTimeout) {
-        this(level, target, formatter, null, messageWaitTimeout);
+    public WriterLogTarget(int level, Writer writer, LogFormatter formatter, int messageWaitTimeout) {
+        this(level, writer, formatter, null, messageWaitTimeout);
     }
 
     /**
      * Creates a new instance from the specified arguments.
      *
      * @param level The level of the log messages to write.
-     * @param target The target where to write the messages into.
+     * @param writer The target where to write the messages into.
      * @param formatter The formatter to use. If this is {@code null}, an instance
      *         of {@link DefaultLogFormatter} is used.
      * @param filter the filter to use to determine whether a message is written.
@@ -165,11 +165,11 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      *
      * @throws NullPointerException {@code target} is {@code null}.
      */
-    public StreamWriterLogTarget(int level, OutputStreamWriter target, LogFormatter formatter, LogFilter filter, int messageWaitTimeout) {
+    public WriterLogTarget(int level, Writer writer, LogFormatter formatter, LogFilter filter, int messageWaitTimeout) {
         super(level, formatter, filter, messageWaitTimeout);
-        Objects.requireNonNull(target, "target must not be null.");
+        Objects.requireNonNull(writer, "target must not be null.");
 
-        this.target = target;
+        this.writer = writer;
     }
 
     /**
@@ -177,8 +177,8 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      *
      * @return The target set at construction.
      */
-    public OutputStreamWriter getTarget() {
-        return target;
+    public Writer getWriter() {
+        return writer;
     }
 
     /**
@@ -193,7 +193,7 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      */
     @Override
     public void close() throws Exception {
-        target.close();
+        writer.close();
         super.close();
     }
 
@@ -204,13 +204,14 @@ public class StreamWriterLogTarget extends FormattedLogTarget {
      * @param level The log level of the message to log. This is given as
      *         information and should not be inserted into {@code messsage}.
      *         The level of joined messages is {@link Integer#MIN_VALUE}.
-     * @param message The message to write. This is already formatted and must
-     *         simply be written into the target as is.
+     * @param message The message to write. This is already formatted and
+     *        contains a trailing linefeed. This implementation does simply
+     *        write it into the target as is.
      *
      * @throws IOException on any I/O error.
      */
     @Override
     protected void write(int level, String message) throws IOException {
-        target.write(message);
+        writer.write(message);
     }
 }

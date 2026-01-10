@@ -181,12 +181,8 @@ public abstract class FormattedLogTarget extends LogTarget {
     protected void write(LogInfo[] info) throws IOException {
         StringBuilder sb = new StringBuilder();
 
-        for (var i = 0; i < info.length; i++) {
-            if (i > 0)
-                sb.append('\n');
-
-            sb.append(formatter.format(info[i]));
-        }
+        for (LogInfo logInfo : info)
+            sb.append(formatter.format(logInfo)).append('\n');
 
         write(info.length == 1 ? info[0].getLevel() : Integer.MIN_VALUE, sb.toString());
     }
@@ -198,8 +194,9 @@ public abstract class FormattedLogTarget extends LogTarget {
      * @param level The log level of the message to log. This is given as
      *        information and should not be inserted into {@code messsage}.
      *        The level of joined messages is {@link Integer#MIN_VALUE}.
-     * @param message The message to write. This is already formatted and must
-     *        simply be written into the target as is.
+     * @param message The message to write. This is already formatted and
+     *        contains a trailing linefeed. It simply should be written into
+     *        the target as is.
      */
     protected abstract void write(int level, String message) throws IOException;
 }

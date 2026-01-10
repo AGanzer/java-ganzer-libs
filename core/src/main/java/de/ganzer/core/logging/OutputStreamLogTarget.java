@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
  *
  * @since 5.4.0
  */
-public class OutputStreamLogTarget extends StreamWriterLogTarget {
+public class OutputStreamLogTarget extends WriterLogTarget {
     private final OutputStream stream;
 
     /**
@@ -193,6 +193,15 @@ public class OutputStreamLogTarget extends StreamWriterLogTarget {
      */
     public OutputStream getStream() {
         return stream;
+    }
+
+    /**
+     * Gets the charset that is used to write message.
+     *
+     * @return The used charset.
+     */
+    public Charset getCharset() {
+        return Charset.forName(((OutputStreamWriter) getWriter()).getEncoding());
     }
 
     /**
