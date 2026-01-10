@@ -389,6 +389,4 @@ public class MainFrame extends JFrame {
     private void onParallelLogging(ActionEvent actionEvent) {
 
     }
-
-
 }
