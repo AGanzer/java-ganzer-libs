@@ -1,6 +1,5 @@
 package com.example.uitests.swing.tests;
 
-import de.ganzer.core.logging.LogTarget;
 import de.ganzer.core.logging.Logger;
 import de.ganzer.swing.logging.TextComponentLogTarget;
 
@@ -45,14 +44,14 @@ public abstract class LogPanel extends JPanel {
         return panel;
     }
 
+    private static final String MESSAGE_FORMAT = "This is the %d. log message of level %d.";
     private int counter;
-    private final String messageFormat = "This is the %n. log message of level %n.";
     private final Random random = new Random();
 
     private void startLogging() {
         for (int i = 0; i < 100; i++) {
             int level = random.nextInt(10);
-            var message = String.format(messageFormat, ++counter, level);
+            var message = String.format(MESSAGE_FORMAT, ++counter, level);
 
             logger.write(level, message);
         }
