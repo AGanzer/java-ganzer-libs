@@ -388,7 +388,7 @@ public class TextComponentLogTarget extends FormattedLogTarget {
         try {
             boolean scrollToEnd = component.getCaretPosition() ==  component.getDocument().getLength();
 
-            doc.insertString(doc.getLength(), message + "\n", null);
+            doc.insertString(doc.getLength(), message, null);
 
             if (scrollToEnd)
                 component.setCaretPosition(component.getDocument().getLength());
