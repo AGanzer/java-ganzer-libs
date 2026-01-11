@@ -8,7 +8,7 @@ import javax.swing.text.JTextComponent;
 public class TextAreaLogPanel extends LogPanel {
     private final int messageWaitTimeOut;
 
-    private JTextArea textPane;
+    private JTextArea textArea;
     private TextComponentLogTarget logTarget;
 
     public TextAreaLogPanel(int messageWaitTimeOut) {
@@ -28,11 +28,11 @@ public class TextAreaLogPanel extends LogPanel {
 
     @Override
     protected JTextComponent getTextComponent() {
-        if (textPane == null) {
-            textPane = new JTextArea();
-            textPane.setEditable(false);
+        if (textArea == null) {
+            textArea = new JTextArea();
+            textArea.setEditable(false);
         }
 
-        return textPane;
+        return textArea;
     }
 }

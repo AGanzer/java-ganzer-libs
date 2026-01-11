@@ -2,6 +2,8 @@ package com.example.uitests.swing;
 
 import com.example.uitests.swing.tests.LoginDialog;
 import com.example.uitests.swing.tests.InputTestDialog;
+import com.example.uitests.swing.tests.TextAreaLogPanel;
+import com.example.uitests.swing.tests.TextPaneLogPanel;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.ClosableTabsPane;
@@ -156,10 +158,19 @@ public class MainFrame extends JFrame {
                                         .enabled(false)
                                         .onAction(this::onChangeTabFont),
                                 new GSeparatorAction(),
-                                new GAction("Sequential logging")
-                                        .onAction(this::onSequentialLogging),
-                                new GAction("Parallel logging")
-                                        .onAction(this::onParallelLogging)
+                                new GAction("Sequential Logging (JTextArea)")
+                                        .onAction(this::onSequentiaArealLogging),
+                                new GAction("Sequential Logging (JTextPane)")
+                                        .onAction(this::onSequentiaPanelLogging),
+                                new GAction("Sequential HTML Logging")
+                                        .onAction(this::onSequentialHTMLLogging),
+                                new GSeparatorAction(),
+                                new GAction("Parallel Logging (JTextArea)")
+                                        .onAction(this::onParallelAreaLogging),
+                                new GAction("Parallel Logging (JTextPane)")
+                                        .onAction(this::onParallelPaneLogging),
+                                new GAction("Parallel HTML Logging")
+                                        .onAction(this::onParallelTMLLogging)
                         ),
                 new GActionGroup("Extras").addAll(
                         new GAction("Show Text In Buttons")
@@ -227,20 +238,20 @@ public class MainFrame extends JFrame {
         });
     }
 
-    private void onExit(ActionEvent event) {
+    private void onExit(ActionEvent e) {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
-    private void onAnyOption(ActionEvent event) {
+    private void onAnyOption(ActionEvent e) {
         System.out.format(
                 "Any Option is %s!\n",
-                ((GAction)event.getSource()).isSelected() ? "selected" : "deselected");
+                ((GAction)e.getSource()).isSelected() ? "selected" : "deselected");
     }
 
-    private void onAnotherOption(ActionEvent event) {
+    private void onAnotherOption(ActionEvent e) {
         System.out.format(
                 "Another Option is %s!\n",
-                ((GAction)event.getSource()).isSelected() ? "selected" : "deselected");
+                ((GAction)e.getSource()).isSelected() ? "selected" : "deselected");
     }
 
     private void onChooseChanged(GSelectedActionChangedEvent event) {
@@ -249,8 +260,8 @@ public class MainFrame extends JFrame {
                 event.getSelectedAction() == null ? "No" : event.getSelectedAction().getName());
     }
 
-    private void onShowTexts(ActionEvent event) {
-        boolean hide = !((GAction)event.getSource()).isSelected();
+    private void onShowTexts(ActionEvent e) {
+        boolean hide = !((GAction)e.getSource()).isSelected();
 
         for (int i = 0; i < toolBar.getComponentCount(); i++) {
             if (toolBar.getComponent(i) instanceof AbstractButton button)
@@ -258,8 +269,8 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void onSmallButtons(ActionEvent event) {
-        boolean smallButtons = ((GAction)event.getSource()).isSelected();
+    private void onSmallButtons(ActionEvent e) {
+        boolean smallButtons = ((GAction)e.getSource()).isSelected();
 
         for (int i = 0; i < toolBar.getComponentCount(); i++) {
             if (toolBar.getComponent(i) instanceof AbstractButton button)
@@ -324,7 +335,7 @@ public class MainFrame extends JFrame {
             System.out.println("Login canceled.");
     }
 
-    private void onInputTest(ActionEvent event) {
+    private void onInputTest(ActionEvent e) {
         var data = new InputTestDialog.Data();
         data.input = "abcd";
 
@@ -338,20 +349,20 @@ public class MainFrame extends JFrame {
         var panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createLoweredBevelBorder());
 
-        addNewTab(closable, SVGProvider.get("hand_count_three", 16), panel);
+        addNewTab(closable, "Tab " + ++tabCounter, SVGProvider.get("hand_count_three", 16), panel);
     }
 
-    private void addNewTab(boolean closable, Icon icon, Component component) {
-        tabPane.addTab("Tab " + ++tabCounter, icon, component);
+    private void addNewTab(boolean closable, String title, Icon icon, Component component) {
+        tabPane.addTab(title, icon, component);
         tabPane.setSelectedComponent(component);
         tabPane.setClosableAt(tabPane.getSelectedIndex(), closable);
     }
 
-    private void onNewTab(ActionEvent event) {
+    private void onNewTab(ActionEvent e) {
         addNewTab(true);
     }
 
-    private void onToggleTabEnabled(ActionEvent event) {
+    private void onToggleTabEnabled(ActionEvent e) {
         if (tabPane.getTabCount() > 1)
             tabPane.setEnabledAt(1, !tabPane.isEnabledAt(1));
     }
@@ -359,7 +370,7 @@ public class MainFrame extends JFrame {
     private Color lastTabBackgroundColor = new Color (128, 128, 255);
     private Color lastTabForegroundColor = new Color (0, 255, 0);
 
-    private void onChangeTabColor(ActionEvent event) {
+    private void onChangeTabColor(ActionEvent e) {
         if (tabPane.getTabCount() > 2) {
             Color backgroundColorToSet = lastTabBackgroundColor;
             Color foregroundColorToSet = lastTabForegroundColor;
@@ -374,7 +385,7 @@ public class MainFrame extends JFrame {
 
     private Font lastTabFont;
 
-    private void onChangeTabFont(ActionEvent event) {
+    private void onChangeTabFont(ActionEvent e) {
         if (tabPane.getTabCount() > 2) {
             Font fontToSet = lastTabFont == null ? tabPane.getFontAt(2).deriveFont(Font.BOLD) : lastTabFont;
             lastTabFont = tabPane.getFontAt(2);
@@ -382,11 +393,45 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void onSequentialLogging(ActionEvent actionEvent) {
-
+    private void onSequentiaArealLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Seq. Area Log",
+                  SVGProvider.get("history2", 16),
+                  new TextAreaLogPanel(0));
     }
 
-    private void onParallelLogging(ActionEvent actionEvent) {
+    private void onSequentiaPanelLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Seq. Pane Log",
+                  SVGProvider.get("history2", 16),
+                  new TextPaneLogPanel("text/plain", 0));
+    }
 
+    private void onSequentialHTMLLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Seq. HTML Log",
+                  SVGProvider.get("history2", 16),
+                  new TextPaneLogPanel("text/html", 0));
+    }
+
+    private void onParallelAreaLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Par. Area Log",
+                  SVGProvider.get("history2", 16),
+                  new TextAreaLogPanel(250));
+    }
+
+    private void onParallelPaneLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Par. Pane Log",
+                  SVGProvider.get("history2", 16),
+                  new TextPaneLogPanel("text/plain", 250));
+    }
+
+    private void onParallelTMLLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Par. HTML Log",
+                  SVGProvider.get("history2", 16),
+                  new TextPaneLogPanel("text/html", 250));
     }
 }
