@@ -243,35 +243,38 @@ public abstract class LogTarget implements AutoCloseable {
 
         @Override
         public void run() {
-            writeLock.lock();
+            while (!canceled.get()) {
+                var avail = false;
 
-            try {
-                while (!canceled.get()) {
-                    var avail = writeCondition.await(100, TimeUnit.MILLISECONDS);
+                writeLock.lock();
 
-                    if (!avail)
-                        continue;
-
-                    List<LogInfo> infos;
-
-                    synchronized (pendingMessages) {
-                        infos = new ArrayList<>(pendingMessages);
-                    }
-
-                    if (infos.isEmpty())
-                        continue;
-
-                    try {
-                        write(infos.toArray(new LogInfo[0]));
-                    } catch (Exception e) {
-                        // This must not throw any exception!
-                        e.printStackTrace(System.err);
-                    }
+                try {
+                    avail = writeCondition.await(100, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    // Ignore.
+                } finally {
+                    writeLock.unlock();
                 }
-            } catch (InterruptedException e) {
-                // Ignore.
-            } finally {
-                writeLock.unlock();
+
+                if (!avail)
+                    continue;
+
+                List<LogInfo> infos;
+
+                synchronized (pendingMessages) {
+                    infos = new ArrayList<>(pendingMessages);
+                    pendingMessages.clear();
+                }
+
+                if (infos.isEmpty())
+                    continue;
+
+                try {
+                    write(infos.toArray(new LogInfo[0]));
+                } catch (Exception e) {
+                    // This must not throw any exception!
+                    e.printStackTrace(System.err);
+                }
             }
         }
 
@@ -285,18 +288,21 @@ public abstract class LogTarget implements AutoCloseable {
 
         @Override
         public void run() {
-            writeLock.lock();
-
             try {
                 while (!canceled.get()) {
                     //noinspection BusyWait
                     Thread.sleep(messageWaitTimeout);
-                    writeCondition.signal();
+
+                    writeLock.lock();
+
+                    try {
+                        writeCondition.signal();
+                    } finally {
+                        writeLock.unlock();
+                    }
                 }
             } catch (InterruptedException e) {
                 // Ignore.
-            } finally {
-                writeLock.unlock();
             }
         }
 
