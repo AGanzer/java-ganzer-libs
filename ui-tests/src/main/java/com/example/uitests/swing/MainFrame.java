@@ -397,41 +397,41 @@ public class MainFrame extends JFrame {
         addNewTab(true,
                   "Seq. Area Log",
                   SVGProvider.get("history2", 16),
-                  new TextAreaLogPanel(0));
+                  new TextAreaLogPanel(0).init());
     }
 
     private void onSequentiaPanelLogging(ActionEvent e) {
         addNewTab(true,
                   "Seq. Pane Log",
                   SVGProvider.get("history2", 16),
-                  new TextPaneLogPanel("text/plain", 0));
+                  new TextPaneLogPanel("text/plain", 0).init());
     }
 
     private void onSequentialHTMLLogging(ActionEvent e) {
         addNewTab(true,
                   "Seq. HTML Log",
                   SVGProvider.get("history2", 16),
-                  new TextPaneLogPanel("text/html", 0));
+                  new TextPaneLogPanel("text/html", 0).init());
     }
 
     private void onParallelAreaLogging(ActionEvent e) {
         addNewTab(true,
                   "Par. Area Log",
                   SVGProvider.get("history2", 16),
-                  new TextAreaLogPanel(250));
+                  new TextAreaLogPanel(250).init());
     }
 
     private void onParallelPaneLogging(ActionEvent e) {
         addNewTab(true,
                   "Par. Pane Log",
                   SVGProvider.get("history2", 16),
-                  new TextPaneLogPanel("text/plain", 250));
+                  new TextPaneLogPanel("text/plain", 250).init());
     }
 
     private void onParallelTMLLogging(ActionEvent e) {
         addNewTab(true,
                   "Par. HTML Log",
                   SVGProvider.get("history2", 16),
-                  new TextPaneLogPanel("text/html", 250));
+                  new TextPaneLogPanel("text/html", 250).init());
     }
 }

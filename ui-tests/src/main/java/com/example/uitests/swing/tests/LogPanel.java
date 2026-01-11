@@ -14,13 +14,17 @@ public abstract class LogPanel extends JPanel {
 
     public LogPanel() {
         super(new BorderLayout());
+    }
 
+    public LogPanel init() {
         JScrollPane scrollPane = new JScrollPane(getTextComponent());
 
         add(scrollPane, BorderLayout.CENTER);
         add(createButtonPanel(), BorderLayout.SOUTH);
 
         logger.addTarget("1", getLogTarget());
+
+        return this;
     }
 
     protected abstract TextComponentLogTarget getLogTarget();
