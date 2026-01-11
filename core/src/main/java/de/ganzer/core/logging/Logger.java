@@ -187,7 +187,7 @@ public class Logger implements AutoCloseable {
      *
      * @throws IllegalStateException If this instance has been closed.
      */
-    synchronized void write(int level, String message) {
+    synchronized public void write(int level, String message) {
         if (closed)
             throw new IllegalStateException("Logger has been closed.");
 
