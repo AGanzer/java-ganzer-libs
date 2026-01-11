@@ -3,6 +3,7 @@ package de.ganzer.swing.logging;
 import de.ganzer.core.logging.*;
 
 import javax.swing.JEditorPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -281,7 +282,9 @@ public class TextComponentLogTarget extends FormattedLogTarget {
      */
     @Override
     protected void write(int level, String message) {
-        if (pane != null && pane.getContentType().contains("text/html"))
+        if (!SwingUtilities.isEventDispatchThread())
+            SwingUtilities.invokeLater(() -> write(level, message));
+        else if (pane != null && pane.getContentType().contains("text/html"))
             writeHTML(level, message + "<br>");
         else
             writePlain(level, message + "\n");
