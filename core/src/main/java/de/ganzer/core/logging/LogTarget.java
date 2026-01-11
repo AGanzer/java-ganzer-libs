@@ -290,7 +290,7 @@ public abstract class LogTarget implements AutoCloseable {
             try {
                 while (!canceled.get()) {
                     //noinspection BusyWait
-                    Thread.sleep(messageNumber);
+                    Thread.sleep(messageWaitTimeout);
                     writeCondition.signal();
                 }
             } catch (InterruptedException e) {
