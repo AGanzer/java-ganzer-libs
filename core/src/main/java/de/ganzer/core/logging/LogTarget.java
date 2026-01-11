@@ -3,9 +3,7 @@ package de.ganzer.core.logging;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
@@ -22,7 +20,7 @@ public abstract class LogTarget implements AutoCloseable {
     private final int level;
     private final LogFilter filter;
     private final int messageWaitTimeout;
-    private final Queue<LogInfo> pendingMessages = new LinkedList<>();
+    private final List<LogInfo> pendingMessages = new ArrayList<>();
     private final AtomicBoolean closed = new AtomicBoolean(false);
 
     private Logger owner;
