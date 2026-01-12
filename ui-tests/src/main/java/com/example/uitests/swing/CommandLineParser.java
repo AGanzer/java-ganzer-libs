@@ -1,5 +1,6 @@
 package com.example.uitests.swing;
 
+import com.example.uitests.swing.tests.FlatLaFBorderValidationHint;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -9,6 +10,7 @@ import com.formdev.flatlaf.intellijthemes.FlatHighContrastIJTheme;
 import com.formdev.flatlaf.intellijthemes.FlatNordIJTheme;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import de.ganzer.swing.validaton.ValidationFilter;
 
 import javax.swing.UIManager;
 
@@ -30,46 +32,55 @@ public class CommandLineParser {
             switch (arg.toLowerCase()) {
                 case "light": {
                     FlatLightLaf.setup();
+                    ValidationFilter.setHintProvider(new FlatLaFBorderValidationHint());
                     break;
                 }
 
                 case "dark": {
                     FlatDarkLaf.setup();
+                    ValidationFilter.setHintProvider(new FlatLaFBorderValidationHint());
                     break;
                 }
 
                 case "dracula": {
                     FlatDarculaLaf.setup();
+                    ValidationFilter.setHintProvider(new FlatLaFBorderValidationHint());
                     break;
                 }
 
                 case "intellij": {
                     FlatIntelliJLaf.setup();
+                    ValidationFilter.setHintProvider(new FlatLaFBorderValidationHint());
                     break;
                 }
 
                 case "highcontrast": {
                     FlatHighContrastIJTheme.setup();
+                    ValidationFilter.setHintProvider(new FlatLaFBorderValidationHint());
                     break;
                 }
 
                 case "cyan": {
                     FlatCyanLightIJTheme.setup();
+                    ValidationFilter.setHintProvider(new FlatLaFBorderValidationHint());
                     break;
                 }
 
                 case "nord": {
                     FlatNordIJTheme.setup();
+                    ValidationFilter.setHintProvider(new FlatLaFBorderValidationHint());
                     break;
                 }
 
                 case "maclight": {
                     FlatMacLightLaf.setup();
+                    ValidationFilter.setHintProvider(new FlatLaFBorderValidationHint());
                     break;
                 }
 
                 case "macdark": {
                     FlatMacDarkLaf.setup();
+                    ValidationFilter.setHintProvider(new FlatLaFBorderValidationHint());
                     break;
                 }
 
