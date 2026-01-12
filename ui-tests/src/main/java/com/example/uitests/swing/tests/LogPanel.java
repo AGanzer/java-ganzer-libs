@@ -48,14 +48,15 @@ public abstract class LogPanel extends JPanel {
         return panel;
     }
 
-    private static final String MESSAGE_FORMAT = "This is the %d. log message of level %d.";
+    private static final String MESSAGE_FORMAT = "This is the %d. \"log message\" of <level> %d.";
+    private static final String LB_MESSAGE_FORMAT = "This is the\n    %d. 'log message'\n    of level &%d.";
     private int counter;
     private final Random random = new Random();
 
     private void startLogging() {
         for (int i = 0; i < 100; i++) {
             int level = random.nextInt(10);
-            var message = String.format(MESSAGE_FORMAT, ++counter, level);
+            var message = String.format(level == 0 ? LB_MESSAGE_FORMAT : MESSAGE_FORMAT, ++counter, level);
 
             logger.write(level, message);
         }

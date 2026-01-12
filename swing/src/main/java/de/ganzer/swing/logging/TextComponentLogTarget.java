@@ -285,7 +285,7 @@ public class TextComponentLogTarget extends FormattedLogTarget {
         if (!SwingUtilities.isEventDispatchThread())
             SwingUtilities.invokeLater(() -> write(level, message));
         else if (pane != null && pane.getContentType().contains("text/html"))
-            writeHTML(level, message + "<br>");
+            writeHTML(level, message + "\n");
         else
             writePlain(level, message + "\n");
     }
@@ -362,12 +362,17 @@ public class TextComponentLogTarget extends FormattedLogTarget {
 
     private void writeHTML(int level, String message) {
         if (formatHTML) {
-            message = message.replace("\n", "<br>");
+            message = message
+                    .replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;");
 
             if (isErrorLevel(level))
-                message = String.format("<span style='color:%s;'>%s</span>", getErrorColor(), message);
+                message = String.format("<pre style='margin:0; line-height:1.0; color:%s;'>%s</pre>", getErrorColor(), message);
             else if (isWarningLevel(level))
-                message = String.format("<span style='color:%s;'>%s</span>", getWarningColor(), message);
+                message = String.format("<pre style='margin:0; line-height:1.0; color:%s;'>%s</pre>", getWarningColor(), message);
+            else
+                message = String.format("<pre style='margin:0; line-height:1.0;'>%s</pre>", message);
         }
 
         var kit = (HTMLEditorKit) pane.getEditorKit();
