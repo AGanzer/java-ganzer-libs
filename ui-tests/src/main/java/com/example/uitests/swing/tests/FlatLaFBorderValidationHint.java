@@ -72,4 +72,20 @@ public class FlatLaFBorderValidationHint implements ValidationHintProvider {
         target.putClientProperty(FlatClientProperties.OUTLINE, null);
         orgTooltip = null;
     }
+
+    /**
+     * Called if a visual hint is already shown but the message has changed.
+     * <p>
+     * This implementation updates the tooltip.
+     *
+     * @param target The target text field where to show the hints.
+     * @param e The exception that causes the error.
+     *
+     * @since 5.4.0
+     */
+    @Override
+    public void updateHints(JTextComponent target, ValidatorException e) {
+        if (!shouldKeepToolTip())
+            target.setToolTipText(e.getLocalizedMessage());
+    }
 }

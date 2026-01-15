@@ -370,10 +370,11 @@ public class ValidationFilter extends DocumentFilter {
     }
 
     private void setVisualHints(ValidatorException e) {
-        if (hintsVisible)
-            return;
-
-        hintProvider.showHints(textField, e);
-        hintsVisible = true;
+        if (hintsVisible) {
+            hintProvider.updateHints(textField, e);
+        } else {
+            hintProvider.showHints(textField, e);
+            hintsVisible = true;
+        }
     }
 }
