@@ -1,6 +1,10 @@
 package com.example.uitests.swing.tests;
 
+import de.ganzer.core.validation.CharCountValidator;
 import de.ganzer.swing.dialogs.AbstractModifiableDialog;
+import de.ganzer.swing.validaton.ValidationBehavior;
+import de.ganzer.swing.validaton.ValidationFilter;
+import de.ganzer.swing.validaton.ValidationFilterList;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -11,6 +15,8 @@ import java.awt.Dialog;
 import java.awt.Window;
 
 public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
+    private final ValidationFilterList validationFilterList = new ValidationFilterList();
+
     public static class Data {
         public String name;
         public String password;
@@ -35,8 +41,7 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
 
     @Override
     protected boolean validateModifiedData() {
-        // Validate input here.
-        return true;
+        return validationFilterList.validate(ValidationBehavior.SHOW_MESSAGE_BOX);
     }
 
     @Override
@@ -72,6 +77,23 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
 
         nameField.getDocument().addDocumentListener(new TextFieldListener());
         passwordField.getDocument().addDocumentListener(new TextFieldListener());
+
+        var orgLiveValidation = ValidationFilter.isLiveValidation();
+        ValidationFilter.setLiveValidation(true);
+
+        try {
+            var nameValidator = new CharCountValidator();
+            nameValidator.setMinLength(5);
+            nameValidator.setMaxLength(12);
+            validationFilterList.addFilter(new ValidationFilter(nameValidator, nameField));
+
+            var pwValidator = new CharCountValidator();
+            pwValidator.setMinLength(8);
+            pwValidator.setMaxLength(12);
+            validationFilterList.addFilter(new ValidationFilter(pwValidator, passwordField));
+        } finally {
+            ValidationFilter.setLiveValidation(orgLiveValidation);
+        }
 
         initLayout();
     }

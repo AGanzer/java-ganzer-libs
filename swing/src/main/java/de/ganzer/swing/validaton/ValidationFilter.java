@@ -4,6 +4,8 @@ import de.ganzer.core.validation.*;
 import de.ganzer.swing.internals.SwingMessages;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -55,6 +57,7 @@ public class ValidationFilter extends DocumentFilter {
     private static boolean liveValidation;
 
     private final JTextComponent textField;
+
     private Validator validator;
     private boolean validateOnFocusLost;
     private boolean hintsVisible;
@@ -97,7 +100,9 @@ public class ValidationFilter extends DocumentFilter {
         this.validateOnFocusLost = validateOnFocusLost;
 
         ((AbstractDocument)textField.getDocument()).setDocumentFilter(this);
-        // TODO: install document listener for live validation
+
+        if (liveValidation)
+            this.textField.getDocument().addDocumentListener(new LiveListener(this));
 
         setListeners();
     }
@@ -414,6 +419,29 @@ public class ValidationFilter extends DocumentFilter {
         } else {
             hintProvider.showHints(textField, e);
             hintsVisible = true;
+        }
+    }
+
+    private static class LiveListener implements DocumentListener {
+        private final ValidationFilter filter;
+
+        private LiveListener(ValidationFilter filter) {
+            this.filter = filter;
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            filter.validate(ValidationBehavior.SET_VISUAL_HINTS);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            filter.validate(ValidationBehavior.SET_VISUAL_HINTS);
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            filter.validate(ValidationBehavior.SET_VISUAL_HINTS);
         }
     }
 }
