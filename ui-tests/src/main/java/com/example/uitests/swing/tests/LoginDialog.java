@@ -78,22 +78,15 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
         nameField.getDocument().addDocumentListener(new TextFieldListener());
         passwordField.getDocument().addDocumentListener(new TextFieldListener());
 
-        var orgLiveValidation = ValidationFilter.isLiveValidation();
-        ValidationFilter.setLiveValidation(true);
+        var nameValidator = new CharCountValidator();
+        nameValidator.setMinLength(5);
+        nameValidator.setMaxLength(12);
+        validationFilterList.addFilter(new ValidationFilter(nameValidator, nameField));
 
-        try {
-            var nameValidator = new CharCountValidator();
-            nameValidator.setMinLength(5);
-            nameValidator.setMaxLength(12);
-            validationFilterList.addFilter(new ValidationFilter(nameValidator, nameField));
-
-            var pwValidator = new CharCountValidator();
-            pwValidator.setMinLength(8);
-            pwValidator.setMaxLength(12);
-            validationFilterList.addFilter(new ValidationFilter(pwValidator, passwordField));
-        } finally {
-            ValidationFilter.setLiveValidation(orgLiveValidation);
-        }
+        var pwValidator = new CharCountValidator();
+        pwValidator.setMinLength(8);
+        pwValidator.setMaxLength(12);
+        validationFilterList.addFilter(new ValidationFilter(pwValidator, passwordField));
 
         initLayout();
     }

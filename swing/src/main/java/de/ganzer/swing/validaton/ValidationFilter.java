@@ -54,19 +54,21 @@ import java.util.function.Consumer;
 public class ValidationFilter extends DocumentFilter {
     private static Consumer<ValidatorException> errorConsumer;
     private static ValidationHintProvider hintProvider = new BorderValidationHint();
-    private static boolean liveValidation;
 
     private final JTextComponent textField;
 
     private Validator validator;
     private boolean validateOnFocusLost;
+    private boolean liveValidation;
     private boolean hintsVisible;
     private boolean updating;
+    private DocumentListener liveListener;
 
     /**
      * Create a new filter from the specified arguments.
      * <p>
-     * This sets {@link #isValidateOnFocusLost()} to {@code true}.
+     * This sets {@link #isValidateOnFocusLost()} and {@link #isLiveValidation()}
+     * to {@code true}.
      *
      * @param validator The validator to use.
      * @param textField The text field to validate.
@@ -75,7 +77,24 @@ public class ValidationFilter extends DocumentFilter {
      *         {@code null}.
      */
     public ValidationFilter(Validator validator, JTextComponent textField) {
-        this(validator, textField, true);
+        this(validator, textField, true, true);
+    }
+
+    /**
+     * Create a new filter from the specified arguments.
+     * <p>
+     * This sets {@link #isLiveValidation()} to {@code true}.
+     *
+     * @param validator The validator to use.
+     * @param textField The text field to validate.
+     * @param validateOnFocusLost If {@code true} the validation is done when
+     *        {@code inputField} loses its focus.
+     *
+     * @throws NullPointerException {@code validator} or {@code textField} is
+     *         {@code null}.
+     */
+    public ValidationFilter(Validator validator, JTextComponent textField, boolean validateOnFocusLost) {
+        this(validator, textField, validateOnFocusLost, true);
     }
 
     /**
@@ -85,25 +104,28 @@ public class ValidationFilter extends DocumentFilter {
      * @param textField The text field to validate.
      * @param validateOnFocusLost If {@code true} the validation is done when
      *        {@code inputField} loses its focus.
+     * @param liveValidation If {@code true} the input is validated live. See
+     *        {@link #setLiveValidation(boolean)} for further details.
      *
      * @throws NullPointerException {@code validator} or {@code textField} is
      *         {@code null}.
      *
      * @see #setValidateOnFocusLost(boolean)
+     *
+     * @since 5.4.0
      */
-    public ValidationFilter(Validator validator, JTextComponent textField, boolean validateOnFocusLost) {
+    public ValidationFilter(Validator validator, JTextComponent textField, boolean validateOnFocusLost, boolean liveValidation) {
         Objects.requireNonNull(validator, "validator must not be null.");
         Objects.requireNonNull(textField, "textField must not be null.");
 
         this.validator = validator;
         this.textField = textField;
         this.validateOnFocusLost = validateOnFocusLost;
+        this.liveValidation = liveValidation;
 
         ((AbstractDocument)textField.getDocument()).setDocumentFilter(this);
 
-        if (liveValidation)
-            this.textField.getDocument().addDocumentListener(new LiveListener(this));
-
+        setLiveValidation(liveValidation);
         setListeners();
     }
 
@@ -138,7 +160,7 @@ public class ValidationFilter extends DocumentFilter {
      *
      * @since 5.4.0
      */
-    public static boolean isLiveValidation() {
+    public boolean isLiveValidation() {
         return liveValidation;
     }
 
@@ -149,18 +171,21 @@ public class ValidationFilter extends DocumentFilter {
      * live while the user inputs its text. If this is not active, the hints
      * are updated on lost focus if {@link #isValidateOnFocusLost()} is true
      * or on explicitly invoking {@link #validate(ValidationBehavior)}.
-     * <p>
-     * Changing this value does not affect already existing validation filters.
-     * If this should not temporarily be set for a special dialog or control,
-     * this should be set before any validation filter is created to ensure the
-     * same behavior within the whole application.
      *
      * @param activate {@code true} to activate live validation.
      *
      * @since 5.4.0
      */
-    public static void setLiveValidation(boolean activate) {
+    public void setLiveValidation(boolean activate) {
         liveValidation = activate;
+
+        if (activate && liveListener == null) {
+            liveListener = new LiveListener(this);
+            this.textField.getDocument().addDocumentListener(liveListener);
+        } else if (!activate && liveListener != null) {
+            this.textField.getDocument().removeDocumentListener(liveListener);
+            liveListener = null;
+        }
     }
 
     /**
