@@ -52,6 +52,7 @@ import java.util.function.Consumer;
 public class ValidationFilter extends DocumentFilter {
     private static Consumer<ValidatorException> errorConsumer;
     private static ValidationHintProvider hintProvider = new BorderValidationHint();
+    private static boolean liveValidation;
 
     private final JTextComponent textField;
     private Validator validator;
@@ -96,6 +97,7 @@ public class ValidationFilter extends DocumentFilter {
         this.validateOnFocusLost = validateOnFocusLost;
 
         ((AbstractDocument)textField.getDocument()).setDocumentFilter(this);
+        // TODO: install document listener for live validation
 
         setListeners();
     }
@@ -117,6 +119,43 @@ public class ValidationFilter extends DocumentFilter {
      */
     public static void setHintProvider(ValidationHintProvider hintProvider) {
         ValidationFilter.hintProvider = hintProvider == null ? new BorderValidationHint() : hintProvider;
+    }
+
+    /**
+     * Gets a value indicating whether live validation is active.
+     * <p>
+     * For a detailed explanation see {@link #setLiveValidation(boolean)}.
+     *
+     * @return {@code true} if live validation is active. The default is
+     *         {@code false}.
+     *
+     * @see #setLiveValidation(boolean)
+     *
+     * @since 5.4.0
+     */
+    public static boolean isLiveValidation() {
+        return liveValidation;
+    }
+
+    /**
+     * Activates or deactivates live validation.
+     * <p>
+     * If live validation is active, the validation error hints are updated
+     * live while the user inputs its text. If this is not active, the hints
+     * are updated on lost focus if {@link #isValidateOnFocusLost()} is true
+     * or on explicitly invoking {@link #validate(ValidationBehavior)}.
+     * <p>
+     * Changing this value does not affect already existing validation filters.
+     * If this should not temporarily be set for a special dialog or control,
+     * this should be set before any validation filter is created to ensure the
+     * same behavior within the whole application.
+     *
+     * @param activate {@code true} to activate live validation.
+     *
+     * @since 5.4.0
+     */
+    public static void setLiveValidation(boolean activate) {
+        liveValidation = activate;
     }
 
     /**
