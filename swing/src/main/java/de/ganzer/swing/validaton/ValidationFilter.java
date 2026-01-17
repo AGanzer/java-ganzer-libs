@@ -59,7 +59,6 @@ public class ValidationFilter extends DocumentFilter {
 
     private Validator validator;
     private boolean validateOnFocusLost;
-    private boolean liveValidation;
     private boolean hintsVisible;
     private boolean updating;
     private DocumentListener liveListener;
@@ -121,12 +120,11 @@ public class ValidationFilter extends DocumentFilter {
         this.validator = validator;
         this.textField = textField;
         this.validateOnFocusLost = validateOnFocusLost;
-        this.liveValidation = liveValidation;
-
-        ((AbstractDocument)textField.getDocument()).setDocumentFilter(this);
 
         setLiveValidation(liveValidation);
         setListeners();
+
+        ((AbstractDocument)textField.getDocument()).setDocumentFilter(this);
     }
 
     /**
@@ -186,7 +184,7 @@ public class ValidationFilter extends DocumentFilter {
      * @since 5.4.0
      */
     public boolean isLiveValidation() {
-        return liveValidation;
+        return liveListener != null;
     }
 
     /**
@@ -202,12 +200,13 @@ public class ValidationFilter extends DocumentFilter {
      * @since 5.4.0
      */
     public void setLiveValidation(boolean activate) {
-        liveValidation = activate;
+        if (activate == isLiveValidation())
+            return;
 
-        if (activate && liveListener == null) {
+        if (activate) {
             liveListener = new LiveListener(this);
             this.textField.getDocument().addDocumentListener(liveListener);
-        } else if (!activate && liveListener != null) {
+        } else {
             this.textField.getDocument().removeDocumentListener(liveListener);
             liveListener = null;
         }
