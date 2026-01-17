@@ -149,6 +149,31 @@ public class ValidationFilter extends DocumentFilter {
     }
 
     /**
+     * Gets the consumer to call on validation error.
+     *
+     * @return The currently set consumer or {@code null} if no consumer is set.
+     *
+     * @see #setErrorConsumer(Consumer)
+     */
+    public static Consumer<ValidatorException> getErrorConsumer() {
+        return errorConsumer;
+    }
+
+    /**
+     * Sets the specified error consumer.
+     * <p>
+     * This is useful if the default message box should not be displayed. If
+     * this is set, the default handling will not take place and {@code consumer}
+     * is invoked to shaw a message box.
+     *
+     * @param errorConsumer The consumer to set or {@code null} to display a
+     *        default message box.
+     */
+    public static void setErrorConsumer(Consumer<ValidatorException> errorConsumer) {
+        ValidationFilter.errorConsumer = errorConsumer;
+    }
+
+    /**
      * Gets a value indicating whether live validation is active.
      * <p>
      * For a detailed explanation see {@link #setLiveValidation(boolean)}.
@@ -186,31 +211,6 @@ public class ValidationFilter extends DocumentFilter {
             this.textField.getDocument().removeDocumentListener(liveListener);
             liveListener = null;
         }
-    }
-
-    /**
-     * Gets the consumer to call on validation error.
-     *
-     * @return The currently set consumer or {@code null} if no consumer is set.
-     *
-     * @see #setErrorConsumer(Consumer)
-     */
-    public static Consumer<ValidatorException> getErrorConsumer() {
-        return errorConsumer;
-    }
-
-    /**
-     * Sets the specified error consumer.
-     * <p>
-     * This is useful if the default message box should not be displayed. If
-     * this is set, the default handling will not take place and {@code consumer}
-     * is invoked to shaw a message box.
-     *
-     * @param errorConsumer The consumer to set or {@code null} to display a
-     *        default message box.
-     */
-    public static void setErrorConsumer(Consumer<ValidatorException> errorConsumer) {
-        ValidationFilter.errorConsumer = errorConsumer;
     }
 
     /**
