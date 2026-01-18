@@ -1,6 +1,7 @@
 package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.core.util.Strings;
 
 import java.util.Objects;
 
@@ -77,7 +78,7 @@ public class Validator {
      * @param errorMessage The error message to use if a text is invalid.
      */
     public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage == null || errorMessage.isBlank() || errorMessage.isEmpty()
+        this.errorMessage = Strings.isNullOrBlank(errorMessage)
                 ? null
                 : errorMessage;
     }
