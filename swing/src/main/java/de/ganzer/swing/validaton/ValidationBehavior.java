@@ -1,5 +1,7 @@
 package de.ganzer.swing.validaton;
 
+import de.ganzer.core.validation.ValidatorException;
+
 import java.util.function.Consumer;
 
 /**
@@ -25,8 +27,13 @@ public enum ValidationBehavior {
     SET_VISUAL_HINTS,
 
     /**
-     * A {@link de.ganzer.core.validation.ValidatorException} is thrown on
-     * invalid input.
+     * A {@link ValidatorException} is thrown on invalid input.
      */
-    THROW_EXCEPTION
+    THROW_EXCEPTION,
+
+    /**
+     * Validates without any further action. Existing visual hints are removed
+     * on valid input nevertheless.
+     */
+    VALIDATION_ONLY
 }
