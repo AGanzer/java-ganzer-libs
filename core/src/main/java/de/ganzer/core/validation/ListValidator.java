@@ -1,6 +1,7 @@
 package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.core.util.Strings;
 
 import java.util.List;
 
@@ -8,6 +9,15 @@ import java.util.List;
  * A validator that accepts input that is contained in a list of valid inputs.
  */
 public class ListValidator extends Validator {
+    /**
+     * The default error message for input that is not found in the list of
+     * allowed messages.
+     * @see #setNotInListErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_NOT_IN_LIST_ERROR_MESSAGE = CoreMessages.get("inputDoesNotMatchList");
+
+    private String notInListErrorMessage = DEFAULT_NOT_IN_LIST_ERROR_MESSAGE;
     private List<String> validInputs;
     private boolean ignoreCase;
 
@@ -81,6 +91,35 @@ public class ListValidator extends Validator {
         super(options);
         this.validInputs = validInputs;
         this.ignoreCase = ignoreCase;
+    }
+
+    /**
+     * Gets the message that is shown for input that is not found in the list of
+     * allowed messages.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_NOT_IN_LIST_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getNotInListErrorMessage() {
+        return notInListErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown for input that is not found in the list of
+     * allowed messages.
+     *
+     * @param notInListErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_NOT_IN_LIST_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setNotInListErrorMessage(String notInListErrorMessage) {
+        this.notInListErrorMessage = Strings.isNullOrBlank(notInListErrorMessage)
+                ? DEFAULT_NOT_IN_LIST_ERROR_MESSAGE
+                : notInListErrorMessage;
     }
 
     /**
@@ -186,9 +225,9 @@ public class ListValidator extends Validator {
             result = validInputs.contains(text);
 
         if (!result)
-            er.setException(new ValidatorException(getErrorMessage() == null
-                                                           ? CoreMessages.get("inputDoesNotMatchList")
-                                                           : getErrorMessage()));
+            er.setException(new ValidatorException(getErrorMessage() != null
+                                                           ? getErrorMessage()
+                                                           : getNotInListErrorMessage()));
 
         return result;
     }

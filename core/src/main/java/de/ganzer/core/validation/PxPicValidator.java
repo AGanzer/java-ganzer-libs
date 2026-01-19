@@ -1,6 +1,9 @@
 package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.core.util.Strings;
+
+import java.util.regex.Pattern;
 
 /**
  * The PxPicValidator class defines a validator that validates text by using a
@@ -38,6 +41,13 @@ import de.ganzer.core.internals.CoreMessages;
  * </ul>
  */
 public class PxPicValidator extends CharCountValidator {
+    /**
+     * The default error message for input that does not confirm to the picture.
+     * @see #setMatchErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_MATCH_ERROR_MESSAGE = CoreMessages.get("inputDoesNotConfirmPic");
+
     private enum Status {
         COMPLETE,
         INCOMPLETE,
@@ -60,7 +70,7 @@ public class PxPicValidator extends CharCountValidator {
         }
 
         public Status start(boolean fill) {
-            if (input.length() == 0)
+            if (input.isEmpty())
                 return Status.EMPTY;
 
             idxInp = 0;
@@ -424,7 +434,8 @@ public class PxPicValidator extends CharCountValidator {
         }
     }
 
-    private String picture = "";
+    private String matchErrorMessage = DEFAULT_MATCH_ERROR_MESSAGE;
+    private String picture;
 
     /**
      * Creates a new instance of the validator where every input is valid.
@@ -484,6 +495,38 @@ public class PxPicValidator extends CharCountValidator {
     }
 
     /**
+     * Gets the message that is shown if the input does not confirm to the
+     * picture.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_MATCH_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getMatchErrorMessage() {
+        return matchErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input does not confirm to the
+     * picture.
+     * <p>
+     * <b>NOTE:</b> The message to set may contain a single {@code %s}. If it
+     * exists, it will be replaced with the currently set picture mask.
+     *
+     * @param matchErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_MATCH_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setMatchErrorMessage(String matchErrorMessage) {
+        this.matchErrorMessage = Strings.isNullOrBlank(matchErrorMessage)
+                ? DEFAULT_MATCH_ERROR_MESSAGE
+                : matchErrorMessage;
+    }
+
+    /**
      * Gets the picture that is used for validation.
      *
      * @return The used picture or an empty string if every input is valid.
@@ -514,8 +557,9 @@ public class PxPicValidator extends CharCountValidator {
      * Checks whether the given picture is syntactically valid.
      *
      * @param picture The picture to check.
+     *
      * @return {@code true} if picture is valid; otherwise, {@code false} is
-     * returned.
+     *         returned.
      */
     public boolean checkSyntax(String picture) {
         if (picture == null || picture.isEmpty())
@@ -581,20 +625,16 @@ public class PxPicValidator extends CharCountValidator {
         if (!super.doInputValidation(text, autoFill))
             return false;
 
-        if (picture == null || picture.isEmpty() || text.length() == 0)
+        if (Strings.isNullOrEmpty(picture) || text.isEmpty())
             return true;
 
-        switch (new StateMachine(picture, text).start(autoFill)) {
-            case COMPLETE:
-            case AMBIGUOUS:
-            case INCOMPLETE:
-            case INCOMPLETE_NO_FILL:
-                return true;
-
-            default:
-                return false;
-        }
+        return switch (new StateMachine(picture, text).start(autoFill)) {
+            case COMPLETE, AMBIGUOUS, INCOMPLETE, INCOMPLETE_NO_FILL -> true;
+            default -> false;
+        };
     }
+
+    private final static Pattern searchPattern = Pattern.compile("(?:^|[^%])(?:%%)*%s");
 
     /**
      * This implementation calls the {@link Validator#doInputValidation} and checks
@@ -605,35 +645,36 @@ public class PxPicValidator extends CharCountValidator {
      *             {@code false}, the encapsulated exception is set to an
      *             instance of {@link ValidatorException}. This must not be
      *             {@code null}.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *          returned.
      */
     @Override
     protected boolean doValidate(String text, ValidatorExceptionRef er) {
         if (!super.doValidate(text, er))
             return false;
 
-        if (picture == null || picture.isEmpty() || text.isEmpty())
+        if (Strings.isNullOrEmpty(picture) || text.isEmpty())
             return true;
 
-        switch (new StateMachine(picture, new StringBuilder(text)).start(false)) {
-            case COMPLETE:
-            case EMPTY:
-                return true;
+        return switch (new StateMachine(picture, new StringBuilder(text)).start(false)) {
+            case COMPLETE, EMPTY -> true;
+            case SYNTAX -> {
+                er.setException(new ValidatorException(String.format(CoreMessages.get("picSyntaxError"), picture)));
+                yield false;
+            }
+            default -> {
+                if (getErrorMessage() != null) {
+                    er.setException(new ValidatorException(getErrorMessage()));
+                } else {
+                    if (searchPattern.matcher(getMatchErrorMessage()).find())
+                        er.setException(new ValidatorException(String.format(getMatchErrorMessage(), picture)));
+                    else
+                        er.setException(new ValidatorException(getMatchErrorMessage()));
+                }
 
-            case SYNTAX:
-                er.setException(new ValidatorException(getErrorMessage() != null
-                        ? getErrorMessage()
-                        : String.format(CoreMessages.get("picSyntaxError"), picture)));
-
-                return false;
-
-            default:
-                er.setException(new ValidatorException(getErrorMessage() != null
-                        ? getErrorMessage()
-                        : String.format(CoreMessages.get("inputDoesNotConfirmPic"), picture)));
-
-                return false;
-        }
+                yield false;
+            }
+        };
     }
 }

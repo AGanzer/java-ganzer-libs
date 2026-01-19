@@ -1,6 +1,7 @@
 package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.core.util.Strings;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -11,6 +12,28 @@ import java.time.format.DecimalStyle;
  * format and range of strings that represents numbers.
  */
 public class NumberValidator extends Validator {
+    /**
+     * The default error message for input that is not in the allowed range.
+     * @see #setRangeErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_RANGE_ERROR_MESSAGE = CoreMessages.get("inputOutOfRange");
+    /**
+     * The default error message for input that is not a number.
+     * @see #setNumberErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_NUMBER_ERROR_MESSAGE = CoreMessages.get("inputIsNotNumber");
+    /**
+     * The default error message for input that is not an integer.
+     * @see #setIntegerErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_INTEGER_ERROR_MESSAGE = CoreMessages.get("inputIsNotInteger");
+
+    private String rangeErrorMessage = DEFAULT_RANGE_ERROR_MESSAGE;
+    private String numberErrorMessage = DEFAULT_NUMBER_ERROR_MESSAGE;
+    private String integerErrorMessage = DEFAULT_INTEGER_ERROR_MESSAGE;
     private double minValue = Long.MIN_VALUE;
     private double maxValue = Long.MAX_VALUE;
     private int numDecimals = 0;
@@ -111,6 +134,91 @@ public class NumberValidator extends Validator {
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.numDecimals = numDecimals;
+    }
+
+    /**
+     * Gets the message that is shown if the input is out of the allowed range.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_RANGE_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getRangeErrorMessage() {
+        return rangeErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input is out of the allowed range.
+     * <p>
+     * <b>NOTE:</b> The message to set must contain 2 placeholders in the form
+     * {@code %1$s} (for the minimum allowed number) and {@code %2$s} (for the
+     * maximum allowed number).
+     *
+     * @param rangeErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_RANGE_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setRangeErrorMessage(String rangeErrorMessage) {
+        this.rangeErrorMessage = Strings.isNullOrBlank(rangeErrorMessage)
+                ? DEFAULT_RANGE_ERROR_MESSAGE
+                : rangeErrorMessage;
+    }
+
+    /**
+     * Gets the message that is shown if the input is not a number.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_NUMBER_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getNumberErrorMessage() {
+        return numberErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input is not a number.
+     *
+     * @param numberErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_NUMBER_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setNumberErrorMessage(String numberErrorMessage) {
+        this.numberErrorMessage = Strings.isNullOrBlank(numberErrorMessage)
+                ? DEFAULT_NUMBER_ERROR_MESSAGE
+                : numberErrorMessage;
+    }
+
+    /**
+     * Gets the message that is shown if the input is not an integer.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_INTEGER_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getIntegerErrorMessage() {
+        return integerErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input is not an integer.
+     *
+     * @param integerErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_INTEGER_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setIntegerErrorMessage(String integerErrorMessage) {
+        this.integerErrorMessage = Strings.isNullOrBlank(integerErrorMessage)
+                ? DEFAULT_INTEGER_ERROR_MESSAGE
+                : integerErrorMessage;
     }
 
     /**
@@ -332,8 +440,9 @@ public class NumberValidator extends Validator {
      *             {@code false}, the encapsulated exception is set to an
      *             instance of {@link ValidatorException}. This must not be
      *             {@code null}.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *         returned.
      */
     @Override
     protected boolean doValidate(String text, ValidatorExceptionRef er) {
@@ -346,7 +455,9 @@ public class NumberValidator extends Validator {
         var d = DecimalStyle.ofDefaultLocale();
 
         if (numDecimals == 0 && text.indexOf(d.getDecimalSeparator()) != -1) {
-            er.setException(new ValidatorException(getErrorMessage() != null ? getErrorMessage() : CoreMessages.get("inputIsNotInteger")));
+            er.setException(new ValidatorException(getErrorMessage() != null ?
+                                                           getErrorMessage() :
+                                                           getIntegerErrorMessage()));
             return false;
         }
 
@@ -361,14 +472,16 @@ public class NumberValidator extends Validator {
             else {
                 String mask1 = String.format("%%1$,.%df", numDecimals);
                 String mask2 = String.format("%%2$,.%df", numDecimals);
-                String format = String.format(CoreMessages.get("inputOutOfRange"), mask1, mask2);
+                String format = String.format(getRangeErrorMessage(), mask1, mask2);
 
                 er.setException(new ValidatorException(String.format(format, minValue, maxValue)));
             }
 
             return false;
         } catch (ParseException e) {
-            er.setException(new ValidatorException(getErrorMessage() != null ? getErrorMessage() : CoreMessages.get("inputIsNotNumber")));
+            er.setException(new ValidatorException(getErrorMessage() != null
+                                                           ? getErrorMessage()
+                                                           : getNumberErrorMessage()));
             return false;
         }
     }

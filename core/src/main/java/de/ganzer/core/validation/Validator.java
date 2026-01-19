@@ -12,6 +12,21 @@ import java.util.Objects;
  * to test whether an input is required.
  */
 public class Validator {
+    /**
+     * The default error message for required input.
+     * @see #setRequiredErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_REQUIRED_ERROR_MESSAGE = CoreMessages.get("inputRequired");
+    /**
+     * The default error message for blank input.
+     * @see #setBlanksErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_BLANKS_ERROR_MESSAGE = CoreMessages.get("blanksNotAllowed");
+
+    private String requiredErrorMessage = DEFAULT_REQUIRED_ERROR_MESSAGE;
+    private String blanksErrorMessage = DEFAULT_BLANKS_ERROR_MESSAGE;
     private int options;
     private String errorMessage;
     private Object tag;
@@ -56,11 +71,70 @@ public class Validator {
     }
 
     /**
-     * Gets the error message to use with this validator.
+     * Gets the message that is shown if the input is empty, but it is required.
      *
-     * @return The error message to use if a text is invalid. If this is
-     * {@code null}, a default message that depends on the validators
-     * type will be used.
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_REQUIRED_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getRequiredErrorMessage() {
+        return requiredErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input is empty, but it is required.
+     *
+     * @param requiredErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_REQUIRED_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setRequiredErrorMessage(String requiredErrorMessage) {
+        this.requiredErrorMessage = Strings.isNullOrBlank(requiredErrorMessage)
+                ? DEFAULT_REQUIRED_ERROR_MESSAGE
+                : requiredErrorMessage;
+    }
+
+    /**
+     * Gets the message that is shown if the input contains only blanks, but
+     * this is not allowed.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_BLANKS_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getBlanksErrorMessage() {
+        return blanksErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input contains only blanks, but
+     * this is not allowed.
+     *
+     * @param blanksErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_BLANKS_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setBlanksErrorMessage(String blanksErrorMessage) {
+        this.blanksErrorMessage = Strings.isNullOrBlank(blanksErrorMessage)
+                ? DEFAULT_BLANKS_ERROR_MESSAGE
+                : blanksErrorMessage;
+    }
+
+    /**
+     * Gets the common error message to use with this validator.
+     * <p>
+     * If this is {@code null}, the granulated messages of the respective
+     * validator are used (like {@link #getBlanksErrorMessage()} or
+     * {@link #getRequiredErrorMessage()}).
+     *
+     * @return The error message to use if a text is invalid or {@code null}
+     *         if this is not set.
      */
     public String getErrorMessage() {
         return errorMessage;
@@ -69,13 +143,15 @@ public class Validator {
     /**
      * Sets the error message to use with this validator.
      * <p>
-     * If errorMessage is {@code null}, a default message that
-     * depends on the validators type is used.
+     * If this is {@code null}, the granulated messages of the respective
+     * validator are used (like {@link #getBlanksErrorMessage()} or
+     * {@link #getRequiredErrorMessage()}).
      * <p>
      * If errorMessage is empty or contains whitespaces only, the error
      * message ist set to {@code null}.
      *
-     * @param errorMessage The error message to use if a text is invalid.
+     * @param errorMessage The error message to use if a text is invalid. If
+     *         is empty or contains whitespaces only, {@code null} is set.
      */
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = Strings.isNullOrBlank(errorMessage)
@@ -249,9 +325,9 @@ public class Validator {
 
         if (text.isEmpty()) {
             if (hasOption(ValidatorOptions.NEEDS_INPUT))
-                er.setException(new ValidatorException(errorMessage != null ? errorMessage : CoreMessages.get("inputRequired")));
+                er.setException(new ValidatorException(errorMessage != null ? getErrorMessage() : getRequiredErrorMessage()));
         } else if (text.trim().isEmpty() && !hasOption(ValidatorOptions.BLANKS_VALID)) {
-            er.setException(new ValidatorException(errorMessage != null ? errorMessage : CoreMessages.get("blanksNotAllowed")));
+            er.setException(new ValidatorException(errorMessage != null ? getErrorMessage() : getBlanksErrorMessage()));
         }
 
         return er.getException() == null;

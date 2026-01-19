@@ -217,4 +217,20 @@ class ListValidatorTest {
         assertEquals(expected, val.validate(input, ref));
         assertEquals(expected, ref.getException() == null);
    }
+
+    @Test
+    void setNotInListErrorMessage() {
+        var val = new ListValidator();
+        val.setNotInListErrorMessage("m");
+
+        assertEquals("m", val.getNotInListErrorMessage());
+    }
+
+    @Test
+    void testSetIgnoreCase() {
+        var val = new ListValidator();
+        val.setIgnoreCase(true);
+
+        assertTrue(val.isIgnoreCase());
+    }
 }

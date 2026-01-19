@@ -1,6 +1,7 @@
 package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.core.util.Strings;
 
 import java.util.regex.Pattern;
 
@@ -9,6 +10,15 @@ import java.util.regex.Pattern;
  * by using a regular expression.
  */
 public class RegularExpressionValidator extends CharCountValidator {
+    /**
+     * The default error message for input that does not confirm to the
+     * expression.
+     * @see #setMatchErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_MATCH_ERROR_MESSAGE = CoreMessages.get("inputDoesNotMatchExpression");
+
+    private String matchErrorMessage = DEFAULT_MATCH_ERROR_MESSAGE;
     private Pattern pattern;
 
     /**
@@ -55,6 +65,38 @@ public class RegularExpressionValidator extends CharCountValidator {
     }
 
     /**
+     * Gets the message that is shown if the input does not confirm to the
+     * expression.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_MATCH_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getMatchErrorMessage() {
+        return matchErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input does not confirm to the
+     * expression.
+     * <p>
+     * <b>NOTE:</b> The message to set may contain a single {@code %s}. If it
+     * exists, it will be replaced with the currently set expression.
+     *
+     * @param matchErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_MATCH_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setMatchErrorMessage(String matchErrorMessage) {
+        this.matchErrorMessage = Strings.isNullOrBlank(matchErrorMessage)
+                ? DEFAULT_MATCH_ERROR_MESSAGE
+                : matchErrorMessage;
+    }
+
+    /**
      * Gets the pattern that is used for validation.
      *
      * @return The used pattern or {@code null} if all input is valid.
@@ -87,13 +129,15 @@ public class RegularExpressionValidator extends CharCountValidator {
         if (!super.doInputValidation(text, autoFill))
             return false;
 
-        if ((text.length() == 0))
+        if (text.isEmpty())
             return true;
 
         var end = firstFailurePoint(pattern, text.toString());
 
         return end == -1 || end == text.length();
     }
+
+    private final static Pattern searchPattern = Pattern.compile("(?:^|[^%])(?:%%)*%s");
 
     /**
      * This implementation calls the {@link Validator#doInputValidation} and checks
@@ -112,15 +156,20 @@ public class RegularExpressionValidator extends CharCountValidator {
         if (!super.doValidate(text, er))
             return false;
 
-        if ((text.isEmpty()) || pattern == null)
+        if (text.isEmpty() || pattern == null)
             return true;
 
         if (pattern.matcher(text).matches())
             return true;
 
-        er.setException(new ValidatorException(getErrorMessage() != null
-                ? getErrorMessage()
-                : String.format(CoreMessages.get("inputDoesNotMatchExpression"), getPattern())));
+        if (getErrorMessage() != null) {
+            er.setException(new ValidatorException(getErrorMessage()));
+        } else {
+            if (searchPattern.matcher(getMatchErrorMessage()).find())
+                er.setException(new ValidatorException(String.format(getMatchErrorMessage(), pattern)));
+            else
+                er.setException(new ValidatorException(getMatchErrorMessage()));
+        }
 
         return false;
     }
