@@ -5,6 +5,7 @@ import de.ganzer.core.util.Strings;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.time.format.DecimalStyle;
 
 /**
@@ -422,12 +423,10 @@ public class NumberValidator extends Validator {
                 return minValue < 0;
         }
 
-        try {
-            NumberFormat.getInstance().parse(t).doubleValue();
-            return true;
-        } catch (ParseException e) {
-            return false;
-        }
+        var pos = new ParsePosition(0);
+        var res = NumberFormat.getInstance().parse(t, pos);
+
+        return res != null && pos.getErrorIndex() < 0 && pos.getIndex() == text.length();
     }
 
     /**
@@ -461,29 +460,32 @@ public class NumberValidator extends Validator {
             return false;
         }
 
-        try {
-            double v = NumberFormat.getInstance().parse(text).doubleValue();
+        var pos = new ParsePosition(0);
+        var res = NumberFormat.getInstance().parse(text, pos);
 
-            if (minValue <= v && v <= maxValue)
-                return true;
-
-            if (getErrorMessage() != null)
-                er.setException(new ValidatorException(getErrorMessage()));
-            else {
-                String mask1 = String.format("%%1$,.%df", numDecimals);
-                String mask2 = String.format("%%2$,.%df", numDecimals);
-                String format = String.format(getRangeErrorMessage(), mask1, mask2);
-
-                er.setException(new ValidatorException(String.format(format, minValue, maxValue)));
-            }
-
-            return false;
-        } catch (ParseException e) {
+        if (res == null || pos.getErrorIndex() >= 0 || pos.getIndex() < text.length()) {
             er.setException(new ValidatorException(getErrorMessage() != null
                                                            ? getErrorMessage()
                                                            : getNumberErrorMessage()));
             return false;
         }
+
+        var v = res.doubleValue();
+
+        if (minValue <= v && v <= maxValue)
+            return true;
+
+        if (getErrorMessage() != null)
+            er.setException(new ValidatorException(getErrorMessage()));
+        else {
+            String mask1 = String.format("%%1$,.%df", numDecimals);
+            String mask2 = String.format("%%2$,.%df", numDecimals);
+            String format = String.format(getRangeErrorMessage(), mask1, mask2);
+
+            er.setException(new ValidatorException(String.format(format, minValue, maxValue)));
+        }
+
+        return false;
     }
 
     /**
