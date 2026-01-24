@@ -163,12 +163,18 @@ public class RegularExpressionValidator extends CharCountValidator {
             return true;
 
         if (getErrorMessage() != null) {
-            er.setException(new ValidatorException(getErrorMessage()));
+            er.setException(new ValidatorException(getErrorMessage(),
+                                                   RegularExpressionValidator.class,
+                                                   this));
         } else {
             if (searchPattern.matcher(getMatchErrorMessage()).find())
-                er.setException(new ValidatorException(String.format(getMatchErrorMessage(), pattern)));
+                er.setException(new ValidatorException(String.format(getMatchErrorMessage(), pattern),
+                                                       RegularExpressionValidator.class,
+                                                       this));
             else
-                er.setException(new ValidatorException(getMatchErrorMessage()));
+                er.setException(new ValidatorException(getMatchErrorMessage(),
+                                                       RegularExpressionValidator.class,
+                                                       this));
         }
 
         return false;

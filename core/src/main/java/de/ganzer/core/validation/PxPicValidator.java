@@ -660,17 +660,25 @@ public class PxPicValidator extends CharCountValidator {
         return switch (new StateMachine(picture, new StringBuilder(text)).start(false)) {
             case COMPLETE, EMPTY -> true;
             case SYNTAX -> {
-                er.setException(new ValidatorException(String.format(CoreMessages.get("picSyntaxError"), picture)));
+                er.setException(new ValidatorException(String.format(CoreMessages.get("picSyntaxError"), picture),
+                                                       PxPicValidator.class,
+                                                       this));
                 yield false;
             }
             default -> {
                 if (getErrorMessage() != null) {
-                    er.setException(new ValidatorException(getErrorMessage()));
+                    er.setException(new ValidatorException(getErrorMessage(),
+                                                           PxPicValidator.class,
+                                                           this));
                 } else {
                     if (searchPattern.matcher(getMatchErrorMessage()).find())
-                        er.setException(new ValidatorException(String.format(getMatchErrorMessage(), picture)));
+                        er.setException(new ValidatorException(String.format(getMatchErrorMessage(), picture),
+                                                               PxPicValidator.class,
+                                                               this));
                     else
-                        er.setException(new ValidatorException(getMatchErrorMessage()));
+                        er.setException(new ValidatorException(getMatchErrorMessage(),
+                                                               PxPicValidator.class,
+                                                               this));
                 }
 
                 yield false;

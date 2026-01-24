@@ -456,7 +456,9 @@ public class NumberValidator extends Validator {
         if (numDecimals == 0 && text.indexOf(d.getDecimalSeparator()) != -1) {
             er.setException(new ValidatorException(getErrorMessage() != null ?
                                                            getErrorMessage() :
-                                                           getIntegerErrorMessage()));
+                                                           getIntegerErrorMessage(),
+                                                   NumberValidator.class,
+                                                   this));
             return false;
         }
 
@@ -466,7 +468,9 @@ public class NumberValidator extends Validator {
         if (res == null || pos.getErrorIndex() >= 0 || pos.getIndex() < text.length()) {
             er.setException(new ValidatorException(getErrorMessage() != null
                                                            ? getErrorMessage()
-                                                           : getNumberErrorMessage()));
+                                                           : getNumberErrorMessage(),
+                                                   NumberValidator.class,
+                                                   this));
             return false;
         }
 
@@ -476,13 +480,17 @@ public class NumberValidator extends Validator {
             return true;
 
         if (getErrorMessage() != null)
-            er.setException(new ValidatorException(getErrorMessage()));
+            er.setException(new ValidatorException(getErrorMessage(),
+                                                   NumberValidator.class,
+                                                   this));
         else {
             String mask1 = String.format("%%1$,.%df", numDecimals);
             String mask2 = String.format("%%2$,.%df", numDecimals);
             String format = String.format(getRangeErrorMessage(), mask1, mask2);
 
-            er.setException(new ValidatorException(String.format(format, minValue, maxValue)));
+            er.setException(new ValidatorException(String.format(format, minValue, maxValue),
+                                                   NumberValidator.class,
+                                                   this));
         }
 
         return false;

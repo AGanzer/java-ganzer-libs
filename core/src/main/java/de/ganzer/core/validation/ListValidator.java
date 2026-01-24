@@ -227,7 +227,9 @@ public class ListValidator extends Validator {
         if (!result)
             er.setException(new ValidatorException(getErrorMessage() != null
                                                            ? getErrorMessage()
-                                                           : getNotInListErrorMessage()));
+                                                           : getNotInListErrorMessage(),
+                                                   ListValidator.class,
+                                                   this));
 
         return result;
     }

@@ -220,12 +220,16 @@ public class CharCountValidator extends Validator {
             er.setException(new ValidatorException(String.format(getErrorMessage() != null
                                                                          ? getErrorMessage()
                                                                          : getAboveMaxErrorMessage(),
-                                                                 maxLength)));
+                                                                 maxLength),
+                                                   CharCountValidator.class,
+                                                   this));
         } else if (minLength != 0 && text.length() < minLength) {
             er.setException(new ValidatorException(String.format(getErrorMessage() != null
                                                                          ? getErrorMessage()
                                                                          : getBelowMinErrorMessage(),
-                                                                 minLength)));
+                                                                 minLength),
+                                                   CharCountValidator.class,
+                                                   this));
             }
 
         return er.getException() == null;

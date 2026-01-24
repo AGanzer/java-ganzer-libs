@@ -253,7 +253,7 @@ public class Validator {
      * @return {@code true} if input is valid; otherwise, {@code false}
      * is returned.
      *
-     * @throws NullPointerException input or er is {@code null}.
+     * @throws NullPointerException {@code input} or {@code er} is {@code null}.
      *
      * @see ValidatorExceptionRef for an example.
      */
@@ -325,9 +325,15 @@ public class Validator {
 
         if (text.isEmpty()) {
             if (hasOption(ValidatorOptions.NEEDS_INPUT))
-                er.setException(new ValidatorException(errorMessage != null ? getErrorMessage() : getRequiredErrorMessage()));
+                er.setException(new ValidatorException(
+                        errorMessage != null ? getErrorMessage() : getRequiredErrorMessage(),
+                        Validator.class,
+                        this));
         } else if (text.trim().isEmpty() && !hasOption(ValidatorOptions.BLANKS_VALID)) {
-            er.setException(new ValidatorException(errorMessage != null ? getErrorMessage() : getBlanksErrorMessage()));
+            er.setException(new ValidatorException(
+                    errorMessage != null ? getErrorMessage() : getBlanksErrorMessage(),
+                    Validator.class,
+                    this));
         }
 
         return er.getException() == null;

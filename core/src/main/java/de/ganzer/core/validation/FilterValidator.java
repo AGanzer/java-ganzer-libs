@@ -258,7 +258,9 @@ public class FilterValidator extends CharCountValidator {
 
         er.setException(new ValidatorException(getErrorMessage() != null
                                                        ? getErrorMessage()
-                                                       : getFilterErrorMessage()));
+                                                       : getFilterErrorMessage(),
+                                               FilterValidator.class,
+                                               this));
         return false;
     }
 
