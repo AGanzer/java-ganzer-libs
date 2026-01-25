@@ -1,7 +1,6 @@
 package com.example.uitests.fx;
 
 import de.ganzer.core.validation.Validator;
-import de.ganzer.core.validation.ValidatorExceptionRef;
 
 public class ValidatorSettingsController implements TestValidatorController {
     //region fields

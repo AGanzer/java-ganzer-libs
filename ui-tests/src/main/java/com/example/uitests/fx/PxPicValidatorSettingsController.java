@@ -2,7 +2,6 @@ package com.example.uitests.fx;
 
 import de.ganzer.core.validation.PxPicValidator;
 import de.ganzer.core.validation.Validator;
-import de.ganzer.core.validation.ValidatorExceptionRef;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;

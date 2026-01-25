@@ -2,7 +2,6 @@ package com.example.uitests.fx;
 
 import de.ganzer.core.validation.NumberValidator;
 import de.ganzer.core.validation.Validator;
-import de.ganzer.core.validation.ValidatorExceptionRef;
 import de.ganzer.fx.validation.ValidationBehavior;
 import de.ganzer.fx.validation.ValidationTextFormatter;
 import javafx.fxml.FXML;
