@@ -4,7 +4,8 @@ import de.ganzer.core.validation.FilterValidator;
 import de.ganzer.core.validation.NumberValidator;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.core.validation.ValidatorExceptionRef;
-import de.ganzer.fx.validation.ValidatorTextFormatter;
+import de.ganzer.fx.validation.ValidationBehavior;
+import de.ganzer.fx.validation.ValidationTextFormatter;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -13,8 +14,8 @@ import java.text.ParseException;
 
 public class FilterValidatorSettingsController implements TestValidatorController {
     //region fields
-    private ValidatorTextFormatter minInputLengthFormatter;
-    private ValidatorTextFormatter maxInputLengthFormatter;
+    private ValidationTextFormatter minInputLengthFormatter;
+    private ValidationTextFormatter maxInputLengthFormatter;
     private FilterValidator testValidator;
     //endregion
 
@@ -39,9 +40,9 @@ public class FilterValidatorSettingsController implements TestValidatorControlle
     //endregion
 
     @Override
-    public boolean validateSettings(ValidatorExceptionRef ref) {
-        return minInputLengthFormatter.validate(ref)
-                && maxInputLengthFormatter.validate(ref);
+    public boolean validateSettings() {
+        return minInputLengthFormatter.validate(ValidationBehavior.SHOW_MESSAGE_BOX)
+                && maxInputLengthFormatter.validate(ValidationBehavior.SHOW_MESSAGE_BOX);
     }
 
     //region init
@@ -49,8 +50,8 @@ public class FilterValidatorSettingsController implements TestValidatorControlle
     private void initialize() {
         var validator = new NumberValidator(0, Short.MAX_VALUE);
 
-        minInputLengthFormatter = new ValidatorTextFormatter(validator, minInputLength);
-        maxInputLengthFormatter = new ValidatorTextFormatter(validator, maxInputLength);
+        minInputLengthFormatter = new ValidationTextFormatter(validator, minInputLength);
+        maxInputLengthFormatter = new ValidationTextFormatter(validator, maxInputLength);
 
         initializeListeners();
     }

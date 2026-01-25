@@ -298,6 +298,17 @@ public class ValidationFilter extends DocumentFilter {
     }
 
     /**
+     * Resets all visual hints to hide them in any is visible.
+     */
+    public void resetVisualHints() {
+        if (!hintsVisible)
+            return;
+
+        hintProvider.hideHints(textField);
+        hintsVisible = false;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -426,14 +437,6 @@ public class ValidationFilter extends DocumentFilter {
                 e.getMessage(),
                 SwingMessages.get("invalidInputHint"),
                 JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void resetVisualHints() {
-        if (!hintsVisible)
-            return;
-
-        hintProvider.hideHints(textField);
-        hintsVisible = false;
     }
 
     private void setVisualHints(ValidatorException e) {

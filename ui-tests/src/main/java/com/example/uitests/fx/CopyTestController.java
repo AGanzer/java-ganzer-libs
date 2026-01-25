@@ -6,7 +6,8 @@ import de.ganzer.core.files.CopyProgressContinuation;
 import de.ganzer.core.util.FileNames;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.core.validation.ValidatorException;
-import de.ganzer.fx.validation.ValidatorTextFormatter;
+import de.ganzer.fx.validation.ValidationBehavior;
+import de.ganzer.fx.validation.ValidationTextFormatter;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,8 +33,8 @@ public class CopyTestController implements TestProvider {
 
     @FXML
     private void initialize() {
-        new ValidatorTextFormatter(new Validator(), sourcePath);
-        new ValidatorTextFormatter(new Validator(), targetPath);
+        new ValidationTextFormatter(new Validator(), sourcePath);
+        new ValidationTextFormatter(new Validator(), targetPath);
     }
 
     private static boolean cancelCopy = false;
@@ -166,7 +167,7 @@ public class CopyTestController implements TestProvider {
 
     private boolean validate(TextField field) {
         try {
-            ((ValidatorTextFormatter)field.getTextFormatter()).validate();
+            ((ValidationTextFormatter)field.getTextFormatter()).validate(ValidationBehavior.SHOW_MESSAGE_BOX);
         } catch (ValidatorException e) {
             FxTestApp.alertInfo(e.getMessage());
 

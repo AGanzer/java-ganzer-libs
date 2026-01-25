@@ -45,7 +45,7 @@ public class PxPicValidatorSettingsController implements TestValidatorController
     //endregion
 
     @Override
-    public boolean validateSettings(ValidatorExceptionRef ref) {
+    public boolean validateSettings() {
         return true;
     }
 

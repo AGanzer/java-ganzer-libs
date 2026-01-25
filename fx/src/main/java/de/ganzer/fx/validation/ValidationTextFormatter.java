@@ -294,6 +294,17 @@ public class ValidationTextFormatter extends TextFormatter<String> {
         return false;
     }
 
+    /**
+     * Resets all visual hints to hide them in any is visible.
+     */
+    public void resetVisualHints() {
+        if (!hintsVisible)
+            return;
+
+        hintProvider.hideHints(control);
+        hintsVisible = false;
+    }
+
     private ValidatorException doValidation() {
         ValidatorExceptionRef ref = new ValidatorExceptionRef();
 
@@ -334,14 +345,6 @@ public class ValidationTextFormatter extends TextFormatter<String> {
         a.setHeaderText(FXMessages.get("invalidInput"));
         a.setContentText(e.getMessage());
         a.showAndWait();
-    }
-
-    private void resetVisualHints() {
-        if (!hintsVisible)
-            return;
-
-        hintProvider.hideHints(control);
-        hintsVisible = false;
     }
 
     private void setVisualHints(ValidatorException e) {

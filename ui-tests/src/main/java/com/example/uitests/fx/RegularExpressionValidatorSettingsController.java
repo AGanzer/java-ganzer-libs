@@ -51,7 +51,7 @@ public class RegularExpressionValidatorSettingsController implements TestValidat
     //endregion
 
     @Override
-    public boolean validateSettings(ValidatorExceptionRef ref) {
+    public boolean validateSettings() {
         return true;
     }
 
