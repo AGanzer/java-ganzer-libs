@@ -75,7 +75,7 @@ public class BorderValidationHint implements ValidationHintProvider {
      *
      * @return The set border. The default is a red thin border.
      */
-    public Border getErrorBorder() {
+    public final Border getErrorBorder() {
         return errorBorder;
     }
 
@@ -84,7 +84,7 @@ public class BorderValidationHint implements ValidationHintProvider {
      *
      * @return {@code true} if tooltips are not changed.
      */
-    public boolean shouldKeepToolTip() {
+    public final boolean shouldKeepToolTip() {
         return keepToolTip;
     }
 

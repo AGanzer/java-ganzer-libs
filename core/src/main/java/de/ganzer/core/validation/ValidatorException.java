@@ -13,7 +13,7 @@ public class ValidatorException extends RuntimeException {
     /**
      * {@inheritDoc}
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated(forRemoval = true, since = "5.4.0")
     public ValidatorException() {
         this(null, null, null);
     }
@@ -21,7 +21,7 @@ public class ValidatorException extends RuntimeException {
     /**
      * {@inheritDoc}
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated(forRemoval = true, since = "5.4.0")
     public ValidatorException(String message) {
         this(message, null, null);
     }

@@ -176,8 +176,7 @@ public class ValidationFilter extends DocumentFilter {
      * <p>
      * For a detailed explanation see {@link #setLiveValidation(boolean)}.
      *
-     * @return {@code true} if live validation is active. The default is
-     *         {@code false}.
+     * @return {@code true} if live validation is active.
      *
      * @see #setLiveValidation(boolean)
      *

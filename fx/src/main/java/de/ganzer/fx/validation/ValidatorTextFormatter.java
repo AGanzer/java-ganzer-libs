@@ -82,8 +82,11 @@ import java.util.Objects;
  *     return true;
  * }
  * }</pre>
+ *
+ * @deprecated Use {@link ValidationTextFormatter} instead.
  */
 @SuppressWarnings("unused")
+@Deprecated(forRemoval = true, since = "5.4.0")
 public class ValidatorTextFormatter extends TextFormatter<String> {
     private static final String DEFAULT_ERROR_STYLE = "-fx-border-color: red; -fx-focus-color: red;";
     private final Validator validator;

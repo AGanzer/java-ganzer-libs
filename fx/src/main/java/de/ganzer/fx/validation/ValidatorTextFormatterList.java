@@ -53,8 +53,11 @@ import java.util.Collection;
  *     return isValid;
  * }
  * }</pre>
+ *
+ * @deprecated Use {@link ValidationTextFormatterList} instead.
  */
 @SuppressWarnings("unused")
+@Deprecated(forRemoval = true, since = "5.4.0")
 public class ValidatorTextFormatterList extends ArrayList<ValidatorTextFormatter> {
     /**
      * The handler that is invoked on a failed validation.
