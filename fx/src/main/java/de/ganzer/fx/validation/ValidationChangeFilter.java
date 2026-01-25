@@ -22,22 +22,26 @@ class ValidationChangeFilter implements UnaryOperator<TextFormatter.Change> {
 
         var text = new StringBuilder(input);
 
-        if (formatter.isLiveValidation())
-            formatter.validate(ValidationBehavior.SET_VISUAL_HINTS);
-
         if (!formatter.getValidator().isValidInput(text, true))
             return null;
 
-        if (!text.toString().equals(input)) {
+        if (text.toString().equals(input)) {
+        } else {
             formatter.getControl().setText(text.toString());
 
             Platform.runLater(() -> {
                 var pos = formatter.getControl().getText().length();
                 formatter.getControl().selectRange(pos, pos);
+
+                if (formatter.isLiveValidation())
+                    formatter.validate(ValidationBehavior.SET_VISUAL_HINTS);
             });
 
             return null;
         }
+
+        if (formatter.isLiveValidation())
+            Platform.runLater(() -> formatter.validate(ValidationBehavior.SET_VISUAL_HINTS));
 
         return change;
     }

@@ -179,18 +179,8 @@ public class ValidatorTestController implements TestProvider {
     }
 
     private void validate() {
-        var message = "Input is valid!";
-
-        try {
-            validationTextFormatter.validate(ValidationBehavior.SHOW_MESSAGE_BOX);
-        } catch (ValidatorException e) {
-            message = e.getMessage();
-        }
-
-        FxTestApp.alertInfo(message);
-
-        testInput.requestFocus();
-        testInput.selectAll();
+        if (validationTextFormatter.validate(ValidationBehavior.SHOW_MESSAGE_BOX))
+            FxTestApp.alertInfo("Input is valid!");
     }
     //endregion
 
