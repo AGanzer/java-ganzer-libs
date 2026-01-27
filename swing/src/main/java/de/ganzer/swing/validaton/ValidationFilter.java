@@ -298,7 +298,7 @@ public class ValidationFilter extends DocumentFilter {
     }
 
     /**
-     * Resets all visual hints to hide them in any is visible.
+     * Resets all visual hints to hide them if any is visible.
      */
     public void resetVisualHints() {
         if (!hintsVisible)
