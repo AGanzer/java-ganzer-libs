@@ -3,6 +3,8 @@ package de.ganzer.swing.validaton;
 import de.ganzer.core.validation.ValidatorException;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 import java.awt.Color;
@@ -102,7 +104,7 @@ public class BorderValidationHint implements ValidationHintProvider {
         }
 
         orgBorder = target.getBorder();
-        target.setBorder(errorBorder);
+        getFinalTarget(target).setBorder(errorBorder);
     }
 
     /**
@@ -115,7 +117,7 @@ public class BorderValidationHint implements ValidationHintProvider {
         if (!shouldKeepToolTip())
             target.setToolTipText(orgTooltip);
 
-        target.setBorder(orgBorder);
+        getFinalTarget(target).setBorder(orgBorder);
 
         orgTooltip = null;
         orgBorder = null;
@@ -135,5 +137,9 @@ public class BorderValidationHint implements ValidationHintProvider {
     public void updateHints(JTextComponent target, ValidatorException e) {
         if (!shouldKeepToolTip())
             target.setToolTipText(e.getLocalizedMessage());
+    }
+
+    private JComponent getFinalTarget(JTextComponent target) {
+        return (target.getParent() instanceof JComboBox<?> cb) ? cb : target;
     }
 }
