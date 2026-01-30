@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import de.ganzer.core.validation.ValidatorException;
 import de.ganzer.swing.validaton.ValidationHintProvider;
 
+import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 
 /**
@@ -56,7 +57,7 @@ public class FlatLaFBorderValidationHint implements ValidationHintProvider {
             target.setToolTipText(e.getLocalizedMessage());
         }
 
-        target.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
+        getFinalTarget(target).putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
     }
 
     /**
@@ -69,7 +70,7 @@ public class FlatLaFBorderValidationHint implements ValidationHintProvider {
         if (!shouldKeepToolTip())
             target.setToolTipText(orgTooltip);
 
-        target.putClientProperty(FlatClientProperties.OUTLINE, null);
+        getFinalTarget(target).putClientProperty(FlatClientProperties.OUTLINE, null);
         orgTooltip = null;
     }
 
@@ -87,5 +88,13 @@ public class FlatLaFBorderValidationHint implements ValidationHintProvider {
     public void updateHints(JTextComponent target, ValidatorException e) {
         if (!shouldKeepToolTip())
             target.setToolTipText(e.getLocalizedMessage());
+    }
+
+    private JComponent getFinalTarget(JTextComponent target) {
+        if (target.getParent() instanceof JComponent) {
+            return (JComponent) target.getParent();
+        }
+
+        return target;
     }
 }
