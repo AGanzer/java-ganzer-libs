@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import de.ganzer.core.validation.ValidatorException;
 import de.ganzer.swing.validaton.ValidationHintProvider;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 
@@ -91,10 +92,6 @@ public class FlatLaFBorderValidationHint implements ValidationHintProvider {
     }
 
     private JComponent getFinalTarget(JTextComponent target) {
-        if (target.getParent() instanceof JComponent) {
-            return (JComponent) target.getParent();
-        }
-
-        return target;
+        return (target.getParent() instanceof JComboBox<?> cb) ? cb : target;
     }
 }
