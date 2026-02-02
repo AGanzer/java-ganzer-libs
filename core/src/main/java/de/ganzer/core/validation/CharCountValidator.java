@@ -124,8 +124,8 @@ public class CharCountValidator extends Validator {
      * Setting this value to 0, causes each text length that is not less than
      * {link #getMinLength} to be valid. This is the default.
      * <p>
-     * If maxLength is less than {link #getMinLength} and greater than 0,
-     * the minimum length is set to maxLength, if {link #getMinLength} is not 0.
+     * If maxLength is less than {link #getMinLength} but greater than 0,
+     * the minimum length is set to maxLength.
      *
      * @param maxLength The maximum length to set.
      * @throws IllegalArgumentException If maxLength is less than 0.
@@ -136,7 +136,7 @@ public class CharCountValidator extends Validator {
 
         this.maxLength = maxLength;
 
-        if (minLength > 0 && maxLength < minLength)
+        if (maxLength > 0 && minLength > maxLength)
             minLength = maxLength;
     }
 
@@ -161,8 +161,8 @@ public class CharCountValidator extends Validator {
      * to 0 means, that a not empty text must have a minimum length of minLength
      * characters.
      * <p>
-     * If minLength is greater than {link #getMaxLength} and greater than 0,
-     * the maximum length is set to minLength, if {link #getMaxLength} is not 0.
+     * If minLength is greater than {link #getMaxLength} and {link #getMaxLength}
+     * greater than 0, {link #getMaxLength} length is set to minLength.
      *
      * @param minLength The minimum length to set.
      * @throws IllegalArgumentException If minLength is less than 0.
