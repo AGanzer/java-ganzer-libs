@@ -160,7 +160,7 @@ public class Logger implements AutoCloseable {
      *
      * @see #getTarget(String)
      */
-    synchronized boolean isTargetActive(String id) {
+    synchronized public boolean isTargetActive(String id) {
         var info = targets.get(id);
         return info != null && info.active;
     }
@@ -170,7 +170,7 @@ public class Logger implements AutoCloseable {
      *
      * @return {@code true} if {@link #close()} has been called.
      */
-    synchronized boolean isClosed() {
+    synchronized public boolean isClosed() {
         return closed;
     }
 
