@@ -24,9 +24,25 @@ public final class OS {
          */
         MAC,
         /**
-         * Any Solaris.
+         * Sun Solaris.
          */
         SOLARIS,
+        /**
+         * AIX.
+         */
+        AIX,
+        /**
+         * FreeBSD
+         */
+        FREE_BSD,
+        /**
+         * OpenBSD
+         */
+        OPEN_BSD,
+        /**
+         * HP-UX
+         */
+        HP_UX,
         /**
          * Any unknown.
          */
@@ -47,11 +63,23 @@ public final class OS {
         if (osName.contains("linux"))
             return Type.LINUX;
 
-        if (osName.contains("solaris"))
+        if (osName.contains("sunos"))
             return Type.SOLARIS;
 
         if (osName.contains("mac"))
             return Type.MAC;
+
+        if (osName.contains("aix"))
+            return Type.AIX;
+
+        if (osName.contains("freebsd"))
+            return Type.FREE_BSD;
+
+        if (osName.contains("openbsd"))
+            return Type.OPEN_BSD;
+
+        if (osName.contains("hp-ux"))
+            return Type.HP_UX;
 
         return Type.OTHER;
     }
