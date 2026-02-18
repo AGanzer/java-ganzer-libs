@@ -134,6 +134,46 @@ public final class OS {
     }
 
     /**
+     * Convenience function fo {@code getType() == Type.AIX}.
+     *
+     * @return {@code true} if the operating systen where the application is
+     *         running on is a Mac operating system.
+     */
+    public static boolean isAIX() {
+        return getType() == Type.AIX;
+    }
+
+    /**
+     * Convenience function fo {@code getType() == Type.FREE_BSD}.
+     *
+     * @return {@code true} if the operating systen where the application is
+     *         running on is a Mac operating system.
+     */
+    public static boolean isFreeBSD() {
+        return getType() == Type.FREE_BSD;
+    }
+
+    /**
+     * Convenience function fo {@code getType() == Type.OPEN_BSD}.
+     *
+     * @return {@code true} if the operating systen where the application is
+     *         running on is a Mac operating system.
+     */
+    public static boolean isOpenBSD() {
+        return getType() == Type.OPEN_BSD;
+    }
+
+    /**
+     * Convenience function fo {@code getType() == Type.HP_UX}.
+     *
+     * @return {@code true} if the operating systen where the application is
+     *         running on is a Mac operating system.
+     */
+    public static boolean isHPUX() {
+        return getType() == Type.HP_UX;
+    }
+
+    /**
      * Convenience function fo {@code getType() == Type.OTHER}.
      *
      * @return {@code true} if the operating systen where the application is
