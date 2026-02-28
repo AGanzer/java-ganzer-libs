@@ -593,7 +593,7 @@ public class ClosableTabsPane extends JTabbedPane {
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    if (isEnabled())
+                    if (isEnabled() && titleLabel != null)
                         titleLabel.setForeground(UIManager.getColor("TabbedPane.hoverForeground"));
                 }
 
