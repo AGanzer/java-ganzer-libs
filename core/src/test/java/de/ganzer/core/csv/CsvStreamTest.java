@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("TextBlockMigration")
 public class CsvStreamTest {
     @Test
     void testEmptyReadWrite() throws IOException {
