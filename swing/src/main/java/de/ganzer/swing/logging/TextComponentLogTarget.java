@@ -4,6 +4,7 @@ import de.ganzer.core.logging.*;
 
 import javax.swing.JEditorPane;
 import javax.swing.SwingUtilities;
+import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -24,7 +25,7 @@ import java.util.Objects;
  * @see #isWarningLevel(int)
  * @see #write(int, String)
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public class TextComponentLogTarget extends FormattedLogTarget {
     private final JTextComponent component;
@@ -375,8 +376,8 @@ public class TextComponentLogTarget extends FormattedLogTarget {
                 message = String.format("<pre style='margin:0; line-height:1.0;'>%s</pre>", message);
         }
 
-        var kit = (HTMLEditorKit) pane.getEditorKit();
-        var doc = (HTMLDocument) pane.getDocument();
+        HTMLEditorKit kit = (HTMLEditorKit) pane.getEditorKit();
+        HTMLDocument doc = (HTMLDocument) pane.getDocument();
 
         try {
             boolean scrollToEnd = pane.getCaretPosition() ==  pane.getDocument().getLength();
@@ -391,7 +392,7 @@ public class TextComponentLogTarget extends FormattedLogTarget {
     }
 
     private void writePlain(int ignored, String message) {
-        var doc = component.getDocument();
+        Document doc = component.getDocument();
 
         try {
             boolean scrollToEnd = component.getCaretPosition() ==  component.getDocument().getLength();

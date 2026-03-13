@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class ValidatorExceptionTest {
     @Test
     void create() {
-        var val = new NumberValidator();
-        var msg = "Error";
-        var e = new ValidatorException(msg, val.getClass(), val);
+        NumberValidator val = new NumberValidator();
+        String msg = "Error";
+        ValidatorException e = new ValidatorException(msg, val.getClass(), val);
 
         assertEquals(msg, e.getMessage());
         assertEquals(val.getClass(), e.getSourceClass());

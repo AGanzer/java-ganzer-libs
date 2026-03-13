@@ -8,7 +8,7 @@ class ValidatorTest {
 
     @Test
     void setOptions() {
-        var val = new Validator();
+        Validator val = new Validator();
         val.setOptions(ValidatorOptions.AUTO_FILL);
 
         assertEquals(ValidatorOptions.AUTO_FILL, val.getOptions());
@@ -16,7 +16,7 @@ class ValidatorTest {
 
     @Test
     void setRequiredErrorMessage() {
-        var val = new Validator();
+        Validator val = new Validator();
         val.setRequiredErrorMessage("m");
 
         assertEquals("m", val.getRequiredErrorMessage());
@@ -24,7 +24,7 @@ class ValidatorTest {
 
     @Test
     void setBlanksErrorMessage() {
-        var val = new Validator();
+        Validator val = new Validator();
         val.setBlanksErrorMessage("m");
 
         assertEquals("m", val.getBlanksErrorMessage());
@@ -32,7 +32,7 @@ class ValidatorTest {
 
     @Test
     void setErrorMessage() {
-        var val = new Validator();
+        Validator val = new Validator();
         val.setErrorMessage("m");
 
         assertEquals("m", val.getErrorMessage());
@@ -40,7 +40,7 @@ class ValidatorTest {
 
     @Test
     void hasOption() {
-        var val = new Validator();
+        Validator val = new Validator();
 
         assertFalse(val.hasOption(ValidatorOptions.AUTO_FILL));
         assertTrue(val.hasOption(ValidatorOptions.NEEDS_INPUT));

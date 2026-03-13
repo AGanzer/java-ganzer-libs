@@ -25,9 +25,9 @@ class WriterLogTargetTest {
 
     @Test
     void create1() {
-        var level = 1;
-        var writer = new StringWriter();
-        var target = new WriterLogTarget(level, writer);
+        int level = 1;
+        StringWriter writer = new StringWriter();
+        WriterLogTarget target = new WriterLogTarget(level, writer);
 
         assertEquals(level, target.getLevel());
         assertEquals(writer, target.getWriter());
@@ -39,10 +39,10 @@ class WriterLogTargetTest {
 
     @Test
     void create2() {
-        var level = 1;
-        var writer = new StringWriter();
-        var logFilter = new MyLogFilter();
-        var target = new WriterLogTarget(level, writer, logFilter);
+        int level = 1;
+        StringWriter writer = new StringWriter();
+        MyLogFilter logFilter = new MyLogFilter();
+        WriterLogTarget target = new WriterLogTarget(level, writer, logFilter);
 
         assertEquals(level, target.getLevel());
         assertEquals(writer, target.getWriter());
@@ -54,10 +54,10 @@ class WriterLogTargetTest {
 
     @Test
     void create3() {
-        var level = 1;
-        var writer = new StringWriter();
-        var timeout = 2;
-        var target = new WriterLogTarget(level, writer, timeout);
+        int level = 1;
+        StringWriter writer = new StringWriter();
+        int timeout = 2;
+        WriterLogTarget target = new WriterLogTarget(level, writer, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(writer, target.getWriter());
@@ -69,11 +69,11 @@ class WriterLogTargetTest {
 
     @Test
     void create4() {
-        var level = 1;
-        var writer = new StringWriter();
-        var logFilter = new MyLogFilter();
-        var timeout = 2;
-        var target = new WriterLogTarget(level, writer, logFilter, timeout);
+        int level = 1;
+        StringWriter writer = new StringWriter();
+        MyLogFilter logFilter = new MyLogFilter();
+        int timeout = 2;
+        WriterLogTarget target = new WriterLogTarget(level, writer, logFilter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(writer, target.getWriter());
@@ -85,10 +85,10 @@ class WriterLogTargetTest {
 
     @Test
     void create5() {
-        var level = 1;
-        var writer = new StringWriter();
-        var formatter = new MyFormatter();
-        var target = new WriterLogTarget(level, writer, formatter);
+        int level = 1;
+        StringWriter writer = new StringWriter();
+        MyFormatter formatter = new MyFormatter();
+        WriterLogTarget target = new WriterLogTarget(level, writer, formatter);
 
         assertEquals(level, target.getLevel());
         assertEquals(writer, target.getWriter());
@@ -100,11 +100,11 @@ class WriterLogTargetTest {
 
     @Test
     void create6() {
-        var level = 1;
-        var writer = new StringWriter();
-        var formatter = new MyFormatter();
-        var logFilter = new MyLogFilter();
-        var target = new WriterLogTarget(level, writer, formatter, logFilter);
+        int level = 1;
+        StringWriter writer = new StringWriter();
+        MyFormatter formatter = new MyFormatter();
+        MyLogFilter logFilter = new MyLogFilter();
+        WriterLogTarget target = new WriterLogTarget(level, writer, formatter, logFilter);
 
         assertEquals(level, target.getLevel());
         assertEquals(writer, target.getWriter());
@@ -116,11 +116,11 @@ class WriterLogTargetTest {
 
     @Test
     void create7() {
-        var level = 1;
-        var writer = new StringWriter();
-        var formatter = new MyFormatter();
-        var timeout = 2;
-        var target = new WriterLogTarget(level, writer, formatter, timeout);
+        int level = 1;
+        StringWriter writer = new StringWriter();
+        MyFormatter formatter = new MyFormatter();
+        int timeout = 2;
+        WriterLogTarget target = new WriterLogTarget(level, writer, formatter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(writer, target.getWriter());
@@ -132,12 +132,12 @@ class WriterLogTargetTest {
 
     @Test
     void create8() {
-        var level = 1;
-        var writer = new StringWriter();
-        var formatter = new MyFormatter();
-        var logFilter = new MyLogFilter();
-        var timeout = 2;
-        var target = new WriterLogTarget(level, writer, formatter, logFilter, timeout);
+        int level = 1;
+        StringWriter writer = new StringWriter();
+        MyFormatter formatter = new MyFormatter();
+        MyLogFilter logFilter = new MyLogFilter();
+        int timeout = 2;
+        WriterLogTarget target = new WriterLogTarget(level, writer, formatter, logFilter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(writer, target.getWriter());
@@ -149,12 +149,12 @@ class WriterLogTargetTest {
 
     @Test
     void write() throws IOException {
-        var level = 1;
-        var writer = new StringWriter();
-        var formatter = new MyFormatter();
-        var target = new WriterLogTarget(level, writer, formatter);
-        var output = "m1\nm2\n";
-        var info = new LogInfo[] {
+        int level = 1;
+        StringWriter writer = new StringWriter();
+        MyFormatter formatter = new MyFormatter();
+        WriterLogTarget target = new WriterLogTarget(level, writer, formatter);
+        String output = "m1\nm2\n";
+        LogInfo[] info = new LogInfo[] {
                 new LogInfo(1, 0, LocalDateTime.now(), 0, "", "m1"),
                 new LogInfo(2, 1, LocalDateTime.now(), 0, "", "m2")
         };

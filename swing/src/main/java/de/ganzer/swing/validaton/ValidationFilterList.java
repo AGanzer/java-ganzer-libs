@@ -60,7 +60,7 @@ public class ValidationFilterList implements Iterable<ValidationFilter> {
     public boolean validate(ValidationBehavior behavior) {
         boolean valid = true;
 
-        for (var filter: this) {
+        for (ValidationFilter filter: this) {
             if (!filter.validate(behavior)) {
                 if (behavior == ValidationBehavior.SHOW_MESSAGE_BOX)
                     return false;

@@ -11,11 +11,11 @@ class LogInfoTest {
     void create() {
         int num = 1;
         int level = 0;
-        var time = LocalDateTime.now();
-        var threadId = Thread.currentThread().getId();
-        var threadName = Thread.currentThread().getName();
-        var message = "test message";
-        var info = new LogInfo(num, level, time, threadId, threadName, message);
+        LocalDateTime time = LocalDateTime.now();
+        long threadId = Thread.currentThread().getId();
+        String threadName = Thread.currentThread().getName();
+        String message = "test message";
+        LogInfo info = new LogInfo(num, level, time, threadId, threadName, message);
 
         assertEquals(level, info.getLevel());
         assertEquals(num, info.getMessageNumber());

@@ -8,14 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
         <module name="fx" />
-        <module name="de-ganzer-fx" />
-        <module name="ui-tests" />
         <module name="de-ganzer-core" />
         <module name="de-ganzer-swing" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="de-ganzer-fx" target="17" />
       <module name="de-ganzer-gv" target="17" />
+      <module name="ui-tests" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

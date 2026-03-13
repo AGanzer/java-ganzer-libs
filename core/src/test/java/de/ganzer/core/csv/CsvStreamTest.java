@@ -135,6 +135,6 @@ public class CsvStreamTest {
 
         w.flush();
 
-        return os.toString(StandardCharsets.UTF_8);
+        return os.toString(StandardCharsets.UTF_8.name());
     }
 }

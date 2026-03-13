@@ -25,9 +25,9 @@ class TextComponentLogTargetTest {
 
     @Test
     void create1() {
-        var level = 1;
-        var component = new JTextArea();
-        var target = new TextComponentLogTarget(level, component);
+        int level = 1;
+        JTextArea component = new JTextArea();
+        TextComponentLogTarget target = new TextComponentLogTarget(level, component);
 
         assertEquals(level, target.getLevel());
         assertEquals(component, target.getComponent());
@@ -40,10 +40,10 @@ class TextComponentLogTargetTest {
 
     @Test
     void create2() {
-        var level = 1;
-        var component = new JTextArea();
-        var logFilter = new MyLogFilter();
-        var target = new TextComponentLogTarget(level, component, logFilter);
+        int level = 1;
+        JTextArea component = new JTextArea();
+        MyLogFilter logFilter = new MyLogFilter();
+        TextComponentLogTarget target = new TextComponentLogTarget(level, component, logFilter);
 
         assertEquals(level, target.getLevel());
         assertEquals(component, target.getComponent());
@@ -56,10 +56,10 @@ class TextComponentLogTargetTest {
 
     @Test
     void create3() {
-        var level = 1;
-        var component = new JTextArea();
-        var timeout = 2;
-        var target = new TextComponentLogTarget(level, component, timeout);
+        int level = 1;
+        JTextArea component = new JTextArea();
+        int timeout = 2;
+        TextComponentLogTarget target = new TextComponentLogTarget(level, component, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(component, target.getComponent());
@@ -72,11 +72,11 @@ class TextComponentLogTargetTest {
 
     @Test
     void create4() {
-        var level = 1;
-        var component = new JTextArea();
-        var logFilter = new MyLogFilter();
-        var timeout = 2;
-        var target = new TextComponentLogTarget(level, component, logFilter, timeout);
+        int level = 1;
+        JTextArea component = new JTextArea();
+        MyLogFilter logFilter = new MyLogFilter();
+        int timeout = 2;
+        TextComponentLogTarget target = new TextComponentLogTarget(level, component, logFilter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(component, target.getComponent());
@@ -89,10 +89,10 @@ class TextComponentLogTargetTest {
 
     @Test
     void create5() {
-        var level = 1;
-        var component = new JTextArea();
-        var formatter = new MyFormatter();
-        var target = new TextComponentLogTarget(level, component, formatter);
+        int level = 1;
+        JTextArea component = new JTextArea();
+        MyFormatter formatter = new MyFormatter();
+        TextComponentLogTarget target = new TextComponentLogTarget(level, component, formatter);
 
         assertEquals(level, target.getLevel());
         assertEquals(component, target.getComponent());
@@ -105,11 +105,11 @@ class TextComponentLogTargetTest {
 
     @Test
     void create6() {
-        var level = 1;
-        var component = new JTextArea();
-        var formatter = new MyFormatter();
-        var logFilter = new MyLogFilter();
-        var target = new TextComponentLogTarget(level, component, formatter, logFilter);
+        int level = 1;
+        JTextArea component = new JTextArea();
+        MyFormatter formatter = new MyFormatter();
+        MyLogFilter logFilter = new MyLogFilter();
+        TextComponentLogTarget target = new TextComponentLogTarget(level, component, formatter, logFilter);
 
         assertEquals(level, target.getLevel());
         assertEquals(component, target.getComponent());
@@ -122,11 +122,11 @@ class TextComponentLogTargetTest {
 
     @Test
     void create7() {
-        var level = 1;
-        var component = new JTextArea();
-        var formatter = new MyFormatter();
-        var timeout = 2;
-        var target = new TextComponentLogTarget(level, component, formatter, timeout);
+        int level = 1;
+        JTextArea component = new JTextArea();
+        MyFormatter formatter = new MyFormatter();
+        int timeout = 2;
+        TextComponentLogTarget target = new TextComponentLogTarget(level, component, formatter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(component, target.getComponent());
@@ -139,12 +139,12 @@ class TextComponentLogTargetTest {
 
     @Test
     void create8() {
-        var level = 1;
-        var component = new JTextArea();
-        var formatter = new MyFormatter();
-        var logFilter = new MyLogFilter();
-        var timeout = 2;
-        var target = new TextComponentLogTarget(level, component, formatter, logFilter, timeout);
+        int level = 1;
+        JTextArea component = new JTextArea();
+        MyFormatter formatter = new MyFormatter();
+        MyLogFilter logFilter = new MyLogFilter();
+        int timeout = 2;
+        TextComponentLogTarget target = new TextComponentLogTarget(level, component, formatter, logFilter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(component, target.getComponent());
@@ -157,8 +157,8 @@ class TextComponentLogTargetTest {
 
     @Test
     void setFormatHTML() {
-        var component = new JTextArea();
-        var target = new TextComponentLogTarget(2, component);
+        JTextArea component = new JTextArea();
+        TextComponentLogTarget target = new TextComponentLogTarget(2, component);
 
         target.setFormatHTML(false);
 

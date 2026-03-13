@@ -21,8 +21,8 @@ class ConsoleLogTargetTest {
 
     @Test
     void create1() {
-        var level = 1;
-        var target = new ConsoleLogTarget(level);
+        int level = 1;
+        ConsoleLogTarget target = new ConsoleLogTarget(level);
 
         assertEquals(level, target.getLevel());
         assertEquals(0, target.getMessageWaitTimeout());
@@ -33,9 +33,9 @@ class ConsoleLogTargetTest {
 
     @Test
     void create2() {
-        var level = 1;
-        var logFilter = new MyLogFilter();
-        var target = new ConsoleLogTarget(level, logFilter);
+        int level = 1;
+        MyLogFilter logFilter = new MyLogFilter();
+        ConsoleLogTarget target = new ConsoleLogTarget(level, logFilter);
 
         assertEquals(level, target.getLevel());
         assertEquals(0, target.getMessageWaitTimeout());
@@ -46,9 +46,9 @@ class ConsoleLogTargetTest {
 
     @Test
     void create3() {
-        var level = 1;
-        var timeout = 2;
-        var target = new ConsoleLogTarget(level, timeout);
+        int level = 1;
+        int timeout = 2;
+        ConsoleLogTarget target = new ConsoleLogTarget(level, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(timeout, target.getMessageWaitTimeout());
@@ -59,10 +59,10 @@ class ConsoleLogTargetTest {
 
     @Test
     void create4() {
-        var level = 1;
-        var logFilter = new MyLogFilter();
-        var timeout = 2;
-        var target = new ConsoleLogTarget(level, logFilter, timeout);
+        int level = 1;
+        MyLogFilter logFilter = new MyLogFilter();
+        int timeout = 2;
+        ConsoleLogTarget target = new ConsoleLogTarget(level, logFilter, timeout);
 
         assertEquals(level, target.getLevel());
         assertInstanceOf(DefaultLogFormatter.class, target.getFormatter());
@@ -73,9 +73,9 @@ class ConsoleLogTargetTest {
 
     @Test
     void create5() {
-        var level = 1;
-        var formatter = new MyFormatter();
-        var target = new ConsoleLogTarget(level, formatter);
+        int level = 1;
+        MyFormatter formatter = new MyFormatter();
+        ConsoleLogTarget target = new ConsoleLogTarget(level, formatter);
 
         assertEquals(level, target.getLevel());
         assertEquals(formatter, target.getFormatter());
@@ -86,10 +86,10 @@ class ConsoleLogTargetTest {
 
     @Test
     void create6() {
-        var level = 1;
-        var formatter = new MyFormatter();
-        var logFilter = new MyLogFilter();
-        var target = new ConsoleLogTarget(level, formatter, logFilter);
+        int level = 1;
+        MyFormatter formatter = new MyFormatter();
+        MyLogFilter logFilter = new MyLogFilter();
+        ConsoleLogTarget target = new ConsoleLogTarget(level, formatter, logFilter);
 
         assertEquals(level, target.getLevel());
         assertEquals(formatter, target.getFormatter());
@@ -100,10 +100,10 @@ class ConsoleLogTargetTest {
 
     @Test
     void create7() {
-        var level = 1;
-        var formatter = new MyFormatter();
-        var timeout = 2;
-        var target = new ConsoleLogTarget(level, formatter, timeout);
+        int level = 1;
+        MyFormatter formatter = new MyFormatter();
+        int timeout = 2;
+        ConsoleLogTarget target = new ConsoleLogTarget(level, formatter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(formatter, target.getFormatter());
@@ -114,11 +114,11 @@ class ConsoleLogTargetTest {
 
     @Test
     void create8() {
-        var level = 1;
-        var formatter = new MyFormatter();
-        var logFilter = new MyLogFilter();
-        var timeout = 2;
-        var target = new ConsoleLogTarget(level, formatter, logFilter, timeout);
+        int level = 1;
+        MyFormatter formatter = new MyFormatter();
+        MyLogFilter logFilter = new MyLogFilter();
+        int timeout = 2;
+        ConsoleLogTarget target = new ConsoleLogTarget(level, formatter, logFilter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(formatter, target.getFormatter());

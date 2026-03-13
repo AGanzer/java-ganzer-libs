@@ -3,6 +3,7 @@ package de.ganzer.core.validation;
 import de.ganzer.core.internals.CoreMessages;
 import de.ganzer.core.util.Strings;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -14,7 +15,7 @@ public class RegularExpressionValidator extends CharCountValidator {
      * The default error message for input that does not confirm to the
      * expression.
      * @see #setMatchErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_MATCH_ERROR_MESSAGE = CoreMessages.get("inputDoesNotMatchExpression");
 
@@ -71,7 +72,7 @@ public class RegularExpressionValidator extends CharCountValidator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_MATCH_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getMatchErrorMessage() {
         return matchErrorMessage;
@@ -88,7 +89,7 @@ public class RegularExpressionValidator extends CharCountValidator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_MATCH_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setMatchErrorMessage(String matchErrorMessage) {
         this.matchErrorMessage = Strings.isNullOrBlank(matchErrorMessage)
@@ -129,10 +130,10 @@ public class RegularExpressionValidator extends CharCountValidator {
         if (!super.doInputValidation(text, autoFill))
             return false;
 
-        if (text.isEmpty())
+        if (text.length() == 0)
             return true;
 
-        var end = firstFailurePoint(pattern, text.toString());
+        int end = firstFailurePoint(pattern, text.toString());
 
         return end == -1 || end == text.length();
     }
@@ -182,7 +183,7 @@ public class RegularExpressionValidator extends CharCountValidator {
 
     private static int firstFailurePoint(Pattern pattern, String text) {
         for (int i = 1; i <= text.length(); ++i) {
-            var m = pattern.matcher(text.substring(0, i));
+            Matcher m = pattern.matcher(text.substring(0, i));
 
             if (!m.matches() && !m.hitEnd())
                 return i - 1;

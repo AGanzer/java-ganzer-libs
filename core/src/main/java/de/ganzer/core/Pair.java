@@ -49,8 +49,10 @@ public class Pair<F, S> {
         if (this == o)
             return true;
 
-        if (!(o instanceof Pair<?, ?> op))
+        if (!(o instanceof Pair<?, ?>))
             return false;
+
+        Pair<?, ?> op = (Pair<?, ?>) o;
 
         return Objects.equals(first, op.first) && Objects.equals(second, op.second);
     }

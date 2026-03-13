@@ -105,7 +105,7 @@ public class GTextField extends JTextField {
     static void initUndoRedo(JTextComponent component, UndoManager undoManager) {
         component.getDocument().addUndoableEditListener(e -> undoManager.addEdit(e.getEdit()));
 
-        int shortcutKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        int shortcutKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
         component.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcutKey), "Undo");
         component.getActionMap().put("Undo", new AbstractAction("Undo") {

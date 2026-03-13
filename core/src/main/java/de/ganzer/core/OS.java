@@ -3,7 +3,7 @@ package de.ganzer.core;
 /**
  * A class for operating system specific queries.
  *
- * @since 5.3.0
+ * @since 1.5.0
  */
 @SuppressWarnings("unused")
 public final class OS {

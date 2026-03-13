@@ -44,7 +44,7 @@ public class PxPicValidator extends CharCountValidator {
     /**
      * The default error message for input that does not confirm to the picture.
      * @see #setMatchErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_MATCH_ERROR_MESSAGE = CoreMessages.get("inputDoesNotConfirmPic");
 
@@ -70,7 +70,7 @@ public class PxPicValidator extends CharCountValidator {
         }
 
         public Status start(boolean fill) {
-            if (input.isEmpty())
+            if (input.length() == 0)
                 return Status.EMPTY;
 
             idxInp = 0;
@@ -85,8 +85,8 @@ public class PxPicValidator extends CharCountValidator {
             // literal characters from the picture over to the text:
             //
             if (result == Status.INCOMPLETE && fill) {
-                var reprocess = false;
-                var specchars = "#?&!@*{}[],";
+                boolean reprocess = false;
+                String specchars = "#?&!@*{}[],";
 
                 while (idxPic < picture.length() && specchars.indexOf(picture.charAt(idxPic)) < 0) {
                     if (picture.charAt(idxPic) == ';')
@@ -501,7 +501,7 @@ public class PxPicValidator extends CharCountValidator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_MATCH_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getMatchErrorMessage() {
         return matchErrorMessage;
@@ -518,7 +518,7 @@ public class PxPicValidator extends CharCountValidator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_MATCH_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setMatchErrorMessage(String matchErrorMessage) {
         this.matchErrorMessage = Strings.isNullOrBlank(matchErrorMessage)
@@ -574,9 +574,9 @@ public class PxPicValidator extends CharCountValidator {
         if (lastChar == '*' && (picture.length() < 2 || prevLastChar != ';'))
             return false;
 
-        var brk_level = 0;
-        var brc_level = 0;
-        var groups = "[]{}";
+        int brk_level = 0;
+        int brc_level = 0;
+        String groups = "[]{}";
 
         for (int p = 0; p < picture.length(); ++p) {
             switch (picture.charAt(p)) {
@@ -625,13 +625,18 @@ public class PxPicValidator extends CharCountValidator {
         if (!super.doInputValidation(text, autoFill))
             return false;
 
-        if (Strings.isNullOrEmpty(picture) || text.isEmpty())
+        if (Strings.isNullOrEmpty(picture) || text.length() == 0)
             return true;
 
-        return switch (new StateMachine(picture, text).start(autoFill)) {
-            case COMPLETE, AMBIGUOUS, INCOMPLETE, INCOMPLETE_NO_FILL -> true;
-            default -> false;
-        };
+        switch (new StateMachine(picture, text).start(autoFill)) {
+            case COMPLETE:
+            case AMBIGUOUS:
+            case INCOMPLETE:
+            case INCOMPLETE_NO_FILL:
+                return true;
+            default:
+                return false;
+        }
     }
 
     private final static Pattern searchPattern = Pattern.compile("(?:^|[^%])(?:%%)*%s");
@@ -657,15 +662,16 @@ public class PxPicValidator extends CharCountValidator {
         if (Strings.isNullOrEmpty(picture) || text.isEmpty())
             return true;
 
-        return switch (new StateMachine(picture, new StringBuilder(text)).start(false)) {
-            case COMPLETE, EMPTY -> true;
-            case SYNTAX -> {
+        switch (new StateMachine(picture, new StringBuilder(text)).start(false)) {
+            case COMPLETE:
+            case EMPTY:
+                return true;
+            case SYNTAX:
                 er.setException(new ValidatorException(String.format(CoreMessages.get("picSyntaxError"), picture),
                                                        PxPicValidator.class,
                                                        this));
-                yield false;
-            }
-            default -> {
+                return false;
+            default:
                 if (getErrorMessage() != null) {
                     er.setException(new ValidatorException(getErrorMessage(),
                                                            PxPicValidator.class,
@@ -681,8 +687,7 @@ public class PxPicValidator extends CharCountValidator {
                                                                this));
                 }
 
-                yield false;
-            }
-        };
+                return false;
+        }
     }
 }

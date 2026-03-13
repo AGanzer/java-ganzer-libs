@@ -7,7 +7,7 @@ package de.ganzer.core.logging;
  * Logged messages are filtered before they are written into the physical
  * target. A function that filters the message must implement this interface.
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public interface LogFilter {
     /**

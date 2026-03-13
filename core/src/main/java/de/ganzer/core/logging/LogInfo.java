@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * This class is used by {@link LogTarget} as well as {@link LogFormatter} and
  * provides detailed information about a logged message.
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public class LogInfo {
     private final int messageNumber;

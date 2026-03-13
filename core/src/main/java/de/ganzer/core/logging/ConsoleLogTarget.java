@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  * Writes log messages into {@link System#out} respective {@link System#err}
  * if {@link #isErrorLevel(int)} indicates an error.
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public class ConsoleLogTarget extends FormattedLogTarget {
     /**

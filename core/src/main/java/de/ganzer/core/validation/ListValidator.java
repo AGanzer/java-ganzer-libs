@@ -13,7 +13,7 @@ public class ListValidator extends Validator {
      * The default error message for input that is not found in the list of
      * allowed messages.
      * @see #setNotInListErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_NOT_IN_LIST_ERROR_MESSAGE = CoreMessages.get("inputDoesNotMatchList");
 
@@ -100,7 +100,7 @@ public class ListValidator extends Validator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_NOT_IN_LIST_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getNotInListErrorMessage() {
         return notInListErrorMessage;
@@ -114,7 +114,7 @@ public class ListValidator extends Validator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_NOT_IN_LIST_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setNotInListErrorMessage(String notInListErrorMessage) {
         this.notInListErrorMessage = Strings.isNullOrBlank(notInListErrorMessage)
@@ -174,7 +174,7 @@ public class ListValidator extends Validator {
         if (!super.doInputValidation(text, autoFill))
             return false;
 
-        if (validInputs == null || validInputs.isEmpty() || text.isEmpty())
+        if (validInputs == null || validInputs.isEmpty() || text.length() == 0)
             return true;
 
         String input = text.toString();

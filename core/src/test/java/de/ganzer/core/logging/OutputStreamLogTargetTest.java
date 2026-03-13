@@ -3,6 +3,7 @@ package de.ganzer.core.logging;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,10 +25,10 @@ class OutputStreamLogTargetTest {
 
     @Test
     void create1() {
-        var level = 1;
-        var stream = new ByteArrayOutputStream();
-        var cs = StandardCharsets.UTF_16;
-        var target = new OutputStreamLogTarget(level, stream, cs);
+        int level = 1;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        java.nio.charset.Charset cs = StandardCharsets.UTF_16;
+        OutputStreamLogTarget target = new OutputStreamLogTarget(level, stream, cs);
 
         assertEquals(level, target.getLevel());
         assertEquals(stream, target.getStream());
@@ -40,11 +41,11 @@ class OutputStreamLogTargetTest {
 
     @Test
     void create2() {
-        var level = 1;
-        var stream = new ByteArrayOutputStream();
-        var cs = StandardCharsets.UTF_16;
-        var logFilter = new MyLogFilter();
-        var target = new OutputStreamLogTarget(level, stream, cs, logFilter);
+        int level = 1;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        java.nio.charset.Charset cs = StandardCharsets.UTF_16;
+        MyLogFilter logFilter = new MyLogFilter();
+        OutputStreamLogTarget target = new OutputStreamLogTarget(level, stream, cs, logFilter);
 
         assertEquals(level, target.getLevel());
         assertEquals(stream, target.getStream());
@@ -57,11 +58,11 @@ class OutputStreamLogTargetTest {
 
     @Test
     void create3() {
-        var level = 1;
-        var stream = new ByteArrayOutputStream();
-        var cs = StandardCharsets.UTF_16;
-        var timeout = 2;
-        var target = new OutputStreamLogTarget(level, stream, cs, timeout);
+        int level = 1;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        java.nio.charset.Charset cs = StandardCharsets.UTF_16;
+        int timeout = 2;
+        OutputStreamLogTarget target = new OutputStreamLogTarget(level, stream, cs, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(stream, target.getStream());
@@ -74,12 +75,12 @@ class OutputStreamLogTargetTest {
 
     @Test
     void create4() {
-        var level = 1;
-        var stream = new ByteArrayOutputStream();
-        var cs = StandardCharsets.UTF_16;
-        var logFilter = new MyLogFilter();
-        var timeout = 2;
-        var target = new OutputStreamLogTarget(level, stream, cs, logFilter, timeout);
+        int level = 1;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        java.nio.charset.Charset cs = StandardCharsets.UTF_16;
+        MyLogFilter logFilter = new MyLogFilter();
+        int timeout = 2;
+        OutputStreamLogTarget target = new OutputStreamLogTarget(level, stream, cs, logFilter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(stream, target.getStream());
@@ -92,11 +93,11 @@ class OutputStreamLogTargetTest {
 
     @Test
     void create5() {
-        var level = 1;
-        var stream = new ByteArrayOutputStream();
-        var cs = StandardCharsets.UTF_16;
-        var formatter = new MyFormatter();
-        var target = new OutputStreamLogTarget(level, stream, cs, formatter);
+        int level = 1;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Charset cs = StandardCharsets.UTF_16;
+        MyFormatter formatter = new MyFormatter();
+        OutputStreamLogTarget target = new OutputStreamLogTarget(level, stream, cs, formatter);
 
         assertEquals(level, target.getLevel());
         assertEquals(stream, target.getStream());
@@ -109,12 +110,12 @@ class OutputStreamLogTargetTest {
 
     @Test
     void create6() {
-        var level = 1;
-        var stream = new ByteArrayOutputStream();
-        var cs = StandardCharsets.UTF_16;
-        var formatter = new MyFormatter();
-        var logFilter = new MyLogFilter();
-        var target = new OutputStreamLogTarget(level, stream, cs, formatter, logFilter);
+        int level = 1;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Charset cs = StandardCharsets.UTF_16;
+        MyFormatter formatter = new MyFormatter();
+        MyLogFilter logFilter = new MyLogFilter();
+        OutputStreamLogTarget target = new OutputStreamLogTarget(level, stream, cs, formatter, logFilter);
 
         assertEquals(level, target.getLevel());
         assertEquals(stream, target.getStream());
@@ -127,12 +128,12 @@ class OutputStreamLogTargetTest {
 
     @Test
     void create7() {
-        var level = 1;
-        var stream = new ByteArrayOutputStream();
-        var cs = StandardCharsets.UTF_16;
-        var formatter = new MyFormatter();
-        var timeout = 2;
-        var target = new OutputStreamLogTarget(level, stream, cs, formatter, timeout);
+        int level = 1;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Charset cs = StandardCharsets.UTF_16;
+        MyFormatter formatter = new MyFormatter();
+        int timeout = 2;
+        OutputStreamLogTarget target = new OutputStreamLogTarget(level, stream, cs, formatter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(stream, target.getStream());
@@ -145,13 +146,13 @@ class OutputStreamLogTargetTest {
 
     @Test
     void create8() {
-        var level = 1;
-        var stream = new ByteArrayOutputStream();
-        var cs = StandardCharsets.UTF_16;
-        var formatter = new MyFormatter();
-        var logFilter = new MyLogFilter();
-        var timeout = 2;
-        var target = new OutputStreamLogTarget(level, stream, cs, formatter, logFilter, timeout);
+        int level = 1;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Charset cs = StandardCharsets.UTF_16;
+        MyFormatter formatter = new MyFormatter();
+        MyLogFilter logFilter = new MyLogFilter();
+        int timeout = 2;
+        OutputStreamLogTarget target = new OutputStreamLogTarget(level, stream, cs, formatter, logFilter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(stream, target.getStream());

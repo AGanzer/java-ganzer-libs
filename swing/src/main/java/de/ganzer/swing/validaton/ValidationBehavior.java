@@ -35,7 +35,7 @@ public enum ValidationBehavior {
      * Validates without any further action. Existing visual hints are removed
      * on valid input nevertheless.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     VALIDATION_ONLY
 }

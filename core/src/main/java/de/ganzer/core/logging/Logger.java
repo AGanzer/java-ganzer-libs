@@ -17,7 +17,7 @@ import java.util.Objects;
  * <p>
  * All methods of this class are thread safe.
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public class Logger implements AutoCloseable {
     private static class TargetInfo {
@@ -86,7 +86,7 @@ public class Logger implements AutoCloseable {
         if (target.getOwner() != null)
             throw new IllegalArgumentException("target is already owned by a logger.");
 
-        var prev =  this.targets.put(id, new TargetInfo(target, !inactive));
+        Logger.TargetInfo prev =  this.targets.put(id, new TargetInfo(target, !inactive));
 
         target.setOwner(this);
 
@@ -105,7 +105,7 @@ public class Logger implements AutoCloseable {
      * @see #getTarget(String)
      */
     synchronized public LogTarget removeTarget(String id) {
-        var prev = targets.remove(id);
+        Logger.TargetInfo prev = targets.remove(id);
 
         if (prev == null)
             return null;
@@ -126,7 +126,7 @@ public class Logger implements AutoCloseable {
      * @see #getTarget(String)
      */
     synchronized public LogTarget getTarget(String id) {
-        var info = targets.get(id);
+        Logger.TargetInfo info = targets.get(id);
         return info != null ? info.target : null;
     }
 
@@ -142,7 +142,7 @@ public class Logger implements AutoCloseable {
      * @see #getTarget(String)
      */
     synchronized public void activateTarget(String id, boolean activate) {
-        var info = targets.get(id);
+        Logger.TargetInfo info = targets.get(id);
 
         if (info != null)
             info.active = activate;
@@ -161,7 +161,7 @@ public class Logger implements AutoCloseable {
      * @see #getTarget(String)
      */
     synchronized public boolean isTargetActive(String id) {
-        var info = targets.get(id);
+        Logger.TargetInfo info = targets.get(id);
         return info != null && info.active;
     }
 
@@ -191,9 +191,9 @@ public class Logger implements AutoCloseable {
         if (closed)
             throw new IllegalStateException("Logger has been closed.");
 
-        var time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now();
 
-        for (var info : this.targets.values()) {
+        for (Logger.TargetInfo info : this.targets.values()) {
             if (info.active)
                 info.target.write(level, time, message != null ? message : "");
         }
@@ -215,7 +215,7 @@ public class Logger implements AutoCloseable {
         if (closed)
             return;
 
-        for (var info : this.targets.values()) {
+        for (Logger.TargetInfo info : this.targets.values()) {
             info.target.close();
             info.target.setOwner(null);
         }

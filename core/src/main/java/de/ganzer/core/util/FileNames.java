@@ -1,6 +1,7 @@
 package de.ganzer.core.util;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -286,7 +287,7 @@ public final class FileNames {
      */
     public static String getUniqueName(String path, String hint) {
         Objects.requireNonNull(path, "FileNameTools::getUniqueName: path");
-        Path result = getUniqueName(Path.of(path), hint);
+        Path result = getUniqueName(Paths.get(path), hint);
 
         return result == null ? null : result.toString();
     }
@@ -340,7 +341,7 @@ public final class FileNames {
         else
             newName = String.format(countedFormat, name, 2);
 
-        Path newPath = Path.of(dir, newName + ext);
+        Path newPath = Paths.get(dir, newName + ext);
 
         if (!newPath.toFile().exists())
             return newPath;
@@ -351,7 +352,7 @@ public final class FileNames {
             else
                 newName = String.format(countedFormat, name, i);
 
-            newPath = Path.of(dir, newName + ext);
+            newPath = Paths.get(dir, newName + ext);
 
             if (!newPath.toFile().exists())
                 return newPath;
@@ -373,7 +374,7 @@ public final class FileNames {
      */
     public static String getNameWithoutLastExtension(String path) {
         Objects.requireNonNull(path, "FileNameTools::getNameWithoutLastExtension: path");
-        return getNameWithoutLastExtension(Path.of(path));
+        return getNameWithoutLastExtension(Paths.get(path));
     }
 
     /**
@@ -411,7 +412,7 @@ public final class FileNames {
      */
     public static String getNameWithoutExtensions(String path) {
         Objects.requireNonNull(path, "FileNameTools::getNameWithoutExtensions: path");
-        return getNameWithoutExtensions(Path.of(path));
+        return getNameWithoutExtensions(Paths.get(path));
     }
 
     /**
@@ -487,7 +488,7 @@ public final class FileNames {
      */
     public static String getAllExtensions(String path) {
         Objects.requireNonNull(path, "FileNameTools::getAllExtensions: path");
-        return getAllExtensions(Path.of(path));
+        return getAllExtensions(Paths.get(path));
     }
 
     /**

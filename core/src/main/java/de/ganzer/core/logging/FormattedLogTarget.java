@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  * A base class for log targets that wont to write all log message information
  * with a single preformatted string.
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public abstract class FormattedLogTarget extends LogTarget {
     private final LogFormatter formatter;

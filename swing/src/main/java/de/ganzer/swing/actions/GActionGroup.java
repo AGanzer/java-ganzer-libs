@@ -47,7 +47,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     public GActionGroup addAll(GActionItemBuilder... actions) {
         Objects.requireNonNull(actions, "actions must not be null.");
 
-        for (var action: List.of(actions)) {
+        for (GActionItemBuilder action: actions) {
             Objects.requireNonNull(action, "actions must not contain null values.");
             this.actions.add(action);
         }
@@ -285,8 +285,8 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
      */
     @Override
     public AbstractButton createButton(int options) {
-        var menu = createPopupMenu();
-        var button = super.createButton(options);
+        JPopupMenu menu = createPopupMenu();
+        AbstractButton button = super.createButton(options);
 
         button.addMouseListener(new MouseAdapter() {
             @Override
@@ -325,7 +325,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     private JPopupMenu createPopupMenu() {
-        var menu = new JPopupMenu();
+        JPopupMenu menu = new JPopupMenu();
         addMenuItems(menu);
 
         return menu;

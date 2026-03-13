@@ -34,7 +34,7 @@ public class FilterValidator extends CharCountValidator {
     /**
      * The default error message for input that contains invalid characters.
      * @see #setFilterErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_FILTER_ERROR_MESSAGE = CoreMessages.get("inputContainsInvalidCharacters");
 
@@ -147,7 +147,7 @@ public class FilterValidator extends CharCountValidator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_FILTER_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getFilterErrorMessage() {
         return filterErrorMessage;
@@ -161,7 +161,7 @@ public class FilterValidator extends CharCountValidator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_FILTER_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setFilterErrorMessage(String filterErrorMessage) {
         this.filterErrorMessage = Strings.isNullOrBlank(filterErrorMessage)

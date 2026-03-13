@@ -11,7 +11,7 @@ import java.util.Objects;
  * {@link FormattedLogTarget} with {@link #DEFAULT_FORMAT} if no other
  * formatter is specified for the target.
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public class DefaultLogFormatter implements LogFormatter {
     /**
@@ -162,7 +162,7 @@ public class DefaultLogFormatter implements LogFormatter {
      *         {@code DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").format(time)}.
      */
     protected String formatTime(LocalDateTime time) {
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         return formatter.format(time);
     }
 

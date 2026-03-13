@@ -175,7 +175,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setSelectedIndex(int index) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null && tab.isEnabled())
             super.setSelectedIndex(index);
@@ -203,7 +203,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * @return {@code true} if the tab is closable.
      */
     public boolean isClosableAt(int index) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
         return tab != null && ((TabHeaderPanel) tab).isClosable();
     }
 
@@ -217,7 +217,7 @@ public class ClosableTabsPane extends JTabbedPane {
         if (!this.closable)
             return;
 
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             ((TabHeaderPanel)tab).setClosable(closable);
@@ -241,7 +241,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setTitleAt(int index, String title) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             ((TabHeaderPanel)tab).setTitle(title);
@@ -273,7 +273,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setIconAt(int index, Icon icon) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             ((TabHeaderPanel)tab).setIcon(icon);
@@ -297,7 +297,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setDisabledIconAt(int index, Icon disabledIcon) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             ((TabHeaderPanel)tab).setDisabledIcon(disabledIcon);
@@ -321,7 +321,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setToolTipTextAt(int index, String toolTipText) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             ((TabHeaderPanel)tab).setToolTipText(toolTipText);
@@ -349,7 +349,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setBackgroundAt(int index, Color background) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             tab.setBackground(background);
@@ -377,7 +377,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setForegroundAt(int index, Color foreground) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             tab.setForeground(foreground);
@@ -400,7 +400,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setEnabledAt(int index, boolean enabled) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             tab.setEnabled(enabled);
@@ -445,7 +445,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setDisplayedMnemonicIndexAt(int tabIndex, int mnemonicIndex) {
-        var tab = getTabComponentAt(tabIndex);
+        Component tab = getTabComponentAt(tabIndex);
 
         if (tab != null)
             ((TabHeaderPanel)tab).setDisplayedMnemonicIndex(mnemonicIndex);
@@ -482,7 +482,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setMnemonicAt(int tabIndex, int mnemonic) {
-        var tab = getTabComponentAt(tabIndex);
+        Component tab = getTabComponentAt(tabIndex);
 
         if (tab != null)
             ((TabHeaderPanel)tab).setMnemonic(mnemonic);
@@ -499,7 +499,7 @@ public class ClosableTabsPane extends JTabbedPane {
      *         {@code index} is invalid or the font is not set.
      */
     public Font getFontAt(int index) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             return tab.getFont();
@@ -515,7 +515,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param font The font to set.
      */
     public void setFontAt(int index, Font font) {
-        var tab = getTabComponentAt(index);
+        Component tab = getTabComponentAt(index);
 
         if (tab != null)
             tab.setFont(font);
@@ -547,9 +547,9 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param tabIndex The zero-based index of the header.
      */
     protected void fireCloseTabEvent(int tabIndex) {
-        var closeListeners = getListeners(TabCloseListener.class);
+        TabCloseListener[] closeListeners = getListeners(TabCloseListener.class);
 
-        for (var closeListener : closeListeners) {
+        for (TabCloseListener closeListener : closeListeners) {
             closeListener.closeTabPerformed(tabIndex, getComponentAt(tabIndex));
         }
     }

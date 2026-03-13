@@ -8,7 +8,7 @@ package de.ganzer.core.logging;
  * target. An instance of each implementing class can be used to format the
  * message.
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public interface LogFormatter {
     /**

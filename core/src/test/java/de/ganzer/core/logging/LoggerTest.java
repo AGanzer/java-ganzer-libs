@@ -24,15 +24,15 @@ class LoggerTest {
 
     @Test
     void create() {
-        var logger = new Logger();
+        Logger logger = new Logger();
         assertFalse(logger.isClosed());
     }
 
     @Test
     void addTarget() {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target);
 
@@ -43,9 +43,9 @@ class LoggerTest {
 
     @Test
     void addTargetTwice() {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target);
 
@@ -54,9 +54,9 @@ class LoggerTest {
 
     @Test
     void addTargetActive() {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target, false);
 
@@ -65,9 +65,9 @@ class LoggerTest {
 
     @Test
     void addTargetInactive() {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target, true);
 
@@ -76,9 +76,9 @@ class LoggerTest {
 
     @Test
     void removeTarget() {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target);
         logger.removeTarget(targetID);
@@ -89,9 +89,9 @@ class LoggerTest {
 
     @Test
     void activateTarget() {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target, true);
         logger.activateTarget(targetID, true);
@@ -101,9 +101,9 @@ class LoggerTest {
 
     @Test
     void deactivateTarget() {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target, false);
         logger.activateTarget(targetID, false);
@@ -113,13 +113,13 @@ class LoggerTest {
 
     @Test
     void write() {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
-        var level1 = 0;
-        var message1 = "m1";
-        var level2 = 1;
-        var message2 = "m2";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
+        int level1 = 0;
+        String message1 = "m1";
+        int level2 = 1;
+        String message2 = "m2";
 
         logger.addTarget(targetID, target);
         logger.write(level1, message1);
@@ -134,9 +134,9 @@ class LoggerTest {
 
     @Test
     void close() throws Exception {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target);
         logger.close();
@@ -148,9 +148,9 @@ class LoggerTest {
 
     @Test
     void closedAddTarget() throws Exception {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target);
         logger.close();
@@ -160,9 +160,9 @@ class LoggerTest {
 
     @Test
     void closeWrite() throws Exception {
-        var logger = new Logger();
-        var target = new MyTarget();
-        var targetID = "1";
+        Logger logger = new Logger();
+        MyTarget target = new MyTarget();
+        String targetID = "1";
 
         logger.addTarget(targetID, target);
         logger.close();

@@ -16,19 +16,19 @@ public class NumberValidator extends Validator {
     /**
      * The default error message for input that is not in the allowed range.
      * @see #setRangeErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_RANGE_ERROR_MESSAGE = CoreMessages.get("inputOutOfRange");
     /**
      * The default error message for input that is not a number.
      * @see #setNumberErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_NUMBER_ERROR_MESSAGE = CoreMessages.get("inputIsNotNumber");
     /**
      * The default error message for input that is not an integer.
      * @see #setIntegerErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_INTEGER_ERROR_MESSAGE = CoreMessages.get("inputIsNotInteger");
 
@@ -143,7 +143,7 @@ public class NumberValidator extends Validator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_RANGE_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getRangeErrorMessage() {
         return rangeErrorMessage;
@@ -160,7 +160,7 @@ public class NumberValidator extends Validator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_RANGE_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setRangeErrorMessage(String rangeErrorMessage) {
         this.rangeErrorMessage = Strings.isNullOrBlank(rangeErrorMessage)
@@ -174,7 +174,7 @@ public class NumberValidator extends Validator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_NUMBER_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getNumberErrorMessage() {
         return numberErrorMessage;
@@ -187,7 +187,7 @@ public class NumberValidator extends Validator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_NUMBER_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setNumberErrorMessage(String numberErrorMessage) {
         this.numberErrorMessage = Strings.isNullOrBlank(numberErrorMessage)
@@ -201,7 +201,7 @@ public class NumberValidator extends Validator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_INTEGER_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getIntegerErrorMessage() {
         return integerErrorMessage;
@@ -214,7 +214,7 @@ public class NumberValidator extends Validator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_INTEGER_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setIntegerErrorMessage(String integerErrorMessage) {
         this.integerErrorMessage = Strings.isNullOrBlank(integerErrorMessage)
@@ -409,11 +409,11 @@ public class NumberValidator extends Validator {
         if (!super.doInputValidation(text, autoFill))
             return false;
 
-        if (text.isEmpty())
+        if (text.length() == 0)
             return true;
 
-        var t = text.toString();
-        var d = DecimalStyle.ofDefaultLocale();
+        String t = text.toString();
+        DecimalStyle d = DecimalStyle.ofDefaultLocale();
 
         if (numDecimals == 0 && t.indexOf(d.getDecimalSeparator()) != -1)
             return false;
@@ -423,8 +423,8 @@ public class NumberValidator extends Validator {
                 return minValue < 0;
         }
 
-        var pos = new ParsePosition(0);
-        var res = NumberFormat.getInstance().parse(t, pos);
+        ParsePosition pos = new ParsePosition(0);
+        Number res = NumberFormat.getInstance().parse(t, pos);
 
         return res != null && pos.getErrorIndex() < 0 && pos.getIndex() == text.length();
     }
@@ -451,7 +451,7 @@ public class NumberValidator extends Validator {
         if (text.isEmpty())
             return true;
 
-        var d = DecimalStyle.ofDefaultLocale();
+        DecimalStyle d = DecimalStyle.ofDefaultLocale();
 
         if (numDecimals == 0 && text.indexOf(d.getDecimalSeparator()) != -1) {
             er.setException(new ValidatorException(getErrorMessage() != null ?
@@ -462,8 +462,8 @@ public class NumberValidator extends Validator {
             return false;
         }
 
-        var pos = new ParsePosition(0);
-        var res = NumberFormat.getInstance().parse(text, pos);
+        ParsePosition pos = new ParsePosition(0);
+        Number res = NumberFormat.getInstance().parse(text, pos);
 
         if (res == null || pos.getErrorIndex() >= 0 || pos.getIndex() < text.length()) {
             er.setException(new ValidatorException(getErrorMessage() != null
@@ -474,7 +474,7 @@ public class NumberValidator extends Validator {
             return false;
         }
 
-        var v = res.doubleValue();
+        double v = res.doubleValue();
 
         if (minValue <= v && v <= maxValue)
             return true;

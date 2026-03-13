@@ -15,13 +15,13 @@ public class Validator {
     /**
      * The default error message for required input.
      * @see #setRequiredErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_REQUIRED_ERROR_MESSAGE = CoreMessages.get("inputRequired");
     /**
      * The default error message for blank input.
      * @see #setBlanksErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_BLANKS_ERROR_MESSAGE = CoreMessages.get("blanksNotAllowed");
 
@@ -76,7 +76,7 @@ public class Validator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_REQUIRED_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getRequiredErrorMessage() {
         return requiredErrorMessage;
@@ -89,7 +89,7 @@ public class Validator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_REQUIRED_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setRequiredErrorMessage(String requiredErrorMessage) {
         this.requiredErrorMessage = Strings.isNullOrBlank(requiredErrorMessage)
@@ -104,7 +104,7 @@ public class Validator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_BLANKS_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getBlanksErrorMessage() {
         return blanksErrorMessage;
@@ -118,7 +118,7 @@ public class Validator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_BLANKS_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setBlanksErrorMessage(String blanksErrorMessage) {
         this.blanksErrorMessage = Strings.isNullOrBlank(blanksErrorMessage)

@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.ganzer</groupId>
         <artifactId>de-ganzer-libs</artifactId>
-        <version>5.5.0</version>
+        <version>1.5.0</version>
     </parent>
 
     <groupId>de.ganzer.core</groupId>

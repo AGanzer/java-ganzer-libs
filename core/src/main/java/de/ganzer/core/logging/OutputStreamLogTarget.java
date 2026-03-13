@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 /**
  * A target that writes log messages into a stream.
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public class OutputStreamLogTarget extends WriterLogTarget {
     private final OutputStream stream;

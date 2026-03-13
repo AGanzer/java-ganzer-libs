@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ListValidatorTest {
     @Test
     void constructEmpty() {
-        var val = new ListValidator();
+        ListValidator val = new ListValidator();
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertNull(val.getValidInputs());
@@ -21,7 +21,7 @@ class ListValidatorTest {
 
     @Test
     void constructWithOption() {
-        var val = new ListValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
+        ListValidator val = new ListValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT);
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertNull(val.getValidInputs());
@@ -31,7 +31,7 @@ class ListValidatorTest {
     @Test
     void constructWithOptionAndInputs() {
         List<String> vi = new ArrayList<>();
-        var val = new ListValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, vi);
+        ListValidator val = new ListValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, vi);
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(vi, val.getValidInputs());
@@ -41,7 +41,7 @@ class ListValidatorTest {
     @Test
     void constructWithOptionAndInputsAndCase() {
         List<String> vi = new ArrayList<>();
-        var val = new ListValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, vi, true);
+        ListValidator val = new ListValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, vi, true);
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(vi, val.getValidInputs());
@@ -51,7 +51,7 @@ class ListValidatorTest {
     @Test
     void constructWithInputs() {
         List<String> vi = new ArrayList<>();
-        var val = new ListValidator(vi);
+        ListValidator val = new ListValidator(vi);
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(vi, val.getValidInputs());
@@ -61,7 +61,7 @@ class ListValidatorTest {
     @Test
     void constructWithInputsAndCase() {
         List<String> vi = new ArrayList<>();
-        var val = new ListValidator(vi, true);
+        ListValidator val = new ListValidator(vi, true);
 
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertEquals(vi, val.getValidInputs());
@@ -71,7 +71,7 @@ class ListValidatorTest {
     @Test
     void setValidInputs() {
         List<String> vi = new ArrayList<>();
-        var val = new ListValidator();
+        ListValidator val = new ListValidator();
 
         val.setValidInputs(vi);
 
@@ -80,7 +80,7 @@ class ListValidatorTest {
 
     @Test
     void setIgnoreCase() {
-        var val = new ListValidator();
+        ListValidator val = new ListValidator();
         val.setIgnoreCase(true);
 
         assertTrue(val.isIgnoreCase());
@@ -108,14 +108,14 @@ class ListValidatorTest {
             "bbb, true"})
     void doInputValidation(String input, String valid) {
         boolean expected = Boolean.parseBoolean(valid);
-        List<String> vi = new ArrayList<>() {{
+        List<String> vi = new ArrayList<String>() {{
             add("aaa");
             add("bbb");
             add("ccc");
             add("ddd");
         }};
 
-        var val = new ListValidator(vi);
+        ListValidator val = new ListValidator(vi);
         assertEquals(expected, val.isValidInput(new StringBuilder(input), false));
     }
 
@@ -141,14 +141,14 @@ class ListValidatorTest {
             "bbb, true"})
     void doInputValidationIgnoreCase(String input, String valid) {
         boolean expected = Boolean.parseBoolean(valid);
-        List<String> vi = new ArrayList<>() {{
+        List<String> vi = new ArrayList<String>() {{
             add("aaa");
             add("bbb");
             add("ccc");
             add("ddd");
         }};
 
-        var val = new ListValidator(vi, true);
+        ListValidator val = new ListValidator(vi, true);
         assertEquals(expected, val.isValidInput(new StringBuilder(input), false));
     }
 
@@ -172,15 +172,15 @@ class ListValidatorTest {
             "bbb, true"})
     void doValidate(String input, String valid) {
         boolean expected = Boolean.parseBoolean(valid);
-        List<String> vi = new ArrayList<>() {{
+        List<String> vi = new ArrayList<String>() {{
             add("aaa");
             add("bbb");
             add("ccc");
             add("ddd");
         }};
 
-        var val = new ListValidator(vi);
-        var ref = new ValidatorExceptionRef();
+        ListValidator val = new ListValidator(vi);
+        ValidatorExceptionRef ref = new ValidatorExceptionRef();
 
         assertEquals(expected, val.validate(input, ref));
         assertEquals(expected, ref.getException() == null);
@@ -204,15 +204,15 @@ class ListValidatorTest {
             "bbb, true"})
     void doValidateIgnoreCase(String input, String valid) {
         boolean expected = Boolean.parseBoolean(valid);
-        List<String> vi = new ArrayList<>() {{
+        List<String> vi = new ArrayList<String>() {{
             add("aaa");
             add("bbb");
             add("ccc");
             add("ddd");
         }};
 
-        var val = new ListValidator(vi, true);
-        var ref = new ValidatorExceptionRef();
+        ListValidator val = new ListValidator(vi, true);
+        ValidatorExceptionRef ref = new ValidatorExceptionRef();
 
         assertEquals(expected, val.validate(input, ref));
         assertEquals(expected, ref.getException() == null);
@@ -220,7 +220,7 @@ class ListValidatorTest {
 
     @Test
     void setNotInListErrorMessage() {
-        var val = new ListValidator();
+        ListValidator val = new ListValidator();
         val.setNotInListErrorMessage("m");
 
         assertEquals("m", val.getNotInListErrorMessage());
@@ -228,7 +228,7 @@ class ListValidatorTest {
 
     @Test
     void testSetIgnoreCase() {
-        var val = new ListValidator();
+        ListValidator val = new ListValidator();
         val.setIgnoreCase(true);
 
         assertTrue(val.isIgnoreCase());

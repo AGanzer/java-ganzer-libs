@@ -32,7 +32,7 @@ public interface ValidationHintProvider {
      * @param target The target text field where to show the hints.
      * @param e The exception that causes the error.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     void updateHints(JTextComponent target, ValidatorException e);
 }

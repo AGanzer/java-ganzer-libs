@@ -38,8 +38,8 @@ class LogTargetTest {
 
     @Test
     void create1() {
-        var level = 1;
-        var target = new MyTarget(level);
+        int level = 1;
+        MyTarget target = new MyTarget(level);
 
         assertEquals(level, target.getLevel());
         assertEquals(0, target.getMessageWaitTimeout());
@@ -49,9 +49,9 @@ class LogTargetTest {
 
     @Test
     void create2() {
-        var level = 1;
-        var logFilter = new MyLogFilter();
-        var target = new MyTarget(level, logFilter);
+        int level = 1;
+        MyLogFilter logFilter = new MyLogFilter();
+        MyTarget target = new MyTarget(level, logFilter);
 
         assertEquals(level, target.getLevel());
         assertEquals(0, target.getMessageWaitTimeout());
@@ -61,9 +61,9 @@ class LogTargetTest {
 
     @Test
     void create3() {
-        var level = 1;
-        var timeout = 2;
-        var target = new MyTarget(level, timeout);
+        int level = 1;
+        int timeout = 2;
+        MyTarget target = new MyTarget(level, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(timeout, target.getMessageWaitTimeout());
@@ -73,10 +73,10 @@ class LogTargetTest {
 
     @Test
     void create4() {
-        var level = 1;
-        var logFilter = new MyLogFilter();
-        var timeout = 2;
-        var target = new MyTarget(level, logFilter, timeout);
+        int level = 1;
+        MyLogFilter logFilter = new MyLogFilter();
+        int timeout = 2;
+        MyTarget target = new MyTarget(level, logFilter, timeout);
 
         assertEquals(level, target.getLevel());
         assertEquals(timeout, target.getMessageWaitTimeout());
@@ -86,7 +86,7 @@ class LogTargetTest {
 
     @Test
     void close() throws Exception {
-        var target = new MyTarget(0);
+        MyTarget target = new MyTarget(0);
         target.close();
 
         assertTrue(target.isClosed());
@@ -94,7 +94,7 @@ class LogTargetTest {
 
     @Test
     void closedWrite() throws Exception {
-        var target = new MyTarget(0);
+        MyTarget target = new MyTarget(0);
         target.close();
 
         assertThrows(IllegalStateException.class, () -> target.write(0, LocalDateTime.now(), ""));

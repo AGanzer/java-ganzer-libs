@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Extends the {@link UserSettings} to enable Windows to save and restore their
@@ -169,7 +170,7 @@ public class UISettings extends UserSettings {
 
             List<Rectangle> intersections = displays.stream()
                     .filter(r -> !bounds.intersection(r).isEmpty())
-                    .toList();
+                    .collect(Collectors.toList());
 
             if (intersections.size() == 1) {
                 clampTo(intersections.get(0), window);
@@ -229,6 +230,6 @@ public class UISettings extends UserSettings {
                     return new Rectangle((int)bounds.getX(), (int)bounds.getY(), dm.getWidth(), dm.getHeight());
                 })
                 .sorted(Comparator.comparing(Rectangle::getX))
-                .toList();
+                .collect(Collectors.toList());
     }
 }

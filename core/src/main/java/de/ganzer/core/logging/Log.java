@@ -16,7 +16,7 @@ package de.ganzer.core.logging;
  * <p>
  * All methods of this class are thread safe.
  *
- * @since 5.5.0
+ * @since 1.5.0
  */
 public final class Log {
     private static final Logger logger = new Logger();

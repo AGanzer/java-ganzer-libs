@@ -131,7 +131,7 @@ public class BorderValidationHint implements ValidationHintProvider {
      * @param target The target text field where to show the hints.
      * @param e The exception that causes the error.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     @Override
     public void updateHints(JTextComponent target, ValidatorException e) {
@@ -140,6 +140,6 @@ public class BorderValidationHint implements ValidationHintProvider {
     }
 
     private JComponent getFinalTarget(JTextComponent target) {
-        return (target.getParent() instanceof JComboBox<?> cb) ? cb : target;
+        return (target.getParent() instanceof JComboBox<?>) ? (JComboBox<?>) target.getParent() : target;
     }
 }

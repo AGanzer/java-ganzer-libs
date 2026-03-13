@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @see Logger
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public abstract class LogTarget implements AutoCloseable {
     private final int level;
@@ -188,7 +188,7 @@ public abstract class LogTarget implements AutoCloseable {
         if (!filter.shouldWrite(level, this.level))
             return;
 
-        var info = new LogInfo(++messageNumber, level, time, Thread.currentThread().getId(), Thread.currentThread().getName(), message);
+        LogInfo info = new LogInfo(++messageNumber, level, time, Thread.currentThread().getId(), Thread.currentThread().getName(), message);
 
         if (messageWaitTimeout < 1) {
             try {
@@ -242,7 +242,7 @@ public abstract class LogTarget implements AutoCloseable {
         @Override
         public void run() {
             while (!canceled.get()) {
-                var avail = false;
+                boolean avail = false;
 
                 writeLock.lock();
 

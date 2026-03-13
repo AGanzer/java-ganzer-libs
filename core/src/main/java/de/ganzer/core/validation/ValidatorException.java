@@ -13,7 +13,7 @@ public class ValidatorException extends RuntimeException {
     /**
      * {@inheritDoc}
      */
-    @Deprecated(forRemoval = true, since = "5.4.0")
+    @Deprecated()
     public ValidatorException() {
         this(null, null, null);
     }
@@ -21,7 +21,7 @@ public class ValidatorException extends RuntimeException {
     /**
      * {@inheritDoc}
      */
-    @Deprecated(forRemoval = true, since = "5.4.0")
+    @Deprecated()
     public ValidatorException(String message) {
         this(message, null, null);
     }
@@ -37,7 +37,7 @@ public class ValidatorException extends RuntimeException {
      *
      * @param <V> Should extend {@link Validator}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public <V extends Validator> ValidatorException(String message, Class<V> sourceClass, Validator source) {
         super(Strings.isNullOrBlank(message) ? CoreMessages.get("invalidInput") : message);
@@ -51,7 +51,7 @@ public class ValidatorException extends RuntimeException {
      *
      * @return The class of the validator or {@code null} if no class is set.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public Class<?> getSourceClass() {
         return sourceClass;
@@ -62,7 +62,7 @@ public class ValidatorException extends RuntimeException {
      *
      * @return The validator or {@code null} if no validator is set.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public Validator getSource() {
         return source;

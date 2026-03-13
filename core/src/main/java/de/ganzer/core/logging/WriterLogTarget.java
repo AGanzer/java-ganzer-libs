@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * A log target that writes log messages into a stream writer.
  *
- * @since 5.4.0
+ * @since 1.5.0
  */
 public class WriterLogTarget extends FormattedLogTarget {
     private final Writer writer;

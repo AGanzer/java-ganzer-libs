@@ -11,13 +11,13 @@ public class CharCountValidator extends Validator {
     /**
      * The default error message for input that is below the minimum length.
      * @see #setBelowMinErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_BELOW_MIN_ERROR_MESSAGE = CoreMessages.get("inputBelowMinLength");
     /**
      * The default error message for input that is above the maximum length.
      * @see #setAboveMaxErrorMessage(String)
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public final static String DEFAULT_ABOVE_MAX_ERROR_MESSAGE = CoreMessages.get("inputExceedsMaxLength");
 
@@ -51,7 +51,7 @@ public class CharCountValidator extends Validator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_BELOW_MIN_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getBelowMinErrorMessage() {
         return belowMinErrorMessage;
@@ -70,7 +70,7 @@ public class CharCountValidator extends Validator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_BELOW_MIN_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setBelowMinErrorMessage(String belowMinErrorMessage) {
         this.belowMinErrorMessage = Strings.isNullOrBlank(belowMinErrorMessage)
@@ -87,7 +87,7 @@ public class CharCountValidator extends Validator {
      * @return The error message to use. The default is
      *         {@link #DEFAULT_ABOVE_MAX_ERROR_MESSAGE}.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public String getAboveMaxErrorMessage() {
         return aboveMaxErrorMessage;
@@ -101,7 +101,7 @@ public class CharCountValidator extends Validator {
      *        {@code null}, empty or does contain white spaces only,
      *        {@link #DEFAULT_ABOVE_MAX_ERROR_MESSAGE} is used.
      *
-     * @since 5.4.0
+     * @since 1.5.0
      */
     public void setAboveMaxErrorMessage(String aboveMaxErrorMessage) {
         this.aboveMaxErrorMessage = Strings.isNullOrBlank(aboveMaxErrorMessage)
