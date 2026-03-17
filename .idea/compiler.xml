@@ -15,6 +15,7 @@
     <bytecodeTargetLevel>
       <module name="de-ganzer-fx" target="17" />
       <module name="de-ganzer-gv" target="17" />
+      <module name="de-ganzer-libs" target="1.8" />
       <module name="ui-tests" target="17" />
     </bytecodeTargetLevel>
   </component>
