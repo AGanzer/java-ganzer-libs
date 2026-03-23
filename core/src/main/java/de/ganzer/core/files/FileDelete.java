@@ -308,18 +308,18 @@ public class FileDelete extends FileErrorProvider {
             if (source.isDirectory())
                 initializeDelete(source);
             else
-                reportInitializeProgress(source.getAbsolutePath(), 1);
+                reportInitializeProgress(source.getAbsolutePath());
         });
     }
 
     private void initializeDelete(File source) {
-        reportInitializeProgress(source.getAbsolutePath(), 1);
+        reportInitializeProgress(source.getAbsolutePath());
 
         for (var file : listFiles(source)) {
             if (isDirectory(file))
                 initializeDelete(file);
             else
-                reportInitializeProgress(file.getAbsolutePath(), file.length());
+                reportInitializeProgress(file.getAbsolutePath());
         }
     }
 
@@ -329,7 +329,6 @@ public class FileDelete extends FileErrorProvider {
 
             if (isDirectory(source)) {
                 deleteDir(source);
-                reportDelete(source, DeleteProgressStatus.DELETE_DIRECTORY);
             } else {
                 deleteFile(source);
             }
@@ -399,17 +398,18 @@ public class FileDelete extends FileErrorProvider {
         for (var file : listFiles(source)) {
             if (isDirectory(file)) {
                 deleteDir(file);
-                reportDelete(file, DeleteProgressStatus.DELETE_DIRECTORY);
-
-                try {
-                    if (!file.delete())
-                        throw new ErrorInfo(FileError.DELETE_DIR, String.format(CoreMessages.get("cannotDeleteDir"), file.getAbsolutePath()), true);
-                } catch (SecurityException e) {
-                    throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), file.getAbsolutePath()), true);
-                }
             } else {
                 deleteFile(file);
             }
+        }
+
+        reportDelete(source, DeleteProgressStatus.DELETE_DIRECTORY);
+
+        try {
+            if (!source.delete())
+                throw new ErrorInfo(FileError.DELETE_DIR, String.format(CoreMessages.get("cannotDeleteDir"), source.getAbsolutePath()), true);
+        } catch (SecurityException e) {
+            throw new ErrorInfo(FileError.ACCESS, String.format(CoreMessages.get("accessDenied"), source.getAbsolutePath()), true);
         }
     }
 
@@ -441,9 +441,9 @@ public class FileDelete extends FileErrorProvider {
             cancel();
     }
 
-    private void reportInitializeProgress(String sourcePath, long addEntries) {
+    private void reportInitializeProgress(String sourcePath) {
         progress.path = sourcePath;
-        progress.entriesAvail += addEntries;
+        ++progress.entriesAvail;
 
         reportProgress();
     }
@@ -465,6 +465,6 @@ public class FileDelete extends FileErrorProvider {
     }
 
     private void cancel() throws ErrorInfo {
-        throw new ErrorInfo(FileError.CANCELED, CoreMessages.get("operationCanceled"), true);
+        throw new ErrorInfo(FileError.CANCELED, CoreMessages.get("operationCanceled"), false);
     }
 }

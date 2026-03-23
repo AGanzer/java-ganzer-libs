@@ -84,4 +84,56 @@ class RegularExpressionValidatorTest {
         assertThrows(ValidatorException.class, () -> val.validate("1"));
         assertThrows(ValidatorException.class, () -> val.validate("123 40"));
     }
+
+    @Test
+    void doValidateWithExpErrorMessage1() {
+        var val = new RegularExpressionValidator(Pattern.compile("\\d\\d\\d"));
+        val.setMatchErrorMessage("Invalid number.");
+
+        var ref = new ValidatorExceptionRef();
+        val.validate("12/12/123", ref);
+
+        assertEquals("Invalid number.", ref.getException().getMessage());
+    }
+
+    @Test
+    void doValidateWithExpErrorMessage2() {
+        var val = new RegularExpressionValidator(Pattern.compile("\\d\\d\\d"));
+        val.setMatchErrorMessage("Invalid number. Expression: %s");
+
+        var ref = new ValidatorExceptionRef();
+        val.validate("12/12/123", ref);
+
+        assertEquals("Invalid number. Expression: \\d\\d\\d", ref.getException().getMessage());
+    }
+
+    @Test
+    void doValidateWithExpErrorMessage3() {
+        var val = new RegularExpressionValidator(Pattern.compile("\\d\\d\\d"));
+        val.setMatchErrorMessage("Invalid number. %%s.");
+
+        var ref = new ValidatorExceptionRef();
+        val.validate("12/12/123", ref);
+
+        assertEquals("Invalid number. %%s.", ref.getException().getMessage());
+    }
+
+    @Test
+    void doValidateWithExpErrorMessage4() {
+        var val = new RegularExpressionValidator(Pattern.compile("\\d\\d\\d"));
+        val.setMatchErrorMessage("Invalid number. Expression: %%%s");
+
+        var ref = new ValidatorExceptionRef();
+        val.validate("12/12/123", ref);
+
+        assertEquals("Invalid number. Expression: %\\d\\d\\d", ref.getException().getMessage());
+    }
+
+    @Test
+    void setMatchErrorMessage() {
+        var val = new RegularExpressionValidator();
+        val.setMatchErrorMessage("m");
+
+        assertEquals("m", val.getMatchErrorMessage());
+    }
 }

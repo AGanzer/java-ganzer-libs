@@ -168,13 +168,15 @@ public class UISettings extends UserSettings {
             }
 
             List<Rectangle> intersections = displays.stream()
-                    .map(bounds::intersection)
-                    .filter(r -> !r.isEmpty())
+                    .filter(r -> !bounds.intersection(r).isEmpty())
                     .toList();
 
-            if (intersections.size() == 1)
+            if (intersections.size() == 1) {
                 clampTo(intersections.get(0), window);
-            else for (Rectangle r: intersections) {
+                return;
+            }
+
+            for (Rectangle r: intersections) {
                 if (r.contains(bounds.getLocation()))
                     return;
             }
@@ -192,17 +194,17 @@ public class UISettings extends UserSettings {
         clampTo(bounds, window);
     }
 
-    private static void clampTo(Rectangle bounds, Window window) {
+    private static void clampTo(Rectangle display, Window window) {
         int x = window.getX();
         int y = window.getY();
         int width = window.getWidth();
         int height = window.getHeight();
 
-        if (x + width > bounds.getWidth())
-            x = (int)bounds.getWidth() - width;
+        if (x + width > display.x + display.width)
+            x -= (x + width) - (display.x + display.width);
 
-        if (y + height > bounds.getHeight())
-            y = (int)bounds.getHeight() - height;
+        if (y + height > display.y + display.height)
+            y -= (y + height) - (display.y + display.height);
 
         if (x < 0)
             x = 0;

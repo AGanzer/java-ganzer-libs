@@ -6,4 +6,5 @@ module de.ganzer.swing {
     exports de.ganzer.swing.dialogs;
     exports de.ganzer.swing.util;
     exports de.ganzer.swing.validaton;
+    exports de.ganzer.swing.logging;
 }

@@ -1,12 +1,28 @@
 package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.core.util.Strings;
 
 /**
  * This CharCountValidator class defines a validator that requires a specified
  * range of characters to input.
  */
 public class CharCountValidator extends Validator {
+    /**
+     * The default error message for input that is below the minimum length.
+     * @see #setBelowMinErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_BELOW_MIN_ERROR_MESSAGE = CoreMessages.get("inputBelowMinLength");
+    /**
+     * The default error message for input that is above the maximum length.
+     * @see #setAboveMaxErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_ABOVE_MAX_ERROR_MESSAGE = CoreMessages.get("inputExceedsMaxLength");
+
+    private String belowMinErrorMessage =  DEFAULT_BELOW_MIN_ERROR_MESSAGE;
+    private String aboveMaxErrorMessage =  DEFAULT_ABOVE_MAX_ERROR_MESSAGE;
     private int maxLength;
     private int minLength;
 
@@ -29,6 +45,71 @@ public class CharCountValidator extends Validator {
     }
 
     /**
+     * Gets the message that is shown if the input is below the minimum required
+     * length.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_BELOW_MIN_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getBelowMinErrorMessage() {
+        return belowMinErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input is below the minimum required
+     * length.
+     * <p>
+     * This does also set the error to use on empty input because it does not
+     * make sense to use another message than the minimum required length. If
+     * another message shall be used, {@link #setRequiredErrorMessage(String)}
+     * should be invoked after {@code setBelowMinErrorMessage()}.
+     *
+     * @param belowMinErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_BELOW_MIN_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setBelowMinErrorMessage(String belowMinErrorMessage) {
+        this.belowMinErrorMessage = Strings.isNullOrBlank(belowMinErrorMessage)
+                ? DEFAULT_BELOW_MIN_ERROR_MESSAGE
+                : belowMinErrorMessage;
+
+        setRequiredErrorMessage(this.belowMinErrorMessage);
+    }
+
+    /**
+     * Gets the message that is shown if the input is above the maximum required
+     * length.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_ABOVE_MAX_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getAboveMaxErrorMessage() {
+        return aboveMaxErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input is above the maximum required
+     * length.
+     *
+     * @param aboveMaxErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_ABOVE_MAX_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setAboveMaxErrorMessage(String aboveMaxErrorMessage) {
+        this.aboveMaxErrorMessage = Strings.isNullOrBlank(aboveMaxErrorMessage)
+                ? DEFAULT_ABOVE_MAX_ERROR_MESSAGE
+                : aboveMaxErrorMessage;
+    }
+
+    /**
      * Gets the maximum length of a valid text.
      *
      * @return The maximum length of a valid text.
@@ -43,8 +124,8 @@ public class CharCountValidator extends Validator {
      * Setting this value to 0, causes each text length that is not less than
      * {link #getMinLength} to be valid. This is the default.
      * <p>
-     * If maxLength is less than {link #getMinLength} and greater than 0,
-     * the minimum length is set to maxLength, if {link #getMinLength} is not 0.
+     * If maxLength is less than {link #getMinLength} but greater than 0,
+     * the minimum length is set to maxLength.
      *
      * @param maxLength The maximum length to set.
      * @throws IllegalArgumentException If maxLength is less than 0.
@@ -55,7 +136,7 @@ public class CharCountValidator extends Validator {
 
         this.maxLength = maxLength;
 
-        if (minLength > 0 && maxLength < minLength)
+        if (maxLength > 0 && minLength > maxLength)
             minLength = maxLength;
     }
 
@@ -80,8 +161,8 @@ public class CharCountValidator extends Validator {
      * to 0 means, that a not empty text must have a minimum length of minLength
      * characters.
      * <p>
-     * If minLength is greater than {link #getMaxLength} and greater than 0,
-     * the maximum length is set to minLength, if {link #getMaxLength} is not 0.
+     * If minLength is greater than {link #getMaxLength} and {link #getMaxLength}
+     * greater than 0, {link #getMaxLength} length is set to minLength.
      *
      * @param minLength The minimum length to set.
      * @throws IllegalArgumentException If minLength is less than 0.
@@ -135,10 +216,21 @@ public class CharCountValidator extends Validator {
         if (text.isEmpty())
             return true;
 
-        if (maxLength != 0 && text.length() > maxLength)
-            er.setException(new ValidatorException(String.format(getErrorMessage() != null ? getErrorMessage() : CoreMessages.get("inputExceedsMaxLength"), maxLength)));
-        else if (minLength != 0 && text.length() < minLength)
-            er.setException(new ValidatorException(String.format(getErrorMessage() != null ? getErrorMessage() : CoreMessages.get("inputBelowMinLength"), minLength)));
+        if (maxLength != 0 && text.length() > maxLength) {
+            er.setException(new ValidatorException(String.format(getErrorMessage() != null
+                                                                         ? getErrorMessage()
+                                                                         : getAboveMaxErrorMessage(),
+                                                                 maxLength),
+                                                   CharCountValidator.class,
+                                                   this));
+        } else if (minLength != 0 && text.length() < minLength) {
+            er.setException(new ValidatorException(String.format(getErrorMessage() != null
+                                                                         ? getErrorMessage()
+                                                                         : getBelowMinErrorMessage(),
+                                                                 minLength),
+                                                   CharCountValidator.class,
+                                                   this));
+            }
 
         return er.getException() == null;
     }

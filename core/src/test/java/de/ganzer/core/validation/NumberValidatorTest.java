@@ -67,6 +67,21 @@ class NumberValidatorTest {
     }
 
     @Test
+    void constructWithValuesAndDecimalsAndOption() {
+        var min = -100.0;
+        var max = 100.0;
+        int dec = 2;
+        var val = new NumberValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, min, max, dec);
+
+        assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
+        assertEquals(min, val.getMinValue());
+        assertEquals(max, val.getMaxValue());
+        assertEquals(dec, val.getNumDecimals());
+        assertNull(val.getDisplayFormat());
+        assertNull(val.getEditFormat());
+    }
+
+    @Test
     void setMinValue() {
         var min = -100.0;
         var max = 100.0;
@@ -124,6 +139,20 @@ class NumberValidatorTest {
 
         assertEquals(min, val.getMinValue());
         assertEquals(max, val.getMaxValue());
+    }
+
+    @Test
+    void setRangeWithDecimals() {
+        var val = new NumberValidator();
+        var min = -100.0;
+        var max = 100.0;
+        int dec = 2;
+
+        val.setRange(min, max, dec);
+
+        assertEquals(min, val.getMinValue());
+        assertEquals(max, val.getMaxValue());
+        assertEquals(dec, val.getNumDecimals());
     }
 
     @Test
@@ -294,5 +323,69 @@ class NumberValidatorTest {
         val.setNumDecimals(2);
         assertEquals("12345", val.formatText("12.345", TextFormat.EDIT));
         assertEquals("12456,01", val.formatText("12.456,01", TextFormat.EDIT));
+    }
+
+    @Test
+    void setRangeErrorMessage() {
+        var val = new NumberValidator();
+        val.setRangeErrorMessage("m");
+
+        assertEquals("m", val.getRangeErrorMessage());
+    }
+
+    @Test
+    void setNumberErrorMessage() {
+        var val = new NumberValidator();
+        val.setNumberErrorMessage("m");
+
+        assertEquals("m", val.getNumberErrorMessage());
+    }
+
+    @Test
+    void setIntegerErrorMessage() {
+        var val = new NumberValidator();
+        val.setIntegerErrorMessage("m");
+
+        assertEquals("m", val.getIntegerErrorMessage());
+    }
+
+    @Test
+    void testSetMinValue() {
+        var val = new NumberValidator();
+        val.setMinValue(1);
+
+        assertEquals(1, val.getMinValue());
+    }
+
+    @Test
+    void testSetMaxValue() {
+        var val = new NumberValidator();
+        val.setMaxValue(2);
+
+        assertEquals(2, val.getMaxValue());
+    }
+
+    @Test
+    void testSetNumDecimals() {
+        var val = new NumberValidator();
+        val.setNumDecimals(1);
+
+        assertEquals(1, val.getNumDecimals());
+    }
+
+    @Test
+    void testSetDisplayFormat() {
+        var val = new NumberValidator();
+        val.setDisplayFormat("d");
+
+        assertEquals("d", val.getDisplayFormat());
+    }
+
+    @Test
+    void testSetEditFormat() {
+        var val = new NumberValidator();
+        val.setEditFormat("e");
+
+        assertEquals("e", val.getEditFormat());
     }
 }

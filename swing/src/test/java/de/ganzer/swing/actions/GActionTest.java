@@ -16,6 +16,7 @@ class GActionTest {
     @Test
     void createDefault() {
         GAction action = new GAction();
+        assertNull(action.getTag(), "tag");
         assertNull(action.getName(), "name");
         assertNull(action.getCommand(), "command");
         assertNull(action.getSmallIcon(), "smallIcon");
@@ -37,6 +38,7 @@ class GActionTest {
         String expected = "test value";
         GAction action = new GAction(expected);
         assertEquals(expected, action.getName(), "name");
+        assertNull(action.getTag(), "tag");
         assertNull(action.getCommand(), "command");
         assertNull(action.getSmallIcon(), "smallIcon");
         assertNull(action.getLargeIcon(), "largeIcon");
@@ -59,6 +61,7 @@ class GActionTest {
 
         GAction action = new GAction(expectedName, expectedIcon);
         assertEquals(expectedName, action.getName(), "name");
+        assertNull(action.getTag(), "tag");
         assertNull(action.getCommand(), "command");
         assertEquals(expectedIcon, action.getSmallIcon(), "smallIcon");
         assertNull(action.getLargeIcon(), "largeIcon");
@@ -87,6 +90,21 @@ class GActionTest {
         GAction action = new GAction();
         action.putValue(Action.NAME, expected);
         assertEquals(expected, action.getName());
+    }
+
+    @Test
+    void tag() {
+        Object expected = new Object();
+        GAction action = new GAction().tag(expected);
+        assertEquals(expected, action.getValue(GAction.TAG_KEY));
+    }
+
+    @Test
+    void getTag() {
+        Object expected = new Object();
+        GAction action = new GAction();
+        action.putValue(GAction.TAG_KEY, expected);
+        assertEquals(expected, action.getTag());
     }
 
     @Test

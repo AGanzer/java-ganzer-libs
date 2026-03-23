@@ -3,7 +3,7 @@ package com.example.uitests.fx.charts;
 import de.ganzer.core.validation.TextFormat;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.core.validation.ValidatorExceptionRef;
-import de.ganzer.fx.validation.ValidatorTextFormatter;
+import de.ganzer.fx.validation.ValidationTextFormatter;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -52,12 +52,12 @@ public class TwoValueSettingsController implements DistributionSettingsControlle
 
     public void setValue1Validator(Validator validator) {
         this.value1Validator = validator;
-        new ValidatorTextFormatter(this.value1Validator, value1Input);
+        new ValidationTextFormatter(this.value1Validator, value1Input);
     }
 
     public void setValue2Validator(Validator validator) {
         this.value2Validator = validator;
-        new ValidatorTextFormatter(this.value2Validator, value2Input);
+        new ValidationTextFormatter(this.value2Validator, value2Input);
     }
 
     public Double getValue1() {

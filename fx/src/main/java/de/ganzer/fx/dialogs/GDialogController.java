@@ -10,52 +10,52 @@ import java.util.function.Consumer;
  * <p>
  * The following code shows an example how it may be implemented:
  * <p>
- * {@code
-public class InputDialogData {
-    public String input;
-}
-
-public class InputDialogController implements GDialogController<InputDialogData> {
-    private int modalResult = 0;
-    private InputDialogData data;
-    private Consumer<InputDialogData> applyDataConsumer;
-
-    public TextField textField;
-
-    public void applyClicked(ActionEvent ignored) {
-        data.input = textField.getText();
-        applyDataConsumer.accept(data);
-    }
-
-    public void okClicked(ActionEvent ignored) {
-        data.input = textField.getText();
-        modalResult = ModalResult.OK;
-
-        textField.getScene().getWindow().hide();
-    }
-
-    public void cancelClicked(ActionEvent ignored) {
-        modalResult = ModalResult.CANCEL;
-        textField.getScene().getWindow().hide();
-    }
-
-    @Override
-    public void setApplyDataConsumer(Consumer<InputDialogData> applyDataConsumer) {
-        this.applyDataConsumer = applyDataConsumer;
-    }
-
-    @Override
-    public void initControls(InputDialogData data) {
-        this.data = data;
-        textField.setText(data.input);
-    }
-
-    @Override
-    public int getModalResult() {
-        return modalResult;
-    }
-}
+ * <pre>{@code
+ * public class InputDialogData {
+ *     public String input;
  * }
+ *
+ * public class InputDialogController implements GDialogController<InputDialogData> {
+ *     private int modalResult = 0;
+ *     private InputDialogData data;
+ *     private Consumer<InputDialogData> applyDataConsumer;
+ *
+ *     public TextField textField;
+ *
+ *     public void applyClicked(ActionEvent ignored) {
+ *         data.input = textField.getText();
+ *         applyDataConsumer.accept(data);
+ *     }
+ *
+ *     public void okClicked(ActionEvent ignored) {
+ *         data.input = textField.getText();
+ *         modalResult = ModalResult.OK;
+ *
+ *         textField.getScene().getWindow().hide();
+ *     }
+ *
+ *     public void cancelClicked(ActionEvent ignored) {
+ *         modalResult = ModalResult.CANCEL;
+ *         textField.getScene().getWindow().hide();
+ *     }
+ *
+ *     @Override
+ *     public void setApplyDataConsumer(Consumer<InputDialogData> applyDataConsumer) {
+ *         this.applyDataConsumer = applyDataConsumer;
+ *     }
+ *
+ *     @Override
+ *     public void initControls(InputDialogData data) {
+ *         this.data = data;
+ *         textField.setText(data.input);
+ *     }
+ *
+ *     @Override
+ *     public int getModalResult() {
+ *         return modalResult;
+ *     }
+ * }
+ * }</pre>
  *
  * @param <Data> The type of the data the dialog works with.
  */

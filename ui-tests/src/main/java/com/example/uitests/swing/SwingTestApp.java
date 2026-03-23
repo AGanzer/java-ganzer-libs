@@ -2,6 +2,9 @@ package com.example.uitests.swing;
 
 import de.ganzer.swing.util.UISettings;
 
+import java.awt.AWTEvent;
+import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -14,11 +17,19 @@ public class SwingTestApp {
     }
 
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> throwable.printStackTrace(System.err));
+
+        CommandLineParser.parse(args);
+
         try {
             uiSettings.load();
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }
+
+        Toolkit.getDefaultToolkit()
+                .getSystemEventQueue()
+                .push(new ExceptionHandlingEventQueue());
 
         var frame = new MainFrame();
         frame.addWindowListener(new WindowAdapter() {
@@ -33,5 +44,20 @@ public class SwingTestApp {
         });
 
         frame.setVisible(true);
+    }
+
+    public static class ExceptionHandlingEventQueue extends EventQueue {
+        @Override
+        protected void dispatchEvent(AWTEvent event) {
+            try {
+                super.dispatchEvent(event);
+            } catch (Throwable t) {
+                handleException(t);
+            }
+        }
+
+        private void handleException(Throwable t) {
+            t.printStackTrace(System.err);
+        }
     }
 }

@@ -9,52 +9,55 @@ import java.util.Collection;
 /**
  * A utility class that simplifies the validation of multiple inputs.
  * <p>
- * {@code
-@FXML
-public Button okButton;
-@FXML
-public TextField numNuggets;
-@FXML
-public TextField numEnemies;
-
-private final ValidatorTextFormatterList formatterList = new ValidatorTextFormatterList();
-
-@FXML
-public void initialize() {
-    formatterList.add(new ValidatorTextFormatter(new NumberValidator(1, 10), numNuggets));
-    formatterList.add(new ValidatorTextFormatter(new NumberValidator(1, 10), numEnemies));
-}
-
-@FXML
-public void closeDialog(ActionEvent actionEvent) {
-    Node source = (Node)actionEvent.getSource();
-
-    if (source != okButton || applyValues()) {
-        Stage stage = (Stage)source.getScene().getWindow();
-        stage.close();
-    }
-}
-
-private boolean applyValues() {
-    // Instead of this complicate code:
-    //
-    //boolean isValid = true;
-    //isValid = ((ValidatorTextFormatter)numEnemies.getTextFormatter()).isValid() && isValid;
-    //isValid = ((ValidatorTextFormatter)numNuggets.getTextFormatter()).isValid() && isValid;
-    //
-    // just:
-    //
-    boolean isValid = formatterList.validate();
-
-    if (isValid) {
-        // Apply values here.
-    }
-
-    return isValid;
-}
+ * <pre>{@code
+ * @FXML
+ * public Button okButton;
+ * @FXML
+ * public TextField numNuggets;
+ * @FXML
+ * public TextField numEnemies;
+ *
+ * private final ValidatorTextFormatterList formatterList = new ValidatorTextFormatterList();
+ *
+ * @FXML
+ * public void initialize() {
+ *     formatterList.add(new ValidatorTextFormatter(new NumberValidator(1, 10), numNuggets));
+ *     formatterList.add(new ValidatorTextFormatter(new NumberValidator(1, 10), numEnemies));
  * }
+ *
+ * @FXML
+ * public void closeDialog(ActionEvent actionEvent) {
+ *     Node source = (Node)actionEvent.getSource();
+ *
+ *     if (source != okButton || applyValues()) {
+ *         Stage stage = (Stage)source.getScene().getWindow();
+ *         stage.close();
+ *     }
+ * }
+ *
+ * private boolean applyValues() {
+ *     // Instead of this complicate code:
+ *     //
+ *     //boolean isValid = true;
+ *     //isValid = ((ValidatorTextFormatter)numEnemies.getTextFormatter()).isValid() && isValid;
+ *     //isValid = ((ValidatorTextFormatter)numNuggets.getTextFormatter()).isValid() && isValid;
+ *     //
+ *     // just:
+ *     //
+ *     boolean isValid = formatterList.validate();
+ *
+ *     if (isValid) {
+ *         // Apply values here.
+ *     }
+ *
+ *     return isValid;
+ * }
+ * }</pre>
+ *
+ * @deprecated Use {@link ValidationTextFormatterList} instead.
  */
 @SuppressWarnings("unused")
+@Deprecated(forRemoval = true, since = "5.4.0")
 public class ValidatorTextFormatterList extends ArrayList<ValidatorTextFormatter> {
     /**
      * The handler that is invoked on a failed validation.
@@ -62,27 +65,27 @@ public class ValidatorTextFormatterList extends ArrayList<ValidatorTextFormatter
      * This handler can be used to show a dialog instead of only setting a red
      * border:
      * <p>
-     * {@code
-    private final ValidatorTextFormatterList formatterList = new ValidatorTextFormatterList();
-
-    @FXML
-    public void initialize() {
-        formatterList.setValidationFailHandler((f, e) -> {
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-            a.setTitle("My Application");
-            a.setHeaderText(ResourceBundle.getBundle("messages").getString("invalidInput"));
-            a.setContentText(e.getMessage());
-            a.showAndWait();
-
-            f.getControl().requestFocus();
-            f.getControl().selectAll();
-
-            return false;
-        });
-
-        // Do all other initialization here.
-    }
+     * <pre>{@code
+     * private final ValidatorTextFormatterList formatterList = new ValidatorTextFormatterList();
+     *
+     * @FXML
+     * public void initialize() {
+     *     formatterList.setValidationFailHandler((f, e) -> {
+     *         Alert a = new Alert(Alert.AlertType.INFORMATION);
+     *         a.setTitle("My Application");
+     *         a.setHeaderText(ResourceBundle.getBundle("messages").getString("invalidInput"));
+     *         a.setContentText(e.getMessage());
+     *         a.showAndWait();
+     *
+     *         f.getControl().requestFocus();
+     *         f.getControl().selectAll();
+     *
+     *         return false;
+     *     });
+     *
+     *     // Do all other initialization here.
      * }
+     * }</pre>
      */
     public interface ValidationFailHandler {
         /**

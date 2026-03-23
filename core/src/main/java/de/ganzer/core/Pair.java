@@ -3,7 +3,7 @@ package de.ganzer.core;
 import java.util.Objects;
 
 /**
- * Defines a pair ov values.
+ * Defines a nonmutable  pair of values.
  *
  * @param <F> The type of the first value.
  * @param <S> The type of the second value.

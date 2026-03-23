@@ -1,7 +1,6 @@
 package com.example.uitests.fx;
 
 import de.ganzer.core.validation.Validator;
-import de.ganzer.core.validation.ValidatorExceptionRef;
 
 public class ValidatorSettingsController implements TestValidatorController {
     //region fields
@@ -19,7 +18,7 @@ public class ValidatorSettingsController implements TestValidatorController {
     //endregion
 
     @Override
-    public boolean validateSettings(ValidatorExceptionRef ref) {
+    public boolean validateSettings() {
         return true;
     }
 }

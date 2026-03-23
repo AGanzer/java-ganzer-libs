@@ -16,7 +16,7 @@ class PxPicValidatorTest {
         var val = new PxPicValidator();
 
         assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
-        assertEquals("", val.getPicture());
+        assertNull(val.getPicture());
     }
 
     @Test
@@ -24,7 +24,7 @@ class PxPicValidatorTest {
         var val = new PxPicValidator(ValidatorOptions.AUTO_FILL);
 
         assertEquals(ValidatorOptions.AUTO_FILL, val.getOptions());
-        assertEquals("", val.getPicture());
+        assertNull(val.getPicture());
     }
 
     @Test
@@ -246,5 +246,57 @@ class PxPicValidatorTest {
         for (String input: invalidInput) {
             assertThrows(ValidatorException.class, () -> val.validate(input));
         }
+    }
+
+    @Test
+    void doValidateWithPicErrorMessage1() {
+        var val = new PxPicValidator("##/##/##[##]");
+        val.setMatchErrorMessage("Invalid date.");
+
+        var ref = new ValidatorExceptionRef();
+        val.validate("12/12/123", ref);
+
+        assertEquals("Invalid date.", ref.getException().getMessage());
+    }
+
+    @Test
+    void doValidateWithPicErrorMessage2() {
+        var val = new PxPicValidator("##/##/##[##]");
+        val.setMatchErrorMessage("Invalid date. Mask: %s");
+
+        var ref = new ValidatorExceptionRef();
+        val.validate("12/12/123", ref);
+
+        assertEquals("Invalid date. Mask: ##/##/##[##]", ref.getException().getMessage());
+    }
+
+    @Test
+    void doValidateWithPicErrorMessage3() {
+        var val = new PxPicValidator("##/##/##[##]");
+        val.setMatchErrorMessage("Invalid date. %%s.");
+
+        var ref = new ValidatorExceptionRef();
+        val.validate("12/12/123", ref);
+
+        assertEquals("Invalid date. %%s.", ref.getException().getMessage());
+    }
+
+    @Test
+    void doValidateWithPicErrorMessage4() {
+        var val = new PxPicValidator("##/##/##[##]");
+        val.setMatchErrorMessage("Invalid date. Mask: %%%s");
+
+        var ref = new ValidatorExceptionRef();
+        val.validate("12/12/123", ref);
+
+        assertEquals("Invalid date. Mask: %##/##/##[##]", ref.getException().getMessage());
+    }
+
+    @Test
+    void setMatchErrorMessage() {
+        var val = new PxPicValidator();
+        val.setMatchErrorMessage("m");
+
+        assertEquals("m", val.getMatchErrorMessage());
     }
 }

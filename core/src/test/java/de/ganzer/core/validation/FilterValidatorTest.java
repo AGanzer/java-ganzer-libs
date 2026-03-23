@@ -106,4 +106,12 @@ class FilterValidatorTest {
         assertThrows(ValidatorException.class, () -> val.validate("12345"));
         assertDoesNotThrow(() -> val.validate("-+12347890"));
     }
+
+    @Test
+    void setFilterErrorMessage() {
+        var val = new FilterValidator();
+        val.setFilterErrorMessage("m");
+
+        assertEquals("m", val.getFilterErrorMessage());
+    }
 }

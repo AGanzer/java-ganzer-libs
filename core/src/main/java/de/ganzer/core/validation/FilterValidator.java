@@ -1,6 +1,7 @@
 package de.ganzer.core.validation;
 
 import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.core.util.Strings;
 
 /**
  * The FilterValidator class defines a validator that filters an input by
@@ -30,6 +31,14 @@ import de.ganzer.core.internals.CoreMessages;
  * digits 2, 5 and 6 as to write "01347-9" for the valid characters only.
  */
 public class FilterValidator extends CharCountValidator {
+    /**
+     * The default error message for input that contains invalid characters.
+     * @see #setFilterErrorMessage(String)
+     * @since 5.4.0
+     */
+    public final static String DEFAULT_FILTER_ERROR_MESSAGE = CoreMessages.get("inputContainsInvalidCharacters");
+
+    private String filterErrorMessage = DEFAULT_FILTER_ERROR_MESSAGE;
     private String validMask = "";
     private String invalidMask = "";
     private String validChars = "";
@@ -132,6 +141,35 @@ public class FilterValidator extends CharCountValidator {
     }
 
     /**
+     * Gets the error message that is used for input that contains invalid
+     * characters.
+     *
+     * @return The error message to use. The default is
+     *         {@link #DEFAULT_FILTER_ERROR_MESSAGE}.
+     *
+     * @since 5.4.0
+     */
+    public String getFilterErrorMessage() {
+        return filterErrorMessage;
+    }
+
+    /**
+     * Sets the message that is shown if the input that contains invalid
+     * characters.
+     *
+     * @param filterErrorMessage The message to use. If this is
+     *        {@code null}, empty or does contain white spaces only,
+     *        {@link #DEFAULT_FILTER_ERROR_MESSAGE} is used.
+     *
+     * @since 5.4.0
+     */
+    public void setFilterErrorMessage(String filterErrorMessage) {
+        this.filterErrorMessage = Strings.isNullOrBlank(filterErrorMessage)
+                ? DEFAULT_FILTER_ERROR_MESSAGE
+                : filterErrorMessage;
+    }
+
+    /**
      * Gets the mask that specifies the valid characters.
      * <p>
      * See {@link FilterValidator} for an explanation of masks.
@@ -188,8 +226,9 @@ public class FilterValidator extends CharCountValidator {
      * @param text     The text to validate. This is never {@code null}. The text
      *                 must not be modified if autoFill is {@code false}.
      * @param autoFill Indicates whether the text is allowed to be modified.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *          returned.
      */
     @Override
     protected boolean doInputValidation(StringBuilder text, boolean autoFill) {
@@ -205,8 +244,9 @@ public class FilterValidator extends CharCountValidator {
      *               {@code false}, the encapsulated exception is set to an
      *               instance of {@link ValidatorException}. This must not be
      *               {@code null}.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *         returned.
      */
     @Override
     protected boolean doValidate(String text, ValidatorExceptionRef er) {
@@ -216,7 +256,11 @@ public class FilterValidator extends CharCountValidator {
         if (validateText(text))
             return true;
 
-        er.setException(new ValidatorException(getErrorMessage() != null ? getErrorMessage() : CoreMessages.get("inputContainsInvalidCharacters")));
+        er.setException(new ValidatorException(getErrorMessage() != null
+                                                       ? getErrorMessage()
+                                                       : getFilterErrorMessage(),
+                                               FilterValidator.class,
+                                               this));
         return false;
     }
 

@@ -19,71 +19,74 @@ import java.util.Objects;
  * itself because it is able to change the style of the control if the input is
  * invalid. In this case the control's tooltip is set to the validators error
  * message.
- * {@code
-@FXML
-public Button okButton;
-@FXML
-public TextField numNuggets;
-@FXML
-public TextField numEnemies;
-
-@FXML
-public void initialize() {
-    new ValidatorTextFormatter(new NumberValidator(1, 10), numNuggets);
-    new ValidatorTextFormatter(new NumberValidator(1, 10), numEnemies);
-}
-
-@FXML
-public void closeDialog(ActionEvent actionEvent) {
-    Node source = (Node)actionEvent.getSource();
-
-    if (source != okButton || applyValues(true)) {
-        Stage stage = (Stage)source.getScene().getWindow();
-        stage.close();
-    }
-}
-
-private boolean applyValues(boolean withMessageBox) {
-    // Show errors by MessageBox and by error indicator:
-    //
-    if (withMessageBox)
-        return validate(numEnemies) && validate(numNuggets);
-
-    // Show errors by error indicators only:
-    //
-    boolean isValid = true;
-
-    isValid = ((ValidatorTextFormatter)numEnemies.getTextFormatter()).isValid() && isValid;
-    isValid = ((ValidatorTextFormatter)numNuggets.getTextFormatter()).isValid() && isValid;
-
-    if (isValid) {
-        // Apply values here.
-    }
-
-    return isValid;
-}
-
-private boolean validate(TextField field) {
-    try {
-        ((ValidatorTextFormatter)field.getTextFormatter()).validate();
-    } catch (ValidatorException e) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle("My Application");
-        a.setHeaderText(ResourceBundle.getBundle("messages").getString("invalidInput"));
-        a.setContentText(e.getMessage());
-        a.showAndWait();
-
-        field.requestFocus();
-        field.selectAll();
-
-        return false;
-    }
-
-    return true;
-}
+ * <pre>{@code
+ * @FXML
+ * public Button okButton;
+ * @FXML
+ * public TextField numNuggets;
+ * @FXML
+ * public TextField numEnemies;
+ *
+ * @FXML
+ * public void initialize() {
+ *     new ValidatorTextFormatter(new NumberValidator(1, 10), numNuggets);
+ *     new ValidatorTextFormatter(new NumberValidator(1, 10), numEnemies);
  * }
+ *
+ * @FXML
+ * public void closeDialog(ActionEvent actionEvent) {
+ *     Node source = (Node)actionEvent.getSource();
+ *
+ *     if (source != okButton || applyValues(true)) {
+ *         Stage stage = (Stage)source.getScene().getWindow();
+ *         stage.close();
+ *     }
+ * }
+ *
+ * private boolean applyValues(boolean withMessageBox) {
+ *     // Show errors by MessageBox and by error indicator:
+ *     //
+ *     if (withMessageBox)
+ *         return validate(numEnemies) && validate(numNuggets);
+ *
+ *     // Show errors by error indicators only:
+ *     //
+ *     boolean isValid = true;
+ *
+ *     isValid = ((ValidatorTextFormatter)numEnemies.getTextFormatter()).isValid() && isValid;
+ *     isValid = ((ValidatorTextFormatter)numNuggets.getTextFormatter()).isValid() && isValid;
+ *
+ *     if (isValid) {
+ *         // Apply values here.
+ *     }
+ *
+ *     return isValid;
+ * }
+ *
+ * private boolean validate(TextField field) {
+ *     try {
+ *         ((ValidatorTextFormatter)field.getTextFormatter()).validate();
+ *     } catch (ValidatorException e) {
+ *         Alert a = new Alert(Alert.AlertType.INFORMATION);
+ *         a.setTitle("My Application");
+ *         a.setHeaderText(ResourceBundle.getBundle("messages").getString("invalidInput"));
+ *         a.setContentText(e.getMessage());
+ *         a.showAndWait();
+ *
+ *         field.requestFocus();
+ *         field.selectAll();
+ *
+ *         return false;
+ *     }
+ *
+ *     return true;
+ * }
+ * }</pre>
+ *
+ * @deprecated Use {@link ValidationTextFormatter} instead.
  */
 @SuppressWarnings("unused")
+@Deprecated(forRemoval = true, since = "5.4.0")
 public class ValidatorTextFormatter extends TextFormatter<String> {
     private static final String DEFAULT_ERROR_STYLE = "-fx-border-color: red; -fx-focus-color: red;";
     private final Validator validator;

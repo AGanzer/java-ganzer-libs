@@ -4,9 +4,9 @@ import de.ganzer.core.validation.*;
 import de.ganzer.swing.internals.SwingMessages;
 
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
-import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Objects;
@@ -17,56 +17,57 @@ import java.util.function.Consumer;
  * <p>
  * Example how to use it in a simple input dialog:
  * <p>
- * {@code
-public class InputTestDialog extends JDialog {
-    private ValidationFilter inputFilter;
-    // Other fields here.
-
-    public InputTestDialog(Frame owner) {
-        super(owner, "Input Test", true);
-        initTextField();
-        initButtons();
-    }
-
-    private void initTextField() {
-        var inputField = new JTextField(30);
-        // Set the validator:
-        inputFilter = new ValidationFilter(new NumberValidator(0.0, 100.0), inputField);
-
-        getContentPane().add(inputField);
-    }
-
-    private void initButtons() {
-        // Init OK and Cancel buttons here.
-    }
-
-    // OK is clicked:
-    private void onOk(ActionEvent event) {
-        if (!inputFilter.validate(ValidationBehavior.SET_VISUAL_HINTS))
-            return;
-
-        // Update dialog data here.
-    }
-}
+ * <pre>{@code
+ * public class InputTestDialog extends JDialog {
+ *     private ValidationFilter inputFilter;
+ *     // Other fields here.
+ *
+ *     public InputTestDialog(Frame owner) {
+ *         super(owner, "Input Test", true);
+ *         initTextField();
+ *         initButtons();
+ *     }
+ *
+ *     private void initTextField() {
+ *         var inputField = new JTextField(30);
+ *         // Set the validator:
+ *         inputFilter = new ValidationFilter(new NumberValidator(0.0, 100.0), inputField);
+ *
+ *         getContentPane().add(inputField);
+ *     }
+ *
+ *     private void initButtons() {
+ *         // Init OK and Cancel buttons here.
+ *     }
+ *
+ *     // OK is clicked:
+ *     private void onOk(ActionEvent event) {
+ *         if (!inputFilter.validate(ValidationBehavior.SET_VISUAL_HINTS))
+ *             return;
+ *
+ *         // Update dialog data here.
+ *     }
  * }
+ * }</pre>
  */
 @SuppressWarnings("unused")
 public class ValidationFilter extends DocumentFilter {
-    private static Border errorBorder = BorderFactory.createLineBorder(Color.RED, 1);
     private static Consumer<ValidatorException> errorConsumer;
+    private static ValidationHintProvider hintProvider = new BorderValidationHint();
 
     private final JTextComponent textField;
+
     private Validator validator;
     private boolean validateOnFocusLost;
-    private String orgTooltip;
-    private Border orgBorder;
     private boolean hintsVisible;
     private boolean updating;
+    private DocumentListener liveListener;
 
     /**
      * Create a new filter from the specified arguments.
      * <p>
-     * This sets {@link #isValidateOnFocusLost()} to {@code true}.
+     * This sets {@link #isValidateOnFocusLost()} and {@link #isLiveValidation()}
+     * to {@code true}.
      *
      * @param validator The validator to use.
      * @param textField The text field to validate.
@@ -75,7 +76,24 @@ public class ValidationFilter extends DocumentFilter {
      *         {@code null}.
      */
     public ValidationFilter(Validator validator, JTextComponent textField) {
-        this(validator, textField, true);
+        this(validator, textField, true, true);
+    }
+
+    /**
+     * Create a new filter from the specified arguments.
+     * <p>
+     * This sets {@link #isLiveValidation()} to {@code true}.
+     *
+     * @param validator The validator to use.
+     * @param textField The text field to validate.
+     * @param validateOnFocusLost If {@code true} the validation is done when
+     *        {@code inputField} loses its focus.
+     *
+     * @throws NullPointerException {@code validator} or {@code textField} is
+     *         {@code null}.
+     */
+    public ValidationFilter(Validator validator, JTextComponent textField, boolean validateOnFocusLost) {
+        this(validator, textField, validateOnFocusLost, true);
     }
 
     /**
@@ -85,13 +103,17 @@ public class ValidationFilter extends DocumentFilter {
      * @param textField The text field to validate.
      * @param validateOnFocusLost If {@code true} the validation is done when
      *        {@code inputField} loses its focus.
+     * @param liveValidation If {@code true} the input is validated live. See
+     *        {@link #setLiveValidation(boolean)} for further details.
      *
      * @throws NullPointerException {@code validator} or {@code textField} is
      *         {@code null}.
      *
      * @see #setValidateOnFocusLost(boolean)
+     *
+     * @since 5.4.0
      */
-    public ValidationFilter(Validator validator, JTextComponent textField, boolean validateOnFocusLost) {
+    public ValidationFilter(Validator validator, JTextComponent textField, boolean validateOnFocusLost, boolean liveValidation) {
         Objects.requireNonNull(validator, "validator must not be null.");
         Objects.requireNonNull(textField, "textField must not be null.");
 
@@ -99,30 +121,29 @@ public class ValidationFilter extends DocumentFilter {
         this.textField = textField;
         this.validateOnFocusLost = validateOnFocusLost;
 
-        ((AbstractDocument)textField.getDocument()).setDocumentFilter(this);
-
+        setLiveValidation(liveValidation);
         setListeners();
+
+        ((AbstractDocument)textField.getDocument()).setDocumentFilter(this);
     }
 
     /**
-     * Gets the border to use for marking a text field with invalid input.
+     * Gets the currently used hint provider.
      *
-     * @return The set border. The default is a red thin border.
+     * @return The currently used hint provider.
      */
-    public static Border getErrorBorder() {
-        return errorBorder;
+    public static ValidationHintProvider getHintProvider() {
+        return hintProvider;
     }
 
     /**
-     * Sets the border to use for marking a text field with invalid input.
+     * Sets the hint provider to use.
      *
-     * @param errorBorder The border to set.
-     *
-     * @throws NullPointerException {@code border} is {@code null}.
+     * @param hintProvider The provider to set or {@code null} to use the
+     *         default provider (an instance of {@link BorderValidationHint}).
      */
-    public static void setErrorBorder(Border errorBorder) {
-        Objects.requireNonNull(errorBorder, "errorBorder must not be null.");
-        ValidationFilter.errorBorder = errorBorder;
+    public static void setHintProvider(ValidationHintProvider hintProvider) {
+        ValidationFilter.hintProvider = hintProvider == null ? new BorderValidationHint() : hintProvider;
     }
 
     /**
@@ -148,6 +169,46 @@ public class ValidationFilter extends DocumentFilter {
      */
     public static void setErrorConsumer(Consumer<ValidatorException> errorConsumer) {
         ValidationFilter.errorConsumer = errorConsumer;
+    }
+
+    /**
+     * Gets a value indicating whether live validation is active.
+     * <p>
+     * For a detailed explanation see {@link #setLiveValidation(boolean)}.
+     *
+     * @return {@code true} if live validation is active.
+     *
+     * @see #setLiveValidation(boolean)
+     *
+     * @since 5.4.0
+     */
+    public boolean isLiveValidation() {
+        return liveListener != null;
+    }
+
+    /**
+     * Activates or deactivates live validation.
+     * <p>
+     * If live validation is active, the validation error hints are updated
+     * live while the user inputs its text. If this is not active, the hints
+     * are updated on lost focus if {@link #isValidateOnFocusLost()} is true
+     * or on explicitly invoking {@link #validate(ValidationBehavior)}.
+     *
+     * @param activate {@code true} to activate live validation.
+     *
+     * @since 5.4.0
+     */
+    public void setLiveValidation(boolean activate) {
+        if (activate == isLiveValidation())
+            return;
+
+        if (activate) {
+            liveListener = new LiveListener(this);
+            this.textField.getDocument().addDocumentListener(liveListener);
+        } else {
+            this.textField.getDocument().removeDocumentListener(liveListener);
+            liveListener = null;
+        }
     }
 
     /**
@@ -220,7 +281,7 @@ public class ValidationFilter extends DocumentFilter {
      *
      * @param behavior The behavior to use for validation.
      *
-     * @return {@code true} if all input is valid; otherwise, {@code false}.
+     * @return {@code true} if the input is valid; otherwise, {@code false}.
      *         Remark that there is no return if {@code behavior} is
      *         {@link ValidationBehavior#THROW_EXCEPTION}.
      */
@@ -234,6 +295,17 @@ public class ValidationFilter extends DocumentFilter {
 
         doErrorHandling(e, behavior);
         return false;
+    }
+
+    /**
+     * Resets all visual hints to hide them if any is visible.
+     */
+    public void resetVisualHints() {
+        if (!hintsVisible)
+            return;
+
+        hintProvider.hideHints(textField);
+        hintsVisible = false;
     }
 
     /**
@@ -367,26 +439,35 @@ public class ValidationFilter extends DocumentFilter {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void resetVisualHints() {
-        if (!hintsVisible)
-            return;
-
-        textField.setToolTipText(orgTooltip);
-        textField.setBorder(orgBorder);
-
-        hintsVisible = false;
-        orgTooltip = null;
-        orgBorder = null;
-    }
-
     private void setVisualHints(ValidatorException e) {
-        if (!hintsVisible) {
-            orgTooltip = textField.getToolTipText();
-            orgBorder = textField.getBorder();
+        if (hintsVisible) {
+            hintProvider.updateHints(textField, e);
+        } else {
+            hintProvider.showHints(textField, e);
             hintsVisible = true;
         }
+    }
 
-        textField.setToolTipText(e.getLocalizedMessage());
-        textField.setBorder(errorBorder);
+    private static class LiveListener implements DocumentListener {
+        private final ValidationFilter filter;
+
+        private LiveListener(ValidationFilter filter) {
+            this.filter = filter;
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            filter.validate(ValidationBehavior.SET_VISUAL_HINTS);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            filter.validate(ValidationBehavior.SET_VISUAL_HINTS);
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            filter.validate(ValidationBehavior.SET_VISUAL_HINTS);
+        }
     }
 }

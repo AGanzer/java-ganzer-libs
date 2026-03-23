@@ -22,11 +22,11 @@ import java.util.Objects;
  * be read ahead from the underlying stream than are necessary to satisfy the
  * current read operation.
  * <p>
- * For top efficiency, consider wrapping an InputStreamReader within a
+ * For top efficiency, consider wrapping a BOMInputStreamReader within a
  * BufferedReader. For example:
  * <p>
  * <code>
- * BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+ * BufferedReader in = new BufferedReader(new BOMInputStreamReader(System.in));
  * </code>
  *
  * @see BufferedReader

@@ -6,7 +6,8 @@ import de.ganzer.core.validation.NumberValidator;
 import de.ganzer.core.validation.TextFormat;
 import de.ganzer.core.validation.ValidatorException;
 import de.ganzer.core.validation.ValidatorExceptionRef;
-import de.ganzer.fx.validation.ValidatorTextFormatter;
+import de.ganzer.fx.validation.ValidationBehavior;
+import de.ganzer.fx.validation.ValidationTextFormatter;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,7 +56,7 @@ public class ChartsController implements Initializable {
         distributionBox.setItems(distributions);
         distributionBox.getSelectionModel().select(0);
 
-        new ValidatorTextFormatter(numValuesValidator, numValuesInput);
+        new ValidationTextFormatter(numValuesValidator, numValuesInput);
         numValuesInput.setText(numValuesValidator.formatText("100000", TextFormat.DISPLAY));
 
         updateSettings();
@@ -111,7 +112,7 @@ public class ChartsController implements Initializable {
 
     private boolean validateField(TextField field) {
         try {
-            ((ValidatorTextFormatter)field.getTextFormatter()).validate();
+            ((ValidationTextFormatter)field.getTextFormatter()).validate(ValidationBehavior.SHOW_MESSAGE_BOX);
         } catch (ValidatorException e) {
             showValidationError(field, e);
             return false;

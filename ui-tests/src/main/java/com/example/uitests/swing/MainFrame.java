@@ -2,8 +2,11 @@ package com.example.uitests.swing;
 
 import com.example.uitests.swing.tests.LoginDialog;
 import com.example.uitests.swing.tests.InputTestDialog;
+import com.example.uitests.swing.tests.TextAreaLogPanel;
+import com.example.uitests.swing.tests.TextPaneLogPanel;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
+import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TogglePanel;
 
 import javax.swing.*;
@@ -16,13 +19,16 @@ import java.awt.event.WindowEvent;
 public class MainFrame extends JFrame {
     private static final String UI_KEY_FRAME = "MainFrame.frame";
 
-    GActionGroup mainMenu;
-    GActionGroup fileMenu;
-    GActionGroup buttonsMenu;
-    GActionGroup othersMenu;
-    GActionGroup testMenu;
-    GActionGroup optionsMenu;
-    JToolBar toolBar;
+    private GActionGroup mainMenu;
+    private GActionGroup fileMenu;
+    private GActionGroup buttonsMenu;
+    private GActionGroup othersMenu;
+    private GActionGroup testMenu;
+    private GAction enableTabAction;
+    private GAction colorTabAction;
+    private GAction fontTabAction;
+    private JToolBar toolBar;
+    private ClosableTabsPane tabPane;
 
     @Override
     protected void frameInit() {
@@ -33,12 +39,12 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        initLookAndFeel();
         initLayout();
         initActions();
         initMenu();
         initToolBar();
-        initAccorion();
+        initAccordion();
+        initTabPane();
 
         SwingTestApp.getUiSettings().apply(UI_KEY_FRAME, this);
     }
@@ -51,23 +57,6 @@ public class MainFrame extends JFrame {
         super.processWindowEvent(e);
     }
 
-    private void initLookAndFeel() {
-        for (var laf: UIManager.getInstalledLookAndFeels())
-            System.out.println(laf.getClassName());
-
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-        } catch (Exception e) {
-            System.err.println("Cannot set look and feel. Using default.");
-            e.printStackTrace(System.err);
-        }
-    }
-
     private void initLayout() {
         var pane = getContentPane();
         pane.setLayout(new BorderLayout());
@@ -78,21 +67,21 @@ public class MainFrame extends JFrame {
                 fileMenu = new GActionGroup("File").addAll(
                         new GAction("Exit")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK))
-                                .smallIcon(Images.load("close-16"))
-                                .largeIcon(Images.load("close-48"))
+                                .smallIcon(SVGProvider.get("close", 16))
+                                .largeIcon(SVGProvider.get("close", 48))
                                 .shortDescription("Quits this application.")
                                 .onAction(this::onExit)
                 ),
                 buttonsMenu = new GActionGroup("Buttons").addAll(
                         new GAction("Any Option")
-                                .smallIcon(Images.load("stroller-16"))
-                                .largeIcon(Images.load("stroller-48"))
+                                .smallIcon(SVGProvider.get("stroller", 16))
+                                .largeIcon(SVGProvider.get("stroller", 48))
                                 .shortDescription("Sets the option 1.")
                                 .selectable(true)
                                 .onAction(this::onAnyOption),
                         new GAction("Another Option")
-                                .smallIcon(Images.load("car_compact2-16"))
-                                .largeIcon(Images.load("car_compact2-48"))
+                                .smallIcon(SVGProvider.get("car_compact2", 16))
+                                .largeIcon(SVGProvider.get("car_compact2", 48))
                                 .shortDescription("Sets the option 2.")
                                 .selectable(true)
                                 .selected(true)
@@ -102,25 +91,25 @@ public class MainFrame extends JFrame {
                                 .onSelectedActionChanged(this::onChooseChanged)
                                 .addAll(
                                         new GAction("Choose 1")
-                                                .smallIcon(Images.load("calendar_1-16"))
-                                                .largeIcon(Images.load("calendar_1-48"))
+                                                .smallIcon(SVGProvider.get("calendar_1", 16))
+                                                .largeIcon(SVGProvider.get("calendar_1", 48))
                                                 .shortDescription("Choose the number 1.")
                                                 .exclusivelySelectable(true)
                                                 .selected(true),
                                         new GAction("Choose 2")
-                                                .smallIcon(Images.load("hand_count_three-16"))
-                                                .largeIcon(Images.load("hand_count_three-48"))
+                                                .smallIcon(SVGProvider.get("hand_count_three", 16))
+                                                .largeIcon(SVGProvider.get("hand_count_three", 48))
                                                 .shortDescription("Choose the number 2.")
                                                 .exclusivelySelectable(true),
                                         new GAction("Choose 3")
-                                                .smallIcon(Images.load("calendar_3-16"))
-                                                .largeIcon(Images.load("calendar_3-48"))
+                                                .smallIcon(SVGProvider.get("calendar_3", 16))
+                                                .largeIcon(SVGProvider.get("calendar_3", 48))
                                                 .shortDescription("Choose the number 3.")
                                                 .exclusivelySelectable(true)
                                 )
                 ),
                 othersMenu = new GActionGroup("Others")
-                        .largeIcon(Images.load("hamburger-48"))
+                        .largeIcon(SVGProvider.get("hamburger", 48))
                         .shortDescription("Further options.")
                         .addAll(
                                 new GActionGroup("Sub Menu 1").addAll(
@@ -148,15 +137,42 @@ public class MainFrame extends JFrame {
                                 new GAction("Dummy 6")
                         ),
                 testMenu = new GActionGroup("Tests")
-                        .largeIcon(Images.load("multimeter_analog-48"))
+                        .largeIcon(SVGProvider.get("multimeter_analog", 48))
                         .shortDescription("Several Tests.")
                         .addAll(
                                 new GAction("Input Dialog Test")
                                         .onAction(this::onInputTest),
                                 new GAction("Login Dialog Test")
-                                        .onAction(this::onLoginTest)
+                                        .onAction(this::onLoginTest),
+                                new GSeparatorAction(),
+                                new GAction("New Tab")
+                                        .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK))
+                                        .onAction(this::onNewTab),
+                                enableTabAction = new GAction("Enable/Disable Tab")
+                                        .enabled(false)
+                                        .onAction(this::onToggleTabEnabled),
+                                colorTabAction = new GAction("Toggle Tab Colors")
+                                        .enabled(false)
+                                        .onAction(this::onChangeTabColor),
+                                fontTabAction = new GAction("Toggle Tab Font")
+                                        .enabled(false)
+                                        .onAction(this::onChangeTabFont),
+                                new GSeparatorAction(),
+                                new GAction("Sequential Logging (JTextArea)")
+                                        .onAction(this::onSequentiaArealLogging),
+                                new GAction("Sequential Logging (JTextPane)")
+                                        .onAction(this::onSequentiaPanelLogging),
+                                new GAction("Sequential HTML Logging")
+                                        .onAction(this::onSequentialHTMLLogging),
+                                new GSeparatorAction(),
+                                new GAction("Parallel Logging (JTextArea)")
+                                        .onAction(this::onParallelAreaLogging),
+                                new GAction("Parallel Logging (JTextPane)")
+                                        .onAction(this::onParallelPaneLogging),
+                                new GAction("Parallel HTML Logging")
+                                        .onAction(this::onParallelTMLLogging)
                         ),
-                optionsMenu = new GActionGroup("Extras").addAll(
+                new GActionGroup("Extras").addAll(
                         new GAction("Show Text In Buttons")
                                 .shortDescription("Shows/hides the toolbar's buttons texts.")
                                 .selectable(true)
@@ -193,7 +209,7 @@ public class MainFrame extends JFrame {
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
     }
 
-    private void initAccorion() {
+    private void initAccordion() {
         Accordion accordion = new Accordion();
 
         for (int i = 0; i < 5; ++i) {
@@ -209,20 +225,33 @@ public class MainFrame extends JFrame {
         getContentPane().add(accordion, BorderLayout.WEST);
     }
 
-    private void onExit(ActionEvent event) {
+    private void initTabPane() {
+        tabPane = new ClosableTabsPane();
+        getContentPane().add(tabPane, BorderLayout.CENTER);
+        addNewTab(false);
+
+        tabPane.addCloseListener((i, c) -> tabPane.remove(c));
+        tabPane.addChangeListener(e -> {
+            enableTabAction.setEnabled(tabPane.getTabCount() > 1);
+            colorTabAction.setEnabled(tabPane.getTabCount() > 2);
+            fontTabAction.setEnabled(tabPane.getTabCount() > 2);
+        });
+    }
+
+    private void onExit(ActionEvent e) {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
-    private void onAnyOption(ActionEvent event) {
+    private void onAnyOption(ActionEvent e) {
         System.out.format(
                 "Any Option is %s!\n",
-                ((GAction)event.getSource()).isSelected() ? "selected" : "deselected");
+                ((GAction)e.getSource()).isSelected() ? "selected" : "deselected");
     }
 
-    private void onAnotherOption(ActionEvent event) {
+    private void onAnotherOption(ActionEvent e) {
         System.out.format(
                 "Another Option is %s!\n",
-                ((GAction)event.getSource()).isSelected() ? "selected" : "deselected");
+                ((GAction)e.getSource()).isSelected() ? "selected" : "deselected");
     }
 
     private void onChooseChanged(GSelectedActionChangedEvent event) {
@@ -231,8 +260,8 @@ public class MainFrame extends JFrame {
                 event.getSelectedAction() == null ? "No" : event.getSelectedAction().getName());
     }
 
-    private void onShowTexts(ActionEvent event) {
-        boolean hide = !((GAction)event.getSource()).isSelected();
+    private void onShowTexts(ActionEvent e) {
+        boolean hide = !((GAction)e.getSource()).isSelected();
 
         for (int i = 0; i < toolBar.getComponentCount(); i++) {
             if (toolBar.getComponent(i) instanceof AbstractButton button)
@@ -240,8 +269,8 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void onSmallButtons(ActionEvent event) {
-        boolean smallButtons = ((GAction)event.getSource()).isSelected();
+    private void onSmallButtons(ActionEvent e) {
+        boolean smallButtons = ((GAction)e.getSource()).isSelected();
 
         for (int i = 0; i < toolBar.getComponentCount(); i++) {
             if (toolBar.getComponent(i) instanceof AbstractButton button)
@@ -254,40 +283,39 @@ public class MainFrame extends JFrame {
     }
 
     private void setImage(GAction action, boolean small) {
-        String size = small ? "-32" : "-48";
         String image;
 
         switch (action.getName()) {
             case "Exit":
-                image = "close" + size;
+                image = "close";
                 break;
 
             case "Any Option":
-                image = "stroller" + size;
+                image = "stroller";
                 break;
 
             case "Another Option":
-                image = "car_compact2" + size;
+                image = "car_compact2";
                 break;
 
             case "Choose 1":
-                image = "calendar_1" + size;
+                image = "calendar_1";
                 break;
 
             case "Choose 2":
-                image = "hand_count_three" + size;
+                image = "hand_count_three";
                 break;
 
             case "Choose 3":
-                image = "calendar_3" + size;
+                image = "calendar_3";
                 break;
 
             case "Others":
-                image = "hamburger" + size;
+                image = "hamburger";
                 break;
 
             case "Tests":
-                image = "multimeter_analog" + size;
+                image = "multimeter_analog";
                 break;
 
             default:
@@ -295,7 +323,7 @@ public class MainFrame extends JFrame {
                 return;
         }
 
-        action.largeIcon(Images.load(image));
+        action.largeIcon(SVGProvider.get(image, small ? 32 : 48));
     }
 
     private void onLoginTest(ActionEvent actionEvent) {
@@ -307,11 +335,103 @@ public class MainFrame extends JFrame {
             System.out.println("Login canceled.");
     }
 
-    private void onInputTest(ActionEvent event) {
+    private void onInputTest(ActionEvent e) {
         var data = new InputTestDialog.Data();
         data.input = "abcd";
 
         if (InputTestDialog.showModal(this, data))
             System.out.println("Your input: " + data.input);
+    }
+
+    private static int tabCounter;
+
+    private void addNewTab(boolean closable) {
+        var panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createLoweredBevelBorder());
+
+        addNewTab(closable, "Tab " + ++tabCounter, SVGProvider.get("hand_count_three", 16), panel);
+    }
+
+    private void addNewTab(boolean closable, String title, Icon icon, Component component) {
+        tabPane.addTab(title, icon, component);
+        tabPane.setSelectedComponent(component);
+        tabPane.setClosableAt(tabPane.getSelectedIndex(), closable);
+    }
+
+    private void onNewTab(ActionEvent e) {
+        addNewTab(true);
+    }
+
+    private void onToggleTabEnabled(ActionEvent e) {
+        if (tabPane.getTabCount() > 1)
+            tabPane.setEnabledAt(1, !tabPane.isEnabledAt(1));
+    }
+
+    private Color lastTabBackgroundColor = new Color (128, 128, 255);
+    private Color lastTabForegroundColor = new Color (0, 255, 0);
+
+    private void onChangeTabColor(ActionEvent e) {
+        if (tabPane.getTabCount() > 2) {
+            Color backgroundColorToSet = lastTabBackgroundColor;
+            Color foregroundColorToSet = lastTabForegroundColor;
+
+            lastTabBackgroundColor = tabPane.getBackgroundAt(2);
+            lastTabForegroundColor = tabPane.getForegroundAt(2);
+
+            tabPane.setBackgroundAt(2, backgroundColorToSet);
+            tabPane.setForegroundAt(2, foregroundColorToSet);
+        }
+    }
+
+    private Font lastTabFont;
+
+    private void onChangeTabFont(ActionEvent e) {
+        if (tabPane.getTabCount() > 2) {
+            Font fontToSet = lastTabFont == null ? tabPane.getFontAt(2).deriveFont(Font.BOLD) : lastTabFont;
+            lastTabFont = tabPane.getFontAt(2);
+            tabPane.setFontAt(2, fontToSet);
+        }
+    }
+
+    private void onSequentiaArealLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Seq. Area Log",
+                  SVGProvider.get("history2", 16),
+                  new TextAreaLogPanel(0).init());
+    }
+
+    private void onSequentiaPanelLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Seq. Pane Log",
+                  SVGProvider.get("history2", 16),
+                  new TextPaneLogPanel("text/plain", 0).init());
+    }
+
+    private void onSequentialHTMLLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Seq. HTML Log",
+                  SVGProvider.get("history2", 16),
+                  new TextPaneLogPanel("text/html", 0).init());
+    }
+
+    private void onParallelAreaLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Par. Area Log",
+                  SVGProvider.get("history2", 16),
+                  new TextAreaLogPanel(250).init());
+    }
+
+    private void onParallelPaneLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Par. Pane Log",
+                  SVGProvider.get("history2", 16),
+                  new TextPaneLogPanel("text/plain", 250).init());
+    }
+
+    private void onParallelTMLLogging(ActionEvent e) {
+        addNewTab(true,
+                  "Par. HTML Log",
+                  SVGProvider.get("history2", 16),
+                  new TextPaneLogPanel("text/html", 250).init());
     }
 }

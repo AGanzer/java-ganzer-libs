@@ -277,4 +277,37 @@ class CharCountValidatorTest {
         assertEquals(t2, val.formatText(t2,TextFormat.EDIT));
         assertEquals(t2, val.formatText(t2,TextFormat.DISPLAY));
     }
+
+    @Test
+    void setBelowMinErrorMessage() {
+        var val = new CharCountValidator();
+        val.setBelowMinErrorMessage("m");
+
+        assertEquals("m", val.getBelowMinErrorMessage());
+        assertEquals("m", val.getRequiredErrorMessage());
+    }
+
+    @Test
+    void setAboveMaxErrorMessage() {
+        var val = new CharCountValidator();
+        val.setAboveMaxErrorMessage("m");
+
+        assertEquals("m", val.getAboveMaxErrorMessage());
+    }
+
+    @Test
+    void testSetMaxLength() {
+        var val = new CharCountValidator();
+        val.setMaxLength(9);
+
+        assertEquals(9, val.getMaxLength());
+    }
+
+    @Test
+    void testSetMinLength() {
+        var val = new CharCountValidator();
+        val.setMinLength(9);
+
+        assertEquals(9, val.getMinLength());
+    }
 }

@@ -118,8 +118,7 @@ public class BinomialDistribution implements Distribution<Long> {
         double LogSqrtTwoPi = 0.91893853320467274178;
 
         if (z < 0.5)
-            return StrictMath.log(Math.PI / StrictMath.sin(Math.PI * z)) -
-                    logGamma(1.0 - z);
+            return StrictMath.log(Math.PI / StrictMath.sin(Math.PI * z)) - logGamma(1.0 - z);
 
         double zz = z - 1.0;
         double b = zz + 5.5; // g + 0.5

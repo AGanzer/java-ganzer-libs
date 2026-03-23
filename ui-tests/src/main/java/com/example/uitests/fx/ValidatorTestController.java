@@ -1,7 +1,8 @@
 package com.example.uitests.fx;
 
 import de.ganzer.core.validation.*;
-import de.ganzer.fx.validation.ValidatorTextFormatter;
+import de.ganzer.fx.validation.ValidationBehavior;
+import de.ganzer.fx.validation.ValidationTextFormatter;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -21,7 +22,7 @@ import java.io.IOException;
 public class ValidatorTestController implements TestProvider {
     //region fields
     private Validator testValidator;
-    private ValidatorTextFormatter validatorTextFormatter;
+    private ValidationTextFormatter validationTextFormatter;
     //endregion
 
     //region controls
@@ -147,11 +148,11 @@ public class ValidatorTestController implements TestProvider {
             return;
         }
 
-        if (validatorTextFormatter != null)
-            validatorTextFormatter.resetIndicators();
+        if (validationTextFormatter != null)
+            validationTextFormatter.resetVisualHints();
 
         testValidator = validator;
-        validatorTextFormatter = new ValidatorTextFormatter(testValidator, testInput);
+        validationTextFormatter = new ValidationTextFormatter(testValidator, testInput);
 
         enableOptions();
     }
@@ -178,18 +179,8 @@ public class ValidatorTestController implements TestProvider {
     }
 
     private void validate() {
-        var message = "Input is valid!";
-
-        try {
-            validatorTextFormatter.validate();
-        } catch (ValidatorException e) {
-            message = e.getMessage();
-        }
-
-        FxTestApp.alertInfo(message);
-
-        testInput.requestFocus();
-        testInput.selectAll();
+        if (validationTextFormatter.validate(ValidationBehavior.SHOW_MESSAGE_BOX))
+            FxTestApp.alertInfo("Input is valid!");
     }
     //endregion
 

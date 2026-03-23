@@ -3,6 +3,7 @@ module de.ganzer.fx {
     requires javafx.fxml;
     requires de.ganzer.core;
     requires java.xml;
+    requires java.desktop;
     exports de.ganzer.fx.validation;
     exports de.ganzer.fx.dialogs;
     exports de.ganzer.fx.actions;

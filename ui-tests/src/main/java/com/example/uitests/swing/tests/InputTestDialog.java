@@ -3,6 +3,7 @@ package com.example.uitests.swing.tests;
 import de.ganzer.core.validation.PxPicValidator;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.swing.actions.GAction;
+import de.ganzer.swing.controls.GTextField;
 import de.ganzer.swing.validaton.ValidationBehavior;
 import de.ganzer.swing.validaton.ValidationFilter;
 
@@ -54,7 +55,7 @@ public class InputTestDialog extends JDialog {
     }
 
     private void initTextField() {
-        var inputField = new JTextField(30);
+        var inputField = new GTextField(30);
 
         var pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));

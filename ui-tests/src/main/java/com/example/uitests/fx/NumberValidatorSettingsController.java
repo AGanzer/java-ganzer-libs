@@ -2,8 +2,8 @@ package com.example.uitests.fx;
 
 import de.ganzer.core.validation.NumberValidator;
 import de.ganzer.core.validation.Validator;
-import de.ganzer.core.validation.ValidatorExceptionRef;
-import de.ganzer.fx.validation.ValidatorTextFormatter;
+import de.ganzer.fx.validation.ValidationBehavior;
+import de.ganzer.fx.validation.ValidationTextFormatter;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -13,9 +13,9 @@ import java.text.ParseException;
 public class NumberValidatorSettingsController implements TestValidatorController {
     //region fields
     private final NumberValidator minMaxValueValidator = new NumberValidator();
-    private ValidatorTextFormatter minValueTextFormatter;
-    private ValidatorTextFormatter maxValueTextFormatter;
-    private ValidatorTextFormatter numDecimalsTextFormatter;
+    private ValidationTextFormatter minValueTextFormatter;
+    private ValidationTextFormatter maxValueTextFormatter;
+    private ValidationTextFormatter numDecimalsTextFormatter;
     private NumberValidator testValidator;
     //endregion
 
@@ -52,10 +52,10 @@ public class NumberValidatorSettingsController implements TestValidatorControlle
     //endregion
 
     @Override
-    public boolean validateSettings(ValidatorExceptionRef ref) {
-        return minValueTextFormatter.validate(ref)
-                && maxValueTextFormatter.validate(ref)
-                && numDecimalsTextFormatter.validate(ref);
+    public boolean validateSettings() {
+        return minValueTextFormatter.validate(ValidationBehavior.SHOW_MESSAGE_BOX)
+                && maxValueTextFormatter.validate(ValidationBehavior.SHOW_MESSAGE_BOX)
+                && numDecimalsTextFormatter.validate(ValidationBehavior.SHOW_MESSAGE_BOX);
     }
 
     //region init
@@ -63,9 +63,9 @@ public class NumberValidatorSettingsController implements TestValidatorControlle
     private void initialize() {
         NumberValidator numDecimalsValidator = new NumberValidator(0, 6);
 
-        minValueTextFormatter = new ValidatorTextFormatter(minMaxValueValidator, minValue);
-        maxValueTextFormatter = new ValidatorTextFormatter(minMaxValueValidator, maxValue);
-        numDecimalsTextFormatter = new ValidatorTextFormatter(numDecimalsValidator, numDecimals);
+        minValueTextFormatter = new ValidationTextFormatter(minMaxValueValidator, minValue);
+        maxValueTextFormatter = new ValidationTextFormatter(minMaxValueValidator, maxValue);
+        numDecimalsTextFormatter = new ValidationTextFormatter(numDecimalsValidator, numDecimals);
 
         initializeListeners();
     }
