@@ -200,6 +200,27 @@ public class Logger implements AutoCloseable {
     }
 
     /**
+     * Writes the specified message with the specified level into all active
+     * targets.
+     * <p>
+     * The meaning of the level is implementation defined. It depends on the
+     * filter that is used by a target to filter messages.
+     *
+     * @param level The level of the message to write.
+     * @param message The message to write. An emtpy string is written if this
+     *        is {@code null}.
+     * @param args Optional arguments for formating {@code message} if this is
+     *         a format string.
+     *
+     * @throws IllegalStateException If this instance has been closed.
+     *
+     * @since 5.6.0
+     */
+    synchronized public void write(int level, String message, Object... args) {
+        write(level, message != null ? String.format(message, args) : null);
+    }
+
+    /**
      * Closes and removes all targets.
      * <p>
      * This method is invoked automatically on objects managed by the
