@@ -747,6 +747,10 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      * a {@code NavigationService} is available; otherwise {@link JOptionPane}
      * is used to show a question whether the data shall be saved and Yes, No
      * and Cancel buttons.
+     * <p>
+     * The title to show in the confirmation dialog is gotten from
+     * {@link ApplicationService#getAppDisplayName()} if available; otherwise,
+     * {@code null} is used as title.
      *
      * @return The result of the user's choice. {@code true} to accept,
      *         {@code false} to deny or {@code null} to cancel.
