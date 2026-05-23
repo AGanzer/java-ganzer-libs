@@ -747,7 +747,8 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      * is used to show a question whether the data shall be saved and Yes, No
      * and Cancel buttons.
      *
-     * @return The result of the user's choice.
+     * @return The result of the user's choice. {@code true} to accept,
+     *         {@code false} to deny or {@code null} to cancel.
      */
     protected Boolean queryUserToSave() {
         if (ServiceProvider.has(NavigationService.class)) {
