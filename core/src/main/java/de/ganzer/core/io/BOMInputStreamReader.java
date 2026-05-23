@@ -86,6 +86,18 @@ public class BOMInputStreamReader extends Reader {
     }
 
     /**
+     * Gets the input stream the reader works on.
+     *
+     * @return The input stream. This is not the same as the one that is set at
+     *         construction.
+     *
+     * @since 5.6.0
+     */
+    public InputStream getInputStream() {
+        return in;
+    }
+
+    /**
      * Returns the name of the character encoding being used by this stream.
      * <p>
      * If the encoding has an historical name then that name is returned;
