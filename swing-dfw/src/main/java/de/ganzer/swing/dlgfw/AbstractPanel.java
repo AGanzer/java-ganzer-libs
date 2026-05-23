@@ -147,12 +147,12 @@ public abstract class AbstractPanel extends JPanel {
     protected abstract JComponent createCenterPanel();
 
     /**
-     * Called to create the title of the dialog or frame.
+     * Called to create the caption for the title of the dialog or frame.
      * <p>
      * Note that this is called during construction. Therefor derived classes
      * my not been fully initialized when this is invoked.
      *
-     * @return The title to set or {@code null} if no title shall be displayed.
+     * @return The title to set or {@code null} if no caption shall be displayed.
      */
     protected abstract JComponent createTitleLabel();
 
@@ -267,7 +267,8 @@ public abstract class AbstractPanel extends JPanel {
      * Note that this is called during construction. Therefor derived classes
      * my not been fully initialized when this is invoked.
      *
-     * @return The created panel. This must not be {@code null}.
+     * @return The created panel. Inheritors may return {@code null} if no title
+     *          panel is wanted.
      */
     protected JPanel createTitlePanel() {
         JPanel title = new JPanel(null);
@@ -327,14 +328,16 @@ public abstract class AbstractPanel extends JPanel {
     }
 
     private void setup() {
-        JPanel title = createTitlePanel();
         JComponent center = createCenterPanel();
+        JComponent title = createTitlePanel();
         JComponent south = createSouthPanel();
         JComponent eastPanel = createEastPanel();
         JComponent westPanel = createWestPanel();
 
         add(center, BorderLayout.CENTER);
-        add(title, BorderLayout.NORTH);
+
+        if (title != null)
+            add(title, BorderLayout.NORTH);
 
         if (south != null)
             add(south, BorderLayout.SOUTH);
