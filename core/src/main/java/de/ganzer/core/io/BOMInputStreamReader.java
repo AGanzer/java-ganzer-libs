@@ -91,7 +91,7 @@ public class BOMInputStreamReader extends Reader {
      * @return The input stream. This is not the same as the one that is set at
      *         construction.
      *
-     * @since 5.6.0
+     * @since 1.5.2
      */
     public InputStream getInputStream() {
         return in;
