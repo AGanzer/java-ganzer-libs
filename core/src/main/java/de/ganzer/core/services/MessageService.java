@@ -4,6 +4,8 @@ import de.ganzer.core.internals.CoreMessages;
 
 /**
  * Defines the service to use to display a simple message box.
+ *
+ * @since 5.6.0
  */
 public interface MessageService {
     /**
