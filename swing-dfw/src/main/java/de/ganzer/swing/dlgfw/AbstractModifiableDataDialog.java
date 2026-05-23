@@ -3,6 +3,7 @@ package de.ganzer.swing.dlgfw;
 import de.ganzer.core.services.ServiceProvider;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
+import de.ganzer.swing.dlgfw.services.ApplicationService;
 import de.ganzer.swing.dlgfw.services.NavigationService;
 
 import javax.swing.AbstractButton;
@@ -701,10 +702,10 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      *     <li>{@code true}: {@link #applyChangedData()} is called. On success,
      *          the window is closed; otherwise, the event is consumed and the
      *          window is not closed.</li>
-     *     <li>{@code false}: The accepted flag is reset and the window is
-     *          closed without any further action.</li>
-     *     <li>{@code null}: The accepted flag is reset, the event is consumed
-     *          and the window is not closed.</li>
+     *     <li>{@code false}: The window is closed without any further action.
+     *          </li>
+     *     <li>{@code null}: The event is consumed and the window is not closed.
+     *         </li>
      * </ul>
      * If the dialog is not closed {@link #resetAccepted()} is invoked.
      *
@@ -750,15 +751,23 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      * @return The result of the user's choice. {@code true} to accept,
      *         {@code false} to deny or {@code null} to cancel.
      */
+    @SuppressWarnings("DuplicatedCode")
     protected Boolean queryUserToSave() {
+        String appName = null;
+
+        if (ServiceProvider.has(ApplicationService.class)) {
+            ApplicationService appService = ServiceProvider.get(ApplicationService.class);
+            appName = appService.getAppDisplayName();
+        }
+
         if (ServiceProvider.has(NavigationService.class)) {
             NavigationService service = ServiceProvider.get(NavigationService.class);
-            return service.getConfirmation(this, SwingDialogsMessages.get("data.query.save"), null);
+            return service.getConfirmation(this, SwingDialogsMessages.get("data.query.save"), appName);
         }
 
         var result = JOptionPane.showConfirmDialog(this,
                                                    SwingDialogsMessages.get("data.query.save"),
-                                                   null,
+                                                   appName,
                                                    JOptionPane.YES_NO_CANCEL_OPTION);
 
         return switch (result) {

@@ -1,7 +1,10 @@
 package de.ganzer.swing.dlgfw;
 
+import de.ganzer.core.services.ServiceProvider;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
+import de.ganzer.swing.dlgfw.services.ApplicationService;
+import de.ganzer.swing.dlgfw.services.NavigationService;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -255,15 +258,16 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      * Queries the user what to do with modified data if {@link #isDataModified()}
      * is {@code true} and the event's ID is {@link WindowEvent#WINDOW_CLOSING}.
      * <p>
-     * This implementation calls {@link #queryUserToSave()}. The only recognized
+     * This implementation calls {@link #queryUserToSave()}. The recognized
      * answers are:
      * <ul>
-     *     <li>{@link JOptionPane#YES_OPTION}: {@link #applyChangedData()} is
-     *          called. On success, the window is closed; otherwise, the event
-     *          is consumed and the window is not closed.</li>
-     *     <li>{@link JOptionPane#CANCEL_OPTION}: The event is consumed and
-     *          the window is not closed.</li>
-     *     <li>All others: The window is closed without any further action.</li>
+     *     <li>{@code true}: {@link #applyChangedData()} is called. On success,
+     *          the window is closed; otherwise, the event is consumed and the
+     *          window is not closed.</li>
+     *     <li>{@code false}: The window is closed without any further action.
+     *          </li>
+     *     <li>{@code null}: The event is consumed and the window is not closed.
+     *         </li>
      * </ul>
      *
      * @param e The window event.
@@ -271,14 +275,12 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
     @Override
     protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING && isDataModified()) {
-            int result = queryUserToSave();
+            var confirmed = queryUserToSave();
 
-            if (result == JOptionPane.YES_OPTION) {
-                if (!applyChangedData())
-                    return;
-            }
+            if (confirmed == null)
+                return;
 
-            if (result == JOptionPane.CANCEL_OPTION)
+            if (confirmed && !applyChangedData())
                 return;
         }
 
@@ -289,15 +291,37 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      * Called within {@link #processWindowEvent(WindowEvent)} when the window
      * is closed but has modified data to query the user what to do.
      * <p>
-     * This implementation uses {@link JOptionPane} to show a question
-     * whether the data shall be saved and Yes, No and Cancel buttons.
+     * This implementation uses {@link NavigationService#getConfirmation} if
+     * a {@code NavigationService} is available; otherwise {@link JOptionPane}
+     * is used to show a question whether the data shall be saved and Yes, No
+     * and Cancel buttons.
      *
-     * @return The result of the user's choice.
+     * @return The result of the user's choice. {@code true} to accept,
+     *         {@code false} to deny or {@code null} to cancel.
      */
-    protected int queryUserToSave() {
-        return JOptionPane.showConfirmDialog(this,
-                                             SwingDialogsMessages.get("data.query.save"),
-                                             null,
-                                             JOptionPane.YES_NO_CANCEL_OPTION);
+    @SuppressWarnings("DuplicatedCode")
+    protected Boolean queryUserToSave() {
+        String appName = null;
+
+        if (ServiceProvider.has(ApplicationService.class)) {
+            ApplicationService appService = ServiceProvider.get(ApplicationService.class);
+            appName = appService.getAppDisplayName();
+        }
+
+        if (ServiceProvider.has(NavigationService.class)) {
+            NavigationService service = ServiceProvider.get(NavigationService.class);
+            return service.getConfirmation(this, SwingDialogsMessages.get("data.query.save"), appName);
+        }
+
+        var result = JOptionPane.showConfirmDialog(this,
+                                                   SwingDialogsMessages.get("data.query.save"),
+                                                   appName,
+                                                   JOptionPane.YES_NO_CANCEL_OPTION);
+
+        return switch (result) {
+            case JOptionPane.YES_OPTION -> true;
+            case JOptionPane.NO_OPTION -> false;
+            default -> null;
+        };
     }
 }
