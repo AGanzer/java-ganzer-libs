@@ -121,8 +121,9 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      * {@link #} is called and the set data consumer is invoked and the
      * modification flag is set to {@code false}.
      * <p>
-     * if {@link #isDataModified()} is {@code false}, nothing is done and this
-     * implementation returns {@code true}.
+     * if {@link #isDataModified()} is {@code false} or {@link #getData()}
+     * returns {@code null}, nothing is done and this implementation returns
+     * {@code true}.
      *
      * @return {@code true} if the data is valid and the consumer is invoked;
      *         otherwise, {@code false}.
@@ -132,6 +133,9 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      */
     @Override
     public boolean applyChangedData() {
+        if (!isDataModified() || getData() == null)
+            return true;
+
         if (!validateModifiedData())
             return false;
 
