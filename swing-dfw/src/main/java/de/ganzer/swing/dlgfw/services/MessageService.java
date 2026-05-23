@@ -1,6 +1,6 @@
-package de.ganzer.core.services;
+package de.ganzer.swing.dlgfw.services;
 
-import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
 
 /**
  * Defines the service to use to display a simple message box.
@@ -38,37 +38,37 @@ public interface MessageService {
      * The OK button. This can be used to compare the result of an invocation
      * of a {@link #show} method.
      */
-    String OK_BUTTON = CoreMessages.get("ok");
+    String OK_BUTTON = SwingDialogsMessages.get("commons.buttons.ok");
     /**
      * The Cancel button. This can be used to compare the result of an invocation
      * of a {@link #show} method.
      */
-    String CANCEL_BUTTON = CoreMessages.get("cancel");
+    String CANCEL_BUTTON = SwingDialogsMessages.get("commons.buttons.cancel");
     /**
      * The Yes button. This can be used to compare the result of an invocation
      * of a {@link #show} method.
      */
-    String YES_BUTTON = CoreMessages.get("yes");
+    String YES_BUTTON = SwingDialogsMessages.get("commons.buttons.yes");
     /**
      * The No button. This can be used to compare the result of an invocation
      * of a {@link #show} method.
      */
-    String NO_BUTTON = CoreMessages.get("no");
+    String NO_BUTTON = SwingDialogsMessages.get("commons.buttons.no");
     /**
      * The Abort button. This can be used to compare the result of an invocation
      * of a {@link #show} method.
      */
-    String ABORT_BUTTON = CoreMessages.get("abort");
+    String ABORT_BUTTON = SwingDialogsMessages.get("commons.buttons.abort");
     /**
      * The Retry button. This can be used to compare the result of an invocation
      * of a {@link #show} method.
      */
-    String RETRY_BUTTON = CoreMessages.get("retry");
+    String RETRY_BUTTON = SwingDialogsMessages.get("commons.buttons.retry");
     /**
      * The Ignore button. This can be used to compare the result of an invocation
      * of a {@link #show} method.
      */
-    String IGNORE_BUTTON = CoreMessages.get("ignore");
+    String IGNORE_BUTTON = SwingDialogsMessages.get("commons.buttons.ignore");
 
     /**
      * The OK button. This is a shortcut for using the methods that requires

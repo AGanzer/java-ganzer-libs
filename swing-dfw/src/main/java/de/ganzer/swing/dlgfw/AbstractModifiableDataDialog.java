@@ -1,6 +1,6 @@
 package de.ganzer.swing.dlgfw;
 
-import de.ganzer.core.services.ServiceProvider;
+import de.ganzer.swing.dlgfw.services.ServiceProvider;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
 import de.ganzer.swing.dlgfw.services.ApplicationService;

@@ -3,4 +3,5 @@ module de.ganzer.swing.dlgfw {
     requires de.ganzer.core;
     requires de.ganzer.swing;
     exports de.ganzer.swing.dlgfw;
+    exports de.ganzer.swing.dlgfw.services;
 }

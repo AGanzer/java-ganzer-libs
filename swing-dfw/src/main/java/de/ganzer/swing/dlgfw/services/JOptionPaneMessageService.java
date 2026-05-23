@@ -1,6 +1,4 @@
-package de.ganzer.swing.services;
-
-import de.ganzer.core.services.MessageService;
+package de.ganzer.swing.dlgfw.services;
 
 import javax.swing.FocusManager;
 import javax.swing.JOptionPane;

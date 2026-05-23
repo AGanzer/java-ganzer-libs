@@ -7,5 +7,4 @@ module de.ganzer.core {
     exports de.ganzer.core.validation;
     exports de.ganzer.core.util;
     exports de.ganzer.core.logging;
-    exports de.ganzer.core.services;
 }

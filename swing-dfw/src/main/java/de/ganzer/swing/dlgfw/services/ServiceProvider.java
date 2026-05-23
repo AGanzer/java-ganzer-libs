@@ -1,4 +1,4 @@
-package de.ganzer.core.services;
+package de.ganzer.swing.dlgfw.services;
 
 import java.util.HashMap;
 import java.util.Map;
