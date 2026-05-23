@@ -54,6 +54,21 @@ public abstract class AbstractPanel extends JPanel {
     }
 
     /**
+     * Creates a new <code>JPanel</code> with <code>FlowLayout</code>
+     * and the specified buffering strategy.
+     * If <code>isDoubleBuffered</code> is true, the <code>JPanel</code>
+     * will use a double buffer.
+     *
+     * @param isDoubleBuffered a boolean, true for double-buffering, which
+     *         uses additional memory space to achieve fast, flicker-free
+     *         updates
+     */
+    public AbstractPanel(boolean isDoubleBuffered) {
+        super(new BorderLayout(), isDoubleBuffered);
+        setup();
+    }
+
+    /**
      * Gets the color to use as background for titles.
      *
      * @return The color. The default is {@link Color#WHITE}.
@@ -72,21 +87,6 @@ public abstract class AbstractPanel extends JPanel {
     public static void setTitleBackground(Color color) {
         Objects.requireNonNull(color, "color cannot be null.");
         titleBackground = color;
-    }
-
-    /**
-     * Creates a new <code>JPanel</code> with <code>FlowLayout</code>
-     * and the specified buffering strategy.
-     * If <code>isDoubleBuffered</code> is true, the <code>JPanel</code>
-     * will use a double buffer.
-     *
-     * @param isDoubleBuffered a boolean, true for double-buffering, which
-     *         uses additional memory space to achieve fast, flicker-free
-     *         updates
-     */
-    public AbstractPanel(boolean isDoubleBuffered) {
-        super(new BorderLayout(), isDoubleBuffered);
-        setup();
     }
 
     /**
