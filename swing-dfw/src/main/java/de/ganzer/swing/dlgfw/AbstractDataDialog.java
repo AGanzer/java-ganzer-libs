@@ -14,8 +14,8 @@ import java.awt.*;
  *
  * @param <Data> The type of the accepted data.
  */
-public abstract class AbstractDataDialog<Data> extends AbstractDialog implements DataSupport<Data> {
-    private final Data data;
+public abstract class AbstractDataDialog<Data> extends AbstractDialog implements DataSupport<Data>, Initializer<Data> {
+    private Data data;
 
     /**
      * Creates a modal dialog with the specified {@code Frame}
@@ -33,7 +33,8 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      * {@code null}.
      *
      * @param owner the {@code Frame} from which the dialog is displayed
-     * @param data The data to set.
+     * @param data The data to set. This may be null if the controls shall
+     *         be initialized by a later call to {@link #initControls}.
      *
      * @throws HeadlessException if {@code GraphicsEnvironment.isHeadless()}
      *         returns {@code true}.
@@ -43,8 +44,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      */
     public AbstractDataDialog(Frame owner, Data data) {
         super(owner);
-        this.data = data;
-        initControls();
+
+        if (data != null)
+            initControls(data);
     }
 
     /**
@@ -75,8 +77,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      */
     public AbstractDataDialog(Frame owner, String title, Data data) {
         super(owner, title);
-        this.data = data;
-        initControls();
+
+        if (data != null)
+            initControls(data);
     }
 
     /**
@@ -120,8 +123,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      */
     public AbstractDataDialog(Frame owner, String title, GraphicsConfiguration gc, Data data) {
         super(owner, title, gc);
-        this.data = data;
-        initControls();
+
+        if (data != null)
+            initControls(data);
     }
 
     /**
@@ -143,8 +147,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      */
     public AbstractDataDialog(Dialog owner, Data data) {
         super(owner);
-        this.data = data;
-        initControls();
+
+        if (data != null)
+            initControls(data);
     }
 
     /**
@@ -168,8 +173,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      */
     public AbstractDataDialog(Dialog owner, String title, Data data) {
         super(owner, title);
-        this.data = data;
-        initControls();
+
+        if (data != null)
+            initControls(data);
     }
 
     /**
@@ -201,8 +207,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      */
     public AbstractDataDialog(Dialog owner, String title, GraphicsConfiguration gc, Data data) {
         super(owner, title, gc);
-        this.data = data;
-        initControls();
+
+        if (data != null)
+            initControls(data);
     }
 
     /**
@@ -228,8 +235,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      */
     public AbstractDataDialog(Window owner, Data data) {
         super(owner);
-        this.data = data;
-        initControls();
+
+        if (data != null)
+            initControls(data);
     }
 
     /**
@@ -257,8 +265,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      */
     public AbstractDataDialog(Window owner, String title, Data data) {
         super(owner, title);
-        this.data = data;
-        initControls();
+
+        if (data != null)
+            initControls(data);
     }
 
     /**
@@ -293,14 +302,17 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      */
     public AbstractDataDialog(Window owner, String title, GraphicsConfiguration gc, Data data) {
         super(owner, title, gc);
-        this.data = data;
-        initControls();
+
+        if (data != null)
+            initControls(data);
     }
 
     /**
-     * Gets the data the dialog was created with.
+     * Gets the data the frame was initialized with.
      *
-     * @return The data set at construction.
+     * @return The data or {@code null} if no data is set.
+     *
+     * @see #initControls
      */
     @Override
     public Data getData() {
@@ -314,9 +326,15 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      * This implementation invokes {@link Initializer<Data>#initControls} on
      * the center panel (as well on the button panel if any is set) if the
      * panel implements {@link Initializer<Data>}.
+     *
+     * @param data The data where to initialize the controls with. This may be
+     *         {@code null} if the controls shall be reset.
      */
     @SuppressWarnings("unchecked")
-    protected void initControls() {
+    @Override
+    public void initControls(Data data) {
+        this.data = data;
+
         if (getCenterPanel() instanceof Initializer)
             ((Initializer<Data>) getCenterPanel()).initControls(data);
 

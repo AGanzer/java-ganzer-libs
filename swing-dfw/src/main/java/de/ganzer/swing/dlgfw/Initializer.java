@@ -10,7 +10,8 @@ public interface Initializer<Data> {
     /**
      * Called to initialize the controls from the specified data.
      *
-     * @param data The data where to initialize the controls with.
+     * @param data The data where to initialize the controls with. This may be
+     *         {@code null} if the controls shall be reset.
      */
     void initControls(Data data);
 }

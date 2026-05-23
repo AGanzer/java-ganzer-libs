@@ -109,7 +109,7 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
     }
 
     /**
-     * Gets the data.
+     * Gets the data the frame was initialized with.
      *
      * @return The data or {@code null} if no data is set.
      *
@@ -127,7 +127,8 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
       * the center panel (as well on the button panel if any is set) if the
       * panel implements {@link Initializer<Data>}.
       *
-      * @param data The data where to initialize the controls with.
+      * @param data The data where to initialize the controls with. This may be
+      *         {@code null} if the controls shall be reset.
       */
     @SuppressWarnings("unchecked")
     @Override
