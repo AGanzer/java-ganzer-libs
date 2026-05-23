@@ -703,8 +703,8 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      *          window is not closed.</li>
      *     <li>{@code false}: The accepted flag is reset and the window is
      *          closed without any further action.</li>
-     *     <li>{@code null}: The event is consumed and the window is not closed.
-     *          </li>
+     *     <li>{@code null}: The accepted flag is reset, the event is consumed
+     *          and the window is not closed.</li>
      * </ul>
      * If the dialog is not closed {@link #resetAccepted()} is invoked.
      *
