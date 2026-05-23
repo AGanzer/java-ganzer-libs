@@ -193,9 +193,12 @@ public class Logger implements AutoCloseable {
 
         var time = LocalDateTime.now();
 
+        if (message == null)
+            message = "";
+
         for (var info : this.targets.values()) {
             if (info.active)
-                info.target.write(level, time, message != null ? message : "");
+                info.target.write(level, time, message);
         }
     }
 
