@@ -1,7 +1,9 @@
 package de.ganzer.swing.dlgfw;
 
+import de.ganzer.core.services.ServiceProvider;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
+import de.ganzer.swing.dlgfw.services.NavigationService;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -693,15 +695,16 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      * If the dialog is not modal, the {@link #queryUserToSave()} is invoked
      * if {@link #isDataModified()} is {@code true}.
      * <p>
-     * This implementation calls {@link #queryUserToSave()}. The only recognized
+     * This implementation calls {@link #queryUserToSave()}. The recognized
      * answers are:
      * <ul>
-     *     <li>{@link JOptionPane#YES_OPTION}: {@link #applyChangedData()} is
-     *          called. On success, the window is closed; otherwise, the event
-     *          is consumed and the window is not closed.</li>
-     *     <li>{@link JOptionPane#CANCEL_OPTION}: The event is consumed and
-     *          the window is not closed.</li>
-     *     <li>All others: The window is closed without any further action.</li>
+     *     <li>{@code true}: {@link #applyChangedData()} is called. On success,
+     *          the window is closed; otherwise, the event is consumed and the
+     *          window is not closed.</li>
+     *     <li>{@code null}: The event is consumed and the window is not closed.
+     *          </li>
+     *     <li>{@code null}: The window is closed without any further action.
+     *         </li>
      * </ul>
      * If the dialog is not closed {@link #resetAccepted()} is invoked.
      *
@@ -716,18 +719,18 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
                     return;
                 }
             } else if (isDataModified()) {
-                int result = queryUserToSave();
+                var confirmed = queryUserToSave();
 
-                if (result == JOptionPane.YES_OPTION) {
+                if (confirmed == null) {
+                    resetAccepted();
+                    return;
+                }
+
+                if (confirmed) {
                     if (!applyChangedData()) {
                         resetAccepted();
                         return;
                     }
-                }
-
-                if (result == JOptionPane.CANCEL_OPTION) {
-                    resetAccepted();
-                    return;
                 }
             }
         }
@@ -739,15 +742,28 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      * Called within {@link #processWindowEvent(WindowEvent)} when the window
      * is closed but has modified data to query the user what to do.
      * <p>
-     * This implementation uses {@link JOptionPane} to show a question
-     * whether the data shall be saved and Yes, No and Cancel buttons.
+     * This implementation uses {@link NavigationService#getConfirmation} if
+     * a {@code NavigationService} is available; otherwise {@link JOptionPane}
+     * is used to show a question whether the data shall be saved and Yes, No
+     * and Cancel buttons.
      *
      * @return The result of the user's choice.
      */
-    protected int queryUserToSave() {
-        return JOptionPane.showConfirmDialog(this,
-                                             SwingDialogsMessages.get("data.query.save"),
-                                             null,
-                                             JOptionPane.YES_NO_CANCEL_OPTION);
+    protected Boolean queryUserToSave() {
+        if (ServiceProvider.has(NavigationService.class)) {
+            NavigationService service = ServiceProvider.get(NavigationService.class);
+            return service.getConfirmation(this, SwingDialogsMessages.get("data.query.save"), null);
+        }
+
+        var result = JOptionPane.showConfirmDialog(this,
+                                                   SwingDialogsMessages.get("data.query.save"),
+                                                   null,
+                                                   JOptionPane.YES_NO_CANCEL_OPTION);
+
+        return switch (result) {
+            case JOptionPane.YES_OPTION -> true;
+            case JOptionPane.NO_OPTION -> false;
+            default -> null;
+        };
     }
 }
