@@ -323,19 +323,8 @@ public abstract class AbstractDialog extends JDialog {
     }
 
     /**
-     * Gets a value that indicates whether the dialog is closed by the Esc key
-     * or by the frames Close button or Close menu or by a Cancel button.
-     *
-     * @return {@code false} if the dialog is closed by an OK button and
-     *         {@code true} if the dialog is closed in any other way.
-     */
-    public final boolean isEscaped() {
-        return !accepted;
-    }
-
-    /**
      * Gets a value that indicates whether the dialog is closed to accept
-     * changed data. This method is the negation of {@link #isEscaped()}.
+     * changed data.
      *
      * @return {@code true} if the dialog is closed by an OK button and
      *         {@code false} if the dialog is closed in any other way.
@@ -523,10 +512,8 @@ public abstract class AbstractDialog extends JDialog {
         getContentPane().add(centerPanel, BorderLayout.CENTER);
 
         if (centerPanel instanceof AbstractPanel panel) {
-            panel.getQueryCloseAction().addActionListener(e -> {
-                boolean accepted = e instanceof QueryCloseEvent && ((QueryCloseEvent) e).shouldApplyData();
-                closeDialog(accepted);
-            });
+            panel.getQueryCloseAction().addActionListener(
+                    e -> closeDialog(QueryCloseEvent.APPLY_DATA_COMMAND.equals(e.getActionCommand())));
         }
 
         if (buttonPanel != null)
