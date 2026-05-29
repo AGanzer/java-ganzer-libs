@@ -579,8 +579,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
     }
 
     /**
-     * Called at construction after the controls are created t initialize the
-     * controls with the data given at construction.
+     * Called at construction if {@code data} is not {@code null} after the
+     * controls are created to initialize the controls with the data given at
+     * construction.
      * <p>
      * This implementation invokes {@link Initializer<Data>#initControls} on
      * the center panel (as well on the button panel if any is set) if the
