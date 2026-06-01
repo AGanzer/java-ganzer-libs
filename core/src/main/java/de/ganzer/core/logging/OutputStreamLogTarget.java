@@ -203,20 +203,4 @@ public class OutputStreamLogTarget extends WriterLogTarget {
     public Charset getCharset() {
         return Charset.forName(((OutputStreamWriter) getWriter()).getEncoding());
     }
-
-    /**
-     * Closes this resource, relinquishing any underlying resources.
-     * <p>
-     * This method is invoked automatically on objects managed by the
-     * {@code try}-with-resources statement.
-     * <p>
-     * This implementation closes the stream.
-     *
-     * @throws Exception if this resource cannot be closed.
-     */
-    @Override
-    public void close() throws Exception {
-        stream.close();
-        super.close();
-    }
 }
