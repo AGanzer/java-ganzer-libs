@@ -193,6 +193,7 @@ public class WriterLogTarget extends FormattedLogTarget {
      */
     @Override
     public void close() throws Exception {
+        writer.flush();
         writer.close();
         super.close();
     }
