@@ -6,7 +6,7 @@
 
     <groupId>de.ganzer.swing</groupId>
     <artifactId>de-ganzer-swing</artifactId>
-    <version>5.4.2</version>
+    <version>5.4.3</version>
     <name>de-ganzer-swing</name>
     
     <properties>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
-            <version>5.4.2</version>
+            <version>5.4.3</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
