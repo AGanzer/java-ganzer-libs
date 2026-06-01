@@ -16,6 +16,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="de-ganzer-gv" target="17" />
+      <module name="de-ganzer-libs" target="17" />
+      <module name="de-ganzer-swing-dlgfw" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
