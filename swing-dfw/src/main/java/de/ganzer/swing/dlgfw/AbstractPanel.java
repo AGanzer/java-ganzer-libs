@@ -39,7 +39,7 @@ import java.util.Objects;
  * filled with further controls, {@link #createCenteredTitleExtension()} and
  * {@link #createRightTitleExtension()} should be overridden.
  */
-public abstract class AbstractPanel extends JPanel {
+public abstract class AbstractPanel extends JPanel implements Disposable {
     private static Color titleBackground = Color.WHITE;
 
     private final GAction queryCloseAction = new GAction();
@@ -118,6 +118,19 @@ public abstract class AbstractPanel extends JPanel {
             super.setLayout(layout);
         else
             throw new UnsupportedOperationException("Changing the layout to other than BorderLayout is not supported in AbstractVPContentPane.");
+    }
+
+    /**
+     * Inheritors should override this if the want to free used resources.
+     * <p>
+     * This implementation calls {@code dispose()} of all subpanels that
+     * implement {@link Disposable}.
+     */
+    @Override
+    public void dispose() {
+        for (Component component : getComponents())
+            if (component instanceof Disposable)
+                ((Disposable) component).dispose();
     }
 
     /**

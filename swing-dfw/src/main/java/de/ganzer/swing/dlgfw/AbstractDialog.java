@@ -502,6 +502,37 @@ public abstract class AbstractDialog extends JDialog {
         return BorderLayout.SOUTH;
     }
 
+    /**
+     * Releases all of the native screen resources used by this
+     * {@code Window}, its subcomponents, and all of its owned
+     * children. That is, the resources for these {@code Component}s
+     * will be destroyed, any memory they consume will be returned to the
+     * OS, and they will be marked as undisplayable.
+     * <p>
+     * The {@code Window} and its subcomponents can be made displayable
+     * again by rebuilding the native resources with a subsequent call to
+     * {@code pack} or {@code show}. The states of the recreated
+     * {@code Window} and its subcomponents will be identical to the
+     * states of these objects at the point where the {@code Window}
+     * was disposed (not accounting for additional modifications between
+     * those actions).
+     * <p>
+     * <b>Note</b>: When the last displayable window
+     * within the Java virtual machine (VM) is disposed of, the VM may
+     * terminate.  See <a href="doc-files/AWTThreadIssues.html#Autoshutdown">
+     * AWT Threading Issues</a> for more information.
+     */
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        if (centerPanel instanceof Disposable)
+            ((Disposable) centerPanel).dispose();
+
+        if (buttonPanel instanceof Disposable)
+            ((Disposable) buttonPanel).dispose();
+    }
+
     private void setup() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
