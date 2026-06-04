@@ -41,10 +41,11 @@ public class UserSettings extends Settings {
      * @param appName The name of the application where the name of the settings
      *         file is build from.
      * @param appVersion The version of the application where the name of the
-     *         settings sub folder is build from.
+     *         settings sub folder is build from. If this is {@code null}, no
+     *         version folder is created.
      *
      * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
-     *         {@code null} or empty or contain only whitespaces.
+     *         empty or contain only whitespaces.
      * @throws DuplicateSettingException if a setting with the file name "settings"
      *         does already exist for {@code appName} and {@code appVersion}.
      */
@@ -61,11 +62,13 @@ public class UserSettings extends Settings {
      * @param appName The name of the application where the name of the settings
      *         file is build from.
      * @param appVersion The version of the application where the name of the
-     *         settings sub folder is build from.
+     *         settings sub folder is build from. If this is {@code null}, no
+     *         version folder is created.
      * @param asXml Indicates whether the settings file shall be written in XML.
      *
-     * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
-     *         {@code null} or empty or contain only whitespaces.
+     * @throws IllegalArgumentException {@code appName} is {@code null} or empty
+     *         or contain only whitespaces or {@code appVersion} is empty or
+     *         contain only whitespaces.
      * @throws DuplicateSettingException if a setting with the file name "settings"
      *         does already exist for {@code appName} and {@code appVersion}.
      */
@@ -82,14 +85,15 @@ public class UserSettings extends Settings {
      * @param appName The name of the application where the name of the settings
      *         file is build from.
      * @param appVersion The version of the application where the name of the
-     *         settings sub folder is build from.
+     *         settings sub folder is build from. If this is {@code null}, no
+     *         version folder is created.
      * @param fileName The name of the settings file. If this is {@code null},
      *         "settings" is used. This must not contain any path information.
      *
-     * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
-     *         {@code null} or empty or contain only whitespaces or {@code fileName}
-     *         is empty or contains whitespaces only or is not a valid name for
-     *         files.
+     * @throws IllegalArgumentException{@code appName} is {@code null} or empty
+     *         or contain only whitespaces or {@code appVersion} is empty or
+     *         contain only whitespaces or {@code fileName} is empty or contains
+     *         whitespaces only or is not a valid name for files.
      * @throws DuplicateSettingException if a setting with the specified file name
      *         does already exist for {@code appName} and {@code appVersion}.
      */
@@ -106,24 +110,25 @@ public class UserSettings extends Settings {
      * @param appName The name of the application where the name of the settings
      *         file is build from.
      * @param appVersion The version of the application where the name of the
-     *         settings sub folder is build from.
+     *         settings sub folder is build from. If this is {@code null}, no
+     *         version folder is created.
      * @param fileName The name of the settings file. If this is {@code null},
      *         "settings" is used. This must not contain any path information.
      * @param asXml Indicates whether the settings file shall be written in XML.
      *
-     * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
-     *         {@code null} or empty or contain only whitespaces or {@code fileName}
-     *         is empty or contains whitespaces only or is not a valid name for
-     *         files.
+     * @throws IllegalArgumentException {@code appName} is {@code null} or empty
+     *         or contain only whitespaces or {@code appVersion} is empty or
+     *         contain only whitespaces. or {@code fileName} is empty or contains
+     *         whitespaces only or is not a valid name for files.
      * @throws DuplicateSettingException if a setting with the specified file name
      *         does already exist for {@code appName} and {@code appVersion}.
      */
     public UserSettings(String appName, String appVersion, String fileName, boolean asXml) {
         if (Strings.isNullOrBlank(appName))
-            throw new IllegalArgumentException("appName must not be null or empty.");
+            throw new IllegalArgumentException("appName must not be null or blank or empty.");
 
-        if (Strings.isNullOrBlank(appVersion))
-            throw new IllegalArgumentException("appVersion must not be null or empty.");
+        if (appVersion != null && appVersion.trim().isEmpty())
+            throw new IllegalArgumentException("appVersion must not be blank or empty.");
 
         if (fileName != null) {
             if (Strings.isNullOrBlank(fileName) || !FileNames.isValidName(fileName))
@@ -135,7 +140,9 @@ public class UserSettings extends Settings {
         this.appVersion = appVersion;
         this.fileName = fileName == null ? "settings" : fileName;
 
-        var key = this.appName + this.appVersion + this.fileName;
+        var key = this.appVersion != null
+                ? this.appName + this.appVersion + this.fileName
+                : this.appName + this.fileName;
 
         if (knownSettings.get(key) != null)
             throw new DuplicateSettingException(this.fileName);
@@ -180,10 +187,14 @@ public class UserSettings extends Settings {
      */
     public void save() throws IOException {
         try (FileOutputStream out = new FileOutputStream(getSettingsStoragePath())) {
+            String description = appVersion != null
+                    ? String.format("Settings of %s %s", appName, appVersion)
+                    : String.format("Settings of %s", appName);
+
             if (asXml)
-                storeToXML(out, String.format("Settings of %s %s", appName, appVersion));
+                storeToXML(out, description);
             else
-                store(out, String.format("Settings of %s %s", appName, appVersion));
+                store(out, description);
         } catch (Exception e) {
             throw new IOException(CoreMessages.get("error.cannotStoreSettings", getSettingsStoragePath()), e);
         }
@@ -219,10 +230,15 @@ public class UserSettings extends Settings {
         String osName = System.getProperty("os.name");
         String path;
 
-        if (osName.startsWith("Windows"))
-            path = Path.of(home, "AppData", "Roaming", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString();
-        else
-            path = Path.of(home, ".config", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString();
+        if (osName.startsWith("Windows")) {
+            path = appVersion != null
+                    ? Path.of(home, "AppData", "Roaming", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString()
+                    : Path.of(home, "AppData", "Roaming", FileNames.getValidName(appName)).toString();
+        } else {
+            path = appVersion != null
+                    ? Path.of(home, ".config", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString()
+                    : Path.of(home, ".config", FileNames.getValidName(appName)).toString();
+        }
 
         File file = new File(path);
         file.mkdirs();
