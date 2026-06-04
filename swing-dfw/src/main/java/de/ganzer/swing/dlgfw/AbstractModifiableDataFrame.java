@@ -255,6 +255,24 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
     }
 
     /**
+     * Called at construction if {@code data} is not {@code null} after the
+     * controls are created to initialize the controls with the data given at
+     * construction.
+     * <p>
+     * This implementation invokes {@link Initializer<Data>#initControls} on
+     * the center panel (as well on the button panel if any is set) if the
+     * panel implements {@link Initializer<Data>}.
+     *
+     * @param data The data where to initialize the controls with. This may be
+     *         {@code null} if the controls shall be reset.
+     */
+    @Override
+    public void initControls(Data data) {
+        super.initControls(data);
+        setDataModified(false);
+    }
+
+    /**
      * Queries the user what to do with modified data if {@link #isDataModified()}
      * is {@code true} and the event's ID is {@link WindowEvent#WINDOW_CLOSING}.
      * <p>

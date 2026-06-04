@@ -655,6 +655,24 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
     }
 
     /**
+     * Called at construction if {@code data} is not {@code null} after the
+     * controls are created to initialize the controls with the data given at
+     * construction.
+     * <p>
+     * This implementation invokes {@link Initializer<Data>#initControls} on
+     * the center panel (as well on the button panel if any is set) if the
+     * panel implements {@link Initializer<Data>}.
+     *
+     * @param data The data where to initialize the controls with. This may be
+     *         {@code null} if the controls shall be reset.
+     */
+    @Override
+    public void initControls(Data data) {
+        super.initControls(data);
+        setDataModified(false);
+    }
+
+    /**
      * Called to validate the user's input.
      * <p>
      * This implementation tests whether the set center panel implements
