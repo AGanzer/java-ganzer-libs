@@ -28,6 +28,32 @@ class CharCountValidatorTest {
     }
 
     @Test
+    void constructWithMinMaxLength() {
+        var min = 10;
+        var max = 12;
+        var val = new CharCountValidator(min, max);
+
+        assertNull(val.getErrorMessage());
+        assertNull(val.getTag());
+        assertEquals(min, val.getMinLength());
+        assertEquals(max, val.getMaxLength());
+        assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
+    }
+
+    @Test
+    void constructWithOptionAndMinMax() {
+        var min = 10;
+        var max = 12;
+        var val = new CharCountValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, min, max);
+
+        assertNull(val.getErrorMessage());
+        assertNull(val.getTag());
+        assertEquals(min, val.getMinLength());
+        assertEquals(max, val.getMaxLength());
+        assertEquals(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, val.getOptions());
+    }
+
+    @Test
     void setOptions() {
         var val = new CharCountValidator();
         val.setOptions(ValidatorOptions.AUTO_FILL);
