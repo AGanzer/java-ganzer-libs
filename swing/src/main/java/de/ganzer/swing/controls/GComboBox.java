@@ -30,6 +30,8 @@ public class GComboBox<E> extends JComboBox<E> {
      *
      * @param aModel the <code>ComboBoxModel</code> that provides the
      *         displayed list of items
+     *
+     * @since 5.6.0
      */
     public GComboBox(ComboBoxModel<E> aModel) {
         super(aModel);
