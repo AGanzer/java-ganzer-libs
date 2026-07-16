@@ -9,6 +9,8 @@ import java.util.Vector;
  * an object of type {@code E}.
  *
  * @param <E> The type of the elements of this combo box.
+ *
+ * @since 5.6.0
  */
 @SuppressWarnings("unused")
 public class GComboBox<E> extends JComboBox<E> {
@@ -30,8 +32,6 @@ public class GComboBox<E> extends JComboBox<E> {
      *
      * @param aModel the <code>ComboBoxModel</code> that provides the
      *         displayed list of items
-     *
-     * @since 5.6.0
      */
     public GComboBox(ComboBoxModel<E> aModel) {
         super(aModel);
