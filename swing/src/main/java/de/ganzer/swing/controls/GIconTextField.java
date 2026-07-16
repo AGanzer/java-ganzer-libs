@@ -139,6 +139,8 @@ public class GIconTextField extends GTextField {
         if (icon == getIcon())
             return;
 
+        iconLabel.setIcon(icon);
+
         if (icon == null) {
             if (UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf.")) {
                 putClientProperty("JTextField.trailingComponent", null);
@@ -146,11 +148,7 @@ public class GIconTextField extends GTextField {
                 remove(iconLabel);
                 setMargin(new Insets(0, 0, 0, 0));
             }
-
-            iconLabel.setIcon(null);
         } else {
-            iconLabel.setIcon(icon);
-
             if (UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf.")) {
                 putClientProperty("JTextField.trailingComponent", iconLabel);
             } else {
@@ -172,23 +170,24 @@ public class GIconTextField extends GTextField {
         if (icon == getIcon())
             return;
 
+        iconLabel.setIcon(icon);
+
         if (icon == null) {
-            if (iconLabel != null) {
+            if (UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf."))
+                putClientProperty("JTextField.trailingComponent", null);
+            else
                 remove(iconLabel);
-                iconLabel = null;
-            }
         } else {
-            if (iconLabel == null) {
+            if (UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf.")) {
+                putClientProperty("JTextField.trailingComponent", iconLabel);
+            } else {
                 var insets = getInsets();
                 var size = getPreferredSize().height - insets.top - insets.bottom;
 
-                iconLabel = new JLabel();
                 iconLabel.setPreferredSize(new Dimension(size, size));
 
                 add(iconLabel, BorderLayout.EAST);
             }
-
-            iconLabel.setIcon(icon);
         }
 
         revalidate();
@@ -199,7 +198,7 @@ public class GIconTextField extends GTextField {
     public Insets getInsets() {
         Insets insets = super.getInsets();
 
-        return iconLabel != null
+        return getIcon() != null
                 ? new Insets(insets.top, insets.left, insets.bottom, insets.right + iconLabel.getPreferredSize().width)
                 : insets;
     }
@@ -208,7 +207,7 @@ public class GIconTextField extends GTextField {
     public Insets getInsets(Insets insets) {
         super.getInsets(insets);
 
-        if (iconLabel != null)
+        if (getIcon() != null)
             insets.right += iconLabel.getPreferredSize().width;
 
         return insets;
