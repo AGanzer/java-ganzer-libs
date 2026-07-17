@@ -5,11 +5,10 @@ import de.ganzer.swing.actions.GAction;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Document;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Insets;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -146,46 +145,11 @@ public class GIconTextField extends GTextField {
                 putClientProperty("JTextField.trailingComponent", null);
             } else {
                 remove(iconLabel);
-                setMargin(new Insets(0, 0, 0, 0));
             }
         } else {
             if (UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf.")) {
                 putClientProperty("JTextField.trailingComponent", iconLabel);
             } else {
-                add(iconLabel, BorderLayout.EAST);
-
-                var rm = iconLabel.getPreferredSize().width;
-                var m = getMargin();
-
-                setMargin(new Insets(m.top, m.left, m.bottom, rm));
-            }
-        }
-
-        revalidate();
-        repaint();
-    }
-
-/* Mit insets:
-    public void setIcon(Icon icon) {
-        if (icon == getIcon())
-            return;
-
-        iconLabel.setIcon(icon);
-
-        if (icon == null) {
-            if (UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf."))
-                putClientProperty("JTextField.trailingComponent", null);
-            else
-                remove(iconLabel);
-        } else {
-            if (UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf.")) {
-                putClientProperty("JTextField.trailingComponent", iconLabel);
-            } else {
-                var insets = getInsets();
-                var size = getPreferredSize().height - insets.top - insets.bottom;
-
-                iconLabel.setPreferredSize(new Dimension(size, size));
-
                 add(iconLabel, BorderLayout.EAST);
             }
         }
@@ -193,26 +157,6 @@ public class GIconTextField extends GTextField {
         revalidate();
         repaint();
     }
-
-    @Override
-    public Insets getInsets() {
-        Insets insets = super.getInsets();
-
-        return getIcon() != null
-                ? new Insets(insets.top, insets.left, insets.bottom, insets.right + iconLabel.getPreferredSize().width)
-                : insets;
-    }
-
-    @Override
-    public Insets getInsets(Insets insets) {
-        super.getInsets(insets);
-
-        if (getIcon() != null)
-            insets.right += iconLabel.getPreferredSize().width;
-
-        return insets;
-    }
-*/
 
     /**
      * Sets the background color of this component.  The background
@@ -238,6 +182,14 @@ public class GIconTextField extends GTextField {
             iconLabel.setBackground(this.getBackground());
     }
 
+    @Override
+    public void updateUI() {
+        super.updateUI();
+
+//        if (!UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf."))
+//            setUI(new IconTextFieldUI());
+    }
+
     private void init() {
         if (!UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf."))
             setLayout(new BorderLayout());
@@ -250,5 +202,24 @@ public class GIconTextField extends GTextField {
                 iconClicked.actionPerformed(new ActionEvent(this, 0, null));
             }
         });
+    }
+
+    private static class IconTextFieldUI extends BasicTextFieldUI {
+        @Override
+        protected Rectangle getVisibleEditorRect() {
+            Rectangle r = super.getVisibleEditorRect();
+
+            JTextComponent c = getComponent();
+
+            if (c instanceof GIconTextField tf) {
+                Icon icon = tf.getIcon();
+
+                if (icon != null) {
+                    r.width -= icon.getIconWidth() + 4;
+                }
+            }
+
+            return r;
+        }
     }
 }
