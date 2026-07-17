@@ -5,9 +5,7 @@ import de.ganzer.swing.actions.GAction;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
-import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -182,13 +180,33 @@ public class GIconTextField extends GTextField {
             iconLabel.setBackground(this.getBackground());
     }
 
-    @Override
-    public void updateUI() {
-        super.updateUI();
-
+    // This does not work properly, and it is better not to use own UI:
+//    @Override
+//    public void updateUI() {
+//        super.updateUI();
+//
 //        if (!UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf."))
 //            setUI(new IconTextFieldUI());
-    }
+//    }
+//
+//    private static class IconTextFieldUI extends BasicTextFieldUI {
+//        @Override
+//        protected Rectangle getVisibleEditorRect() {
+//            Rectangle r = super.getVisibleEditorRect();
+//
+//            JTextComponent c = getComponent();
+//
+//            if (c instanceof GIconTextField tf) {
+//                Icon icon = tf.getIcon();
+//
+//                if (icon != null) {
+//                    r.width -= icon.getIconWidth() + 4;
+//                }
+//            }
+//
+//            return r;
+//        }
+//    }
 
     private void init() {
         if (!UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf."))
@@ -202,24 +220,5 @@ public class GIconTextField extends GTextField {
                 iconClicked.actionPerformed(new ActionEvent(this, 0, null));
             }
         });
-    }
-
-    private static class IconTextFieldUI extends BasicTextFieldUI {
-        @Override
-        protected Rectangle getVisibleEditorRect() {
-            Rectangle r = super.getVisibleEditorRect();
-
-            JTextComponent c = getComponent();
-
-            if (c instanceof GIconTextField tf) {
-                Icon icon = tf.getIcon();
-
-                if (icon != null) {
-                    r.width -= icon.getIconWidth() + 4;
-                }
-            }
-
-            return r;
-        }
     }
 }

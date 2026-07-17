@@ -61,6 +61,8 @@ public class InputTestDialog extends JDialog {
     private void initTextField() {
         inputField = new GIconTextField(30);
         inputField.setIcon(SVGProvider.get("checks", 20));
+        inputField.putClientProperty("JTextField.showClearButton", true);
+        inputField.putClientProperty("JTextField.placeholderText", "Input Letters ...");
 
         var pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
