@@ -15,8 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 public class InputTestDialog extends JDialog {
-    private GIconTextField inputField;
-
     public static class Data {
         public String input;
     }
@@ -59,7 +57,7 @@ public class InputTestDialog extends JDialog {
     }
 
     private void initTextField() {
-        inputField = new GIconTextField(30);
+        var inputField = new GIconTextField(30);
         inputField.setIcon(SVGProvider.get("checks", 20));
         inputField.putClientProperty("JTextField.showClearButton", true);
         inputField.putClientProperty("JTextField.placeholderText", "Input Letters ...");

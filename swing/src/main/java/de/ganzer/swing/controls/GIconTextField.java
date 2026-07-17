@@ -118,6 +118,24 @@ public class GIconTextField extends GTextField {
     }
 
     /**
+     * Gets the cursor that is displayed when the icon is hovered.
+     *
+     * @return The cursor that is displayed when the icon is hovered.
+     */
+    public Cursor getIconCursor() {
+        return iconLabel.getCursor();
+    }
+
+    /**
+     * Sets the cursor that is displayed when the icon is hovered.
+     *
+     * @param cursor The cursor to display when the icon is hovered.
+     */
+    public void setIconCursor(Cursor cursor) {
+        iconLabel.setCursor(cursor);
+    }
+
+    /**
      * Gets the icon that is displayed in the text field.
      *
      * @return The icon that is displayed in the text field, or {@code null} if
@@ -212,6 +230,7 @@ public class GIconTextField extends GTextField {
         if (!UIManager.getLookAndFeel().getClass().getName().contains(".flatlaf."))
             setLayout(new BorderLayout());
 
+        iconLabel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         iconLabel.setOpaque(true);
         iconLabel.setBackground(this.getBackground());
         iconLabel.addMouseListener(new MouseAdapter() {
