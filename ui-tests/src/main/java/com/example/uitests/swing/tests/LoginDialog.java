@@ -2,6 +2,7 @@ package com.example.uitests.swing.tests;
 
 import com.example.uitests.swing.SVGProvider;
 import de.ganzer.core.validation.CharCountValidator;
+import de.ganzer.swing.controls.GIconPasswordField;
 import de.ganzer.swing.dialogs.AbstractModifiableDialog;
 import de.ganzer.swing.validaton.ValidationBehavior;
 import de.ganzer.swing.validaton.ValidationFilter;
@@ -18,13 +19,15 @@ import java.awt.Window;
 public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     private final ValidationFilterList validationFilterList = new ValidationFilterList();
 
+    private char echoChar;
+
     public static class Data {
         public String name;
-        public String password;
+        public char[] password;
     }
 
     private final JTextField nameField = new JTextField(20);
-    private final JTextField passwordField = new JPasswordField(20);
+    private final GIconPasswordField passwordField = new GIconPasswordField(20);
 
     private LoginDialog(Window owner, Dialog.ModalityType modalityType, Data data) {
         super(owner, modalityType, data);
@@ -50,7 +53,7 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
     @Override
     protected void updateData(Data data) {
         data.name = nameField.getText();
-        data.password = passwordField.getText();
+        data.password = passwordField.getPassword();
     }
 
     private void init() {
@@ -76,7 +79,15 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
         }
 
         nameField.setText(getData().name);
-        passwordField.setText(getData().password);
+        passwordField.setText(getData().password != null ? new String(getData().password) : null);
+        passwordField.setIcon(SVGProvider.get("close", 16));
+        passwordField.getIconClickedAction().addActionListener(e -> {
+            passwordField.setEchoChar(passwordField.echoCharIsSet() ? '\0' : echoChar);
+            passwordField.setIcon(passwordField.echoCharIsSet()
+                                          ? SVGProvider.get("close", 16)
+                                          : SVGProvider.get("checks", 16));
+        });
+        echoChar = passwordField.getEchoChar();
 
         nameField.getDocument().addDocumentListener(new TextFieldListener());
         passwordField.getDocument().addDocumentListener(new TextFieldListener());

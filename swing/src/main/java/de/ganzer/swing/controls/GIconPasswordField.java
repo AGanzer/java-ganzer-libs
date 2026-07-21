@@ -16,7 +16,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * A text field with an optional image at the right edge.
+ * A password field with an optional image at the right edge.
  *
  * @since 5.6.0
  */
