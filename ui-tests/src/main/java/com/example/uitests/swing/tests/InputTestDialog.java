@@ -4,8 +4,7 @@ import com.example.uitests.swing.SVGProvider;
 import de.ganzer.core.validation.PxPicValidator;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.swing.actions.GAction;
-import de.ganzer.swing.controls.GIconTextField;
-import de.ganzer.swing.controls.GTextField;
+import de.ganzer.swing.controls.flatlaf.GIconTextField;
 import de.ganzer.swing.validaton.ValidationBehavior;
 import de.ganzer.swing.validaton.ValidationFilter;
 

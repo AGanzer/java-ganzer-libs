@@ -2,7 +2,7 @@ package com.example.uitests.swing.tests;
 
 import com.example.uitests.swing.SVGProvider;
 import de.ganzer.core.validation.CharCountValidator;
-import de.ganzer.swing.controls.GIconPasswordField;
+import de.ganzer.swing.controls.flatlaf.GIconPasswordField;
 import de.ganzer.swing.dialogs.AbstractModifiableDialog;
 import de.ganzer.swing.validaton.ValidationBehavior;
 import de.ganzer.swing.validaton.ValidationFilter;
