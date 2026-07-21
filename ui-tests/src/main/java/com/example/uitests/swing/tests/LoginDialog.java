@@ -78,7 +78,6 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
             }
         }
 
-        nameField.setText(getData().name);
         passwordField.setText(getData().password != null ? new String(getData().password) : null);
         passwordField.setIcon(SVGProvider.get("close", 16));
         passwordField.getIconClickedAction().addActionListener(e -> {
@@ -87,10 +86,11 @@ public class LoginDialog extends AbstractModifiableDialog<LoginDialog.Data> {
                                           ? SVGProvider.get("close", 16)
                                           : SVGProvider.get("checks", 16));
         });
+        passwordField.getDocument().addDocumentListener(new TextFieldListener());
         echoChar = passwordField.getEchoChar();
 
+        nameField.setText(getData().name);
         nameField.getDocument().addDocumentListener(new TextFieldListener());
-        passwordField.getDocument().addDocumentListener(new TextFieldListener());
 
         var nameValidator = new CharCountValidator();
         nameValidator.setMinLength(5);
