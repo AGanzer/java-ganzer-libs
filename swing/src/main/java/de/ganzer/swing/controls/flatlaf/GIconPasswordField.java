@@ -2,10 +2,7 @@ package de.ganzer.swing.controls.flatlaf;
 
 import de.ganzer.swing.actions.GAction;
 
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -13,12 +10,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.BeanProperty;
+import java.beans.JavaBean;
 
 /**
  * A password field with an optional image at the right edge.
  *
  * @since 5.6.0
  */
+@JavaBean(description = "Allows the editing an invisible password with an optional icon.")
+@SwingContainer(false)
+@SuppressWarnings("unused")
 public class GIconPasswordField extends JPasswordField {
     /**
      * The default command of the action that is sent when the icon is clicked.
@@ -134,6 +136,7 @@ public class GIconPasswordField extends JPasswordField {
      *
      * @param cursor The cursor to display when the icon is hovered.
      */
+    @BeanProperty(bound = false, description = "The cursor to display when the icon is hovered.")
     public void setIconCursor(Cursor cursor) {
         iconLabel.setCursor(cursor);
     }
@@ -153,6 +156,7 @@ public class GIconPasswordField extends JPasswordField {
      *
      * @param icon The icon to display, or {@code null} to remove the icon.
      */
+    @BeanProperty(bound = false, description = "the icon to display.")
     public void setIcon(Icon icon) {
         if (icon == getIcon())
             return;
@@ -193,6 +197,7 @@ public class GIconPasswordField extends JPasswordField {
      * @see Component#getBackground
      * @see #setOpaque
      */
+    @BeanProperty(preferred = true, visualUpdate = true, description = "The background color of the component.")
     @Override
     public void setBackground(Color bg) {
         super.setBackground(bg);
@@ -221,7 +226,7 @@ public class GIconPasswordField extends JPasswordField {
                 Icon icon = tf.getIcon();
 
                 if (icon != null) {
-                    r.width -= icon.getIconWidth() + 4;
+                    r.width -= icon.getIconWidth() + 2;
                 }
             }
 
@@ -234,8 +239,7 @@ public class GIconPasswordField extends JPasswordField {
             setLayout(new BorderLayout());
 
         iconLabel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        iconLabel.setOpaque(true);
-        iconLabel.setBackground(this.getBackground());
+        iconLabel.setOpaque(false);
         iconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
