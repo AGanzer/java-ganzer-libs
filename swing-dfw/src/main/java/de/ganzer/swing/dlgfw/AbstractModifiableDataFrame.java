@@ -410,7 +410,7 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      * <p>
      * The title to show in the confirmation dialog is gotten from
      * {@link ApplicationService#getAppDisplayName()} if available; otherwise,
-     * {@code null} is used as title.
+     * {@code null} is used as a title.
      *
      * @return The result of the user's choice. {@code true} to accept,
      *         {@code false} to deny or {@code null} to cancel.

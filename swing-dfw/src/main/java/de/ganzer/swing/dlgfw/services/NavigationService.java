@@ -3,7 +3,7 @@ package de.ganzer.swing.dlgfw.services;
 import java.awt.Component;
 
 /**
- * A service to navigates through the UI.
+ * A service to navigate through the UI.
  */
 public interface NavigationService {
     /**

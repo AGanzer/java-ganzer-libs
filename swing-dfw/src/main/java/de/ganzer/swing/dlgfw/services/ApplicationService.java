@@ -1,7 +1,7 @@
 package de.ganzer.swing.dlgfw.services;
 
 /**
- * A service to get application specific information.
+ * A service to get application-specific information.
  */
 public interface ApplicationService {
     /**
