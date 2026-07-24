@@ -78,7 +78,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     }
 
     /**
-     * Sets the color to use as background for titles.
+     * Sets the color to use as background-color for titles.
      *
      * @param color The color to set.
      *
