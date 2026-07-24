@@ -1,13 +1,19 @@
 package de.ganzer.swing.controls;
 
 import javax.swing.JTextArea;
+import javax.swing.SwingContainer;
 import javax.swing.text.Document;
 import javax.swing.undo.UndoManager;
+import java.beans.JavaBean;
 
 /**
  * Extends {@link JTextArea} with the ability to control undo/redo operations
  * via the keyboard.
  */
+@JavaBean(defaultProperty = "UIClassID",
+        description = "A multi-line area that displays plain text " +
+                "and to control undo/redo operations via the keyboard.")
+@SwingContainer(false)
 @SuppressWarnings("unused")
 public class GTextArea extends JTextArea {
     private final UndoManager undoManager = new UndoManager();

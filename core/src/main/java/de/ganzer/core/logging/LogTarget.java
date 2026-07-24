@@ -212,7 +212,7 @@ public abstract class LogTarget implements AutoCloseable {
      * the target or decreases the responsiveness of the application. Joined
      * messages are not written directly into the target, but they are
      * collected until the target is able to work further messages. These
-     * messages should be written as one single message.
+     * collected messages should be written as one single message.
      * <p>
      * If {@link #getMessageWaitTimeout()} is less than 1, {@code info} contains
      * only one element. In all other cases it may contain multiple elements.

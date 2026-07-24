@@ -2,6 +2,7 @@ package com.example.uitests.swing;
 
 import de.ganzer.swing.util.UISettings;
 
+import javax.swing.SwingUtilities;
 import java.awt.AWTEvent;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
@@ -31,19 +32,20 @@ public class SwingTestApp {
                 .getSystemEventQueue()
                 .push(new ExceptionHandlingEventQueue());
 
-        var frame = new MainFrame();
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent ignored) {
-                try {
-                    uiSettings.save();
-                } catch (IOException e) {
-                    e.printStackTrace(System.err);
+        SwingUtilities.invokeLater(() -> {
+            var frame = new MainFrame();
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent ignored) {
+                    try {
+                        uiSettings.save();
+                    } catch (IOException e) {
+                        e.printStackTrace(System.err);
+                    }
                 }
-            }
+            });
+            frame.setVisible(true);
         });
-
-        frame.setVisible(true);
     }
 
     public static class ExceptionHandlingEventQueue extends EventQueue {

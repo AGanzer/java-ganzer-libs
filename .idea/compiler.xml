@@ -9,7 +9,9 @@
         <module name="core" />
         <module name="fx" />
         <module name="de-ganzer-fx" />
+        <module name="swing-dfw" />
         <module name="ui-tests" />
+        <module name="de-ganzer-swing-dlgfw" />
         <module name="de-ganzer-core" />
         <module name="de-ganzer-swing" />
         <module name="de-ganzer-gv" />

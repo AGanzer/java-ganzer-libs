@@ -1,9 +1,10 @@
 package com.example.uitests.swing.tests;
 
+import com.example.uitests.swing.SVGProvider;
 import de.ganzer.core.validation.PxPicValidator;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.swing.actions.GAction;
-import de.ganzer.swing.controls.GTextField;
+import de.ganzer.swing.controls.flatlaf.GIconTextField;
 import de.ganzer.swing.validaton.ValidationBehavior;
 import de.ganzer.swing.validaton.ValidationFilter;
 
@@ -55,7 +56,11 @@ public class InputTestDialog extends JDialog {
     }
 
     private void initTextField() {
-        var inputField = new GTextField(30);
+        var inputField = new GIconTextField(30);
+        inputField.setIcon(SVGProvider.get("checks", 20));
+        inputField.putClientProperty("JTextField.showClearButton", true);
+        inputField.putClientProperty("JTextField.placeholderText", "Input Letters ...");
+        inputField.getIconClickedAction().addActionListener(this::onOk);
 
         var pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));

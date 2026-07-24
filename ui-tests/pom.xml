@@ -13,6 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <junit.version>5.8.2</junit.version>
+        <ganzer.version>5.6.0</ganzer.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
@@ -21,19 +22,24 @@
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
-            <version>5.6.0</version>
+            <version>${ganzer.version}</version>
        </dependency>
         <dependency>
             <groupId>de.ganzer.fx</groupId>
             <artifactId>de-ganzer-fx</artifactId>
-            <version>5.6.0</version>
+            <version>${ganzer.version}</version>
         </dependency>
         <dependency>
             <groupId>de.ganzer.swing</groupId>
             <artifactId>de-ganzer-swing</artifactId>
-            <version>5.6.0</version>
+            <version>${ganzer.version}</version>
         </dependency>
-        
+        <dependency>
+            <groupId>de.ganzer.swing.dlgfw</groupId>
+            <artifactId>de-ganzer-swing-dlgfw</artifactId>
+            <version>${ganzer.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
@@ -78,12 +84,12 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>17.0.2</version>
+            <version>21.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>17.0.2</version>
+            <version>21.0.6</version>
         </dependency>
 
         <dependency>

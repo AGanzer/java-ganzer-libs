@@ -6,7 +6,7 @@
 
     <groupId>de.ganzer.core</groupId>
     <artifactId>de-ganzer-core</artifactId>
-    <version>5.6.0</version>
+    <version>${ganzer.version}</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,6 +15,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <junit.version>5.10.2</junit.version>
+        <ganzer.version>5.6.0</ganzer.version>
     </properties>
 
     <dependencies>
