@@ -69,7 +69,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     }
 
     /**
-     * Gets the color to use as background for titles.
+     * Gets the color to use as background-color for titles.
      *
      * @return The color. The default is {@link Color#WHITE}.
      */
@@ -121,7 +121,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     }
 
     /**
-     * Inheritors should override this if the want to free used resources.
+     * Inheritors should override this if they want to free used resources.
      * <p>
      * This implementation calls {@code dispose()} of all subpanels that
      * implement {@link Disposable}.
@@ -151,7 +151,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     /**
      * Called to create the panel with the main controls of the frame or dialog.
      * <p>
-     * Note that this is called during construction. Therefor derived classes
+     * Note that this is called during construction. Therefore, derived classes
      * my not been fully initialized when this is invoked.
      *
      * @return The panel that shall be inserted into the center of the frame or
@@ -162,7 +162,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     /**
      * Called to create the caption for the title of the dialog or frame.
      * <p>
-     * Note that this is called during construction. Therefor derived classes
+     * Note that this is called during construction. Therefore, derived classes
      * my not been fully initialized when this is invoked.
      *
      * @return The title to set or {@code null} if no caption shall be displayed.
@@ -172,7 +172,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     /**
      * Called to create the image icon of the dialog or frame.
      * <p>
-     * Note that this is called during construction. Therefor derived classes
+     * Note that this is called during construction. Therefore, derived classes
      * my not been fully initialized when this is invoked.
      *
      * @return The image icon to display or {@code null} if no image shall be
@@ -184,7 +184,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * Called to create a component that contains further controls that shall be
      * displayed in the center of the title panel.
      * <p>
-     * Note that this is called during construction. Therefor derived classes
+     * Note that this is called during construction. Therefore, derived classes
      * my not been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
@@ -200,7 +200,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * Called to create a component that contains further controls that shall be
      * displayed on the right side of the title panel.
      * <p>
-     * Note that this is called during construction. Therefor derived classes
+     * Note that this is called during construction. Therefore, derived classes
      * my not been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
@@ -216,7 +216,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * Called to create the panel that contains further controls that shall be
      * displayed the south of the frame or dialog.
      * <p>
-     * Note that this is called during construction. Therefor derived classes
+     * Note that this is called during construction. Therefore, derived classes
      * my not been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
@@ -232,7 +232,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * Called to create the panel that contains further controls that shall be
      * displayed the east of the frame or dialog.
      * <p>
-     * Note that this is called during construction. Therefor derived classes
+     * Note that this is called during construction. Therefore, derived classes
      * my not been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
