@@ -232,7 +232,7 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
       * Called to initialize the controls from the specified data.
       * <p>
       * This implementation invokes {@link Initializer<Data>#initControls} on
-      * the center panel (as well on the button panel if any is set) if the
+      * the center panel (as well as on the button panel if any is set) if the
       * panel implements {@link Initializer<Data>}.
       *
       * @param data The data where to initialize the controls with. This may be
