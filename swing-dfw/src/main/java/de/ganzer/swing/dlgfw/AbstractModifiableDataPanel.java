@@ -85,6 +85,6 @@ public abstract class AbstractModifiableDataPanel<Data> extends AbstractPanel im
      *         owner's data is.
      */
     public Data getData() {
-        return owner.getData();
+        return owner != null ? owner.getData() : null;
     }
 }
