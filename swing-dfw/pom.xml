@@ -4,16 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.ganzer.swing</groupId>
-    <artifactId>de-ganzer-swing</artifactId>
-    <version>1.5.3</version>
+    <groupId>de.ganzer.swing.dlgfw</groupId>
+    <artifactId>de-ganzer-swing-dlgfw</artifactId>
+    <version>${ganzer.version}</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <ganzer.version>5.6.0</ganzer.version>
         <junit.version>5.10.2</junit.version>
     </properties>
 
@@ -21,7 +22,12 @@
         <dependency>
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
-            <version>1.5.3</version>
+            <version>${ganzer.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.ganzer.swing</groupId>
+            <artifactId>de-ganzer-swing</artifactId>
+            <version>${ganzer.version}</version>
         </dependency>
 
         <dependency>

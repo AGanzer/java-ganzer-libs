@@ -27,11 +27,12 @@ public class UISettings extends UserSettings {
      * @param appName The name of the application where the name of the settings
      *         file is build from.
      * @param appVersion The version of the application where the name of the
-     *         settings sub folder is build from.
+     *         settings sub folder is build from. If this is {@code null}, no
+     *         version folder is created.
      *
      * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
-     *         {@code null} or empty or contain only whitespaces.
-     * @throws DuplicateSettingException if a setting with the file name "ui"
+     *         empty or contain only whitespaces.
+     * @throws DuplicateSettingException if a setting with the file name "settings"
      *         does already exist for {@code appName} and {@code appVersion}.
      */
     public UISettings(String appName, String appVersion) {
@@ -44,11 +45,13 @@ public class UISettings extends UserSettings {
      * @param appName The name of the application where the name of the settings
      *         file is build from.
      * @param appVersion The version of the application where the name of the
-     *         settings sub folder is build from.
+     *         settings sub folder is build from. If this is {@code null}, no
+     *         version folder is created.
      * @param asXml Indicates whether the settings file shall be written in XML.
      *
-     * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
-     *         {@code null} or empty or contain only whitespaces.
+     * @throws IllegalArgumentException {@code appName} is {@code null} or empty
+     *         or contain only whitespaces or {@code appVersion} is empty or
+     *         contain only whitespaces.
      * @throws DuplicateSettingException if a setting with the file name "ui"
      *         does already exist for {@code appName} and {@code appVersion}.
      */
