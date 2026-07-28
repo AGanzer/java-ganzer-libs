@@ -232,12 +232,12 @@ public class UserSettings extends Settings {
 
         if (osName.startsWith("Windows")) {
             path = appVersion != null
-                    ? Path.of(home, "AppData", "Roaming", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString()
-                    : Path.of(home, "AppData", "Roaming", FileNames.getValidName(appName)).toString();
+                    ? Paths.get(home, "AppData", "Roaming", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString()
+                    : Paths.get(home, "AppData", "Roaming", FileNames.getValidName(appName)).toString();
         } else {
             path = appVersion != null
-                    ? Path.of(home, ".config", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString()
-                    : Path.of(home, ".config", FileNames.getValidName(appName)).toString();
+                    ? Paths.get(home, ".config", FileNames.getValidName(appName), FileNames.getValidName(appVersion)).toString()
+                    : Paths.get(home, ".config", FileNames.getValidName(appName)).toString();
         }
 
         File file = new File(path);

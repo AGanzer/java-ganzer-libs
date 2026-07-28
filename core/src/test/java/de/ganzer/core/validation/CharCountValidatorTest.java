@@ -29,9 +29,9 @@ class CharCountValidatorTest {
 
     @Test
     void constructWithMinMaxLength() {
-        var min = 10;
-        var max = 12;
-        var val = new CharCountValidator(min, max);
+        int min = 10;
+        int max = 12;
+        CharCountValidator val = new CharCountValidator(min, max);
 
         assertNull(val.getErrorMessage());
         assertNull(val.getTag());
@@ -42,9 +42,9 @@ class CharCountValidatorTest {
 
     @Test
     void constructWithOptionAndMinMax() {
-        var min = 10;
-        var max = 12;
-        var val = new CharCountValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, min, max);
+        int min = 10;
+        int max = 12;
+        CharCountValidator val = new CharCountValidator(ValidatorOptions.AUTO_FILL | ValidatorOptions.NEEDS_INPUT, min, max);
 
         assertNull(val.getErrorMessage());
         assertNull(val.getTag());

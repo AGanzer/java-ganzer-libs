@@ -3,7 +3,6 @@ package de.ganzer.swing.controls;
 import javax.swing.AbstractAction;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.SwingContainer;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.undo.UndoManager;
@@ -11,16 +10,11 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.beans.JavaBean;
 
 /**
  * Extends {@link JTextField} with the ability to control undo/redo operations
  * via the keyboard.
  */
-@JavaBean(defaultProperty = "UIClassID",
-        description = "A component that allows for the editing a single line of " +
-                "text and to control undo/redo operations via the keyboard.")
-@SwingContainer(false)
 @SuppressWarnings("unused")
 public class GTextField extends JTextField {
     private final UndoManager undoManager = new UndoManager();

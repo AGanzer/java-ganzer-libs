@@ -5,7 +5,6 @@ import de.ganzer.swing.controls.GTextField;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import javax.swing.SwingContainer;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Document;
@@ -14,17 +13,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.BeanProperty;
-import java.beans.JavaBean;
 
 /**
  * A text field with an optional image at the right edge.
  *
  * @since 5.6.0
  */
-@JavaBean(defaultProperty = "UIClassID",
-        description = "A single-line text editor with an optional icon.")
-@SwingContainer(false)
 @SuppressWarnings("unused")
 public class GIconTextField extends GTextField {
     /**
@@ -141,7 +135,6 @@ public class GIconTextField extends GTextField {
      *
      * @param cursor The cursor to display when the icon is hovered.
      */
-    @BeanProperty(bound = false, description = "The cursor to display when the icon is hovered.")
     public void setIconCursor(Cursor cursor) {
         iconLabel.setCursor(cursor);
     }
@@ -161,7 +154,6 @@ public class GIconTextField extends GTextField {
      *
      * @param icon The icon to display, or {@code null} to remove the icon.
      */
-    @BeanProperty(bound = false, description = "the icon to display.")
     public void setIcon(Icon icon) {
         if (icon == getIcon())
             return;
@@ -202,7 +194,6 @@ public class GIconTextField extends GTextField {
      * @see Component#getBackground
      * @see #setOpaque
      */
-    @BeanProperty(preferred = true, visualUpdate = true, description = "The background color of the component.")
     @Override
     public void setBackground(Color bg) {
         super.setBackground(bg);
@@ -227,8 +218,8 @@ public class GIconTextField extends GTextField {
 
             JTextComponent c = getComponent();
 
-            if (c instanceof GIconTextField tf) {
-                Icon icon = tf.getIcon();
+            if (c instanceof GIconTextField) {
+                Icon icon = ((GIconTextField) c).getIcon();
 
                 if (icon != null) {
                     r.width -= icon.getIconWidth() + 2;

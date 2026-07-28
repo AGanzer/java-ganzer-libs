@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GComboBoxTest {
     @Test
     void getSelectedItem() {
-        var cb = new GComboBox<String>();
+        GComboBox<String> cb = new GComboBox<>();
         cb.addItem("a");
         cb.setSelectedItem("a");
 
