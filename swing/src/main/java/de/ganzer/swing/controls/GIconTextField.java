@@ -1,7 +1,6 @@
-package de.ganzer.swing.controls.flatlaf;
+package de.ganzer.swing.controls;
 
 import de.ganzer.swing.actions.GAction;
-import de.ganzer.swing.controls.GTextField;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
