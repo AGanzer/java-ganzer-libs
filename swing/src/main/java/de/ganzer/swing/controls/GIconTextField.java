@@ -1,9 +1,11 @@
-package de.ganzer.swing.controls.flatlaf;
+package de.ganzer.swing.controls;
 
 import de.ganzer.swing.actions.GAction;
 
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicPasswordFieldUI;
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
@@ -12,18 +14,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * A password field with an optional image at the right edge.
+ * A text field with an optional image at the right edge.
  *
  * @since 5.6.0
  */
 @SuppressWarnings("unused")
-public class GIconPasswordField extends JPasswordField {
+public class GIconTextField extends GTextField {
     /**
      * The default command of the action that is sent when the icon is clicked.
      * This can be changed by invoking {@link GAction#setCommand(String)} of
      * the action returned by {@link #getIconClickedAction()}.
      */
-    public static final String ICON_CLICKED_COMMAND = "GIconPasswordField.iconClicked";
+    public static final String ICON_CLICKED_COMMAND = "GIconTextField.iconClicked";
 
     private final JLabel iconLabel = new JLabel();
     private final GAction iconClicked = new GAction().command(ICON_CLICKED_COMMAND);
@@ -33,7 +35,7 @@ public class GIconPasswordField extends JPasswordField {
      * the initial string is <code>null</code>,
      * and the number of columns is set to 0.
      */
-    public GIconPasswordField() {
+    public GIconTextField() {
         init();
     }
 
@@ -44,7 +46,7 @@ public class GIconPasswordField extends JPasswordField {
      *
      * @param text the text to be displayed, or <code>null</code>
      */
-    public GIconPasswordField(String text) {
+    public GIconTextField(String text) {
         super(text);
         init();
     }
@@ -60,7 +62,7 @@ public class GIconPasswordField extends JPasswordField {
      *         preferred width will be whatever naturally results from
      *         the component implementation
      */
-    public GIconPasswordField(int columns) {
+    public GIconTextField(int columns) {
         super(columns);
         init();
     }
@@ -75,7 +77,7 @@ public class GIconPasswordField extends JPasswordField {
      *         preferred width will be whatever naturally results from
      *         the component implementation
      */
-    public GIconPasswordField(String text, int columns) {
+    public GIconTextField(String text, int columns) {
         super(text, columns);
         init();
     }
@@ -97,7 +99,7 @@ public class GIconPasswordField extends JPasswordField {
      *
      * @throws IllegalArgumentException if <code>columns</code> &lt; 0
      */
-    public GIconPasswordField(Document doc, String text, int columns) {
+    public GIconTextField(Document doc, String text, int columns) {
         super(doc, text, columns);
         init();
     }
@@ -191,7 +193,6 @@ public class GIconPasswordField extends JPasswordField {
      * @see Component#getBackground
      * @see #setOpaque
      */
-
     @Override
     public void setBackground(Color bg) {
         super.setBackground(bg);
@@ -209,15 +210,15 @@ public class GIconPasswordField extends JPasswordField {
             setUI(new IconTextFieldUI());
     }
 
-    private static class IconTextFieldUI extends BasicPasswordFieldUI {
+    private static class IconTextFieldUI extends BasicTextFieldUI {
         @Override
         protected Rectangle getVisibleEditorRect() {
             Rectangle r = super.getVisibleEditorRect();
 
             JTextComponent c = getComponent();
 
-            if (c instanceof GIconPasswordField) {
-                Icon icon = ((GIconPasswordField) c).getIcon();
+            if (c instanceof GIconTextField) {
+                Icon icon = ((GIconTextField) c).getIcon();
 
                 if (icon != null) {
                     r.width -= icon.getIconWidth() + 2;
