@@ -17,7 +17,7 @@ public abstract class AbstractDocument extends AbstractModel implements Document
     private final List<DocumentView<? extends Document>> openViews = new ArrayList<>();
 
     /**
-     * Adss an open view to the document.
+     * Adss a view to the document.
      * <p>
      * <b>NOTE:</b> This is invoked automatically after a view is created and
      * should never be called by any client code.
@@ -36,7 +36,7 @@ public abstract class AbstractDocument extends AbstractModel implements Document
     }
 
     /**
-     * Removes an open view from the document.
+     * Removes a view from the document.
      * <p>
      * <b>NOTE:</b> This should always be invoked by a view that implements
      * {@link DocumentView} when the view is closed.
