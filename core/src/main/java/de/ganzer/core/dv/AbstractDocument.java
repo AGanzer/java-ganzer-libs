@@ -55,7 +55,7 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      * @return An unmodifiable list of the views of the document.
      */
     @Override
-    public List<DocumentView<?>> getViews() {
+    public List<DocumentView<? extends Document>> getViews() {
         return Collections.unmodifiableList(openViews);
     }
 

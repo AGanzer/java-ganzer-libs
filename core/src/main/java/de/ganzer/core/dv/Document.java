@@ -76,7 +76,7 @@ public interface Document extends Model {
      *
      * @return The open views of the document.
      */
-    List<DocumentView<?>> getViews();
+    List<DocumentView<? extends Document>> getViews();
 
     /**
      * Gets the parent document.
