@@ -45,6 +45,40 @@ public interface Document extends Model {
     DocumentTemplate<?> getDocumentTemplate();
 
     /**
+     * Adss an open view to the document.
+     * <p>
+     * <b>NOTE:</b> This is invoked automatically after a view is created and
+     * should never be called by any client code.
+     *
+     * @param view The view to add.
+     *
+     * @throws IllegalArgumentException If the view is already added to a
+     *         document.
+     */
+    void addView(DocumentView<? extends Document> view);
+
+    /**
+     * Removes an open view from the document.
+     * <p>
+     * <b>NOTE:</b> This should always be invoked by a view that implements
+     * {@link DocumentView} when the view is closed (closed in the sense of
+     * destroyed but not just hidden to re-show it later).
+     * <p>
+     * Implementors should ensure that {@code view.setDocument(null)} is
+     * invoked.
+     *
+     * @param view The view to remove.
+     */
+    void removeView(DocumentView<? extends Document> view);
+
+    /**
+     * Gets the open views of the document.
+     *
+     * @return The open views of the document.
+     */
+    List<DocumentView<?>> getViews();
+
+    /**
      * Gets the parent document.
      *
      * @return The parent document or {@code null} if there is no parent. This

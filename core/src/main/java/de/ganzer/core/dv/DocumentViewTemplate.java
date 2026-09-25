@@ -155,6 +155,7 @@ public class DocumentViewTemplate<D extends Document, V extends DocumentView<D>>
         if (view == null)
             return null;
 
+        document.addView(view);
         view.setDocument(document);
 
         showView.accept(view);

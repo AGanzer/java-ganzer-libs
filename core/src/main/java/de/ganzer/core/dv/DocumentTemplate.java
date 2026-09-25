@@ -234,10 +234,9 @@ public class DocumentTemplate<D extends Document> {
         D document = documentSupplier.createDocument(info);
 
         var template = documentViewTemplates.stream().filter(DocumentViewTemplate::isMandatory).findFirst();
-        DocumentView<D> view = null;
 
         if (template.isPresent()) {
-            view = template.get().createView(document);
+            template.get().createView(document);
         } else if (isAutoView()) {
             template = documentViewTemplates.stream().filter(DocumentViewTemplate::isDefault).findFirst();
 
@@ -247,7 +246,7 @@ public class DocumentTemplate<D extends Document> {
             if (template.isEmpty())
                 throw new IllegalStateException("DocumentTemplate " + displayName + " has no view template defined.");
 
-            view = template.get().createView(document);
+            template.get().createView(document);
         }
 
         return document;
