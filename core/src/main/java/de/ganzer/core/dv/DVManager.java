@@ -44,7 +44,7 @@ public class DVManager {
      * Creates a document with new empty data based on the default template and
      * adds it to the list of open documents.
      *
-     * @param parent The parent document, or {n@code ull} if the document has no
+     * @param parent The parent document, or {@code null} if the document has no
      *        parent.
      *
      * @return The newly created document.
@@ -61,10 +61,10 @@ public class DVManager {
      * Creates a document with new empty data based on the provided template and
      * adds it to the list of open documents.
      *
-     * @param parent The parent document, or {n@code ull} if the document has no
+     * @param parent The parent document, or {@code null} if the document has no
      *        parent.
      * @param template The template to use for creating the document. If this is
-     *        {@code null}, a default template will be used. if there is no
+     *        {@code null}, a default template will be used. If there is no
      *        default template, the first registered template will be used.
      *
      * @return The newly created document.
@@ -88,5 +88,99 @@ public class DVManager {
         openDocuments.add(document);
 
         return document;
+    }
+
+    /**
+     * Opens an existing data source based on the template that matches the
+     * source and adds it to the list of open documents.
+     *
+     * @param parent The parent document, or {@code null} if the document has no
+     *        parent.
+     * @param dataSource The data source to open.
+     * @param readOnly {@code true} if the document should be opened in read-only
+     *         mode, {@code false} otherwise.
+     *
+     * @return The opened document.
+     *
+     * @throws NullPointerException If the given data source is {@code null}.
+     * @throws IllegalStateException If no document template is registered.
+     *
+     * @see #registerDocumentTemplate(DocumentTemplate)
+     */
+    public static Document openDocument(Document parent, String dataSource, boolean readOnly) {
+        return openDocument(parent, dataSource, null, readOnly);
+    }
+
+    /**
+     * Opens an existing data source based on the provided template and
+     * adds it to the list of open documents.
+     *
+     * @param parent The parent document, or {@code null} if the document has no
+     *        parent.
+     * @param dataSource The data source to open.
+     * @param template The template to use for creating the document. If this is
+     *        {@code null}, a template will be used that matches the given source.
+     *        If there is no template that matches the given source, a default
+     *        template will be used. If there is no default template, the first
+     *        registered template will be used.
+     * @param readOnly {@code true} if the document should be opened in read-only
+     *         mode, {@code false} otherwise.
+     *
+     * @return The opened document.
+     *
+     * @throws NullPointerException If the given data source is {@code null}.
+     * @throws IllegalStateException If no document template is registered.
+     *
+     * @see #registerDocumentTemplate(DocumentTemplate)
+     */
+    public static Document openDocument(Document parent, String dataSource, DocumentTemplate<?> template, boolean readOnly) {
+        Objects.requireNonNull(dataSource, "dataSource must not be null.");
+
+        if (templates.isEmpty())
+            throw new IllegalStateException("No document template is registered.");
+
+        if (template == null) {
+            template = templates.stream().filter(t -> t.canHandleDataSource(dataSource)).findFirst().orElse(null);
+
+            if (template == null) {
+                template = templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(null);
+
+                if (template == null)
+                    template = templates.get(0);
+            }
+        }
+
+        Document document = template.createDocument(dataSource, parent, false, readOnly);
+        openDocuments.add(document);
+
+        return document;
+    }
+
+    /**
+     * Opens existing data sources based on the templates that match the given
+     * sources and adds them to the list of open documents.
+     *
+     * @param parent The parent documents, or {@code null} if the documents have
+     *        no parent.
+     * @param dataSources The data sources to open.
+     * @param readOnly {@code true} if the documents should be opened in read-only
+     *         mode, {@code false} otherwise.
+     *
+     * @return The opened documents.
+     *
+     * @throws NullPointerException If the given data sources are {@code null}.
+     * @throws IllegalStateException If no document template is registered.
+     *
+     * @see #registerDocumentTemplate(DocumentTemplate)
+     */
+    public static List<Document> openDocuments(Document parent, Collection<String> dataSources, boolean readOnly) {
+        Objects.requireNonNull(dataSources, "dataSources must not be null.");
+
+        var documents = new ArrayList<Document>();
+
+        for (var dataSource : dataSources)
+            documents.add(openDocument(parent, dataSource, null, readOnly));
+
+        return documents;
     }
 }
