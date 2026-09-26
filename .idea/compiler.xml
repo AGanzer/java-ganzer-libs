@@ -9,6 +9,7 @@
         <module name="core" />
         <module name="fx" />
         <module name="de-ganzer-fx" />
+        <module name="dv" />
         <module name="de-ganzer-dv" />
         <module name="swing-dfw" />
         <module name="de-ganzer-swing-dlgfw" />
