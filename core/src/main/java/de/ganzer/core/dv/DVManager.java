@@ -1,5 +1,7 @@
 package de.ganzer.core.dv;
 
+import de.ganzer.core.util.Strings;
+
 import java.util.*;
 
 /**
@@ -77,12 +79,7 @@ public class DVManager {
         if (templates.isEmpty())
             throw new IllegalStateException("No document template is registered.");
 
-        if (template == null) {
-            template = templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(null);
-
-            if (template == null)
-                template = templates.get(0);
-        }
+        template = getTemplateToUse(null, template);
 
         Document document = template.createDocument(parent);
         openDocuments.add(document);
@@ -117,7 +114,6 @@ public class DVManager {
      *
      * @param parent The parent document, or {@code null} if the document has no
      *        parent.
-     * @param dataSource The data source to open.
      * @param template The template to use for creating the document. If this is
      *        {@code null}, a template will be used that matches the given source.
      *        If there is no template that matches the given source, a default
@@ -136,24 +132,56 @@ public class DVManager {
     public static Document openDocument(Document parent, String dataSource, DocumentTemplate<?> template, boolean readOnly) {
         Objects.requireNonNull(dataSource, "dataSource must not be null.");
 
-        if (templates.isEmpty())
-            throw new IllegalStateException("No document template is registered.");
-
-        if (template == null) {
-            template = templates.stream().filter(t -> t.canHandleDataSource(dataSource)).findFirst().orElse(null);
-
-            if (template == null) {
-                template = templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(null);
-
-                if (template == null)
-                    template = templates.get(0);
-            }
-        }
+        template = getTemplateToUse(dataSource, template);
 
         Document document = template.createDocument(dataSource, parent, false, readOnly);
         openDocuments.add(document);
 
         return document;
+    }
+
+    /**
+     * Opens existing data sources by querying the user to choose one or more.
+     *
+     * @param parent The parent documents, or {@code null} if the documents have
+     *        no parent.
+     * @param readOnly {@code true} if the documents should be opened in read-only
+     *         mode, {@code false} otherwise.
+     *
+     * @return The opened documents.
+     *
+     * @throws IllegalStateException If no document template is registered.
+     *
+     * @see #registerDocumentTemplate(DocumentTemplate)
+     */
+    public static List<Document> openDocuments(Document parent, boolean readOnly) {
+        return openDocuments(parent, (DocumentTemplate<?>) null, readOnly);
+    }
+
+    /**
+     * Opens existing data sources by querying the user to choose one or more.
+     *
+     * @param parent The parent documents, or {@code null} if the documents have
+     *        no parent.
+     * @param template The template that's filter should be initially used to
+     *        choose a data source. If this is {@code null}, a default template
+     *        will be used. If there is no default template, the first
+     *        registered template will be used.
+     * @param readOnly {@code true} if the documents should be opened in read-only
+     *         mode, {@code false} otherwise.
+     *
+     * @return The opened documents.
+     *
+     * @throws IllegalStateException If no document template is registered.
+     *
+     * @see #registerDocumentTemplate(DocumentTemplate)
+     */
+    public static List<Document> openDocuments(Document parent, DocumentTemplate<?> template, boolean readOnly) {
+        var filters = templates.stream().map(DocumentTemplate::getFilter).filter(f -> !Strings.isNullOrBlank(f)).toList();
+        var initial = getTemplateToUse(null, template);
+        var locations = DVNavigationService.getInstance().getLocationsToOpen(filters, initial.getFilter());
+
+        return openDocuments(parent, locations, readOnly);
     }
 
     /**
@@ -182,5 +210,27 @@ public class DVManager {
             documents.add(openDocument(parent, dataSource, null, readOnly));
 
         return documents;
+    }
+
+    private static DocumentTemplate<?> getTemplateToUse(String dataSource, DocumentTemplate<?> preferred) {
+        if (templates.isEmpty())
+            throw new IllegalStateException("No document template is registered.");
+
+        if (preferred != null)
+            return preferred;
+
+        DocumentTemplate<?> template = null;
+
+        if (!Strings.isNullOrBlank(dataSource))
+            template = templates.stream().filter(t -> t.canHandleDataSource(dataSource)).findFirst().orElse(null);
+
+        if (template == null) {
+            template = templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(null);
+
+            if (template == null)
+                template = templates.get(0);
+        }
+
+        return template;
     }
 }
