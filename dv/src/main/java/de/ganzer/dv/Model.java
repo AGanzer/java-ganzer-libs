@@ -8,7 +8,10 @@ import java.util.List;
  * The basic interface to an object that represents a model.
  * <p>
  * A model in the sense of this framework should only represent one or more
- * entities of data but should not act as an entity itself.
+ * entities of data but should not act as an entity itself. The model does have
+ * no internal logic ad is just a container of modifiable data.
+ *
+ * @see Document
  *
  * @since 6.0.0
  */

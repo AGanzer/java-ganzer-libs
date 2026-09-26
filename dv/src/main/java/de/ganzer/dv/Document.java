@@ -12,7 +12,7 @@ import java.util.List;
  * Other than a basic model, a document is always file- or stream-based and is
  * usually able to load data and writes it into another target.
  * <p>
- * For a more easy creation of documents and its possible views, document types
+ * For a more easy creation of documents and their possible views, document types
  * can be registered by {@link DVManager#registerDocumentTemplate}.
  * <p>
  * The following example shows how a template is created that simply creates a
@@ -36,6 +36,10 @@ import java.util.List;
  * }</pre>
  * This interface provides child documents, but the implementation itself is
  * responsive for managing child documents with all its actions.
+ * <p>
+ * Other than a model, a document does implement all logic that is necessary to
+ * manage its children, its data, and its views, in conjunction with the
+ * {@link DVManager}.
  *
  * @since 6.0.0
  */
