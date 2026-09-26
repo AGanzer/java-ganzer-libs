@@ -328,7 +328,7 @@ public abstract class AbstractModel implements Model {
     /**
      * Creates new data.
      * <p>
-     * This resets the modification and the read only flags and sets the new
+     * This resets the modification and the read-only flags and sets the new
      * data flag.
      */
     @Override
@@ -341,7 +341,7 @@ public abstract class AbstractModel implements Model {
     }
 
     /**
-     * Loads data from a file, a database or any other source.
+     * Loads data from a file, a database, or any other source.
      * <p>
      * This resets the modification and the new data flags.
      *
@@ -358,7 +358,7 @@ public abstract class AbstractModel implements Model {
     /**
      * Writes the data into a file, a database, or any other target.
      * <p>
-     * This resets the modification, the read-only and the new data flags.
+     * This resets the modification, the read-only, and the new data flags.
      *
      * @throws RuntimeException on any error.
      */
@@ -470,7 +470,7 @@ public abstract class AbstractModel implements Model {
     }
 
     /**
-     * Resets the read only flag.
+     * Resets the read-only flag.
      * <p>
      * This fires a property change event with the property name set to
      * {@link #READ_ONLY_PROPERTY}.

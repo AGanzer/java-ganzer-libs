@@ -25,7 +25,9 @@ public class DocumentTemplate<D extends Document> {
     public static final int OWN_NEW_NUMBER = 0x02;
     /**
      * If this option is set, Creating a new document does not automatically
-     * create a new view.
+     * create a new view except that one of the registered view templates marks
+     * a view as mandatory.
+     * @see DocumentViewTemplate#IS_MANDATORY
      */
     public static final int NO_AUTO_VIEW = 0x04;
     /**
@@ -63,7 +65,7 @@ public class DocumentTemplate<D extends Document> {
      * @param canHandleSource Determines whether a data source can be read by
      *        the document.
      * @param documentSupplier Creates the document.
-     * @param newName The name ob new documents.
+     * @param newName The name of new documents.
      * @param filter The filter to use to open documents from existing sources.
      * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
      *        {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
@@ -195,6 +197,9 @@ public class DocumentTemplate<D extends Document> {
      * @param parent The parent document or {@code null} if there is no parent.
      *
      * @return The created document.
+     *
+     * @throws IllegalStateException If {@link #isAutoView()} is {@code true}
+     *         and no view template is registered.
      */
     public D createDocument(Document parent) {
         return createDocument(null, parent, true, false);
@@ -209,6 +214,9 @@ public class DocumentTemplate<D extends Document> {
      * @param readOnly {@code true} if the document's data cannot be modified.
      *
      * @return The created document.
+     *
+     * @throws IllegalStateException If {@link #isAutoView()} is {@code true}
+     *         and no view template is registered.
      */
     public D createDocument(String name, Document parent, boolean newData, boolean readOnly) {
         if (newData) {

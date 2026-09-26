@@ -153,7 +153,7 @@ public interface Model {
      * If this is changed, implementors should fire a property change event with
      * the property name set to {@link #REDO_TITLE_PROPERTY}.
      *
-     * @return The title of tue current undoable action or {@code null} if there
+     * @return The title of the current undoable action or {@code null} if there
      *          is no undoable action.
      */
     default String getUndoTitle() {
