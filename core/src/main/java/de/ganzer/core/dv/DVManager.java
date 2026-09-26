@@ -153,6 +153,7 @@ public class DVManager {
      * @throws IllegalStateException If no document template is registered.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
+     * @see DVNavigationService#queryLocationsToOpen(List, String)
      */
     public static List<Document> openDocuments(Document parent, boolean readOnly) {
         return openDocuments(parent, (DocumentTemplate<?>) null, readOnly);
@@ -175,11 +176,12 @@ public class DVManager {
      * @throws IllegalStateException If no document template is registered.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
+     * @see DVNavigationService#queryLocationsToOpen(List, String)
      */
     public static List<Document> openDocuments(Document parent, DocumentTemplate<?> template, boolean readOnly) {
         var filters = templates.stream().map(DocumentTemplate::getFilter).filter(f -> !Strings.isNullOrBlank(f)).toList();
         var initial = getTemplateToUse(null, template);
-        var locations = DVNavigationService.getInstance().getLocationsToOpen(filters, initial.getFilter());
+        var locations = DVNavigationService.getInstance().queryLocationsToOpen(filters, initial.getFilter());
 
         return openDocuments(parent, locations, readOnly);
     }

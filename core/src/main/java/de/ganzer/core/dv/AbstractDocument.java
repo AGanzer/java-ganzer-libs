@@ -1,5 +1,6 @@
 package de.ganzer.core.dv;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,8 +14,20 @@ import java.util.List;
  * @since 5.6.0
  */
 public abstract class AbstractDocument extends AbstractModel implements Document {
-    private final DocumentTemplate<? extends Document> documentTemplate;
-    private final List<DocumentView<? extends Document>> openViews = new ArrayList<>();
+    private final DocumentTemplate<? extends Document> template;
+    private final List<DocumentView<? extends Document>> views = new ArrayList<>();
+
+    private boolean closed;
+
+    /**
+     * Gets the template that has created the document.
+     *
+     * @return The template that has created the document.
+     */
+    @Override
+    public DocumentTemplate<? extends Document> getTemplate() {
+        return template;
+    }
 
     /**
      * Adss a view to the document.
@@ -32,21 +45,31 @@ public abstract class AbstractDocument extends AbstractModel implements Document
         if (view.getDocument() == this)
             throw new IllegalArgumentException("View is already added to a document.");
 
-        openViews.add(view);
+        views.add(view);
     }
 
     /**
      * Removes a view from the document.
      * <p>
+     * If {@link DocumentTemplate#isAutoClose()} of the document's template is
+     * {@code true}, the document will be closed automatically.
+     * <p>
      * <b>NOTE:</b> This should always be invoked by a view that implements
-     * {@link DocumentView} when the view is closed.
+     * {@link DocumentView} when the view is closed (closed in the sense of
+     * destroyed but not just hidden to re-show it later).
+     * <p>
+     * Implementors should ensure that {@code view.setDocument(null)} is
+     * invoked.
      *
      * @param view The view to remove.
      */
     @Override
     public void removeView(DocumentView<? extends Document> view) {
-        openViews.remove(view);
+        views.remove(view);
         view.setDocument(null);
+
+        if (view.getTemplate().isMandatory() || getTemplate().isAutoClose() && views.isEmpty())
+            close();
     }
 
     /**
@@ -56,7 +79,46 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      */
     @Override
     public List<DocumentView<? extends Document>> getViews() {
-        return Collections.unmodifiableList(openViews);
+        return Collections.unmodifiableList(views);
+    }
+
+    /**
+     * Writes the data into a file, a database, or any other target.
+     * <p>
+     * This resets the modification, the read-only, and the new data flags.
+     *
+     * @throws IOException on any error.
+     *
+     * @see #doSaveData()
+     */
+    @Override
+    public void saveData() throws IOException {
+        if (isNewData())
+            saveDataAs();
+        else
+            super.saveData();
+    }
+
+    /**
+     * Closes the document with all its open views and without any further action.
+     * <p>
+     * To ensure that the document saves all modified data, invoke
+     * {@link #canClose()} before invoking this method.
+     */
+    @Override
+    public void close() {
+        closed = true;
+        views.forEach(DocumentView::forceClose);
+    }
+
+    /**
+     * Gets a value indicating whether the document is closed.
+     *
+     * @return {@code true} if the document is closed.
+     */
+    @Override
+    public boolean isClosed() {
+        return closed;
     }
 
     /**
@@ -66,19 +128,11 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      * is {@code true}; otherwise, {@link #doLoadData()} is invoked.
      *
      * @param info The information for initializing the model.
-     */
-    protected AbstractDocument(DocumentCreationInfo<? extends Document> info) {
-        super(info.getName(), info.isReadOnly(), info.isNewData());
-        this.documentTemplate = info.getTemplate();
-    }
-
-    /**
-     * Gets the template that has created the document.
      *
-     * @return The template that has created the document.
+     * @throws IOException on any error loading data.
      */
-    @Override
-    public DocumentTemplate<? extends Document> getDocumentTemplate() {
-        return documentTemplate;
+    protected AbstractDocument(DocumentCreationInfo<? extends Document> info) throws IOException {
+        super(info.getName(), info.isReadOnly(), info.isNewData());
+        this.template = info.getTemplate();
     }
 }

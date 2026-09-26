@@ -9,6 +9,13 @@ package de.ganzer.core.dv;
  */
 public interface DocumentView<D extends Document> {
     /**
+     * Gets the template that has created the view.
+     *
+     * @return The template that has created the view.
+     */
+    DocumentViewTemplate<D, ? extends DocumentView<D>> getTemplate();
+
+    /**
      * Gets the bound document.
      *
      * @return The bound document or {@code null} if the document is not bound
@@ -19,143 +26,18 @@ public interface DocumentView<D extends Document> {
     D getDocument();
 
     /**
-     * Called to bind the given document to the view.
+     * Invoked to bind the given document to the view.
      *
      * @param document The document to bind.
      */
     void setDocument(D document);
 
     /**
-     * Gets the view's title.
-     *
-     * @return The title or {@code null} if the title is not set.
-     *
-     * @see #setTitle(String)
-     */
-    String getTitle();
-
-    /**
-     * Sets the title of the view.
-     *
-     * @param title The title to set.
-     */
-    void setTitle(String title);
-
-    /**
-     * Gets the view's title tool tip.
+     * Invoked to close the view without any further action.
      * <p>
-     * This default implementation is provided because not every view needs a
-     * tool tip for its title, but only views that may be subviews within a
-     * tabbed client of a main window.
+     * The view's document is already closed when this method is invoked.
      *
-     * @return The tool tip or {@code null} if the tool tip is not set. This
-     *          implementation does always return {@code null}.
-     *
-     * @see #setTitleToolTip(String)
+     * @see Document#isClosed()
      */
-    default String getTitleToolTip() {
-        return null;
-    }
-
-    /**
-     * Sets the title tool tip of the view.
-     * <p>
-     * This default implementation is provided because not every view needs a
-     * tool tip for its title, but only views that may be subviews within a
-     * tabbed client of a main window.
-     * <p>
-     * This implementation does nothing.
-     *
-     * @param toolTip The tool tip to set.
-     */
-    default void setTitleToolTip(String toolTip) {
-    }
-
-    /**
-     * Invoked to set the description text of an "Undo" action.
-     * <p>
-     * This default implementation is provided because not every view has a menu
-     * or button for undoable actions.
-     * <p>
-     * This implementation does nothing.
-     *
-     * @param description The description to set or {@code null} if no undoable
-     *         action is available.
-     */
-    default void setUndoableDescription(String description) {
-    }
-
-    /**
-     * Invoked to set the description text of a "Redo" action.
-     * <p>
-     * This default implementation is provided because not every view has a menu
-     * or button for redoable actions.
-     * <p>
-     * This implementation does nothing.
-     *
-     * @param description The description to set or {@code null} if no redoable
-     *         action is available.
-     */
-    default void setRedoableDescription(String description) {
-    }
-
-    /**
-     * Indicates whether a "Cut" action is currently supported.
-     *
-     * @return {@code true} if the action is currently supported.
-     */
-    default boolean canCut() {
-        return false;
-    }
-
-    /**
-     * Indicates whether a "Copy" action is currently supported.
-     *
-     * @return {@code true} if the action is currently supported.
-     */
-    default boolean canCopy() {
-        return false;
-    }
-
-    /**
-     * Indicates whether a "Paste" action is currently supported.
-     *
-     * @return {@code true} if the action is currently supported.
-     */
-    default boolean canPaste() {
-        return false;
-    }
-
-    /**
-     * Indicates whether a "Delete" action is currently supported.
-     *
-     * @return {@code true} if the action is currently supported.
-     */
-    default boolean canDelete() {
-        return false;
-    }
-
-    /**
-     * Performs a "Cut" action.
-     */
-    default void cut() {
-    }
-
-    /**
-     * Performs a "Copy" action.
-     */
-    default void copy() {
-    }
-
-    /**
-     * Performs a "Paste" action.
-     */
-    default void paste() {
-    }
-
-    /**
-     * Performs a "Delete" action.
-     */
-    default void delete() {
-    }
+    void forceClose();
 }

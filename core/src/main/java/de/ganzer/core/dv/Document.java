@@ -1,5 +1,8 @@
 package de.ganzer.core.dv;
 
+import de.ganzer.core.internals.CoreMessages;
+
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,47 +41,6 @@ import java.util.List;
  */
 public interface Document extends Model {
     /**
-     * Gets the template that has created the document.
-     *
-     * @return The template that has created the document.
-     */
-    DocumentTemplate<?> getDocumentTemplate();
-
-    /**
-     * Adss a view to the document.
-     * <p>
-     * <b>NOTE:</b> This is invoked automatically after a view is created and
-     * should never be called by any client code.
-     *
-     * @param view The view to add.
-     *
-     * @throws IllegalArgumentException If the view is already added to a
-     *         document.
-     */
-    void addView(DocumentView<? extends Document> view);
-
-    /**
-     * Removes a view from the document.
-     * <p>
-     * <b>NOTE:</b> This should always be invoked by a view that implements
-     * {@link DocumentView} when the view is closed (closed in the sense of
-     * destroyed but not just hidden to re-show it later).
-     * <p>
-     * Implementors should ensure that {@code view.setDocument(null)} is
-     * invoked.
-     *
-     * @param view The view to remove.
-     */
-    void removeView(DocumentView<? extends Document> view);
-
-    /**
-     * Gets the open views of the document.
-     *
-     * @return The open views of the document.
-     */
-    List<DocumentView<? extends Document>> getViews();
-
-    /**
      * Gets the parent document.
      *
      * @return The parent document or {@code null} if there is no parent. This
@@ -98,4 +60,142 @@ public interface Document extends Model {
     default List<Document> getChildren() {
         return Collections.emptyList();
     }
+
+    /**
+     * Gets the template that has created the document.
+     *
+     * @return The template that has created the document.
+     */
+    DocumentTemplate<?> getTemplate();
+
+    /**
+     * Adds a view to the document.
+     * <p>
+     * <b>NOTE:</b> This is invoked automatically after a view is created and
+     * should never be called by any client code.
+     *
+     * @param view The view to add.
+     *
+     * @throws IllegalArgumentException If the view is already added to a
+     *         document.
+     */
+    void addView(DocumentView<? extends Document> view);
+
+    /**
+     * Removes a view from the document.
+     * <p>
+     * If {@link DocumentTemplate#isAutoClose()} of the document's template is
+     * {@code true} or if the given view is mandatory, the document will be
+     * closed automatically without any further action. To ensure that all data
+     * will be saved correctly, the view should invoke
+     * {@link #canCloseView(DocumentView)} before removing the view.
+     * <p>
+     * <b>NOTE:</b> This should always be invoked by a view that implements
+     * {@link DocumentView} when the view is closed (closed in the sense of
+     * destroyed but not just hidden to re-show it later).
+     * <p>
+     * Implementors should ensure that {@code view.setDocument(null)} is
+     * invoked.
+     *
+     * @param view The view to remove.
+     */
+    void removeView(DocumentView<? extends Document> view);
+
+    /**
+     * Gets a value indicating whether the given view can be closed.
+     *
+     * @param view The view to check.
+     *
+     * @return {@code true} if the view can be closed. This implementation returns
+     *         {@code true} if the view is not mandatory and the document is not
+     *         set to auto-close. Otherwise, it returns {@code true} if there is
+     *         more than one open view or if the document itself can be closed.
+     */
+    default boolean canCloseView(DocumentView<? extends Document> view) {
+        if (!view.getTemplate().isMandatory() && !getTemplate().isAutoClose())
+            return true;
+
+        return getViews().size() > 1 || canClose();
+    }
+
+    /**
+     * Gets a value indicating whether the document can be closed.
+     * <p>
+     * This implementation queries the user to save if the document is modified.
+     * Depending on the user's choice, the document can be closed or not.
+     *
+     * @return {@code true} if the document can be closed.
+     *
+     * @see #isModified()
+     * @see #setModified(boolean)
+     * @see DVNavigationService#querySave(String)
+     */
+    default boolean canClose() {
+        if (!isModified())
+            return true;
+
+        Boolean result = DVNavigationService.getInstance().querySave(getName());
+
+        if (result == null)
+            return false;
+
+        if (!result)
+            return true;
+
+        try {
+            saveData();
+        } catch (IOException e) {
+            DVNavigationService.getInstance().showError(CoreMessages.get("dv.error.save", getName(), e.getLocalizedMessage()), e);
+            return false;
+        }
+
+        return !isModified();
+    }
+
+    /**
+     * Writes the data into a file, a database, or any other target where the
+     * name is queried from the user.
+     * <p>
+     * Implementors should reset the modification, the new-data nad the
+     * read-only flags.
+     * <p>
+     * This implementation does nothing if the user cancels the operation;
+     * otherwise, it sets the new name and invokes {@link #saveData()}.
+     *
+     * @throws IOException on any error.
+     *
+     * @see #saveData()
+     * @see DVNavigationService#querySaveLocation(String, String)
+     */
+    default void saveDataAs() throws IOException {
+        var saveName = DVNavigationService.getInstance().querySaveLocation(getName(), getTemplate().getFilter());
+
+        if (saveName == null)
+            return;
+
+        setName(saveName);
+        saveData();
+    }
+
+    /**
+     * Closes the document with all its open views and without any further action.
+     * <p>
+     * To ensure that the document saves all modified data, invoke
+     * {@link #canClose()} befor invoking this method.
+     */
+    void close();
+
+    /**
+     * Gets a value indicating whether the document is closed.
+     *
+     * @return {@code true} if the document is closed.
+     */
+    boolean isClosed();
+
+    /**
+     * Gets the open views of the document.
+     *
+     * @return The open views of the document.
+     */
+    List<DocumentView<? extends Document>> getViews();
 }

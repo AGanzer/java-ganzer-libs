@@ -1,5 +1,6 @@
 package de.ganzer.core.dv;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -278,19 +279,19 @@ public interface Model {
      * Implementors should reset the modification flag and return {@code false}
      * in {@link #isNewData()} if this is invoked.
      *
-     * @throws RuntimeException on any error.
+     * @throws IOException on any error.
      */
-    void loadData() throws RuntimeException;
+    void loadData() throws IOException;
 
     /**
-     * Writes the data into a file, a database or any other target.
+     * Writes the data into a file, a database, or any other target.
      * <p>
-     * Implementors should reset the modification flag and return {@code false}
-     * in {@link #isNewData()} and in {@link #isReadOnly()} if this is invoked.
+     * Implementors should reset the modification, the new-data nad the
+     * read-only flags.
      *
-     * @throws RuntimeException on any error.
+     * @throws IOException on any error.
      */
-    void saveData() throws RuntimeException;
+    void saveData() throws IOException;
 
     /**
      * Adds a listener for all properties.

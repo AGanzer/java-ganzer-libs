@@ -2,6 +2,7 @@ package de.ganzer.core.dv;
 
 import de.ganzer.core.util.Strings;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -31,8 +32,9 @@ public abstract class AbstractModel implements Model {
      *
      * @throws IllegalArgumentException if {@code name} is {@code null} or empty
      *          or does contain only blanks.
+     * @throws IOException on any error loading data.
      */
-    protected AbstractModel(String name, boolean readOnly) {
+    protected AbstractModel(String name, boolean readOnly) throws IOException {
         this(name, readOnly, false);
     }
 
@@ -48,8 +50,9 @@ public abstract class AbstractModel implements Model {
      *
      * @throws IllegalArgumentException if {@code newData} is {@code false} and
      *         {@code name} is {@code null} or empty or does contain only blanks.
+     * @throws IOException on any error loading data.
      */
-    protected AbstractModel(String name, boolean readOnly, boolean newData) {
+    protected AbstractModel(String name, boolean readOnly, boolean newData) throws IOException {
         if (newData && Strings.isNullOrBlank(name))
             throw new IllegalArgumentException("name is null or blank");
 
@@ -330,6 +333,8 @@ public abstract class AbstractModel implements Model {
      * <p>
      * This resets the modification and the read-only flags and sets the new
      * data flag.
+     *
+     * @see #doCreateData()
      */
     @Override
     public void createData() {
@@ -345,10 +350,12 @@ public abstract class AbstractModel implements Model {
      * <p>
      * This resets the modification and the new data flags.
      *
-     * @throws RuntimeException on any error.
+     * @throws IOException on any error.
+     *
+     * @see #doLoadData()
      */
     @Override
-    public void loadData() throws RuntimeException {
+    public void loadData() throws IOException {
         doLoadData();
 
         setModified(false);
@@ -360,10 +367,12 @@ public abstract class AbstractModel implements Model {
      * <p>
      * This resets the modification, the read-only, and the new data flags.
      *
-     * @throws RuntimeException on any error.
+     * @throws IOException on any error.
+     *
+     * @see #doSaveData()
      */
     @Override
-    public void saveData() throws RuntimeException {
+    public void saveData() throws IOException {
         doSaveData();
 
         setModified(false);
@@ -528,14 +537,14 @@ public abstract class AbstractModel implements Model {
     /**
      * Invoked by {@link #loadData()} to load data from a storage.
      *
-     * @throws RuntimeException on any error.
+     * @throws IOException on any error.
      */
-    protected abstract void doLoadData() throws RuntimeException;
+    protected abstract void doLoadData() throws IOException;
 
     /**
      * Invoked by {@link #saveData()} to write the data into a storage.
      *
-     * @throws RuntimeException on any error.
+     * @throws IOException on any error.
      */
-    protected abstract void doSaveData()throws RuntimeException;
+    protected abstract void doSaveData()throws IOException;
 }
