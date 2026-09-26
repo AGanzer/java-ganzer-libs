@@ -54,8 +54,8 @@ public class Actions {
                                 .largeIcon(SVGProvider.get("save_all", 32))
                                 .onAction(e -> {}),
                         saveAsAction = new GAction("Save As...")
-                                .smallIcon(SVGProvider.get("document_save_as", 16))
-                                .largeIcon(SVGProvider.get("document_save_as", 32))
+                                .smallIcon(SVGProvider.get("save_as", 16))
+                                .largeIcon(SVGProvider.get("save_as", 32))
                                 .onAction(e -> {}),
                         new GSeparatorAction(),
                         exitAction = new GAction("Exit")

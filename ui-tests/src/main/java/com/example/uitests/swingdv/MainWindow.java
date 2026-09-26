@@ -3,11 +3,14 @@ package com.example.uitests.swingdv;
 import de.ganzer.dv.DVManager;
 import org.jdesktop.swingx.JXFrame;
 
+import javax.swing.JMenuBar;
 import java.awt.event.WindowEvent;
 
 public class MainWindow extends JXFrame {
     public MainWindow() {
         super(SwingDVApp.TITLE, true);
+
+        initMenuBar();
         setSize(800, 600);
         setLocationRelativeTo(null);
         SwingDVApp.uiSettings.apply(getClass().getSimpleName(), this);
@@ -23,5 +26,12 @@ public class MainWindow extends JXFrame {
         }
 
         super.processWindowEvent(e);
+    }
+
+    private void initMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        Actions.allActions.addMenus(menuBar);
     }
 }
