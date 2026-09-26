@@ -1,4 +1,4 @@
-package de.ganzer.core.dv;
+package de.ganzer.dv;
 
 import java.io.IOException;
 import java.util.ArrayList;

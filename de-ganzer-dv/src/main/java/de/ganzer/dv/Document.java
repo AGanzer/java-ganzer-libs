@@ -1,6 +1,6 @@
-package de.ganzer.core.dv;
+package de.ganzer.dv;
 
-import de.ganzer.core.internals.CoreMessages;
+import de.ganzer.dv.internals.DVMessages;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -148,7 +148,7 @@ public interface Document extends Model {
         } catch (IOException e) {
             String message = getSaveErrorMessage(getName(), e);
             DVNavigationService.getInstance().showError(
-                    message != null ? message : CoreMessages.get("dv.error.save", getName(), e.getLocalizedMessage()),
+                    message != null ? message : DVMessages.get("dv.error.save", getName(), e.getLocalizedMessage()),
                     e);
             return false;
         }

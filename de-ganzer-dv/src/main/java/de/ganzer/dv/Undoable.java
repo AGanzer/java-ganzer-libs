@@ -1,4 +1,4 @@
-package de.ganzer.core.dv;
+package de.ganzer.dv;
 
 /**
  * An interface to an undoable action.

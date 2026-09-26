@@ -1,4 +1,4 @@
-package de.ganzer.core.dv;
+package de.ganzer.dv;
 
 /**
  * Interface to an object that handles property changes of a model.

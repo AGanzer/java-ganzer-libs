@@ -25,6 +25,11 @@
             <version>${ganzer.version}</version>
        </dependency>
         <dependency>
+            <groupId>de.ganzer.dv</groupId>
+            <artifactId>de-ganzer-dv</artifactId>
+            <version>${ganzer.version}</version>
+        </dependency>
+        <dependency>
             <groupId>de.ganzer.fx</groupId>
             <artifactId>de-ganzer-fx</artifactId>
             <version>${ganzer.version}</version>
