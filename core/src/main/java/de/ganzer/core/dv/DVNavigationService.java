@@ -39,5 +39,22 @@ public abstract class DVNavigationService {
         return instance;
     }
 
+    /**
+     * Invoked to get one or more locations that shall be opened as documents.
+     * <p>
+     * A "location" is implementation defined. Usually, this is a path to a file
+     * or a URL to an internet address.
+     * <p>
+     * The filters are also implementation defined, but usually, they define a
+     * set of file filters that can be shown in an "Open" dialog.
+     *
+     * @param filters The filters to filter the possible results or {@code null}
+     *         if no filter is provided.
+     * @param initialFilter The initial filter to set or {@code null} if no
+     *         initial filter is provided.
+     *
+     * @return The list of locations to open or {@code null} of an empty list
+     *          if the user has canceled.
+     */
     public abstract Collection<String> getLocationsToOpen(List<String> filters, String initialFilter);
 }
