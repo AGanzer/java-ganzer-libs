@@ -2,10 +2,11 @@ package de.ganzer.dv;
 
 import de.ganzer.core.Pair;
 
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 /**
- * The same as {@code PropertyChangeSupport} but for implementors of the
+ * The same as {@link PropertyChangeSupport} but for implementors of the
  * {@link Model} interface. The difference ist that the originator of a change
  * event ist not notified.
  *

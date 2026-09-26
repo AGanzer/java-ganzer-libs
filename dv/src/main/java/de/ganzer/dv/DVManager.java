@@ -2,7 +2,12 @@ package de.ganzer.dv;
 
 import de.ganzer.core.util.Strings;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeListenerProxy;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * A singleton document-view-manager.
@@ -17,22 +22,123 @@ import java.util.*;
  * @since 6.0.0
  */
 public class DVManager {
+    /**
+     * The name of the "activeView" property used for {@link PropertyChangeEvent}'s.
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
+     */
+    public static final String ACTIVE_VIEW_PROPERTY = "activeView";
+    /**
+     * The name of the "activeDocument" property used for {@link PropertyChangeEvent}'s.
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
+     */
+    public static final String ACTIVE_DOCUMENT_PROPERTY = "activeDocument";
+
+    private static final PropertyChangeSupport pcs = new PropertyChangeSupport(DVManager.class);
     private static final List<DocumentTemplate<?>> templates = new ArrayList<>();
     private static final List<Document> openDocuments = new ArrayList<>();
 
     private static DVManagerSupport support;
+    private static View<?> activeView;
 
     /**
      * Sets the support for the DVManager.
      * <p>
      * The manager needs some support to perform certain operations that depend
      * on the used UI framework. This support should be installed once at
-     * application startup
+     * application startup.
      *
      * @param support The support to set.
      */
     public static void registerSupport(DVManagerSupport support) {
+        if (DVManager.support == support)
+            return;
+
+        if (DVManager.support != null)
+            DVManager.support.setActiveViewChangedListener(null);
+
         DVManager.support = support;
+
+        if (support != null) {
+            support.setActiveViewChangedListener(v -> {
+                var oldView = activeView;
+                var oldDoc = activeView == null ? null : activeView.getDocument();
+                var newDoc = v == null ? null : v.getDocument();
+
+                activeView = v;
+
+                pcs.firePropertyChange(ACTIVE_VIEW_PROPERTY, oldView, activeView);
+                pcs.firePropertyChange(ACTIVE_DOCUMENT_PROPERTY, oldDoc, newDoc);
+            });
+        }
+    }
+
+    /**
+     * Add a PropertyChangeListener to the listener list.
+     * <p>
+     * The listener is registered for all properties. The same listener object
+     * may be added more than once and will be called as many times as it is
+     * added.
+     * <p>
+     * If {@code listener} is {@code null}, no exception is thrown and
+     * no action is taken.
+     *
+     * @param listener  The PropertyChangeListener to be added
+     */
+    public static void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove a PropertyChangeListener from the listener list.
+     * <p>
+     * This removes a PropertyChangeListener that was registered for all
+     * properties. If {@code listener} was added more than once to the same
+     * event source, it will be notified one less time after being removed.
+     * <p>
+     * If {@code listener} is {@code null}, or was never added, no exception is
+     * thrown and no action is taken.
+     *
+     * @param listener  The PropertyChangeListener to be removed
+     */
+    public static void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * Add a PropertyChangeListener for a specific property.
+     * <p>
+     * The listener will be invoked only for that specific property. The same
+     * listener object may be added more than once. For each property, the
+     * listener will be invoked the number of times it was added for that
+     * property.
+     * If {@code propertyName} or {@code listener} is null, no exception is
+     * thrown and no action is taken.
+     *
+     * @param propertyName  The name of the property to listen on.
+     * @param listener  The PropertyChangeListener to be added
+     */
+    public static void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(propertyName, listener);
+    }
+
+    /**
+     * Remove a PropertyChangeListener for a specific property.
+     * <p>
+     * If {@code listener} was added more than once to the same event source for
+     * the specified property, it will be notified one less time after being
+     * removed.
+     * <p>
+     * If {@code propertyName} is null, no exception is thrown and no action is
+     * taken. If {@code listener} is null, or was never added for the specified
+     * property, no exception is thrown and no action is taken.
+     *
+     * @param propertyName  The name of the property that was listened on.
+     * @param listener  The PropertyChangeListener to be removed
+     */
+    public static void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(propertyName, listener);
     }
 
     /**
@@ -205,7 +311,11 @@ public class DVManager {
      * @see DVNavigationService#queryLocationsToOpen(List, String)
      */
     public static List<Document> openDocuments(Document parent, DocumentTemplate<?> template, boolean readOnly) throws DVLoadException {
-        var filters = templates.stream().map(DocumentTemplate::getFilter).filter(f -> !Strings.isNullOrBlank(f)).toList();
+        var filters = templates.stream()
+                .filter(t -> !t.isHidden())
+                .map(DocumentTemplate::getFilter)
+                .filter(f -> !Strings.isNullOrBlank(f))
+                .toList();
         var initial = getTemplateToUse(null, template);
         var locations = DVNavigationService.getInstance().queryLocationsToOpen(filters, initial.getFilter());
 
@@ -241,28 +351,6 @@ public class DVManager {
         return documents;
     }
 
-    private static DocumentTemplate<?> getTemplateToUse(String dataSource, DocumentTemplate<?> preferred) {
-        if (templates.isEmpty())
-            throw new IllegalStateException("No document template is registered.");
-
-        if (preferred != null)
-            return preferred;
-
-        DocumentTemplate<?> template = null;
-
-        if (!Strings.isNullOrBlank(dataSource))
-            template = templates.stream().filter(t -> t.canHandleDataSource(dataSource)).findFirst().orElse(null);
-
-        if (template == null) {
-            template = templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(null);
-
-            if (template == null)
-                template = templates.get(0);
-        }
-
-        return template;
-    }
-
     /**
      * Queries all open documents whether tey can be closed.
      *
@@ -282,10 +370,7 @@ public class DVManager {
      * @see #registerSupport(DVManagerSupport)
      */
     public static View<?> getActiveView() {
-        if (support == null)
-            throw new IllegalStateException("DVManagerSupport not registered");
-
-        return support.getActiveView();
+        return activeView;
     }
 
     /**
@@ -356,5 +441,27 @@ public class DVManager {
             throw new IllegalStateException("Document is not closed");
 
         openDocuments.remove(doc);
+    }
+
+    private static DocumentTemplate<?> getTemplateToUse(String dataSource, DocumentTemplate<?> preferred) {
+        if (templates.isEmpty())
+            throw new IllegalStateException("No document template is registered.");
+
+        if (preferred != null)
+            return preferred;
+
+        DocumentTemplate<?> template = null;
+
+        if (!Strings.isNullOrBlank(dataSource))
+            template = templates.stream().filter(t -> t.canHandleDataSource(dataSource)).findFirst().orElse(null);
+
+        if (template == null) {
+            template = templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(null);
+
+            if (template == null)
+                template = templates.get(0);
+        }
+
+        return template;
     }
 }

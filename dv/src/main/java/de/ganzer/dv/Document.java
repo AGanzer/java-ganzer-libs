@@ -1,8 +1,5 @@
 package de.ganzer.dv;
 
-import de.ganzer.dv.internals.DVMessages;
-
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,7 +20,7 @@ import java.util.List;
  *         s -> false,
  *         WelcomeDocument::new,
  *         "Welcome",
- *         DocumentTemplate.NO_NEW_NUMBER,
+ *         DocumentTemplate.NO_NEW_NUMBER | DocumentTemplate.IS_HIDDEN,
  *         null);
  * tpl.addViewTemplate(new ViewTemplate<>(
  *         "Welcome",
@@ -160,7 +157,8 @@ public interface Document extends Model {
 
     /**
      * Writes the data into a file, a database, or any other target where the
-     * name is queried from the user.
+     * name is queried from the user as long as {@link #isSaveAsSupported()}
+     * returns {@code true}.
      * <p>
      * Implementors should reset the modification, the new-data nad the
      * read-only flags.
@@ -171,9 +169,13 @@ public interface Document extends Model {
      * @throws DVSaveException on any error.
      *
      * @see #saveData()
+     * @see #isSaveAsSupported()
      * @see DVNavigationService#querySaveLocation(String, String)
      */
     default void saveDataAs() throws DVSaveException {
+        if (!isSaveAsSupported())
+            return;
+
         var saveName = DVNavigationService.getInstance().querySaveLocation(getName(), getTemplate().getFilter());
 
         if (saveName == null)
@@ -181,6 +183,21 @@ public interface Document extends Model {
 
         setName(saveName);
         saveData();
+    }
+
+    /**
+     * Gets a value that indicates whether {link #saveDataAs()} is supported by
+     * this document.
+     * <p>
+     * Normally each document can be saved under another name even if it is
+     * read-only. For documents that should not be saved (like a Welcome page),
+     * this method has to be overridden to return {@code false}.
+     *
+     * @return {@code true} if {@link #saveDataAs()} is supported. This default
+     *          implementation does always return {@code true}.
+     */
+    default boolean isSaveAsSupported() {
+        return true;
     }
 
     /**

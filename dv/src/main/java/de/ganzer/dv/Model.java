@@ -18,34 +18,50 @@ import java.util.List;
 public interface Model {
     /**
      * The name of the "newData" property used for {@link ModelChangeEvent}'s.
+     * @see #addChangeListener(ModelChangeListener, Object)
+     * @see #addChangeListener(String, ModelChangeListener, Object)
      */
     String NEW_DATA_PROPERTY = "newData";
     /**
      * The name of the "readOnly" property used for {@link ModelChangeEvent}'s.
+     * @see #addChangeListener(ModelChangeListener, Object)
+     * @see #addChangeListener(String, ModelChangeListener, Object)
      */
     String READ_ONLY_PROPERTY = "readOnly";
     /**
      * The name of the "canUndo" property used for {@link ModelChangeEvent}'s.
+     * @see #addChangeListener(ModelChangeListener, Object)
+     * @see #addChangeListener(String, ModelChangeListener, Object)
      */
     String CAN_UNDO_PROPERTY = "canUndo";
     /**
      * The name of the "canRedo" property used for {@link ModelChangeEvent}'s.
+     * @see #addChangeListener(ModelChangeListener, Object)
+     * @see #addChangeListener(String, ModelChangeListener, Object)
      */
     String CAN_REDO_PROPERTY = "canRedo";
     /**
      * The name of the "undoTitle" property used for {@link ModelChangeEvent}'s.
+     * @see #addChangeListener(ModelChangeListener, Object)
+     * @see #addChangeListener(String, ModelChangeListener, Object)
      */
     String UNDO_TITLE_PROPERTY = "undoTitle";
     /**
      * The name of the "redoTitle" property used for {@link ModelChangeEvent}'s.
+     * @see #addChangeListener(ModelChangeListener, Object)
+     * @see #addChangeListener(String, ModelChangeListener, Object)
      */
     String REDO_TITLE_PROPERTY = "redoTitle";
     /**
      * The name of the "name" property used for {@link ModelChangeEvent}'s.
+     * @see #addChangeListener(ModelChangeListener, Object)
+     * @see #addChangeListener(String, ModelChangeListener, Object)
      */
     String NAME_PROPERTY = "name";
     /**
      * The name of the "modified" property used for {@link ModelChangeEvent}'s.
+     * @see #addChangeListener(ModelChangeListener, Object)
+     * @see #addChangeListener(String, ModelChangeListener, Object)
      */
     String MODIFIED_PROPERTY = "modified";
 

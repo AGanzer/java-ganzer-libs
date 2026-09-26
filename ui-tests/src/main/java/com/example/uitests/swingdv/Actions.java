@@ -2,10 +2,7 @@ package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
 import de.ganzer.core.OS;
-import de.ganzer.dv.DVLoadException;
-import de.ganzer.dv.DVManager;
-import de.ganzer.dv.DVNavigationService;
-import de.ganzer.dv.DVSaveException;
+import de.ganzer.dv.*;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
 import de.ganzer.swing.actions.GSeparatorAction;
@@ -199,5 +196,16 @@ public class Actions {
                                 })
                 )
         );
+
+        DVManager.addPropertyChangeListener(DVManager.ACTIVE_DOCUMENT_PROPERTY, e -> {
+            var doc = (e.getNewValue() instanceof Document d) ? d : null;
+
+            saveAction.setEnabled(doc != null && !doc.isReadOnly());
+            saveAsAction.setEnabled(doc != null && doc.isSaveAsSupported());
+            saveAllAction.setEnabled(DVManager.getOpenDocuments().stream().anyMatch(Document::isModified));
+        });
+
+        DVManager.addPropertyChangeListener(DVManager.ACTIVE_VIEW_PROPERTY, e -> {
+        });
     }
 }

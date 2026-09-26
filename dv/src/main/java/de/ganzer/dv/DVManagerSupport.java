@@ -1,13 +1,15 @@
 package de.ganzer.dv;
 
+import java.util.function.Consumer;
+
 /**
  * This interface is used to provide additional functionality to the DVManager.
  */
 public interface DVManagerSupport {
     /**
-     * Gets the view that currently has the focus.
+     * Installs a consumer that has to be notified if the active view has changed.
      *
-     * @return the active view or {@code null} if no view is active.
+     * @param consumer The consumer to be notified.
      */
-    View<?> getActiveView();
+    void setActiveViewChangedListener(Consumer<View<?>> consumer);
 }
