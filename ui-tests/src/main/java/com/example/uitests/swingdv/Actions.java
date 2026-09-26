@@ -1,5 +1,6 @@
 package com.example.uitests.swingdv;
 
+import com.example.uitests.swing.SVGProvider;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
 import de.ganzer.swing.actions.GSeparatorAction;
@@ -26,30 +27,92 @@ public class Actions {
     public static final GAction pasteAction;
     public static final GAction deleteAction;
 
+    public static final GAction closeWindowAction;
+    public static final GAction closeAllWindowsAction;
+
+    public static final GAction optionsAction;
+
+    public static final GAction helpAction;
+    public static final GAction aboutAction;
+
     static {
         allActions = new GActionGroup().addAll(
                 fileActions = new GActionGroup("File").addAll(
                         newActionGroup = new GActionGroup("New"),
-                        openAction = new GAction("Open..."),
+                        openAction = new GAction("Open...")
+                                .smallIcon(SVGProvider.get("document_open", 16))
+                                .largeIcon(SVGProvider.get("document_open", 32))
+                                .onAction(e -> {}),
                         new GSeparatorAction(),
-                        saveAction = new GAction("Save"),
-                        saveAllAction = new GAction("Save All"),
-                        saveAsAction = new GAction("Save As..."),
+                        saveAction = new GAction("Save")
+                                .smallIcon(SVGProvider.get("save", 16))
+                                .largeIcon(SVGProvider.get("save", 32))
+                                .onAction(e -> {}),
+                        new GSeparatorAction(),
+                        saveAllAction = new GAction("Save All")
+                                .smallIcon(SVGProvider.get("save_all", 16))
+                                .largeIcon(SVGProvider.get("save_all", 32))
+                                .onAction(e -> {}),
+                        saveAsAction = new GAction("Save As...")
+                                .smallIcon(SVGProvider.get("document_save_as", 16))
+                                .largeIcon(SVGProvider.get("document_save_as", 32))
+                                .onAction(e -> {}),
                         new GSeparatorAction(),
                         exitAction = new GAction("Exit")
+                                .onAction(e -> {})
                 ),
                 editActions = new GActionGroup("Edit").addAll(
-                        undoAction = new GAction("Undo"),
-                        redoAction = new GAction("Redo"),
+                        undoAction = new GAction("Undo")
+                                .smallIcon(SVGProvider.get("undo", 16))
+                                .largeIcon(SVGProvider.get("undo", 32))
+                                .onAction(e -> {}),
+                        redoAction = new GAction("Redo")
+                                .smallIcon(SVGProvider.get("redo", 16))
+                                .largeIcon(SVGProvider.get("redo", 32))
+                                .onAction(e -> {}),
                         new GSeparatorAction(),
-                        cutAction = new GAction("Cut"),
-                        copyAction = new GAction("Copy"),
-                        pasteAction = new GAction("Paste"),
+                        cutAction = new GAction("Cut")
+                                .smallIcon(SVGProvider.get("cut", 16))
+                                .largeIcon(SVGProvider.get("cut", 32))
+                                .onAction(e -> {}),
+                        copyAction = new GAction("Copy")
+                                .smallIcon(SVGProvider.get("copy", 16))
+                                .largeIcon(SVGProvider.get("copy", 32))
+                                .onAction(e -> {}),
+                        pasteAction = new GAction("Paste")
+                                .smallIcon(SVGProvider.get("paste", 16))
+                                .largeIcon(SVGProvider.get("paste", 32))
+                                .onAction(e -> {}),
                         deleteAction = new GAction("Delete")
+                                .smallIcon(SVGProvider.get("delete", 16))
+                                .largeIcon(SVGProvider.get("delete", 32))
+                                .onAction(e -> {})
                 ),
-                windowActions = new GActionGroup("Window"),
-                settingsActions = new GActionGroup("Settings"),
-                helpActions = new GActionGroup("Help")
+                windowActions = new GActionGroup("Window").addAll(
+                        closeWindowAction = new GAction("Close")
+                                .smallIcon(SVGProvider.get("window_close", 16))
+                                .largeIcon(SVGProvider.get("window_close", 32))
+                                .onAction(e -> {}),
+                        closeAllWindowsAction = new GAction("Close All")
+                                .smallIcon(SVGProvider.get("windows_close", 16))
+                                .largeIcon(SVGProvider.get("windows_close", 32))
+                                .onAction(e -> {})
+                ),
+                settingsActions = new GActionGroup("Settings").addAll(
+                        optionsAction = new GAction("Options")
+                                .onAction(e -> {})
+                ),
+                helpActions = new GActionGroup("Help").addAll(
+                        helpAction = new GAction("Help")
+                                .smallIcon(SVGProvider.get("help", 16))
+                                .largeIcon(SVGProvider.get("help", 32))
+                                .onAction(e -> {}),
+                        new GSeparatorAction(),
+                        aboutAction = new GAction("About")
+                                .smallIcon(SVGProvider.get("about", 16))
+                                .largeIcon(SVGProvider.get("about", 32))
+                                .onAction(e -> {})
+                )
         );
     }
 }
