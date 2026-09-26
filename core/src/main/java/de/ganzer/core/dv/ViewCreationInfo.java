@@ -11,8 +11,8 @@ import java.util.Objects;
  *
  * @since 5.6.0
  */
-public class DocumentViewCreationInfo<D extends Document, V extends DocumentView<D>> {
-    private final DocumentViewTemplate<?, V> template;
+public class ViewCreationInfo<D extends Document, V extends View<D>> {
+    private final ViewTemplate<?, V> template;
 
     /**
      * Creates a new instance.
@@ -21,7 +21,7 @@ public class DocumentViewCreationInfo<D extends Document, V extends DocumentView
      *
      * @throws NullPointerException {@code template} is {@code null}.
      */
-    public DocumentViewCreationInfo(DocumentViewTemplate<?, V> template) {
+    public ViewCreationInfo(ViewTemplate<?, V> template) {
         Objects.requireNonNull(template, "template must not be null.");
         this.template = template;
     }
@@ -31,7 +31,7 @@ public class DocumentViewCreationInfo<D extends Document, V extends DocumentView
      *
      * @return The template.
      */
-    public DocumentViewTemplate<?, V> getTemplate() {
+    public ViewTemplate<?, V> getTemplate() {
         return template;
     }
 }

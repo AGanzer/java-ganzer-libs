@@ -11,7 +11,7 @@ import java.util.function.Consumer;
  *
  * @since 5.6.0
  */
-public class DocumentViewTemplate<D extends Document, V extends DocumentView<D>> {
+public class ViewTemplate<D extends Document, V extends View<D>> {
     /**
      * If this option is set, the template is not shown in the list of available
      * templates for new views.
@@ -35,7 +35,7 @@ public class DocumentViewTemplate<D extends Document, V extends DocumentView<D>>
     public static final int NOT_CLOSABLE = 0x08;
 
     private final String displayName;
-    private final DocumentViewSupplier<D, V> documentViewSupplier;
+    private final ViewSupplier<D, V> viewSupplier;
     private final Consumer<V> showView;
     private final int options;
     private final String modificationHintFormat;
@@ -45,7 +45,7 @@ public class DocumentViewTemplate<D extends Document, V extends DocumentView<D>>
      * Creates a new instance.
      *
      * @param displayName The display name of the template.
-     * @param documentViewSupplier Creates a new view.
+     * @param viewSupplier Creates a new view.
      * @param showView Displays the view.
      * @param options The options to set. This can be any combination of
      *        {@link #IS_HIDDEN}, {@link #IS_DEFAULT}, {@link #IS_MANDATORY}
@@ -58,20 +58,20 @@ public class DocumentViewTemplate<D extends Document, V extends DocumentView<D>>
      *        "%s (R)" is used.
      *
      * @throws NullPointerException {@code displayName}, {@code presenterSupplier}
-     *         {@code documentViewSupplier} or {@code showView} is {@code null}.
+     *         {@code viewSupplier} or {@code showView} is {@code null}.
      */
-    public DocumentViewTemplate(String displayName,
-                                DocumentViewSupplier<D, V> documentViewSupplier,
-                                Consumer<V> showView,
-                                int options,
-                                String modificationHintFormat,
-                                String readOnlyHintFormat) {
+    public ViewTemplate(String displayName,
+                        ViewSupplier<D, V> viewSupplier,
+                        Consumer<V> showView,
+                        int options,
+                        String modificationHintFormat,
+                        String readOnlyHintFormat) {
         Objects.requireNonNull(displayName, "displayName must not be null");
-        Objects.requireNonNull(documentViewSupplier, "documentViewSupplier must not be null");
+        Objects.requireNonNull(viewSupplier, "viewSupplier must not be null");
         Objects.requireNonNull(showView, "showView must not be null");
 
         this.displayName = displayName;
-        this.documentViewSupplier = documentViewSupplier;
+        this.viewSupplier = viewSupplier;
         this.showView = showView;
         this.options = options;
         this.modificationHintFormat = modificationHintFormat != null ? modificationHintFormat : "%s*";
@@ -149,8 +149,8 @@ public class DocumentViewTemplate<D extends Document, V extends DocumentView<D>>
      * @return The created presenter.
      */
     public V createView(D document) {
-        var cvInfo = new DocumentViewCreationInfo<>(this);
-        var view = documentViewSupplier.createView(cvInfo);
+        var cvInfo = new ViewCreationInfo<>(this);
+        var view = viewSupplier.createView(cvInfo);
 
         if (view == null)
             return null;

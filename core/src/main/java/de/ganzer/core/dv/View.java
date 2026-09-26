@@ -7,13 +7,13 @@ package de.ganzer.core.dv;
  *
  * @since 5.6.0
  */
-public interface DocumentView<D extends Document> {
+public interface View<D extends Document> {
     /**
      * Gets the template that has created the view.
      *
      * @return The template that has created the view.
      */
-    DocumentViewTemplate<D, ? extends DocumentView<D>> getTemplate();
+    ViewTemplate<D, ? extends View<D>> getTemplate();
 
     /**
      * Gets the bound document.

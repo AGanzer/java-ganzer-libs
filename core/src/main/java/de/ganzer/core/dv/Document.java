@@ -25,11 +25,11 @@ import java.util.List;
  *         "Welcome",
  *         DocumentTemplate.NO_NEW_NUMBER,
  *         null);
- * tpl.addViewTemplate(new DocumentViewTemplate<>(
+ * tpl.addViewTemplate(new ViewTemplate<>(
  *         "Welcome",
  *         WelcomePanel::new,
  *         v -> getMainView().addChildView(v),
- *         DocumentViewTemplate.NOT_CLOSABLE,
+ *         ViewTemplate.NOT_CLOSABLE,
  *         null,
  *         null));
  * DVManager.registerDocumentTemplate(tpl);
@@ -79,7 +79,7 @@ public interface Document extends Model {
      * @throws IllegalArgumentException If the view is already added to a
      *         document.
      */
-    void addView(DocumentView<? extends Document> view);
+    void addView(View<? extends Document> view);
 
     /**
      * Removes a view from the document.
@@ -88,10 +88,10 @@ public interface Document extends Model {
      * {@code true} or if the given view is mandatory, the document will be
      * closed automatically without any further action. To ensure that all data
      * will be saved correctly, the view should invoke
-     * {@link #canCloseView(DocumentView)} before removing the view.
+     * {@link #canCloseView(View)} before removing the view.
      * <p>
      * <b>NOTE:</b> This should always be invoked by a view that implements
-     * {@link DocumentView} when the view is closed (closed in the sense of
+     * {@link View} when the view is closed (closed in the sense of
      * destroyed but not just hidden to re-show it later).
      * <p>
      * Implementors should ensure that {@code view.setDocument(null)} is
@@ -99,7 +99,7 @@ public interface Document extends Model {
      *
      * @param view The view to remove.
      */
-    void removeView(DocumentView<? extends Document> view);
+    void removeView(View<? extends Document> view);
 
     /**
      * Gets a value indicating whether the given view can be closed.
@@ -111,7 +111,7 @@ public interface Document extends Model {
      *         set to auto-close. Otherwise, it returns {@code true} if there is
      *         more than one open view or if the document itself can be closed.
      */
-    default boolean canCloseView(DocumentView<? extends Document> view) {
+    default boolean canCloseView(View<? extends Document> view) {
         if (!view.getTemplate().isMandatory() && !getTemplate().isAutoClose())
             return true;
 
@@ -218,5 +218,5 @@ public interface Document extends Model {
      *
      * @return The open views of the document.
      */
-    List<DocumentView<? extends Document>> getViews();
+    List<View<? extends Document>> getViews();
 }

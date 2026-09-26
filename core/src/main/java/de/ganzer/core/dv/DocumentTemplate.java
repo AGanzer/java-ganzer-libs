@@ -28,7 +28,7 @@ public class DocumentTemplate<D extends Document> {
      * If this option is set, Creating a new document does not automatically
      * create a new view except that one of the registered view templates marks
      * a view as mandatory.
-     * @see DocumentViewTemplate#IS_MANDATORY
+     * @see ViewTemplate#IS_MANDATORY
      */
     public static final int NO_AUTO_VIEW = 0x04;
     /**
@@ -50,7 +50,7 @@ public class DocumentTemplate<D extends Document> {
 
     private static int globalNewNumber;
 
-    private final List<DocumentViewTemplate<D, ?>> documentViewTemplates = new ArrayList<>();
+    private final List<ViewTemplate<D, ?>> viewTemplates = new ArrayList<>();
     private final String displayName;
     private final Predicate<String> canHandleSource;
     private final DocumentSupplier<D> documentSupplier;
@@ -163,10 +163,10 @@ public class DocumentTemplate<D extends Document> {
      *
      * @return An unmodifiable list of registered view templates.
      *
-     * @see #registerViewTemplate(DocumentViewTemplate)
+     * @see #registerViewTemplate(ViewTemplate)
      */
-    public List<DocumentViewTemplate<?, ?>> getViewTemplates() {
-        return Collections.unmodifiableList(documentViewTemplates);
+    public List<ViewTemplate<?, ?>> getViewTemplates() {
+        return Collections.unmodifiableList(viewTemplates);
     }
 
     /**
@@ -174,8 +174,8 @@ public class DocumentTemplate<D extends Document> {
      *
      * @param viewTemplate The template to register.
      */
-    public void registerViewTemplate(DocumentViewTemplate<D, ?> viewTemplate) {
-        documentViewTemplates.add(viewTemplate);
+    public void registerViewTemplate(ViewTemplate<D, ?> viewTemplate) {
+        viewTemplates.add(viewTemplate);
     }
 
     /**
@@ -248,15 +248,15 @@ public class DocumentTemplate<D extends Document> {
         var info = new DocumentCreationInfo<>(this, parent, name, readOnly, newData);
         D document = documentSupplier.createDocument(info);
 
-        var template = documentViewTemplates.stream().filter(DocumentViewTemplate::isMandatory).findFirst();
+        var template = viewTemplates.stream().filter(ViewTemplate::isMandatory).findFirst();
 
         if (template.isPresent()) {
             template.get().createView(document);
         } else if (isAutoView()) {
-            template = documentViewTemplates.stream().filter(DocumentViewTemplate::isDefault).findFirst();
+            template = viewTemplates.stream().filter(ViewTemplate::isDefault).findFirst();
 
             if (template.isEmpty())
-                template = documentViewTemplates.stream().findFirst();
+                template = viewTemplates.stream().findFirst();
 
             if (template.isEmpty())
                 throw new IllegalStateException("DocumentTemplate " + displayName + " has no view template defined.");

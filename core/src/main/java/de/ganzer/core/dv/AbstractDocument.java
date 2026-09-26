@@ -15,7 +15,7 @@ import java.util.List;
  */
 public abstract class AbstractDocument extends AbstractModel implements Document {
     private final DocumentTemplate<? extends Document> template;
-    private final List<DocumentView<? extends Document>> views = new ArrayList<>();
+    private final List<View<? extends Document>> views = new ArrayList<>();
 
     private boolean closed;
 
@@ -41,7 +41,7 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      *         document.
      */
     @Override
-    public void addView(DocumentView<? extends Document> view) {
+    public void addView(View<? extends Document> view) {
         if (view.getDocument() == this)
             throw new IllegalArgumentException("View is already added to a document.");
 
@@ -55,7 +55,7 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      * {@code true}, the document will be closed automatically.
      * <p>
      * <b>NOTE:</b> This should always be invoked by a view that implements
-     * {@link DocumentView} when the view is closed (closed in the sense of
+     * {@link View} when the view is closed (closed in the sense of
      * destroyed but not just hidden to re-show it later).
      * <p>
      * Implementors should ensure that {@code view.setDocument(null)} is
@@ -64,7 +64,7 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      * @param view The view to remove.
      */
     @Override
-    public void removeView(DocumentView<? extends Document> view) {
+    public void removeView(View<? extends Document> view) {
         views.remove(view);
         view.setDocument(null);
 
@@ -78,7 +78,7 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      * @return An unmodifiable list of the views of the document.
      */
     @Override
-    public List<DocumentView<? extends Document>> getViews() {
+    public List<View<? extends Document>> getViews() {
         return Collections.unmodifiableList(views);
     }
 
@@ -108,7 +108,7 @@ public abstract class AbstractDocument extends AbstractModel implements Document
     @Override
     public void close() {
         closed = true;
-        views.forEach(DocumentView::forceClose);
+        views.forEach(View::forceClose);
     }
 
     /**
