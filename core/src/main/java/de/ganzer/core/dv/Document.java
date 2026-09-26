@@ -128,6 +128,7 @@ public interface Document extends Model {
      *
      * @see #isModified()
      * @see #setModified(boolean)
+     * @see #getSaveErrorMessage(String, Throwable)
      * @see DVNavigationService#querySave(String)
      */
     default boolean canClose() {
@@ -145,7 +146,10 @@ public interface Document extends Model {
         try {
             saveData();
         } catch (IOException e) {
-            DVNavigationService.getInstance().showError(CoreMessages.get("dv.error.save", getName(), e.getLocalizedMessage()), e);
+            String message = getSaveErrorMessage(getName(), e);
+            DVNavigationService.getInstance().showError(
+                    message != null ? message : CoreMessages.get("dv.error.save", getName(), e.getLocalizedMessage()),
+                    e);
             return false;
         }
 
@@ -175,6 +179,23 @@ public interface Document extends Model {
 
         setName(saveName);
         saveData();
+    }
+
+    /**
+     * Invoked to get an alternative error message for the save operation.
+     * <p>
+     * Implementors should return {@code null} if they don't want to provide
+     * an alternative error message.
+     *
+     * @param documentName The name of the document that cannot be saved.
+     * @param cause The causing exception.
+     *
+     * @return The alternative error message or {@code null} if no alternative
+     *         error message is available. This implementation does always
+     *         return {@code null}.
+     */
+    default String getSaveErrorMessage(String documentName, Throwable cause) {
+        return null;
     }
 
     /**

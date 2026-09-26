@@ -2,6 +2,7 @@ package de.ganzer.core.dv;
 
 import de.ganzer.core.util.Strings;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -202,7 +203,12 @@ public class DocumentTemplate<D extends Document> {
      *         and no view template is registered.
      */
     public D createDocument(Document parent) {
-        return createDocument(null, parent, true, false);
+        try {
+            return createDocument(null, parent, true, false);
+        } catch (IOException e) {
+            // Should never throw on new Data.
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -217,8 +223,9 @@ public class DocumentTemplate<D extends Document> {
      *
      * @throws IllegalStateException If {@link #isAutoView()} is {@code true}
      *         and no view template is registered.
+     * @throws IOException on any error loading the data.
      */
-    public D createDocument(String name, Document parent, boolean newData, boolean readOnly) {
+    public D createDocument(String name, Document parent, boolean newData, boolean readOnly) throws IOException {
         if (newData) {
             if (Strings.isNullOrBlank(name))
                 name = newName;
