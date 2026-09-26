@@ -10,6 +10,8 @@ module com.example.uitests {
     requires com.kitfox.svg;
     requires batik.dom;
     requires batik.svggen;
+    requires swingx.all;
+    requires de.ganzer.dv;
     opens com.example.uitests.fx to javafx.fxml;
     opens com.example.uitests.fx.charts to javafx.fxml;
     exports com.example.uitests.fx;

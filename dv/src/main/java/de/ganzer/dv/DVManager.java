@@ -241,4 +241,13 @@ public class DVManager {
 
         return template;
     }
+
+    /**
+     * Queries all open documents whether tey can be closed.
+     *
+     * @return {@code true} if all documents can be closed.
+     */
+    public static boolean canClose() {
+        return getOpenDocuments().stream().allMatch(Document::canClose);
+    }
 }
