@@ -205,8 +205,8 @@ public class DocumentTemplate<D extends Document> {
     public D createDocument(Document parent) {
         try {
             return createDocument(null, parent, true, false);
-        } catch (IOException e) {
-            // Should never throw on new Data.
+        } catch (DVLoadException e) {
+            // Should never happen on new Data.
             throw new RuntimeException(e);
         }
     }
@@ -223,9 +223,9 @@ public class DocumentTemplate<D extends Document> {
      *
      * @throws IllegalStateException If {@link #isAutoView()} is {@code true}
      *         and no view template is registered.
-     * @throws IOException on any error loading the data.
+     * @throws DVLoadException on any error loading the data.
      */
-    public D createDocument(String name, Document parent, boolean newData, boolean readOnly) throws IOException {
+    public D createDocument(String name, Document parent, boolean newData, boolean readOnly) throws DVLoadException {
         if (newData) {
             if (Strings.isNullOrBlank(name))
                 name = newName;

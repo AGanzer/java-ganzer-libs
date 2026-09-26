@@ -17,7 +17,7 @@ public interface DocumentSupplier<D extends Document> {
      *
      * @return The created document.
      *
-     * @throws IOException on any error loading the data.
+     * @throws DVLoadException on any error loading the data.
      */
-    D createDocument(DocumentCreationInfo<D> info) throws IOException;
+    D createDocument(DocumentCreationInfo<D> info) throws DVLoadException;
 }

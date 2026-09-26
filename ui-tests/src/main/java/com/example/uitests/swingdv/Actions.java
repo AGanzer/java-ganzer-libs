@@ -2,6 +2,7 @@ package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
 import de.ganzer.core.OS;
+import de.ganzer.dv.DVManager;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
 import de.ganzer.swing.actions.GSeparatorAction;
@@ -59,7 +60,7 @@ public class Actions {
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, defaultModifier))
                                 .smallIcon(SVGProvider.get("document_new", 16))
                                 .largeIcon(SVGProvider.get("document_new", 32))
-                                .onAction(e -> {}),
+                                .onAction(e -> DVManager.createDocument(null)),
                         openAction = new GAction("Open...")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, defaultModifier))
                                 .smallIcon(SVGProvider.get("document_open", 16))
@@ -89,7 +90,7 @@ public class Actions {
                         new GSeparatorAction(),
                         exitAction = new GAction(OS.isMac() ? "Quit" : "Exit")
                                 .accelerator(quitAccel)
-                                .onAction(e -> {})
+                                .onAction(e -> SwingDVApp.exit())
                 ),
                 editActions = new GActionGroup("Edit").addAll(
                         undoAction = new GAction("Undo")

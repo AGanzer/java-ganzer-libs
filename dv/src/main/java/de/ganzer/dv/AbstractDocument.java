@@ -87,12 +87,12 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      * <p>
      * This resets the modification, the read-only, and the new data flags.
      *
-     * @throws IOException on any error.
+     * @throws DVSaveException on any error.
      *
      * @see #doSaveData()
      */
     @Override
-    public void saveData() throws IOException {
+    public void saveData() throws DVSaveException {
         if (isNewData())
             saveDataAs();
         else

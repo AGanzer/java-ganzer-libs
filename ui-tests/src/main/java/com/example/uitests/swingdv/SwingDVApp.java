@@ -10,6 +10,7 @@ import de.ganzer.swing.util.UISettings;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class SwingDVApp {
@@ -39,6 +40,10 @@ public class SwingDVApp {
             mainWindow = new MainWindow();
             mainWindow.setVisible(true);
         });
+    }
+
+    public static void exit() {
+        mainWindow.dispatchEvent(new WindowEvent(mainWindow, WindowEvent.WINDOW_CLOSING));
     }
 
     public static void saveSettings() {

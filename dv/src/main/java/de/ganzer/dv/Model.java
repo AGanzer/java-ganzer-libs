@@ -282,9 +282,9 @@ public interface Model {
      * Implementors should reset the modification flag and return {@code false}
      * in {@link #isNewData()} if this is invoked.
      *
-     * @throws IOException on any error.
+     * @throws DVLoadException on any error.
      */
-    void loadData() throws IOException;
+    void loadData() throws DVLoadException;
 
     /**
      * Writes the data into a file, a database, or any other target.
@@ -292,9 +292,9 @@ public interface Model {
      * Implementors should reset the modification, the new-data nad the
      * read-only flags.
      *
-     * @throws IOException on any error.
+     * @throws DVSaveException on any error.
      */
-    void saveData() throws IOException;
+    void saveData() throws DVSaveException;
 
     /**
      * Adds a listener for all properties.

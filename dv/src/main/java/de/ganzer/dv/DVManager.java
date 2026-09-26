@@ -102,11 +102,11 @@ public class DVManager {
      *
      * @throws NullPointerException If the given data source is {@code null}.
      * @throws IllegalStateException If no document template is registered.
-     * @throws IOException on any error loading the data.
+     * @throws DVLoadException on any error loading the data.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
      */
-    public static Document openDocument(Document parent, String dataSource, boolean readOnly) throws IOException {
+    public static Document openDocument(Document parent, String dataSource, boolean readOnly) throws DVLoadException {
         return openDocument(parent, dataSource, null, readOnly);
     }
 
@@ -126,13 +126,13 @@ public class DVManager {
      *
      * @return The opened document.
      *
-     * @throws IOException on any error loading the data.
+     * @throws DVLoadException on any error loading the data.
      * @throws NullPointerException If the given data source is {@code null}.
      * @throws IllegalStateException If no document template is registered.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
      */
-    public static Document openDocument(Document parent, String dataSource, DocumentTemplate<?> template, boolean readOnly) throws IOException {
+    public static Document openDocument(Document parent, String dataSource, DocumentTemplate<?> template, boolean readOnly) throws DVLoadException {
         Objects.requireNonNull(dataSource, "dataSource must not be null.");
 
         template = getTemplateToUse(dataSource, template);
@@ -154,12 +154,12 @@ public class DVManager {
      * @return The opened documents.
      *
      * @throws IllegalStateException If no document template is registered.
-     * @throws IOException on any error loading the data.
+     * @throws DVLoadException on any error loading the data.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
      * @see DVNavigationService#queryLocationsToOpen(List, String)
      */
-    public static List<Document> openDocuments(Document parent, boolean readOnly) throws IOException {
+    public static List<Document> openDocuments(Document parent, boolean readOnly) throws DVLoadException {
         return openDocuments(parent, (DocumentTemplate<?>) null, readOnly);
     }
 
@@ -178,12 +178,12 @@ public class DVManager {
      * @return The opened documents.
      *
      * @throws IllegalStateException If no document template is registered.
-     * @throws IOException on any error loading the data.
+     * @throws DVLoadException on any error loading the data.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
      * @see DVNavigationService#queryLocationsToOpen(List, String)
      */
-    public static List<Document> openDocuments(Document parent, DocumentTemplate<?> template, boolean readOnly) throws IOException {
+    public static List<Document> openDocuments(Document parent, DocumentTemplate<?> template, boolean readOnly) throws DVLoadException {
         var filters = templates.stream().map(DocumentTemplate::getFilter).filter(f -> !Strings.isNullOrBlank(f)).toList();
         var initial = getTemplateToUse(null, template);
         var locations = DVNavigationService.getInstance().queryLocationsToOpen(filters, initial.getFilter());
@@ -205,11 +205,11 @@ public class DVManager {
      *
      * @throws NullPointerException If the given data sources are {@code null}.
      * @throws IllegalStateException If no document template is registered.
-     * @throws IOException on any error loading the data.
+     * @throws DVLoadException on any error loading the data.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
      */
-    public static List<Document> openDocuments(Document parent, Collection<String> dataSources, boolean readOnly) throws IOException {
+    public static List<Document> openDocuments(Document parent, Collection<String> dataSources, boolean readOnly) throws DVLoadException {
         Objects.requireNonNull(dataSources, "dataSources must not be null.");
 
         var documents = new ArrayList<Document>();

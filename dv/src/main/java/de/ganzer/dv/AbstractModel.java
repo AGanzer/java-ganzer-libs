@@ -1,6 +1,7 @@
 package de.ganzer.dv;
 
 import de.ganzer.core.util.Strings;
+import de.ganzer.dv.internals.DVMessages;
 
 import java.io.IOException;
 import java.util.List;
@@ -350,13 +351,20 @@ public abstract class AbstractModel implements Model {
      * <p>
      * This resets the modification and the new data flags.
      *
-     * @throws IOException on any error.
+     * @throws DVLoadException on any error.
      *
      * @see #doLoadData()
      */
     @Override
-    public void loadData() throws IOException {
-        doLoadData();
+    public void loadData() throws DVLoadException {
+        try {
+            doLoadData();
+        } catch (IOException e) {
+            String message = getLoadErrorMessage(getName(), e);
+            throw new DVLoadException(
+                    message != null ? message : DVMessages.get("dv.error.load", getName(), e.getLocalizedMessage()),
+                    e);
+        }
 
         setModified(false);
         setNewData(false);
@@ -367,13 +375,21 @@ public abstract class AbstractModel implements Model {
      * <p>
      * This resets the modification, the read-only, and the new data flags.
      *
-     * @throws IOException on any error.
+     * @throws DVSaveException on any error.
      *
      * @see #doSaveData()
+     * @see #getSaveErrorMessage(String, Throwable)
      */
     @Override
-    public void saveData() throws IOException {
-        doSaveData();
+    public void saveData() throws DVSaveException {
+        try {
+            doSaveData();
+        } catch (IOException e) {
+            String message = getSaveErrorMessage(getName(), e);
+            throw new DVSaveException(
+                    message != null ? message : DVMessages.get("dv.error.save", getName(), e.getLocalizedMessage()),
+                    e);
+        }
 
         setModified(false);
         setNewData(false);
@@ -527,6 +543,40 @@ public abstract class AbstractModel implements Model {
      */
     protected void setUndoManager(UndoManager undoManager) {
         this.undoManager = undoManager != null ? undoManager : new UndoManager();
+    }
+
+    /**
+     * Invoked to get an alternative error message for the load operation.
+     * <p>
+     * Implementors should return {@code null} if they don't want to provide
+     * an alternative error message.
+     *
+     * @param documentName The name of the document that cannot be loaded.
+     * @param cause The causing exception.
+     *
+     * @return The alternative error message or {@code null} if no alternative
+     *         error message is available. This implementation does always
+     *         return {@code null}.
+     */
+    protected String getLoadErrorMessage(String documentName, Throwable cause) {
+        return null;
+    }
+
+    /**
+     * Invoked to get an alternative error message for the save operation.
+     * <p>
+     * Implementors should return {@code null} if they don't want to provide
+     * an alternative error message.
+     *
+     * @param documentName The name of the document that cannot be saved.
+     * @param cause The causing exception.
+     *
+     * @return The alternative error message or {@code null} if no alternative
+     *         error message is available. This implementation does always
+     *         return {@code null}.
+     */
+    protected String getSaveErrorMessage(String documentName, Throwable cause) {
+        return null;
     }
 
     /**

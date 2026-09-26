@@ -126,14 +126,15 @@ public interface Document extends Model {
      * Gets a value indicating whether the document can be closed.
      * <p>
      * This implementation queries the user to save if the document is modified.
-     * Depending on the user's choice, the document can be closed or not.
+     * Depending on the user's choice, the document can be closed or not. On
+     * error, the error is shown to the user and {@code false} is returned.
      *
      * @return {@code true} if the document can be closed.
      *
      * @see #isModified()
      * @see #setModified(boolean)
-     * @see #getSaveErrorMessage(String, Throwable)
      * @see DVNavigationService#querySave(String)
+     * @see DVNavigationService#showError(String, Throwable)
      */
     default boolean canClose() {
         if (!isModified())
@@ -149,11 +150,8 @@ public interface Document extends Model {
 
         try {
             saveData();
-        } catch (IOException e) {
-            String message = getSaveErrorMessage(getName(), e);
-            DVNavigationService.getInstance().showError(
-                    message != null ? message : DVMessages.get("dv.error.save", getName(), e.getLocalizedMessage()),
-                    e);
+        } catch (DVSaveException e) {
+            DVNavigationService.getInstance().showError(e.getLocalizedMessage(), e);
             return false;
         }
 
@@ -170,12 +168,12 @@ public interface Document extends Model {
      * This implementation does nothing if the user cancels the operation;
      * otherwise, it sets the new name and invokes {@link #saveData()}.
      *
-     * @throws IOException on any error.
+     * @throws DVSaveException on any error.
      *
      * @see #saveData()
      * @see DVNavigationService#querySaveLocation(String, String)
      */
-    default void saveDataAs() throws IOException {
+    default void saveDataAs() throws DVSaveException {
         var saveName = DVNavigationService.getInstance().querySaveLocation(getName(), getTemplate().getFilter());
 
         if (saveName == null)
@@ -183,23 +181,6 @@ public interface Document extends Model {
 
         setName(saveName);
         saveData();
-    }
-
-    /**
-     * Invoked to get an alternative error message for the save operation.
-     * <p>
-     * Implementors should return {@code null} if they don't want to provide
-     * an alternative error message.
-     *
-     * @param documentName The name of the document that cannot be saved.
-     * @param cause The causing exception.
-     *
-     * @return The alternative error message or {@code null} if no alternative
-     *         error message is available. This implementation does always
-     *         return {@code null}.
-     */
-    default String getSaveErrorMessage(String documentName, Throwable cause) {
-        return null;
     }
 
     /**
