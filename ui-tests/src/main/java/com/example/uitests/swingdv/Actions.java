@@ -2,7 +2,10 @@ package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
 import de.ganzer.core.OS;
+import de.ganzer.dv.DVLoadException;
 import de.ganzer.dv.DVManager;
+import de.ganzer.dv.DVNavigationService;
+import de.ganzer.dv.DVSaveException;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
 import de.ganzer.swing.actions.GSeparatorAction;
@@ -65,7 +68,13 @@ public class Actions {
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, defaultModifier))
                                 .smallIcon(SVGProvider.get("document_open", 16))
                                 .largeIcon(SVGProvider.get("document_open", 32))
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                    try {
+                                        DVManager.openDocuments(null, false);
+                                    } catch (DVLoadException ex) {
+                                        DVNavigationService.getInstance().showError(ex.getLocalizedMessage(), ex);
+                                    }
+                                }),
                         new GSeparatorAction(),
                         recentDocsActions = new GActionGroup("Recent Documents")
                                 .enabled(false),
@@ -75,18 +84,36 @@ public class Actions {
                                 .smallIcon(SVGProvider.get("save", 16))
                                 .largeIcon(SVGProvider.get("save", 32))
                                 .enabled(false)
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                    try {
+                                        DVManager.saveActiveDocument();
+                                    } catch (DVSaveException ex) {
+                                        DVNavigationService.getInstance().showError(ex.getLocalizedMessage(), ex);
+                                    }
+                                }),
                         saveAllAction = new GAction("Save All")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, defaultModifier | InputEvent.SHIFT_DOWN_MASK))
                                 .smallIcon(SVGProvider.get("save_all", 16))
                                 .largeIcon(SVGProvider.get("save_all", 32))
                                 .enabled(false)
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                    try {
+                                        DVManager.saveAllDocuments();
+                                    } catch (DVSaveException ex) {
+                                        DVNavigationService.getInstance().showError(ex.getLocalizedMessage(), ex);
+                                    }
+                                }),
                         saveAsAction = new GAction("Save As...")
                                 .smallIcon(SVGProvider.get("save_as", 16))
                                 .largeIcon(SVGProvider.get("save_as", 32))
                                 .enabled(false)
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                    try {
+                                        DVManager.saveActiveDocumentAs();
+                                    } catch (DVSaveException ex) {
+                                        DVNavigationService.getInstance().showError(ex.getLocalizedMessage(), ex);
+                                    }
+                                }),
                         new GSeparatorAction(),
                         exitAction = new GAction(OS.isMac() ? "Quit" : "Exit")
                                 .accelerator(quitAccel)
@@ -98,38 +125,44 @@ public class Actions {
                                 .smallIcon(SVGProvider.get("undo", 16))
                                 .largeIcon(SVGProvider.get("undo", 32))
                                 .enabled(false)
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                }),
                         redoAction = new GAction("Redo")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, defaultModifier))
                                 .smallIcon(SVGProvider.get("redo", 16))
                                 .largeIcon(SVGProvider.get("redo", 32))
                                 .enabled(false)
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                }),
                         new GSeparatorAction(),
                         cutAction = new GAction("Cut")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, defaultModifier))
                                 .smallIcon(SVGProvider.get("cut", 16))
                                 .largeIcon(SVGProvider.get("cut", 32))
                                 .enabled(false)
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                }),
                         copyAction = new GAction("Copy")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, defaultModifier))
                                 .smallIcon(SVGProvider.get("copy", 16))
                                 .largeIcon(SVGProvider.get("copy", 32))
                                 .enabled(false)
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                }),
                         pasteAction = new GAction("Paste")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, defaultModifier))
                                 .smallIcon(SVGProvider.get("paste", 16))
                                 .largeIcon(SVGProvider.get("paste", 32))
                                 .enabled(false)
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                }),
                         deleteAction = new GAction("Delete")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0))
                                 .smallIcon(SVGProvider.get("delete", 16))
                                 .largeIcon(SVGProvider.get("delete", 32))
                                 .enabled(false)
-                                .onAction(e -> {})
+                                .onAction(e -> {
+                                })
                 ),
                 windowActions = new GActionGroup("Window").addAll(
                         closeWindowAction = new GAction("Close")
@@ -137,28 +170,33 @@ public class Actions {
                                 .smallIcon(SVGProvider.get("window_close", 16))
                                 .largeIcon(SVGProvider.get("window_close", 32))
                                 .enabled(false)
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                }),
                         closeAllWindowsAction = new GAction("Close All")
                                 .smallIcon(SVGProvider.get("windows_close", 16))
                                 .largeIcon(SVGProvider.get("windows_close", 32))
                                 .enabled(false)
-                                .onAction(e -> {})
+                                .onAction(e -> {
+                                })
                 ),
                 settingsActions = new GActionGroup("Settings").addAll(
                         optionsAction = new GAction("Options")
-                                .onAction(e -> {})
+                                .onAction(e -> {
+                                })
                 ),
                 helpActions = new GActionGroup("Help").addAll(
                         helpAction = new GAction("Help")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0))
                                 .smallIcon(SVGProvider.get("help", 16))
                                 .largeIcon(SVGProvider.get("help", 32))
-                                .onAction(e -> {}),
+                                .onAction(e -> {
+                                }),
                         new GSeparatorAction(),
                         aboutAction = new GAction("About")
                                 .smallIcon(SVGProvider.get("about", 16))
                                 .largeIcon(SVGProvider.get("about", 32))
-                                .onAction(e -> {})
+                                .onAction(e -> {
+                                })
                 )
         );
     }

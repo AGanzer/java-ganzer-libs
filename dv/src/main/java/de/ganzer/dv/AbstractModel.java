@@ -4,6 +4,8 @@ import de.ganzer.core.util.Strings;
 import de.ganzer.dv.internals.DVMessages;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -359,7 +361,7 @@ public abstract class AbstractModel implements Model {
     public void loadData() throws DVLoadException {
         try {
             doLoadData();
-        } catch (IOException e) {
+        } catch (Exception e) {
             String message = getLoadErrorMessage(getName(), e);
             throw new DVLoadException(
                     message != null ? message : DVMessages.get("dv.error.load", getName(), e.getLocalizedMessage()),
@@ -384,7 +386,7 @@ public abstract class AbstractModel implements Model {
     public void saveData() throws DVSaveException {
         try {
             doSaveData();
-        } catch (IOException e) {
+        } catch (Exception e) {
             String message = getSaveErrorMessage(getName(), e);
             throw new DVSaveException(
                     message != null ? message : DVMessages.get("dv.error.save", getName(), e.getLocalizedMessage()),

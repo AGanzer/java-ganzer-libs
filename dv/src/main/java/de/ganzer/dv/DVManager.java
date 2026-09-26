@@ -250,4 +250,66 @@ public class DVManager {
     public static boolean canClose() {
         return getOpenDocuments().stream().allMatch(Document::canClose);
     }
+
+    /**
+     * Returns the active view.
+     *
+     * @return the active view or {@code null} if no view is active.
+     */
+    public static View<?> getActiveView() {
+        // TODO: getActiveView()
+        return null;
+    }
+
+    /**
+     * Returns the active document.
+     *
+     * @return the active document or {@code null} if no document is active.
+     */
+    public static Document getActiveDocument() {
+        var view = getActiveView();
+
+        if (view != null)
+            return view.getDocument();
+
+        return null;
+    }
+
+    /**
+     * Save the active document.
+     * <p>
+     * This is a shortcut for {@code DVManager.getActiveDocument().saveData()}.
+     *
+     * @throws DVSaveException on any error.
+     */
+    public static void saveActiveDocument() throws DVSaveException {
+        var doc = getActiveDocument();
+
+        if (doc != null)
+            doc.saveData();
+    }
+
+    /**
+     * Save the active document with another name.
+     * <p>
+     * This is a shortcut for {@code DVManager.getActiveDocument().saveDataAs()}.
+     *
+     * @throws DVSaveException on any error.
+     */
+    public static void saveActiveDocumentAs() throws DVSaveException {
+        var doc = getActiveDocument();
+
+        if (doc != null)
+            doc.saveDataAs();
+    }
+
+    /**
+     * Saves all open documents.
+     *
+     * @throws DVSaveException on any error.
+     */
+    public static void saveAllDocuments() throws DVSaveException {
+        for (var doc : getOpenDocuments())
+            doc.saveData();
+    }
 }
