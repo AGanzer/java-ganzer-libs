@@ -38,6 +38,8 @@ import java.util.Objects;
  * optional image that is displayed in front of the title. If the title shall be
  * filled with further controls, {@link #createCenteredTitleExtension()} and
  * {@link #createRightTitleExtension()} should be overridden.
+ *
+ * @since 6.0.0
  */
 public abstract class AbstractPanel extends JPanel implements Disposable {
     private static Color titleBackground = Color.WHITE;

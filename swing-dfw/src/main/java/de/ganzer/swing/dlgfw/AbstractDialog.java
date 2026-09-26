@@ -25,6 +25,8 @@ import java.awt.event.WindowEvent;
  * manager and implements a factory method that fills the center and the buttons.
  * These panels should be created in the derived classes by implementing
  * {@link #createCenterPanel()} and {@link #createButtonPanel()}.
+ *
+ * @since 6.0.0
  */
 public abstract class AbstractDialog extends JDialog {
     private boolean accepted = true;

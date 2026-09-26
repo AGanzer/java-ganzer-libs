@@ -11,7 +11,7 @@ import java.util.concurrent.FutureTask;
  * The service implementation that uses a {@link JOptionPane} to display the
  * messages.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public class JOptionPaneMessageService implements MessageService {
     /**

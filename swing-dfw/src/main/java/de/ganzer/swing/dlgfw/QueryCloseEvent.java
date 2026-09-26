@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 
 /**
  * The event that is used to query a window to close itself.
+ *
+ * @since 6.0.0
  */
 public class QueryCloseEvent extends ActionEvent {
     /**

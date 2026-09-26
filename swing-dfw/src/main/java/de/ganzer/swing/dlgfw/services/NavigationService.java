@@ -4,6 +4,8 @@ import java.awt.Component;
 
 /**
  * A service to navigate through the UI.
+ *
+ * @since 6.0.0
  */
 public interface NavigationService {
     /**

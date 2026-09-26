@@ -21,6 +21,8 @@ import java.util.function.Consumer;
  * The basic frame for all non-modal dialogs that modifies external data.
  *
  * @param <Data> The type of the accepted data.
+ *
+ * @since 6.0.0
  */
 @SuppressWarnings("unused")
 public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFrame<Data> implements ModifiableDataSupport<Data> {

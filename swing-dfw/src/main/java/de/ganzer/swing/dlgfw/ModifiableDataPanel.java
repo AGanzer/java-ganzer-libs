@@ -4,6 +4,8 @@ package de.ganzer.swing.dlgfw;
  * May be implemented by content panes that work on modifiable data.
  *
  * @param <Data> The type of the data to work with.
+ *
+ * @since 6.0.0
  */
 public interface ModifiableDataPanel<Data> extends Initializer<Data> {
     /**

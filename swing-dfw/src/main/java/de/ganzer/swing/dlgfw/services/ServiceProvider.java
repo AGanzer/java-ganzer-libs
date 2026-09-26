@@ -35,7 +35,7 @@ import java.util.Objects;
  * the implementation of the required service without changing any code that uses
  * the service.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 @SuppressWarnings("unchecked")
 public final class ServiceProvider {

@@ -18,6 +18,8 @@ import java.util.function.Consumer;
  * The basic dialog for all modal dialogs that modifies external data.
  *
  * @param <Data> The type of the accepted data.
+ *
+ * @since 6.0.0
  */
 @SuppressWarnings("unused")
 public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDialog<Data> implements ModifiableDataSupport<Data> {
