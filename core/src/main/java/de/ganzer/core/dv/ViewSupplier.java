@@ -6,7 +6,7 @@ package de.ganzer.core.dv;
  * @param <D> The type of the document.
  * @param <V> The type of the view.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public interface ViewSupplier<D extends Document, V extends View<D>> {
     /**

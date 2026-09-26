@@ -3,7 +3,7 @@ package de.ganzer.core.dv;
 /**
  * A change event for indexed properties.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public class IndexedModelChangeEvent extends ModelChangeEvent{
     private final int index;

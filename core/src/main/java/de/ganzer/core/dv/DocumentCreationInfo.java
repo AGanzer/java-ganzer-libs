@@ -30,7 +30,7 @@ public class DocumentCreationInfo<D extends Document> {
      * @throws IllegalArgumentException if {@code newData} is {@code false} and
      *         {@code name} is {@code null} or empty or does contain only blanks.
      *
-     * @since 5.6.0
+     * @since 6.0.0
      */
     public DocumentCreationInfo(DocumentTemplate<D> template, Document parent, String name, boolean readOnly, boolean newData) {
         this.parent = parent;

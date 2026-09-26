@@ -6,7 +6,7 @@ import java.util.Stack;
 /**
  * The manager that manages undoable actions that implement {@link Undoable}.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public class UndoManager {
     private final Stack<Undoable> undoStack = new Stack<>();

@@ -9,7 +9,7 @@ import java.util.Objects;
  * @param <V> The type of the view.
  * @param <D> The type of the view's presenter.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public class ViewCreationInfo<D extends Document, V extends View<D>> {
     private final ViewTemplate<?, V> template;

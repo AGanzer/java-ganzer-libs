@@ -11,7 +11,7 @@ import java.util.List;
  * A document of this type can only be created with an instance of
  * {@link DocumentCreationInfo}.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public abstract class AbstractDocument extends AbstractModel implements Document {
     private final DocumentTemplate<? extends Document> template;

@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  * @param <D> The type of the document.
  * @param <V> The type of the view.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public class ViewTemplate<D extends Document, V extends View<D>> {
     /**

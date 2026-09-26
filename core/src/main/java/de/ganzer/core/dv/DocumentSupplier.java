@@ -1,11 +1,13 @@
 package de.ganzer.core.dv;
 
+import java.io.IOException;
+
 /**
  * Used by {@link DocumentTemplate} to create a new document.
  *
  * @param <D> The type of the document.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public interface DocumentSupplier<D extends Document> {
     /**
@@ -14,6 +16,8 @@ public interface DocumentSupplier<D extends Document> {
      * @param info The information to create the document.
      *
      * @return The created document.
+     *
+     * @throws IOException on any error loading the data.
      */
-    D createDocument(DocumentCreationInfo<D> info);
+    D createDocument(DocumentCreationInfo<D> info) throws IOException;
 }

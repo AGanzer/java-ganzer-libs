@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * A basic abstract model that implements the {@link Model} interface.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public abstract class AbstractModel implements Model {
     private static final int IS_NEW = 0x01;

@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * A singleton document-view-manager.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public class DVManager {
     private static final List<DocumentTemplate<?>> templates = new ArrayList<>();

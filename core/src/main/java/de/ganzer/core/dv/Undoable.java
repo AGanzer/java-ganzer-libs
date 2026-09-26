@@ -3,7 +3,7 @@ package de.ganzer.core.dv;
 /**
  * An interface to an undoable action.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public interface Undoable {
     /**

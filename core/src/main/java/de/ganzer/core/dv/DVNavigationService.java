@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  * The navigation service used by the document-view framework to access the user.
+ *
+ * @since 6.0.0
  */
 public abstract class DVNavigationService {
     private static DVNavigationService instance;

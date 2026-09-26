@@ -10,7 +10,7 @@ import java.util.List;
  * A model in the sense of this framework should only represent one or more
  * entities of data but should not act as an entity itself.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public interface Model {
     /**

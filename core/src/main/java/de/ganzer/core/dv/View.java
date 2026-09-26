@@ -5,7 +5,7 @@ package de.ganzer.core.dv;
  *
  * @param <D> The type of the document the view shall be bound to.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public interface View<D extends Document> {
     /**

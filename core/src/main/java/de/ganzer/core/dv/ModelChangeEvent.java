@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * The event that is raised when a model has changed.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public class ModelChangeEvent extends EventObject {
     private final String propertyName;

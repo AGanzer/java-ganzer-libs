@@ -37,7 +37,7 @@ import java.util.List;
  * This interface provides child documents, but the implementation itself is
  * responsive for managing child documents with all its actions.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public interface Document extends Model {
     /**

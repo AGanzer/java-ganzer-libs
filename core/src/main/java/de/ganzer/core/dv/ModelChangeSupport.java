@@ -9,7 +9,7 @@ import java.util.*;
  * {@link Model} interface. The difference ist that the originator of a change
  * event ist not notified.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public class ModelChangeSupport {
     private final Map<String, Set<Pair<Object, ModelChangeListener>>> listeners = new HashMap<>();

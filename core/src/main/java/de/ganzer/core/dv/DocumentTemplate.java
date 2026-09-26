@@ -11,7 +11,7 @@ import java.util.function.Predicate;
  *
  * @param <D> the type of the document ot create.
  *
- * @since 5.6.0
+ * @since 6.0.0
  */
 public class DocumentTemplate<D extends Document> {
     /**
