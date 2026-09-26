@@ -104,10 +104,15 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      * <p>
      * To ensure that the document saves all modified data, invoke
      * {@link #canClose()} before invoking this method.
+     * <p>
+     * <b>NOTE:</b> Inheritors have to ensure that the base method is invoked
+     * to remove the document from the manager's document list.
      */
     @Override
     public void close() {
         closed = true;
+        DVManager.documentClosed(this);
+
         views.forEach(View::forceClose);
     }
 

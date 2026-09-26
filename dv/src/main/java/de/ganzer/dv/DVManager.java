@@ -2,17 +2,38 @@ package de.ganzer.dv;
 
 import de.ganzer.core.util.Strings;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
  * A singleton document-view-manager.
+ * <p>
+ * The manager needs some support to perform certain operations that depend
+ * on the used UI framework. This support should be installed once at
+ * application startup
+ *
+ * @see #registerSupport(DVManagerSupport)
+ * @see DVManagerSupport
  *
  * @since 6.0.0
  */
 public class DVManager {
     private static final List<DocumentTemplate<?>> templates = new ArrayList<>();
     private static final List<Document> openDocuments = new ArrayList<>();
+
+    private static DVManagerSupport support;
+
+    /**
+     * Sets the support for the DVManager.
+     * <p>
+     * The manager needs some support to perform certain operations that depend
+     * on the used UI framework. This support should be installed once at
+     * application startup
+     *
+     * @param support The support to set.
+     */
+    public static void registerSupport(DVManagerSupport support) {
+        DVManager.support = support;
+    }
 
     /**
      * Adds a document template to the manager.
@@ -255,10 +276,16 @@ public class DVManager {
      * Returns the active view.
      *
      * @return the active view or {@code null} if no view is active.
+     *
+     * @throws IllegalStateException if no support is registered.
+     *
+     * @see #registerSupport(DVManagerSupport)
      */
     public static View<?> getActiveView() {
-        // TODO: getActiveView()
-        return null;
+        if (support == null)
+            throw new IllegalStateException("DVManagerSupport not registered");
+
+        return support.getActiveView();
     }
 
     /**
@@ -311,5 +338,23 @@ public class DVManager {
     public static void saveAllDocuments() throws DVSaveException {
         for (var doc : getOpenDocuments())
             doc.saveData();
+    }
+
+    /**
+     * Removes the document from the manager's document list.
+     * <p>
+     * <b>NOTE:</b> This is automatically invoked by {@link AbstractDocument}
+     * when it is closed. Implementors of {@link Document} have to ensure that
+     * a closed document is removed from the manager's document list.
+     *
+     * @param doc The document to remove.
+     *
+     * @throws IllegalStateException if the {@code doc} is not closed.
+     */
+    public static void documentClosed(Document doc) {
+        if (!doc.isClosed())
+            throw new IllegalStateException("Document is not closed");
+
+        openDocuments.remove(doc);
     }
 }

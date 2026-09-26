@@ -188,6 +188,9 @@ public interface Document extends Model {
      * <p>
      * To ensure that the document saves all modified data, invoke
      * {@link #canClose()} befor invoking this method.
+     * <p>
+     * <b>NOTE:</b> Implementors have to call {@link DVManager#documentClosed}
+     * if this method is invoked.
      */
     void close();
 

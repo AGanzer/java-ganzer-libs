@@ -36,6 +36,8 @@ public interface View<D extends Document> {
      * Invoked to close the view without any further action.
      * <p>
      * The view's document is already closed when this method is invoked.
+     * Implementors have to ensure that no exception is thrown and the view is
+     * closed.
      *
      * @see Document#isClosed()
      */
