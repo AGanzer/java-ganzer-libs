@@ -2,7 +2,6 @@ package de.ganzer.dv;
 
 import de.ganzer.core.util.Strings;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -115,6 +114,8 @@ public class DocumentTemplate<D extends Document> {
      * Indicates whether the template is hidden.
      *
      * @return {@code true} if the template is hidden.
+     *
+     * @see #IS_HIDDEN
      */
     public boolean isHidden() {
         return (options & IS_HIDDEN) != 0;
@@ -124,6 +125,8 @@ public class DocumentTemplate<D extends Document> {
      * Indicates whether the template is the default.
      *
      * @return {@code true} if the template is the default.
+     *
+     * @see #IS_DEFAULT
      */
     public boolean isDefault() {
         return (options & IS_DEFAULT) != 0;
@@ -133,16 +136,20 @@ public class DocumentTemplate<D extends Document> {
      * Indicates whether the template automatically should create a view.
      *
      * @return {@code true} if the template automatically should create a view.
+     *
+     * @see #NO_AUTO_VIEW
      */
-    public boolean isAutoView() {
+    public boolean autoCreateView() {
         return (options & NO_AUTO_VIEW) == 0;
     }
 
     /**
-     * Indicates whether the document shall be automatically be closed when the
+     * Indicates whether the document shall automatically be closed when the
      * last view is closed.
      *
      * @return {@code true} if the document is automatically closed.
+     *
+     * @see #NO_AUTO_CLOSE
      */
     public boolean isAutoClose() {
         return (options & NO_AUTO_CLOSE) == 0;
@@ -153,6 +160,8 @@ public class DocumentTemplate<D extends Document> {
      * is a new document.
      *
      * @return {@code true} if the document has a new number.
+     *
+     * @see #NO_NEW_NUMBER
      */
     public boolean hasNewNumber() {
         return (options & NO_NEW_NUMBER) == 0;
@@ -199,7 +208,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @return The created document.
      *
-     * @throws IllegalStateException If {@link #isAutoView()} is {@code true}
+     * @throws IllegalStateException If {@link #autoCreateView()} is {@code true}
      *         and no view template is registered.
      */
     public D createDocument(Document parent) {
@@ -221,7 +230,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @return The created document.
      *
-     * @throws IllegalStateException If {@link #isAutoView()} is {@code true}
+     * @throws IllegalStateException If {@link #autoCreateView()} is {@code true}
      *         and no view template is registered.
      * @throws DVLoadException on any error loading the data.
      */
@@ -252,7 +261,7 @@ public class DocumentTemplate<D extends Document> {
 
         if (template.isPresent()) {
             template.get().createView(document);
-        } else if (isAutoView()) {
+        } else if (autoCreateView()) {
             template = viewTemplates.stream().filter(ViewTemplate::isDefault).findFirst();
 
             if (template.isEmpty())

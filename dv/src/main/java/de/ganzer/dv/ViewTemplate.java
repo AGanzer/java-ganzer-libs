@@ -90,6 +90,8 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * Indicates whether the template is hidden.
      *
      * @return {@code true} if the template is hidden.
+     *
+     * @see #IS_HIDDEN
      */
     public boolean isHidden() {
         return (options & IS_HIDDEN) != 0;
@@ -99,6 +101,8 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * Indicates whether the template is the default.
      *
      * @return {@code true} if the template is the default.
+     *
+     * @see #IS_DEFAULT
      */
     public boolean isDefault() {
         return (options & IS_DEFAULT) != 0;
@@ -108,6 +112,8 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * Indicates whether the view is mandatory.
      *
      * @return {@code true} if the view is mandatory.
+     *
+     * @see #IS_MANDATORY
      */
     public boolean isMandatory() {
         return (options & IS_MANDATORY) != 0;
@@ -117,6 +123,8 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * Indicates whether the view is closable.
      *
      * @return {@code true} if the view is closable.
+     *
+     * @see #NOT_CLOSABLE
      */
     public boolean isClosable() {
         return (options & NOT_CLOSABLE) == 0;
