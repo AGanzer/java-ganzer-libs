@@ -3,17 +3,18 @@ package com.example.uitests.swingdv;
 import com.example.uitests.swing.SVGProvider;
 import com.example.uitests.swingdv.services.NavigationService;
 import de.ganzer.core.OS;
-import de.ganzer.core.Services;
 import de.ganzer.dv.*;
-import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
 import de.ganzer.swing.actions.GSeparatorAction;
+import de.ganzer.swing.actions.GToggleActionGroup;
+import de.ganzer.swing.util.EditorTracer;
 
 import javax.swing.KeyStroke;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Actions {
     public static final GActionGroup allActions;
@@ -40,11 +41,23 @@ public class Actions {
 
     public static final GAction closeWindowAction;
     public static final GAction closeAllWindowsAction;
+    public static final GToggleActionGroup chooseWindowActions;
 
     public static final GAction optionsAction;
 
     public static final GAction helpAction;
     public static final GAction aboutAction;
+
+    public static void updateIdleActions() {
+        var tracer = EditorTracer.getInstance();
+
+        undoAction.setEnabled(tracer.canUndo());
+        redoAction.setEnabled(tracer.canRedo());
+        cutAction.setEnabled(tracer.canCut());
+        copyAction.setEnabled(tracer.canCopy());
+        pasteAction.setEnabled(tracer.canPaste());
+        deleteAction.setEnabled(tracer.canDelete());
+    }
 
     static {
         var defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
@@ -56,6 +69,11 @@ public class Actions {
                 : OS.isWindows()
                     ? KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.CTRL_DOWN_MASK)
                     : KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK);
+        var windowToggleActions = new GAction[10];
+
+        for (int i = 0; i < 10; i++) {
+            windowToggleActions[i] = new GAction().visible(false);
+        }
 
         allActions = new GActionGroup().addAll(
                 fileActions = new GActionGroup("File").addAll(
@@ -177,7 +195,11 @@ public class Actions {
                                 .largeIcon(SVGProvider.get("windows_close", 32))
                                 .enabled(false)
                                 .onAction(e -> {
-                                })
+                                }),
+                        new GSeparatorAction(),
+                        chooseWindowActions = new GToggleActionGroup().addAll(
+                                windowToggleActions
+                        )
                 ),
                 settingsActions = new GActionGroup("Settings").addAll(
                         optionsAction = new GAction("Options")
@@ -209,6 +231,9 @@ public class Actions {
         });
 
         DVManager.addPropertyChangeListener(DVManager.ACTIVE_VIEW_PROPERTY, e -> {
+        });
+
+        DVManager.addPropertyChangeListener(DVManager.OPEN_DOCUMENTS_PROPERTY, e -> {
         });
     }
 }

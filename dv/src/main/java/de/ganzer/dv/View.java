@@ -33,6 +33,11 @@ public interface View<D extends Document> {
     void setDocument(D document);
 
     /**
+     * Invoked to bring the view to the front.
+     */
+    void toFront();
+
+    /**
      * Invoked to close the view without any further action.
      * <p>
      * The view's document is already closed when this method is invoked.

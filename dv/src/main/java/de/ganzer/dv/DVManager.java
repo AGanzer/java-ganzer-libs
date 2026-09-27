@@ -1,5 +1,6 @@
 package de.ganzer.dv;
 
+import de.ganzer.core.OS;
 import de.ganzer.core.Services;
 import de.ganzer.core.util.Strings;
 import de.ganzer.dv.services.DVNavigationService;
@@ -24,16 +25,30 @@ import java.util.*;
 public class DVManager {
     /**
      * The name of the "activeView" property used for {@link PropertyChangeEvent}'s.
+     *
      * @see #addPropertyChangeListener(PropertyChangeListener)
      * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String ACTIVE_VIEW_PROPERTY = "activeView";
+
     /**
      * The name of the "activeDocument" property used for {@link PropertyChangeEvent}'s.
+     *
      * @see #addPropertyChangeListener(PropertyChangeListener)
      * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String ACTIVE_DOCUMENT_PROPERTY = "activeDocument";
+
+    /**
+     * The name of the "openDocuments" property used for {@link PropertyChangeEvent}'s.
+     * <p>
+     * The old value is {@code null} on inserted documents. The new value is
+     * {@code null} on removed documents.
+     *
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
+     */
+    public static final String OPEN_DOCUMENTS_PROPERTY = "openDocuments";
 
     private static final PropertyChangeSupport pcs = new PropertyChangeSupport(DVManager.class);
     private static final List<DocumentTemplate<?>> templates = new ArrayList<>();
@@ -217,6 +232,7 @@ public class DVManager {
 
         Document document = template.createDocument(parent);
         openDocuments.add(document);
+        pcs.firePropertyChange(OPEN_DOCUMENTS_PROPERTY, null, document);
 
         return document;
     }
@@ -224,6 +240,9 @@ public class DVManager {
     /**
      * Opens an existing data source based on the template that matches the
      * source and adds it to the list of open documents.
+     * <p>
+     * If the given source is already opened, the existing document will be
+     * activated by bringing its default view to the front and is returned.
      *
      * @param parent The parent document, or {@code null} if the document has no
      *        parent.
@@ -246,6 +265,9 @@ public class DVManager {
     /**
      * Opens an existing data source based on the provided template and
      * adds it to the list of open documents.
+     * <p>
+     * If the given source is already opened, the existing document will be
+     * activated by bringing its default view to the front and is returned.
      *
      * @param parent The parent document, or {@code null} if the document has no
      *        parent.
@@ -268,10 +290,23 @@ public class DVManager {
     public static Document openDocument(Document parent, String dataSource, DocumentTemplate<?> template, boolean readOnly) throws DVLoadException {
         Objects.requireNonNull(dataSource, "dataSource must not be null.");
 
+        Document document = getOpenDocuments().stream()
+                // TODO: correct search for open document by name:
+                .filter(doc -> OS.isWindows() ? doc.getName().equalsIgnoreCase(dataSource) : doc.getName().equals(dataSource))
+                .findFirst()
+                .orElse(null);
+
+        if (document != null) {
+            document.getViews().stream()
+                    .filter(v -> v.getTemplate().isDefault())
+                    .findFirst().ifPresent(View::toFront);
+        }
+
         template = getTemplateToUse(dataSource, template);
 
-        Document document = template.createDocument(dataSource, parent, false, readOnly);
+        document = template.createDocument(dataSource, parent, false, readOnly);
         openDocuments.add(document);
+        pcs.firePropertyChange(OPEN_DOCUMENTS_PROPERTY, null, document);
 
         return document;
     }
@@ -449,7 +484,8 @@ public class DVManager {
         if (!doc.isClosed())
             throw new IllegalStateException("Document is not closed");
 
-        openDocuments.remove(doc);
+        if (openDocuments.remove(doc))
+            pcs.firePropertyChange(OPEN_DOCUMENTS_PROPERTY, doc, null);
     }
 
     private static DocumentTemplate<?> getTemplateToUse(String dataSource, DocumentTemplate<?> preferred) {
