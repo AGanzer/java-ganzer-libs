@@ -1,10 +1,12 @@
 package com.example.uitests.swingdv;
 
 import de.ganzer.dv.DVManager;
+import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import org.jdesktop.swingx.JXFrame;
 
 import javax.swing.JMenuBar;
+import java.awt.Component;
 import java.awt.event.WindowEvent;
 
 public class MainWindow extends JXFrame {
@@ -22,6 +24,10 @@ public class MainWindow extends JXFrame {
 
     public ClosableTabsPane getTabPane() {
         return tabPane;
+    }
+
+    public void addChildView(View<?> view) {
+        tabPane.addTab(view.getDocument().getName(), (Component) view);
     }
 
     @Override

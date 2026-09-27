@@ -503,9 +503,13 @@ public class DVManager {
         if (template != null)
             return template;
 
-        return dataSource == null
-                ? ((DVNavigationService) Services.get(DVNavigationService.class)).chooseDocumentTemplate(
-                        templates.stream().filter(t -> !t.isHidden()).toList())
+        if (dataSource != null)
+            return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
+
+        var tpls = templates.stream().filter(t -> !t.isHidden()).toList();
+
+        return tpls.size() > 1
+                ? ((DVNavigationService) Services.get(DVNavigationService.class)).chooseDocumentTemplate(tpls)
                 : templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
     }
 }

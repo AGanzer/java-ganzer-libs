@@ -4,8 +4,6 @@ import de.ganzer.core.util.Strings;
 import de.ganzer.dv.internals.DVMessages;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -35,9 +33,9 @@ public abstract class AbstractModel implements Model {
      *
      * @throws IllegalArgumentException if {@code name} is {@code null} or empty
      *          or does contain only blanks.
-     * @throws IOException on any error loading data.
+     * @throws DVLoadException on any error loading data.
      */
-    protected AbstractModel(String name, boolean readOnly) throws IOException {
+    protected AbstractModel(String name, boolean readOnly) throws DVLoadException {
         this(name, readOnly, false);
     }
 
@@ -53,9 +51,9 @@ public abstract class AbstractModel implements Model {
      *
      * @throws IllegalArgumentException if {@code newData} is {@code false} and
      *         {@code name} is {@code null} or empty or does contain only blanks.
-     * @throws IOException on any error loading data.
+     * @throws DVLoadException on any error loading data.
      */
-    protected AbstractModel(String name, boolean readOnly, boolean newData) throws IOException {
+    protected AbstractModel(String name, boolean readOnly, boolean newData) throws DVLoadException {
         if (newData && Strings.isNullOrBlank(name))
             throw new IllegalArgumentException("name is null or blank");
 
@@ -589,14 +587,14 @@ public abstract class AbstractModel implements Model {
     /**
      * Invoked by {@link #loadData()} to load data from a storage.
      *
-     * @throws IOException on any error.
+     * @throws DVLoadException on any error.
      */
-    protected abstract void doLoadData() throws IOException;
+    protected abstract void doLoadData() throws DVLoadException;
 
     /**
      * Invoked by {@link #saveData()} to write the data into a storage.
      *
-     * @throws IOException on any error.
+     * @throws DVLoadException on any error.
      */
-    protected abstract void doSaveData()throws IOException;
+    protected abstract void doSaveData()throws DVLoadException;
 }

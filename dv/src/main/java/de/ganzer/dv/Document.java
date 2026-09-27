@@ -25,7 +25,7 @@ import java.util.List;
  *         "Welcome",
  *         DocumentTemplate.NO_NEW_NUMBER | DocumentTemplate.IS_HIDDEN,
  *         null);
- * tpl.addViewTemplate(new ViewTemplate<>(
+ * tpl.registerViewTemplate(new ViewTemplate<>(
  *         "Welcome",
  *         WelcomePanel::new,
  *         v -> getMainView().addChildView(v),

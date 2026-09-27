@@ -1,6 +1,5 @@
 package de.ganzer.dv;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +17,21 @@ public abstract class AbstractDocument extends AbstractModel implements Document
     private final List<View<? extends Document>> views = new ArrayList<>();
 
     private boolean closed;
+
+    /**
+     * Creates a new instance.
+     * <p>
+     * {@link #doCreateData()} is invoked if {@link DocumentCreationInfo#isNewData()}
+     * is {@code true}; otherwise, {@link #doLoadData()} is invoked.
+     *
+     * @param info The information for initializing the model.
+     *
+     * @throws DVLoadException on any error loading data.
+     */
+    protected AbstractDocument(DocumentCreationInfo<? extends Document> info) throws DVLoadException {
+        super(info.getName(), info.isReadOnly(), info.isNewData());
+        this.template = info.getTemplate();
+    }
 
     /**
      * Gets the template that has created the document.
@@ -42,7 +56,7 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      */
     @Override
     public void addView(View<? extends Document> view) {
-        if (view.getDocument() == this)
+        if (view.getDocument() != this)
             throw new IllegalArgumentException("View is already added to a document.");
 
         views.add(view);
@@ -124,20 +138,5 @@ public abstract class AbstractDocument extends AbstractModel implements Document
     @Override
     public boolean isClosed() {
         return closed;
-    }
-
-    /**
-     * Creates a new instance.
-     * <p>
-     * {@link #doCreateData()} is invoked if {@link DocumentCreationInfo#isNewData()}
-     * is {@code true}; otherwise, {@link #doLoadData()} is invoked.
-     *
-     * @param info The information for initializing the model.
-     *
-     * @throws IOException on any error loading data.
-     */
-    protected AbstractDocument(DocumentCreationInfo<? extends Document> info) throws IOException {
-        super(info.getName(), info.isReadOnly(), info.isNewData());
-        this.template = info.getTemplate();
     }
 }

@@ -1,12 +1,17 @@
 package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
+import com.example.uitests.swingdv.doc.welcome.WelcomeDocument;
+import com.example.uitests.swingdv.doc.welcome.WelcomeView;
 import com.example.uitests.swingdv.services.NavigationService;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
+import de.ganzer.dv.DVManager;
+import de.ganzer.dv.DocumentTemplate;
+import de.ganzer.dv.ViewTemplate;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
 import de.ganzer.swing.util.UISettings;
@@ -97,6 +102,22 @@ public class SwingDVApp {
     }
 
     private static void registerTemplates() {
+        var tpl = new DocumentTemplate<WelcomeDocument>(
+                "Welcome",
+                s -> false,
+                WelcomeDocument::new,
+                "Welcome",
+                null,
+                DocumentTemplate.NO_NEW_NUMBER | DocumentTemplate.IS_HIDDEN,
+                null);
+        tpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, WelcomeView>(
+                "Welcome",
+                i -> new WelcomeView(i, mainWindow.getTabPane()),
+                v -> mainWindow.addChildView(v),
+                ViewTemplate.NOT_CLOSABLE,
+                null,
+                null));
+        DVManager.registerDocumentTemplate(tpl);
     }
 
     private static void onIdle() {

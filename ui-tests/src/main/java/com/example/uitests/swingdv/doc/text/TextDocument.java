@@ -2,6 +2,7 @@ package com.example.uitests.swingdv.doc.text;
 
 import de.ganzer.core.io.BOMInputStreamReader;
 import de.ganzer.dv.AbstractDocument;
+import de.ganzer.dv.DVLoadException;
 import de.ganzer.dv.DocumentCreationInfo;
 
 import java.io.*;
@@ -13,7 +14,7 @@ public class TextDocument extends AbstractDocument {
     private String text;
     private String encoding;
 
-    public TextDocument(DocumentCreationInfo<TextDocument> info) throws IOException {
+    public TextDocument(DocumentCreationInfo<TextDocument> info) throws DVLoadException {
         super(info);
     }
 
