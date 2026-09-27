@@ -53,6 +53,7 @@ public interface View<D extends Document> {
         return title;
     }
 
+    // TODO: implement this to make the document responsive for notifying views:
 //    void updateTitle();
 //    void documentDataChanged(Object context);
 

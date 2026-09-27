@@ -5,6 +5,7 @@ package de.ganzer.dv;
  *
  * @since 6.0.0
  */
+// TODO: Remove this, it is not necessary:
 public interface ModelChangeListener {
     /**
      * Called when a model's propert has changed.

@@ -12,6 +12,7 @@ import java.util.*;
  *
  * @since 6.0.0
  */
+// TODO: Remove this, it is not necessary:
 public class ModelChangeSupport {
     private final Map<String, Set<Pair<Object, ModelChangeListener>>> listeners = new HashMap<>();
     private final Object source;

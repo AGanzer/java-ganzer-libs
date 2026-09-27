@@ -8,6 +8,7 @@ import java.util.Objects;
  *
  * @since 6.0.0
  */
+// TODO: Remove this, it is not necessary:
 public class ModelChangeEvent extends EventObject {
     private final String propertyName;
     private final Object oldValue;

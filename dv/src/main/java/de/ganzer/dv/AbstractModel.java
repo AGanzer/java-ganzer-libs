@@ -16,6 +16,7 @@ public abstract class AbstractModel implements Model {
     private static final int IS_READONLY = 0x02;
     private static final int IS_MODIFIED = 0x04;
 
+    // TODO: change to PropertyChangeSupport, ModelChangeSupport is not required here:
     private final ModelChangeSupport pcs = new ModelChangeSupport(this);
 
     private UndoManager undoManager = new UndoManager();
