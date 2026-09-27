@@ -173,11 +173,14 @@ public class DVManager {
     /**
      * Creates a document with new empty data based on the default template and
      * adds it to the list of open documents.
+     * <p>
+     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
+     * by {@link Services#register(Class, Object)}.
      *
      * @param parent The parent document, or {@code null} if the document has no
      *        parent.
      *
-     * @return The newly created document.
+     * @return The newly created document or {@code null} if the user has canceled.
      *
      * @throws IllegalStateException If no document template is registered.
      *
@@ -190,6 +193,9 @@ public class DVManager {
     /**
      * Creates a document with new empty data based on the provided template and
      * adds it to the list of open documents.
+     * <p>
+     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
+     * by {@link Services#register(Class, Object)}.
      *
      * @param parent The parent document, or {@code null} if the document has no
      *        parent.
@@ -197,17 +203,17 @@ public class DVManager {
      *        {@code null}, a default template will be used. If there is no
      *        default template, the first registered template will be used.
      *
-     * @return The newly created document.
+     * @return The newly created document or {@code null} if the user has canceled.
      *
      * @throws IllegalStateException If no document template is registered.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
      */
     public static Document createDocument(Document parent, DocumentTemplate<?> template) {
-        if (templates.isEmpty())
-            throw new IllegalStateException("No document template is registered.");
-
         template = getTemplateToUse(null, template);
+
+        if (template == null)
+            return null;
 
         Document document = template.createDocument(parent);
         openDocuments.add(document);
@@ -458,13 +464,12 @@ public class DVManager {
         if (!Strings.isNullOrBlank(dataSource))
             template = templates.stream().filter(t -> t.canHandleDataSource(dataSource)).findFirst().orElse(null);
 
-        if (template == null) {
-            template = templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(null);
+        if (template != null)
+            return template;
 
-            if (template == null)
-                template = templates.get(0);
-        }
-
-        return template;
+        return dataSource == null
+                ? ((DVNavigationService) Services.get(DVNavigationService.class)).chooseDocumentTemplate(
+                        templates.stream().filter(t -> !t.isHidden()).toList())
+                : templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
     }
 }

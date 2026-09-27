@@ -1,6 +1,7 @@
 package de.ganzer.dv.services;
 
 import de.ganzer.core.Services;
+import de.ganzer.dv.DocumentTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -70,4 +71,14 @@ public interface DVNavigationService {
      *        exception is available.
      */
     void showError(String message, Throwable cause);
+
+    /**
+     * Invoked to choose a document template.
+     *
+     * @param templates The available templates to choose from.
+     *
+     * @return The chosen document template or {@code null} if the user has
+     *         canceled.
+     */
+    DocumentTemplate<?> chooseDocumentTemplate(List<DocumentTemplate<?>> templates);
 }

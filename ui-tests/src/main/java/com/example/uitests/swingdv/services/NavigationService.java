@@ -2,6 +2,7 @@ package com.example.uitests.swingdv.services;
 
 import com.example.uitests.swingdv.SwingDVApp;
 import de.ganzer.dv.DVManager;
+import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
 
@@ -39,6 +40,19 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
     @Override
     public void showError(String message, Throwable cause) {
         JOptionPane.showMessageDialog(getParent(null), message, SwingDVApp.TITLE, JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Invoked to choose a document template.
+     *
+     * @param templates The available templates to choose from.
+     *
+     * @return The chosen document template or {@code null} if the user has
+     *         canceled.
+     */
+    @Override
+    public DocumentTemplate<?> chooseDocumentTemplate(List<DocumentTemplate<?>> templates) {
+        return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
     }
 
     @Override
