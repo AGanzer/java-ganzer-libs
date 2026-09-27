@@ -233,8 +233,8 @@ public interface Model {
     /**
      * Pushes an undoable action to the stack of undoable actions.
      * <p>
-     * This default implementation is provided because not every model provides
-     * undoable changes. This implementation does nothing.
+     * This default implementation invokes {@link #addUndoable(Undoable, boolean)}
+     * with the second argument set to {@code false}.
      * <p>
      * Implementors should set the modification flag if this is invoked.
      *
@@ -243,6 +243,7 @@ public interface Model {
      * @see #addUndoable(Undoable, boolean)
      */
     default void addUndoable(Undoable undoable) {
+        addUndoable(undoable, false);
     }
 
     /**

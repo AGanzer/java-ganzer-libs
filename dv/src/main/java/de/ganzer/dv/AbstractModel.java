@@ -261,18 +261,6 @@ public abstract class AbstractModel implements Model {
      * Pushes an undoable action to the stack of undoable actions.
      *
      * @param undoable The action to push. This is not executed but only pushed.
-     *
-     * @see #addUndoable(Undoable, boolean)
-     */
-    @Override
-    public void addUndoable(Undoable undoable) {
-        addUndoable(undoable, false);
-    }
-
-    /**
-     * Pushes an undoable action to the stack of undoable actions.
-     *
-     * @param undoable The action to push. This is not executed but only pushed.
      * @param execute If this is {@code true}, {@link Undoable#execute()} is
      *         invoked.
      */
