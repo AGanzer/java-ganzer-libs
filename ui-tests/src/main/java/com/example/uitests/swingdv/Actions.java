@@ -1,6 +1,7 @@
 package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
+import com.example.uitests.swingdv.services.NavigationService;
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
 import de.ganzer.dv.*;
@@ -71,7 +72,7 @@ public class Actions {
                                     try {
                                         DVManager.openDocuments(null, false);
                                     } catch (DVLoadException ex) {
-                                        ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
+                                        NavigationService.getInstance().showError(ex.getLocalizedMessage(), ex);
                                     }
                                 }),
                         new GSeparatorAction(),
@@ -87,7 +88,7 @@ public class Actions {
                                     try {
                                         DVManager.saveActiveDocument();
                                     } catch (DVSaveException ex) {
-                                        ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
+                                        NavigationService.getInstance().showError(ex.getLocalizedMessage(), ex);
                                     }
                                 }),
                         saveAllAction = new GAction("Save All")
@@ -99,7 +100,7 @@ public class Actions {
                                     try {
                                         DVManager.saveAllDocuments();
                                     } catch (DVSaveException ex) {
-                                        ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
+                                        NavigationService.getInstance().showError(ex.getLocalizedMessage(), ex);
                                     }
                                 }),
                         saveAsAction = new GAction("Save As...")
@@ -110,7 +111,7 @@ public class Actions {
                                     try {
                                         DVManager.saveActiveDocumentAs();
                                     } catch (DVSaveException ex) {
-                                        ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
+                                        NavigationService.getInstance().showError(ex.getLocalizedMessage(), ex);
                                     }
                                 }),
                         new GSeparatorAction(),

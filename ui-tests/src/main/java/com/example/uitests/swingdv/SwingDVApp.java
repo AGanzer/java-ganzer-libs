@@ -8,6 +8,7 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
 import de.ganzer.dv.services.DVNavigationService;
+import de.ganzer.swing.dlgfw.services.DFWNavigationService;
 import de.ganzer.swing.util.UISettings;
 
 import javax.swing.SwingUtilities;
@@ -88,7 +89,8 @@ public class SwingDVApp {
     }
 
     private static void registerServices() {
-        Services.register(DVNavigationService.class, new NavigationService());
+        Services.register(DVNavigationService.class, NavigationService.getInstance());
+        Services.register(DFWNavigationService.class, NavigationService.getInstance());
     }
 
     private static class ExceptionHandlingEventQueue extends EventQueue {
