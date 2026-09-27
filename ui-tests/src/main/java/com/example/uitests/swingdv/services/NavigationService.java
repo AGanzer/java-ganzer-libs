@@ -5,6 +5,8 @@ import de.ganzer.dv.DVManager;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
 
+import javax.swing.FocusManager;
+import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.util.Collection;
 import java.util.List;
@@ -26,9 +28,7 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
 
     @Override
     public Boolean querySave(String name) {
-        return getConfirmation((Component) DVManager.getActiveView(),
-                               String.format("Soll %s gespeichert werden?", name),
-                               SwingDVApp.TITLE);
+        return getConfirmation(null, String.format("Soll %s gespeichert werden?", name), null);
     }
 
     @Override
@@ -38,13 +38,33 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
 
     @Override
     public void showError(String message, Throwable cause) {
+        JOptionPane.showMessageDialog(getParent(null), message, SwingDVApp.TITLE, JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
     public Boolean getConfirmation(Component parent, String question, String title) {
-        return false;
+        return switch (JOptionPane.showConfirmDialog(getParent(parent),
+                                                     question,
+                                                     title != null ? title : SwingDVApp.TITLE,
+                                                     JOptionPane.YES_NO_CANCEL_OPTION)) {
+            case JOptionPane.YES_OPTION -> true;
+            case JOptionPane.NO_OPTION -> false;
+            default -> null;
+        };
     }
 
     private NavigationService() {
+    }
+
+    private Component getParent(Component parent) {
+        if (parent != null)
+            return parent;
+
+        parent = (Component) DVManager.getActiveView();
+
+        if (parent == null)
+            parent = FocusManager.getCurrentManager().getPermanentFocusOwner();
+
+        return parent;
     }
 }
