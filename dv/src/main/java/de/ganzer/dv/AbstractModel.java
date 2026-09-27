@@ -283,7 +283,7 @@ public abstract class AbstractModel implements Model {
         var oldRedo = undoManager.canRedo();
         var oldRedoTitle = undoManager.getRedoTitle();
 
-        undoManager.add(undoable);
+        undoManager.add(undoable, execute);
         setModified(true);
 
         fireChange(CAN_UNDO_PROPERTY, null, oldUndo, undoManager.canUndo());
