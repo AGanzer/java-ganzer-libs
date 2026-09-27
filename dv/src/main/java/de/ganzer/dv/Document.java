@@ -195,31 +195,13 @@ public interface Document extends Model {
      * <p>
      * Implementors should reset the modification, the new-data nad the
      * read-only flags.
-     * <p>
-     * This implementation does nothing if the user cancels the operation;
-     * otherwise, it sets the new name and invokes {@link #saveData()}.
-     * <p>
-     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
-     * by {@link Services#register(Class, Object)}.
      *
      * @throws DVSaveException on any error.
      *
      * @see #saveData()
      * @see #isSaveAsSupported()
-     * @see DVNavigationService#querySaveLocation(String, String)
      */
-    default void saveDataAs() throws DVSaveException {
-        if (!isSaveAsSupported())
-            return;
-
-        var saveName = ((DVNavigationService) Services.get(DVNavigationService.class)).querySaveLocation(getName(), getTemplate().getFilter());
-
-        if (saveName == null)
-            return;
-
-        setName(saveName);
-        saveData();
-    }
+    void saveDataAs() throws DVSaveException;
 
     /**
      * Gets a value that indicates whether {link #saveDataAs()} is supported by

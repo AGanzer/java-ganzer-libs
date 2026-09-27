@@ -1,5 +1,8 @@
 package de.ganzer.dv;
 
+import de.ganzer.core.Services;
+import de.ganzer.dv.services.DVNavigationService;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -111,6 +114,38 @@ public abstract class AbstractDocument extends AbstractModel implements Document
             saveDataAs();
         else
             super.saveData();
+    }
+
+    /**
+     * Writes the data into a file, a database, or any other target where the
+     * name is queried from the user as long as {@link #isSaveAsSupported()}
+     * returns {@code true}.
+     * <p>
+     * This implementation does nothing if the user cancels the operation;
+     * otherwise, it sets the new name and invokes {@link #saveData()}.
+     * <p>
+     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
+     * by {@link Services#register(Class, Object)}.
+     *
+     * @throws DVSaveException on any error.
+     *
+     * @see #saveData()
+     * @see #isSaveAsSupported()
+     * @see DVNavigationService#querySaveLocation(String, String)
+     */
+    @Override
+    public void saveDataAs() throws DVSaveException {
+        if (!isSaveAsSupported())
+            return;
+
+        var saveName = ((DVNavigationService) Services.get(DVNavigationService.class)).querySaveLocation(getName(), getTemplate().getFilter());
+
+        if (saveName == null)
+            return;
+
+        setName(saveName);
+        setNewData(false);
+        super.saveData();
     }
 
     /**

@@ -53,6 +53,9 @@ public interface View<D extends Document> {
         return title;
     }
 
+//    void updateTitle();
+//    void documentDataChanged(Object context);
+
     /**
      * Invoked to bring the view to the front.
      */

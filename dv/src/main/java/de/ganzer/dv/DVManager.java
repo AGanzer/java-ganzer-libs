@@ -394,21 +394,6 @@ public class DVManager {
     }
 
     /**
-     * Tries to activate the given document.
-     *
-     * @param document The document to activate.
-     *
-     * @throws NullPointerException If the given document is {@code null}.
-     */
-    public static void activateDocument(Document document) {
-        Objects.requireNonNull(document, "document must not be null.");
-
-        document.getViews().stream()
-                .filter(v -> v.getTemplate().isDefault())
-                .findFirst().ifPresent(View::toFront);
-    }
-
-    /**
      * Queries all open documents whether tey can be closed.
      *
      * @return {@code true} if all documents can be closed.
@@ -442,6 +427,21 @@ public class DVManager {
             return view.getDocument();
 
         return null;
+    }
+
+    /**
+     * Tries to activate the given document.
+     *
+     * @param document The document to activate.
+     *
+     * @throws NullPointerException If the given document is {@code null}.
+     */
+    public static void activateDocument(Document document) {
+        Objects.requireNonNull(document, "document must not be null.");
+
+        document.getViews().stream()
+                .filter(v -> v.getTemplate().isDefault())
+                .findFirst().ifPresent(View::toFront);
     }
 
     /**

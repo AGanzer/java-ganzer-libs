@@ -27,4 +27,9 @@ public class WelcomeDocument extends AbstractDocument {
     @Override
     protected void doSaveData() throws RuntimeException {
     }
+
+    @Override
+    public boolean isSaveAsSupported() {
+        return false;
+    }
 }

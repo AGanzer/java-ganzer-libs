@@ -14,6 +14,7 @@ import javax.swing.KeyStroke;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 public class Actions {
     public static final GActionGroup allActions;
@@ -59,6 +60,15 @@ public class Actions {
         deleteAction.setEnabled(tracer.canDelete());
     }
 
+    private static final GAction[] windowToggleActions = new GAction[20];
+
+    private static final ModelChangeListener documentNameListener = evt -> {
+        Arrays.stream(windowToggleActions)
+                .filter(a -> a.getTag().equals(evt.getSource()))
+                .findFirst()
+                .ifPresent(action -> action.setName(evt.getNewValue().toString()));
+    };
+
     static {
         var defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
         var quitAccel = OS.isMac()
@@ -69,23 +79,29 @@ public class Actions {
                 : OS.isWindows()
                     ? KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.CTRL_DOWN_MASK)
                     : KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK);
-        var windowToggleActions = new GAction[10];
 
         for (int i = 0; i < windowToggleActions.length; i++) {
             windowToggleActions[i] = new GAction()
                     .visible(false)
                     .enabled(false)
                     .onAction(e -> DVManager.activateDocument((Document) (((GAction) e.getSource()).getTag())));
+
+            if (i < 9)
+                windowToggleActions[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, InputEvent.ALT_DOWN_MASK));
+            else if (i == 9)
+                windowToggleActions[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, InputEvent.ALT_DOWN_MASK));
         }
 
         allActions = new GActionGroup().addAll(
                 fileActions = new GActionGroup("File").addAll(
                         newAction = new GAction("New...")
+                                .shortDescription("Create a new document")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, defaultModifier))
                                 .smallIcon(SVGProvider.get("document_new", 16))
                                 .largeIcon(SVGProvider.get("document_new", 32))
                                 .onAction(e -> DVManager.createDocument(null)),
                         openAction = new GAction("Open...")
+                                .shortDescription("Open an existing document")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, defaultModifier))
                                 .smallIcon(SVGProvider.get("document_open", 16))
                                 .largeIcon(SVGProvider.get("document_open", 32))
@@ -101,6 +117,7 @@ public class Actions {
                                 .enabled(false),
                         new GSeparatorAction(),
                         saveAction = new GAction("Save")
+                                .shortDescription("Save the active document")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, defaultModifier))
                                 .smallIcon(SVGProvider.get("save", 16))
                                 .largeIcon(SVGProvider.get("save", 32))
@@ -113,6 +130,7 @@ public class Actions {
                                     }
                                 }),
                         saveAllAction = new GAction("Save All")
+                                .shortDescription("Save all documents")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, defaultModifier | InputEvent.SHIFT_DOWN_MASK))
                                 .smallIcon(SVGProvider.get("save_all", 16))
                                 .largeIcon(SVGProvider.get("save_all", 32))
@@ -125,6 +143,7 @@ public class Actions {
                                     }
                                 }),
                         saveAsAction = new GAction("Save As...")
+                                .shortDescription("Save the active document with a new name")
                                 .smallIcon(SVGProvider.get("save_as", 16))
                                 .largeIcon(SVGProvider.get("save_as", 32))
                                 .enabled(false)
@@ -137,11 +156,13 @@ public class Actions {
                                 }),
                         new GSeparatorAction(),
                         exitAction = new GAction(OS.isMac() ? "Quit" : "Exit")
+                                .shortDescription("Exit the application")
                                 .accelerator(quitAccel)
                                 .onAction(e -> SwingDVApp.exit())
                 ),
                 editActions = new GActionGroup("Edit").addAll(
                         undoAction = new GAction("Undo")
+                                .shortDescription("Undo the last action")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, defaultModifier))
                                 .smallIcon(SVGProvider.get("undo", 16))
                                 .largeIcon(SVGProvider.get("undo", 32))
@@ -149,6 +170,7 @@ public class Actions {
                                 .onAction(e -> {
                                 }),
                         redoAction = new GAction("Redo")
+                                .shortDescription("Redo the last undone action")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, defaultModifier))
                                 .smallIcon(SVGProvider.get("redo", 16))
                                 .largeIcon(SVGProvider.get("redo", 32))
@@ -157,6 +179,7 @@ public class Actions {
                                 }),
                         new GSeparatorAction(),
                         cutAction = new GAction("Cut")
+                                .shortDescription("Cut the selected text")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, defaultModifier))
                                 .smallIcon(SVGProvider.get("cut", 16))
                                 .largeIcon(SVGProvider.get("cut", 32))
@@ -164,6 +187,7 @@ public class Actions {
                                 .onAction(e -> {
                                 }),
                         copyAction = new GAction("Copy")
+                                .shortDescription("Copy the selected text")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, defaultModifier))
                                 .smallIcon(SVGProvider.get("copy", 16))
                                 .largeIcon(SVGProvider.get("copy", 32))
@@ -171,6 +195,7 @@ public class Actions {
                                 .onAction(e -> {
                                 }),
                         pasteAction = new GAction("Paste")
+                                .shortDescription("Paste the text from the clipboard")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, defaultModifier))
                                 .smallIcon(SVGProvider.get("paste", 16))
                                 .largeIcon(SVGProvider.get("paste", 32))
@@ -178,6 +203,7 @@ public class Actions {
                                 .onAction(e -> {
                                 }),
                         deleteAction = new GAction("Delete")
+                                .shortDescription("Delete the selected text")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0))
                                 .smallIcon(SVGProvider.get("delete", 16))
                                 .largeIcon(SVGProvider.get("delete", 32))
@@ -187,6 +213,7 @@ public class Actions {
                 ),
                 windowActions = new GActionGroup("Window").addAll(
                         closeWindowAction = new GAction("Close")
+                                .shortDescription("Close the current window")
                                 .accelerator(closeAccel)
                                 .smallIcon(SVGProvider.get("window_close", 16))
                                 .largeIcon(SVGProvider.get("window_close", 32))
@@ -194,6 +221,7 @@ public class Actions {
                                 .onAction(e -> {
                                 }),
                         closeAllWindowsAction = new GAction("Close All")
+                                .shortDescription("Close all windows")
                                 .smallIcon(SVGProvider.get("windows_close", 16))
                                 .largeIcon(SVGProvider.get("windows_close", 32))
                                 .enabled(false)
@@ -206,11 +234,13 @@ public class Actions {
                 ),
                 settingsActions = new GActionGroup("Settings").addAll(
                         optionsAction = new GAction("Options")
+                                .shortDescription("Open options dialog")
                                 .onAction(e -> {
                                 })
                 ),
                 helpActions = new GActionGroup("Help").addAll(
                         helpAction = new GAction("Help")
+                                .shortDescription("Show help")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0))
                                 .smallIcon(SVGProvider.get("help", 16))
                                 .largeIcon(SVGProvider.get("help", 32))
@@ -218,6 +248,7 @@ public class Actions {
                                 }),
                         new GSeparatorAction(),
                         aboutAction = new GAction("About")
+                                .shortDescription("Show about dialog")
                                 .smallIcon(SVGProvider.get("about", 16))
                                 .largeIcon(SVGProvider.get("about", 32))
                                 .onAction(e -> {
@@ -226,13 +257,20 @@ public class Actions {
         );
 
         DVManager.addPropertyChangeListener(DVManager.ACTIVE_DOCUMENT_PROPERTY, e -> {
-            var doc = (e.getNewValue() instanceof Document d) ? d : null;
+            var docOld = (e.getOldValue() instanceof Document d) ? d : null;
+            var docNew = (e.getNewValue() instanceof Document d) ? d : null;
 
-            saveAction.setEnabled(doc != null && !doc.isReadOnly());
-            saveAsAction.setEnabled(doc != null && doc.isSaveAsSupported());
+            if (docOld != null)
+                docOld.removeChangeListener(Document.NAME_PROPERTY, documentNameListener, Actions.class);
+
+            if (docNew != null)
+                docNew.addChangeListener(Document.NAME_PROPERTY, documentNameListener, Actions.class);
+
+            saveAction.setEnabled(docNew != null && docNew.isModified());
+            saveAsAction.setEnabled(docNew != null && docNew.isSaveAsSupported());
             saveAllAction.setEnabled(DVManager.getOpenDocuments().stream().anyMatch(Document::isModified));
 
-            System.out.println("Active document changed: " + (doc != null ? doc.getName() : "no active one"));
+            System.out.println("Active document changed: " + (docNew != null ? docNew.getName() : "no active one"));
         });
 
         DVManager.addPropertyChangeListener(DVManager.ACTIVE_VIEW_PROPERTY, e -> {
@@ -247,10 +285,9 @@ public class Actions {
                 windowToggleActions[index++]
                         .visible(true)
                         .enabled(true)
-                        .name(index + ": " + doc.getName())
+                        .name(doc.getName())
                         .tag(doc)
-                        .selected(doc == DVManager.getActiveDocument())
-                        .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0 + index, InputEvent.ALT_DOWN_MASK));
+                        .selected(doc == DVManager.getActiveDocument());
             }
 
             for (int i = index; i < windowToggleActions.length; i++) {
