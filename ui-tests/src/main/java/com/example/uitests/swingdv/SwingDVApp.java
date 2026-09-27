@@ -86,6 +86,8 @@ public class SwingDVApp {
         }
 
         UIManager.put("TitlePane.menuBarEmbedded", false);
+        UIManager.put("Table.intercellSpacing", new Dimension(1, 1));
+
         FlatLaf.updateUI();
     }
 
