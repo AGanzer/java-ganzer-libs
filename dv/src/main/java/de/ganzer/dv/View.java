@@ -17,20 +17,14 @@ public interface View<D extends Document> {
 
     /**
      * Gets the bound document.
+     * <p>
+     * Implementors should set and return the document that is given by
+     * {@link ViewCreationInfo} when the view is created by a {@link ViewSupplier}.
      *
      * @return The bound document or {@code null} if the document is not bound
      *          yet.
-     *
-     * @see #setDocument(D)
      */
     D getDocument();
-
-    /**
-     * Invoked to bind the given document to the view.
-     *
-     * @param document The document to bind.
-     */
-    void setDocument(D document);
 
     /**
      * Invoked to bring the view to the front.

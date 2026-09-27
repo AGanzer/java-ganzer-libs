@@ -12,7 +12,8 @@ import java.util.Objects;
  * @since 6.0.0
  */
 public class ViewCreationInfo<D extends Document, V extends View<D>> {
-    private final ViewTemplate<?, V> template;
+    private final ViewTemplate<D, V> template;
+    private final D document;
 
     /**
      * Creates a new instance.
@@ -21,9 +22,12 @@ public class ViewCreationInfo<D extends Document, V extends View<D>> {
      *
      * @throws NullPointerException {@code template} is {@code null}.
      */
-    public ViewCreationInfo(ViewTemplate<?, V> template) {
+    public ViewCreationInfo(ViewTemplate<D, V> template, D document) {
         Objects.requireNonNull(template, "template must not be null.");
+        Objects.requireNonNull(document, "document must not be null.");
+
         this.template = template;
+        this.document = document;
     }
 
     /**
@@ -31,7 +35,16 @@ public class ViewCreationInfo<D extends Document, V extends View<D>> {
      *
      * @return The template.
      */
-    public ViewTemplate<?, V> getTemplate() {
+    public ViewTemplate<D, V> getTemplate() {
         return template;
+    }
+
+    /**
+     * Gets the document that owns the view.
+     *
+     * @return The document.
+     */
+    public D getDocument() {
+        return document;
     }
 }

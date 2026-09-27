@@ -56,7 +56,8 @@ public abstract class AbstractDocument extends AbstractModel implements Document
      * <p>
      * <b>NOTE:</b> This should always be invoked by a view that implements
      * {@link View} when the view is closed (closed in the sense of
-     * destroyed but not just hidden to re-show it later).
+     * destroyed but not just hidden to re-show it later). The view's document
+     * should be set to {@code null} by the view.
      * <p>
      * Implementors should ensure that {@code view.setDocument(null)} is
      * invoked.
@@ -66,7 +67,6 @@ public abstract class AbstractDocument extends AbstractModel implements Document
     @Override
     public void removeView(View<? extends Document> view) {
         views.remove(view);
-        view.setDocument(null);
 
         if (view.getTemplate().isMandatory() || getTemplate().isAutoClose() && views.isEmpty())
             close();

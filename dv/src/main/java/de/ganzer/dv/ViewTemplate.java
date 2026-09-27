@@ -156,14 +156,13 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * @return The created presenter.
      */
     public V createView(D document) {
-        var cvInfo = new ViewCreationInfo<>(this);
+        var cvInfo = new ViewCreationInfo<>(this, document);
         var view = viewSupplier.createView(cvInfo);
 
         if (view == null)
             return null;
 
         document.addView(view);
-        view.setDocument(document);
 
         showView.accept(view);
 
