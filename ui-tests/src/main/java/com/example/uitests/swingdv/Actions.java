@@ -47,11 +47,12 @@ public class Actions {
     public static final GAction helpAction;
     public static final GAction aboutAction;
 
-    public static void updateIdleActions() {
+    public static void updateEditActions() {
         var tracer = EditorTracer.getInstance();
+        var doc = DVManager.getActiveDocument();
 
-        undoAction.setEnabled(tracer.canUndo());
-        redoAction.setEnabled(tracer.canRedo());
+        undoAction.setEnabled(tracer.canUndo() || doc != null && doc.canUndo());
+        redoAction.setEnabled(tracer.canRedo() || doc != null && doc.canRedo());
         cutAction.setEnabled(tracer.canCut());
         copyAction.setEnabled(tracer.canCopy());
         pasteAction.setEnabled(tracer.canPaste());

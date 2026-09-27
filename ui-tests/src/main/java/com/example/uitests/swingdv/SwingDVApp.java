@@ -142,7 +142,7 @@ public class SwingDVApp {
     }
 
     private static void onIdle() {
-        Actions.updateIdleActions();
+        Actions.updateEditActions();
     }
 
     private static class ExceptionHandlingEventQueue extends EventQueue {
