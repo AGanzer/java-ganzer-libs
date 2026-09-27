@@ -40,6 +40,7 @@ public class SwingDVApp {
         loadSettings();
         setupLaF();
         registerServices();
+        registerTemplates();
 
         SwingUtilities.invokeLater(() -> {
             mainWindow = new MainWindow();
@@ -91,6 +92,9 @@ public class SwingDVApp {
     private static void registerServices() {
         Services.register(DVNavigationService.class, NavigationService.getInstance());
         Services.register(DFWNavigationService.class, NavigationService.getInstance());
+    }
+
+    private static void registerTemplates() {
     }
 
     private static class ExceptionHandlingEventQueue extends EventQueue {
