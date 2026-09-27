@@ -97,6 +97,9 @@ public class SwingDVApp {
     private static void registerTemplates() {
     }
 
+    private static void onIdle() {
+    }
+
     private static class ExceptionHandlingEventQueue extends EventQueue {
         @Override
         protected void dispatchEvent(AWTEvent event) {
@@ -105,6 +108,9 @@ public class SwingDVApp {
             } catch (Throwable t) {
                 handleException(t);
             }
+
+            if (peekEvent() == null)
+                onIdle();
         }
 
         private void handleException(Throwable t) {

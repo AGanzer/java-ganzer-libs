@@ -14,26 +14,24 @@ import java.awt.event.ActionEvent;
  * A utility class that enables tracing of focusable components to enable
  * editableComponent actions globally.
  *
- * @see #install()
- *
  * @since 6.0.0
  */
 public final class EditorTracer {
     private static final JTextComponentWrapper wrapper = new JTextComponentWrapper();
+    private static EditorTracer instance;
 
-    private static EditableComponent editableComponent;
+    private EditableComponent editableComponent;
 
     /**
-     * Enables the trace of editableComponent controls. This should be called once at the
-     * start of a Swing-based application.
+     * Gets the single instance of the tracer.
+     *
+     * @return The single instance of the tracer.
      */
-    public static void install() {
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner", e -> {
-            editableComponent = getEditable(e.getNewValue());
+    public static EditorTracer getInstance() {
+        if (instance == null)
+            instance = new EditorTracer();
 
-            if (editableComponent == null)
-                editableComponent = getEditable(KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner());
-        });
+        return instance;
     }
 
     /**
@@ -42,14 +40,14 @@ public final class EditorTracer {
      *
      * @return {@code true} if an action can be undone.
      */
-    public static boolean canUndo() {
+    public boolean canUndo() {
         return editableComponent != null && editableComponent.canUndo();
     }
 
     /**
      * Undoes the last undoable action.
      */
-    public static void undo() {
+    public void undo() {
         if (canUndo())
             editableComponent.undo();
     }
@@ -60,14 +58,14 @@ public final class EditorTracer {
      *
      * @return {@code true} if an action can be redone.
      */
-    public static boolean canRedo() {
+    public boolean canRedo() {
         return editableComponent != null && editableComponent.canRedo();
     }
 
     /**
      * Redoes the last undone action.
      */
-    public static void redo() {
+    public void redo() {
         if (canRedo())
             editableComponent.redo();
     }
@@ -77,14 +75,14 @@ public final class EditorTracer {
      *
      * @return {@code true} if the action is currently supported.
      */
-    public static boolean canCut() {
+    public boolean canCut() {
         return editableComponent != null && editableComponent.canCut();
     }
 
     /**
      * Performs a "Cut" action.
      */
-    public static void cut() {
+    public void cut() {
         if (canCut())
             editableComponent.cut();
     }
@@ -94,14 +92,14 @@ public final class EditorTracer {
      *
      * @return {@code true} if the action is currently supported.
      */
-    public static boolean canCopy() {
+    public boolean canCopy() {
         return editableComponent != null && editableComponent.canCopy();
     }
 
     /**
      * Performs a "Copy" action.
      */
-    public static void copy() {
+    public void copy() {
         if (canCopy())
             editableComponent.copy();
     }
@@ -111,14 +109,14 @@ public final class EditorTracer {
      *
      * @return {@code true} if the action is currently supported.
      */
-    public static boolean canPaste() {
+    public boolean canPaste() {
         return editableComponent != null && editableComponent.canPaste();
     }
 
     /**
      * Performs a "Paste" action.
      */
-    public static void paste() {
+    public void paste() {
         if (canPaste())
             editableComponent.paste();
     }
@@ -128,16 +126,25 @@ public final class EditorTracer {
      *
      * @return {@code true} if the action is currently supported.
      */
-    public static boolean canDelete() {
+    public boolean canDelete() {
         return editableComponent != null && editableComponent.canDelete();
     }
 
     /**
      * Performs a "Delete" action.
      */
-    public static void delete() {
+    public void delete() {
         if (canDelete())
             editableComponent.delete();
+    }
+
+    private EditorTracer() {
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner", e -> {
+            editableComponent = getEditable(e.getNewValue());
+
+            if (editableComponent == null)
+                editableComponent = getEditable(KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner());
+        });
     }
 
     private static EditableComponent getEditable(Object control) {
