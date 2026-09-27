@@ -108,15 +108,12 @@ public class SwingDVApp {
                 WelcomeDocument::new,
                 "Welcome",
                 null,
-                DocumentTemplate.NO_NEW_NUMBER | DocumentTemplate.IS_HIDDEN,
-                null);
+                DocumentTemplate.NO_NEW_NUMBER | DocumentTemplate.IS_HIDDEN);
         tpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, WelcomeView>(
                 "Welcome",
                 i -> new WelcomeView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
-                ViewTemplate.NOT_CLOSABLE,
-                null,
-                null));
+                ViewTemplate.NOT_CLOSABLE));
         DVManager.registerDocumentTemplate(tpl);
     }
 

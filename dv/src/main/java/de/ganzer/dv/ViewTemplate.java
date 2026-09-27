@@ -29,7 +29,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      */
     public static final int IS_MANDATORY = 0x04;
     /**
-     * If this option is set, the view should be closeable by the user.
+     * If this option is set, the view should not be closeable by the user.
      */
     public static final int NOT_CLOSABLE = 0x08;
 
@@ -39,6 +39,26 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
     private final int options;
     private final String modificationHintFormat;
     private final String readOnlyHintFormat;
+
+    /**
+     * Creates a new instance.
+     *
+     * @param displayName The display name of the template.
+     * @param viewSupplier Creates a new view.
+     * @param showView Displays the view.
+     * @param options The options to set. This can be any combination of
+     *        {@link #IS_HIDDEN}, {@link #IS_DEFAULT}, {@link #IS_MANDATORY}
+     *        and {@link #NOT_CLOSABLE}.
+     *
+     * @throws NullPointerException {@code displayName}, {@code presenterSupplier}
+     *         {@code viewSupplier} or {@code showView} is {@code null}.
+     */
+    public ViewTemplate(String displayName,
+                        ViewSupplier<D, V> viewSupplier,
+                        Consumer<V> showView,
+                        int options) {
+       this(displayName, viewSupplier, showView, options, null, null);
+    }
 
     /**
      * Creates a new instance.

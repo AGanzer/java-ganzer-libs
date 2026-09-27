@@ -28,6 +28,34 @@ public class MainWindow extends JXFrame {
 
     public void addChildView(View<?> view) {
         tabPane.addTab(view.getDocument().getName(), (Component) view);
+        tabPane.setClosableAt(tabPane.getTabCount() - 1, view.getTemplate().isClosable());
+
+        tabPane.addCloseListener((i, c) -> {
+            if (c instanceof View<?> v) {
+                if (!v.getDocument().canCloseView(v))
+                    return;
+
+                v.getDocument().removeView(v);
+            }
+
+            tabPane.removeTabAt(i);
+        });
+
+        tabPane.addChangeListener(e -> {
+            var enableAll = false;
+
+            for (int i = 0; i < tabPane.getTabCount(); i++) {
+                if (tabPane.isClosableAt(i)) {
+                    enableAll = true;
+                    break;
+                }
+            }
+
+            Actions.closeWindowAction.setEnabled(tabPane.isClosableAt(tabPane.getSelectedIndex()));
+            Actions.closeAllWindowsAction.setEnabled(enableAll);
+        });
+
+        tabPane.setSelectedIndex(tabPane.getTabCount() - 1);
     }
 
     @Override

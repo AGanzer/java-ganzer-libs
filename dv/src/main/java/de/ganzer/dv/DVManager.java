@@ -297,16 +297,14 @@ public class DVManager {
                 .orElse(null);
 
         if (document != null) {
-            document.getViews().stream()
-                    .filter(v -> v.getTemplate().isDefault())
-                    .findFirst().ifPresent(View::toFront);
+            activateDocument(document);
+        } else {
+            template = getTemplateToUse(dataSource, template);
+
+            document = template.createDocument(dataSource, parent, false, readOnly);
+            openDocuments.add(document);
+            pcs.firePropertyChange(OPEN_DOCUMENTS_PROPERTY, null, document);
         }
-
-        template = getTemplateToUse(dataSource, template);
-
-        document = template.createDocument(dataSource, parent, false, readOnly);
-        openDocuments.add(document);
-        pcs.firePropertyChange(OPEN_DOCUMENTS_PROPERTY, null, document);
 
         return document;
     }
@@ -393,6 +391,21 @@ public class DVManager {
             documents.add(openDocument(parent, dataSource, null, readOnly));
 
         return documents;
+    }
+
+    /**
+     * Tries to activate the given document.
+     *
+     * @param document The document to activate.
+     *
+     * @throws NullPointerException If the given document is {@code null}.
+     */
+    public static void activateDocument(Document document) {
+        Objects.requireNonNull(document, "document must not be null.");
+
+        document.getViews().stream()
+                .filter(v -> v.getTemplate().isDefault())
+                .findFirst().ifPresent(View::toFront);
     }
 
     /**

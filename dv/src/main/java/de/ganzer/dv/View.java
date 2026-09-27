@@ -27,6 +27,33 @@ public interface View<D extends Document> {
     D getDocument();
 
     /**
+     * Gets the view's title.
+     * <p>
+     * This implementation builds the title from the given title hints of the
+     * view's template and the title of the view's document. If there are more
+     * than one views in the document, the view's index is appended to the title.
+     *
+     * @return The view's title.
+     *
+     * @see ViewTemplate#getReadOnlyHintFormat()
+     * @see ViewTemplate#getModificationHintFormat()
+     */
+    default String getTitle() {
+        var format = getDocument().isReadOnly()
+                ? getTemplate().getReadOnlyHintFormat()
+                : getDocument().isModified() ? getTemplate().getModificationHintFormat() : "%s";
+        var title = String.format(format, getDocument().getTitle());
+
+        var views = getDocument().getViews();
+        int index = views.size() > 1 ? views.indexOf(this) : -1;
+
+        if (index >= 0)
+            title += ":" + (index + 1);
+
+        return title;
+    }
+
+    /**
      * Invoked to bring the view to the front.
      */
     void toFront();

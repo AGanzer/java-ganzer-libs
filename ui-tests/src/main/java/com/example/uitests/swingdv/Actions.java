@@ -14,7 +14,6 @@ import javax.swing.KeyStroke;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
 public class Actions {
     public static final GActionGroup allActions;
@@ -71,8 +70,11 @@ public class Actions {
                     : KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK);
         var windowToggleActions = new GAction[10];
 
-        for (int i = 0; i < 10; i++) {
-            windowToggleActions[i] = new GAction().visible(false);
+        for (int i = 0; i < windowToggleActions.length; i++) {
+            windowToggleActions[i] = new GAction()
+                    .visible(false)
+                    .enabled(false)
+                    .onAction(e -> DVManager.activateDocument((Document) (((GAction) e.getSource()).getTag())));
         }
 
         allActions = new GActionGroup().addAll(
@@ -228,12 +230,40 @@ public class Actions {
             saveAction.setEnabled(doc != null && !doc.isReadOnly());
             saveAsAction.setEnabled(doc != null && doc.isSaveAsSupported());
             saveAllAction.setEnabled(DVManager.getOpenDocuments().stream().anyMatch(Document::isModified));
+
+            System.out.println("Active document changed: " + (doc != null ? doc.getName() : "no active one"));
         });
 
         DVManager.addPropertyChangeListener(DVManager.ACTIVE_VIEW_PROPERTY, e -> {
+            var view = (e.getNewValue() instanceof View<?> v) ? v : null;
+            System.out.println("Active document changed: " + (view != null ? view.getTitle() : "no active one"));
         });
 
         DVManager.addPropertyChangeListener(DVManager.OPEN_DOCUMENTS_PROPERTY, e -> {
+            int index = 0;
+
+            for (var doc : DVManager.getOpenDocuments()) {
+                windowToggleActions[index++]
+                        .visible(true)
+                        .enabled(true)
+                        .name(index + ": " + doc.getName())
+                        .tag(doc)
+                        .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0 + index, InputEvent.ALT_DOWN_MASK));
+            }
+
+            for (int i = index; i < windowToggleActions.length; i++) {
+                windowToggleActions[i].visible(false).enabled(false);
+            }
+
+            var docOld = (e.getOldValue() instanceof Document d) ? d : null;
+            var docNew = (e.getNewValue() instanceof Document d) ? d : null;
+
+            if (docOld != null)
+                System.out.println("Document closed: " + docOld.getName());
+            else if (docNew != null)
+                System.out.println("Document opened: " + docNew.getName());
+            else
+                System.err.println("Documents changed but with no document.");
         });
     }
 }

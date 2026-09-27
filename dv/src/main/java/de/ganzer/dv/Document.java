@@ -3,6 +3,8 @@ package de.ganzer.dv;
 import de.ganzer.core.Services;
 import de.ganzer.dv.services.DVNavigationService;
 
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,6 +73,31 @@ public interface Document extends Model {
      * @return The template that has created the document.
      */
     DocumentTemplate<?> getTemplate();
+
+    /**
+     * Gets the title of the document.
+     * <p>
+     * The title is the name of the document for display purposes.
+     *
+     * @return The title. This implementation does return the name part of
+     *          {@link #getName()} if this is a file path or a URL.
+     */
+    default String getTitle() {
+        try {
+            URI uri = URI.create(getName());
+
+            if (uri.getScheme() != null) {
+                String path = uri.getPath();
+
+                if (path != null && !path.isEmpty()) {
+                    return Path.of(path).getFileName().toString();
+                }
+            }
+        } catch (IllegalArgumentException ignored) {
+        }
+
+        return Path.of(getName()).getFileName().toString();
+    }
 
     /**
      * Adds a view to the document.

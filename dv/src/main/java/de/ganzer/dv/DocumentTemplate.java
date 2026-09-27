@@ -70,13 +70,44 @@ public class DocumentTemplate<D extends Document> {
      * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
      *        {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
      *        and {@link #NO_NEW_NUMBER}.
+     *
+     * @throws NullPointerException {@code displayName}, {@code canHandleSource}
+     *         {@code documentSupplier} or {@code newName} is {@code null}.
+     */
+    public DocumentTemplate(String displayName,
+                            Predicate<String> canHandleSource,
+                            DocumentSupplier<D> documentSupplier,
+                            String newName,
+                            String filter,
+                            int options) {
+        this(displayName, canHandleSource, documentSupplier, newName, filter, options, null);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param displayName The display name of the template.
+     * @param canHandleSource Determines whether a data source can be read by
+     *        the document.
+     * @param documentSupplier Creates the document.
+     * @param newName The name of new documents.
+     * @param filter The filter to use to open documents from existing sources.
+     * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
+     *        {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
+     *        and {@link #NO_NEW_NUMBER}.
      * @param newNameNumberFormat The format String to use for new documents that
      *        have a new number. If this is {@code null} "%s %d" is used.
      *
      * @throws NullPointerException {@code displayName}, {@code canHandleSource}
      *         {@code documentSupplier} or {@code newName} is {@code null}.
      */
-    public DocumentTemplate(String displayName, Predicate<String> canHandleSource, DocumentSupplier<D> documentSupplier, String newName, String filter, int options, String newNameNumberFormat) {
+    public DocumentTemplate(String displayName,
+                            Predicate<String> canHandleSource,
+                            DocumentSupplier<D> documentSupplier,
+                            String newName,
+                            String filter,
+                            int options,
+                            String newNameNumberFormat) {
         Objects.requireNonNull(displayName, "displayName must not be null");
         Objects.requireNonNull(canHandleSource, "canHandleSource must not be null");
         Objects.requireNonNull(documentSupplier, "documentSupplier must not be null");
