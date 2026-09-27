@@ -347,7 +347,6 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
             titlePanel.add(further);
             titlePanel.add(Box.createHorizontalStrut(10));
         }
-
     }
 
     private void setup() {
