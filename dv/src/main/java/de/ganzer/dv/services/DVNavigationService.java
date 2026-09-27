@@ -1,46 +1,19 @@
-package de.ganzer.dv;
+package de.ganzer.dv.services;
+
+import de.ganzer.core.Services;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
  * The navigation service used by the document-view framework to access the user.
+ * <p>
+ * A service implementation of this type has to be registered by
+ * {@link Services#register(Class, Object)}.
  *
  * @since 6.0.0
  */
-public abstract class DVNavigationService {
-    private static DVNavigationService instance;
-
-    /**
-     * Registers the navigation service to use.
-     * <p>
-     * This method should be called with an instance of the navigation service
-     * once at application startup.
-     *
-     * @param service The service to use.
-     *
-     * @see #getInstance()
-     */
-    public static void registerService(DVNavigationService service) {
-        instance = service;
-    }
-
-    /**
-     * Returns the instance of the navigation service.
-     *
-     * @return The instance of the navigation service.
-     *
-     * @throws IllegalStateException If no navigation service is registered.
-     *
-     * @see #registerService(DVNavigationService)
-     */
-    public static DVNavigationService getInstance() {
-        if (instance == null)
-            throw new IllegalStateException("No navigation service is registered.");
-
-        return instance;
-    }
-
+public interface DVNavigationService {
     /**
      * Invoked to get one or more locations that shall be opened as documents.
      * <p>
@@ -58,7 +31,7 @@ public abstract class DVNavigationService {
      * @return The list of locations to open or {@code null} of an empty list
      *          if the user has canceled.
      */
-    public abstract Collection<String> queryLocationsToOpen(List<String> filters, String initialFilter);
+    Collection<String> queryLocationsToOpen(List<String> filters, String initialFilter);
 
     /**
      * Invoked to query the user whether the document with the given name should
@@ -70,7 +43,7 @@ public abstract class DVNavigationService {
      *         save and {@code null} if the user wants to cancel to ongoing
      *         operation.
      */
-    public abstract Boolean querySave(String name);
+    Boolean querySave(String name);
 
     /**
      * Invoked to query a location where to save new data.
@@ -87,7 +60,7 @@ public abstract class DVNavigationService {
      *
      * @return The chosen location or {@code null} if the user has canceled.
      */
-    public abstract String querySaveLocation(String initialLocation, String filter);
+    String querySaveLocation(String initialLocation, String filter);
 
     /**
      * Displays an error message to the user.
@@ -96,5 +69,5 @@ public abstract class DVNavigationService {
      * @param cause The exception that caused the error or {@code null} if no
      *        exception is available.
      */
-    public abstract void showError(String message, Throwable cause);
+    void showError(String message, Throwable cause);
 }

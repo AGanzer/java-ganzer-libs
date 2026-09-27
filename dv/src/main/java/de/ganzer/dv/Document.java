@@ -1,5 +1,8 @@
 package de.ganzer.dv;
 
+import de.ganzer.core.Services;
+import de.ganzer.dv.services.DVNavigationService;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -125,6 +128,9 @@ public interface Document extends Model {
      * This implementation queries the user to save if the document is modified.
      * Depending on the user's choice, the document can be closed or not. On
      * error, the error is shown to the user and {@code false} is returned.
+     * <p>
+     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
+     * by {@link Services#register(Class, Object)}.
      *
      * @return {@code true} if the document can be closed.
      *
@@ -137,7 +143,7 @@ public interface Document extends Model {
         if (!isModified())
             return true;
 
-        Boolean result = DVNavigationService.getInstance().querySave(getName());
+        Boolean result = ((DVNavigationService) Services.get(DVNavigationService.class)).querySave(getName());
 
         if (result == null)
             return false;
@@ -148,7 +154,7 @@ public interface Document extends Model {
         try {
             saveData();
         } catch (DVSaveException e) {
-            DVNavigationService.getInstance().showError(e.getLocalizedMessage(), e);
+            ((DVNavigationService) Services.get(DVNavigationService.class)).showError(e.getLocalizedMessage(), e);
             return false;
         }
 
@@ -165,6 +171,9 @@ public interface Document extends Model {
      * <p>
      * This implementation does nothing if the user cancels the operation;
      * otherwise, it sets the new name and invokes {@link #saveData()}.
+     * <p>
+     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
+     * by {@link Services#register(Class, Object)}.
      *
      * @throws DVSaveException on any error.
      *
@@ -176,7 +185,7 @@ public interface Document extends Model {
         if (!isSaveAsSupported())
             return;
 
-        var saveName = DVNavigationService.getInstance().querySaveLocation(getName(), getTemplate().getFilter());
+        var saveName = ((DVNavigationService) Services.get(DVNavigationService.class)).querySaveLocation(getName(), getTemplate().getFilter());
 
         if (saveName == null)
             return;

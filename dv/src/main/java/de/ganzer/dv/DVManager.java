@@ -1,13 +1,13 @@
 package de.ganzer.dv;
 
+import de.ganzer.core.Services;
 import de.ganzer.core.util.Strings;
+import de.ganzer.dv.services.DVNavigationService;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeListenerProxy;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * A singleton document-view-manager.
@@ -292,6 +292,9 @@ public class DVManager {
 
     /**
      * Opens existing data sources by querying the user to choose one or more.
+     * <p>
+     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
+     * by {@link Services#register(Class, Object)}.
      *
      * @param parent The parent documents, or {@code null} if the documents have
      *        no parent.
@@ -317,7 +320,7 @@ public class DVManager {
                 .filter(f -> !Strings.isNullOrBlank(f))
                 .toList();
         var initial = getTemplateToUse(null, template);
-        var locations = DVNavigationService.getInstance().queryLocationsToOpen(filters, initial.getFilter());
+        var locations = ((DVNavigationService) Services.get(DVNavigationService.class)).queryLocationsToOpen(filters, initial.getFilter());
 
         return openDocuments(parent, locations, readOnly);
     }
