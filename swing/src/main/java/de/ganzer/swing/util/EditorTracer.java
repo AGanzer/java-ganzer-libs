@@ -1,7 +1,6 @@
 package de.ganzer.swing.util;
 
 import de.ganzer.core.OS;
-import de.ganzer.swing.controls.EditableControl;
 
 import javax.swing.Action;
 import javax.swing.text.DefaultEditorKit;
@@ -13,7 +12,7 @@ import java.awt.event.ActionEvent;
 
 /**
  * A utility class that enables tracing of focusable components to enable
- * editableControl actions globally.
+ * editableComponent actions globally.
  *
  * @see #install()
  *
@@ -22,18 +21,18 @@ import java.awt.event.ActionEvent;
 public final class EditorTracer {
     private static final JTextComponentWrapper wrapper = new JTextComponentWrapper();
 
-    private static EditableControl editableControl;
+    private static EditableComponent editableComponent;
 
     /**
-     * Enables the trace of editableControl controls. This should be called once at the
+     * Enables the trace of editableComponent controls. This should be called once at the
      * start of a Swing-based application.
      */
     public static void install() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner", e -> {
-            editableControl = getEditable(e.getNewValue());
+            editableComponent = getEditable(e.getNewValue());
 
-            if (editableControl == null)
-                editableControl = getEditable(KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner());
+            if (editableComponent == null)
+                editableComponent = getEditable(KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner());
         });
     }
 
@@ -44,7 +43,7 @@ public final class EditorTracer {
      * @return {@code true} if an action can be undone.
      */
     public static boolean canUndo() {
-        return editableControl != null && editableControl.canUndo();
+        return editableComponent != null && editableComponent.canUndo();
     }
 
     /**
@@ -52,7 +51,7 @@ public final class EditorTracer {
      */
     public static void undo() {
         if (canUndo())
-            editableControl.undo();
+            editableComponent.undo();
     }
 
     /**
@@ -62,7 +61,7 @@ public final class EditorTracer {
      * @return {@code true} if an action can be redone.
      */
     public static boolean canRedo() {
-        return editableControl != null && editableControl.canRedo();
+        return editableComponent != null && editableComponent.canRedo();
     }
 
     /**
@@ -70,7 +69,7 @@ public final class EditorTracer {
      */
     public static void redo() {
         if (canRedo())
-            editableControl.redo();
+            editableComponent.redo();
     }
 
     /**
@@ -79,7 +78,7 @@ public final class EditorTracer {
      * @return {@code true} if the action is currently supported.
      */
     public static boolean canCut() {
-        return editableControl != null && editableControl.canCut();
+        return editableComponent != null && editableComponent.canCut();
     }
 
     /**
@@ -87,7 +86,7 @@ public final class EditorTracer {
      */
     public static void cut() {
         if (canCut())
-            editableControl.cut();
+            editableComponent.cut();
     }
 
     /**
@@ -96,7 +95,7 @@ public final class EditorTracer {
      * @return {@code true} if the action is currently supported.
      */
     public static boolean canCopy() {
-        return editableControl != null && editableControl.canCopy();
+        return editableComponent != null && editableComponent.canCopy();
     }
 
     /**
@@ -104,7 +103,7 @@ public final class EditorTracer {
      */
     public static void copy() {
         if (canCopy())
-            editableControl.copy();
+            editableComponent.copy();
     }
 
     /**
@@ -113,7 +112,7 @@ public final class EditorTracer {
      * @return {@code true} if the action is currently supported.
      */
     public static boolean canPaste() {
-        return editableControl != null && editableControl.canPaste();
+        return editableComponent != null && editableComponent.canPaste();
     }
 
     /**
@@ -121,7 +120,7 @@ public final class EditorTracer {
      */
     public static void paste() {
         if (canPaste())
-            editableControl.paste();
+            editableComponent.paste();
     }
 
     /**
@@ -130,7 +129,7 @@ public final class EditorTracer {
      * @return {@code true} if the action is currently supported.
      */
     public static boolean canDelete() {
-        return editableControl != null && editableControl.canDelete();
+        return editableComponent != null && editableComponent.canDelete();
     }
 
     /**
@@ -138,11 +137,11 @@ public final class EditorTracer {
      */
     public static void delete() {
         if (canDelete())
-            editableControl.delete();
+            editableComponent.delete();
     }
 
-    private static EditableControl getEditable(Object control) {
-        if (control instanceof EditableControl e)
+    private static EditableComponent getEditable(Object control) {
+        if (control instanceof EditableComponent e)
             return e;
 
         if (control instanceof JTextComponent c) {
@@ -153,7 +152,7 @@ public final class EditorTracer {
         return null;
     }
 
-    private static class JTextComponentWrapper implements EditableControl {
+    private static class JTextComponentWrapper implements EditableComponent {
         private JTextComponent component;
 
         public void setComponent(JTextComponent component) {

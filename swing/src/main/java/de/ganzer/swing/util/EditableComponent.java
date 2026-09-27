@@ -1,11 +1,11 @@
-package de.ganzer.swing.controls;
+package de.ganzer.swing.util;
 
 /**
  * An interface to a control that supports the basic editable features.
  *
  * @since 6.0.0
  */
-public interface EditableControl {
+public interface EditableComponent {
     /**
      * Gets a value that indicates whether the editor is able to undo the
      * last undoable action.
