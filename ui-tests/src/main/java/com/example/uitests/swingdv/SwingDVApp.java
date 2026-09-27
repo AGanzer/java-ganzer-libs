@@ -1,10 +1,13 @@
 package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
+import com.example.uitests.swingdv.services.NavigationService;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import de.ganzer.core.OS;
+import de.ganzer.core.Services;
+import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.util.UISettings;
 
 import javax.swing.SwingUtilities;
@@ -35,6 +38,7 @@ public class SwingDVApp {
 
         loadSettings();
         setupLaF();
+        registerServices();
 
         SwingUtilities.invokeLater(() -> {
             mainWindow = new MainWindow();
@@ -81,6 +85,10 @@ public class SwingDVApp {
 
         UIManager.put("TitlePane.menuBarEmbedded", false);
         FlatLaf.updateUI();
+    }
+
+    private static void registerServices() {
+        Services.register(DVNavigationService.class, new NavigationService());
     }
 
     private static class ExceptionHandlingEventQueue extends EventQueue {
