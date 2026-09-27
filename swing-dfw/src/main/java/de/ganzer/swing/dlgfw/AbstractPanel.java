@@ -42,6 +42,11 @@ import java.util.Objects;
  * @since 6.0.0
  */
 public abstract class AbstractPanel extends JPanel implements Disposable {
+    /**
+     * The default size of a title icon.
+     */
+    protected static final int DEFAULT_TITLE_ICON_SIZE = 32;
+
     private static Color titleBackground = Color.WHITE;
 
     private final GAction queryCloseAction = new GAction();
@@ -173,6 +178,9 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
 
     /**
      * Called to create the image icon of the dialog or frame.
+     * <p>
+     * The preferred size of the icon should be {@link #DEFAULT_TITLE_ICON_SIZE}
+     * x {@link #DEFAULT_TITLE_ICON_SIZE}.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
      * my not been fully initialized when this is invoked.
