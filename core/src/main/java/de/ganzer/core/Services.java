@@ -1,4 +1,4 @@
-package de.ganzer.swing.dlgfw.services;
+package de.ganzer.core;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,7 @@ import java.util.Objects;
  * @since 6.0.0
  */
 @SuppressWarnings("unchecked")
-public final class ServiceProvider {
+public final class Services {
     private static final Map<Class<?>, Object> registeredServices = new HashMap<>();
 
     /**
@@ -92,7 +92,7 @@ public final class ServiceProvider {
         T service = (T) registeredServices.get(clazz);
 
         if (service == null)
-            throw new IllegalArgumentException("No service of specified class registered.");
+            throw new IllegalArgumentException("No service of the specified class is registered.");
 
         return service;
     }

@@ -1,6 +1,6 @@
 package de.ganzer.swing.dlgfw;
 
-import de.ganzer.swing.dlgfw.services.ServiceProvider;
+import de.ganzer.core.Services;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
 import de.ganzer.swing.dlgfw.services.ApplicationService;
@@ -779,13 +779,13 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
     protected Boolean queryUserToSave() {
         String appName = null;
 
-        if (ServiceProvider.has(ApplicationService.class)) {
-            ApplicationService appService = ServiceProvider.get(ApplicationService.class);
+        if (Services.has(ApplicationService.class)) {
+            ApplicationService appService = Services.get(ApplicationService.class);
             appName = appService.getAppDisplayName();
         }
 
-        if (ServiceProvider.has(NavigationService.class)) {
-            NavigationService service = ServiceProvider.get(NavigationService.class);
+        if (Services.has(NavigationService.class)) {
+            NavigationService service = Services.get(NavigationService.class);
             return service.getConfirmation(this, SwingDialogsMessages.get("data.query.save"), appName);
         }
 
