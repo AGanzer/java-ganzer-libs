@@ -3,8 +3,8 @@ package de.ganzer.swing.dlgfw;
 import de.ganzer.core.Services;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
-import de.ganzer.swing.dlgfw.services.ApplicationService;
-import de.ganzer.swing.dlgfw.services.NavigationService;
+import de.ganzer.swing.dlgfw.services.DFWApplicationService;
+import de.ganzer.swing.dlgfw.services.DFWNavigationService;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -405,14 +405,14 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      * Called within {@link #processWindowEvent(WindowEvent)} when the window
      * is closed but has modified data to query the user what to do.
      * <p>
-     * This implementation uses {@link NavigationService#getConfirmation} if
-     * a {@code NavigationService} is available; otherwise, {@link JOptionPane}
+     * This implementation uses {@link DFWNavigationService#getConfirmation} if
+     * a {@code DFWNavigationService} is available; otherwise, {@link JOptionPane}
      * is used to show a question whether the data shall be saved and Yes, No
      * and Cancel buttons.
      * <p>
      * The title to show in the confirmation dialog is gotten from
-     * {@link ApplicationService#getAppDisplayName()} if available; otherwise,
-     * {@code null} is used as a title.
+     * {@link DFWApplicationService#getAppDisplayName()} if available;
+     * otherwise, {@code null} is used as a title.
      *
      * @return The result of the user's choice. {@code true} to accept,
      *         {@code false} to deny or {@code null} to cancel.
@@ -421,13 +421,13 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
     protected Boolean queryUserToSave() {
         String appName = null;
 
-        if (Services.has(ApplicationService.class)) {
-            ApplicationService appService = Services.get(ApplicationService.class);
+        if (Services.has(DFWApplicationService.class)) {
+            DFWApplicationService appService = Services.get(DFWApplicationService.class);
             appName = appService.getAppDisplayName();
         }
 
-        if (Services.has(NavigationService.class)) {
-            NavigationService service = Services.get(NavigationService.class);
+        if (Services.has(DFWNavigationService.class)) {
+            DFWNavigationService service = Services.get(DFWNavigationService.class);
             return service.getConfirmation(this, SwingDialogsMessages.get("data.query.save"), appName);
         }
 

@@ -1,13 +1,18 @@
 package de.ganzer.swing.dlgfw.services;
 
+import de.ganzer.core.Services;
+
 import java.awt.Component;
 
 /**
  * A service to navigate through the UI.
+ * <p>
+ * A service implementation of this type has to be registered by
+ * {@link Services#register(Class, Object)}.
  *
  * @since 6.0.0
  */
-public interface NavigationService {
+public interface DFWNavigationService {
     /**
      * Gets a confirmation from the user.
      *
