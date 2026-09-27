@@ -1,6 +1,8 @@
 package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
+import com.example.uitests.swingdv.doc.text.TextDocument;
+import com.example.uitests.swingdv.doc.text.TextView;
 import com.example.uitests.swingdv.doc.welcome.WelcomeDocument;
 import com.example.uitests.swingdv.doc.welcome.WelcomeView;
 import com.example.uitests.swingdv.services.NavigationService;
@@ -29,6 +31,7 @@ public class SwingDVApp {
     public static final UISettings uiSettings = new UISettings(NAME, null);
 
     private static MainWindow mainWindow;
+    private static DocumentTemplate<WelcomeDocument> welcomeTpl;
 
     public static void main(String[] args) {
         if (OS.isMac()) {
@@ -46,11 +49,17 @@ public class SwingDVApp {
         setupLaF();
         registerServices();
         registerTemplates();
+        DVManager.registerSupport(new DVMSupport());
 
         SwingUtilities.invokeLater(() -> {
             mainWindow = new MainWindow();
             mainWindow.setVisible(true);
+            DVManager.createDocument(null, welcomeTpl);
         });
+    }
+
+    public static MainWindow getMainWindow() {
+        return mainWindow;
     }
 
     public static void exit() {
@@ -102,19 +111,34 @@ public class SwingDVApp {
     }
 
     private static void registerTemplates() {
-        var tpl = new DocumentTemplate<WelcomeDocument>(
+        welcomeTpl = new DocumentTemplate<>(
                 "Welcome",
                 s -> false,
                 WelcomeDocument::new,
                 "Welcome",
                 null,
                 DocumentTemplate.NO_NEW_NUMBER | DocumentTemplate.IS_HIDDEN);
-        tpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, WelcomeView>(
+        welcomeTpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, WelcomeView>(
                 "Welcome",
                 i -> new WelcomeView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
-                ViewTemplate.NOT_CLOSABLE));
-        DVManager.registerDocumentTemplate(tpl);
+                ViewTemplate.IS_DEFAULT | ViewTemplate.NOT_CLOSABLE));
+
+        var textTpl = new DocumentTemplate<>(
+                "Text Files",
+                s -> false,
+                TextDocument::new,
+                "New Text",
+                "Text Files|*.txt;Log Files|*.log;Source Files|*.c *.cpp *.h *.java *.py",
+                DocumentTemplate.IS_DEFAULT);
+        textTpl.registerViewTemplate(new ViewTemplate<TextDocument, TextView>(
+                "Text",
+                i -> new TextView(i, mainWindow.getTabPane()),
+                v -> mainWindow.addChildView(v),
+                ViewTemplate.IS_DEFAULT));
+
+        DVManager.registerDocumentTemplate(welcomeTpl);
+        DVManager.registerDocumentTemplate(textTpl);
     }
 
     private static void onIdle() {

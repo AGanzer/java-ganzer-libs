@@ -7,9 +7,14 @@ import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
 
 import javax.swing.FocusManager;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Component;
+import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class NavigationService implements DVNavigationService, DFWNavigationService {
@@ -24,17 +29,34 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
 
     @Override
     public Collection<String> queryLocationsToOpen(List<String> filters, String initialFilter) {
-        return List.of();
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setMultiSelectionEnabled(true);
+        chooser.setDialogTitle(SwingDVApp.TITLE);
+        setFilters(chooser, filters);
+
+        return chooser.showOpenDialog(SwingDVApp.getMainWindow()) == JFileChooser.APPROVE_OPTION
+                ? Arrays.stream(chooser.getSelectedFiles()).map(File::getAbsolutePath).toList()
+                : null;
     }
 
     @Override
     public Boolean querySave(String name) {
-        return getConfirmation(null, String.format("Soll %s gespeichert werden?", name), null);
+        return getConfirmation(null, String.format("\"%s\" has changed.\n\nSave it now?", name), null);
     }
 
     @Override
     public String querySaveLocation(String initialLocation, String filter) {
-        return null;
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setMultiSelectionEnabled(false);
+        chooser.setDialogTitle(SwingDVApp.TITLE);
+        chooser.setSelectedFile(new File(initialLocation));
+        setFilters(chooser, Collections.singletonList(filter));
+
+        return chooser.showSaveDialog(SwingDVApp.getMainWindow()) == JFileChooser.APPROVE_OPTION
+                ? chooser.getSelectedFile().getAbsolutePath()
+                : null;
     }
 
     @Override
@@ -80,5 +102,21 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
             parent = FocusManager.getCurrentManager().getPermanentFocusOwner();
 
         return parent;
+    }
+
+    private void setFilters(JFileChooser chooser, List<String> filters) {
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        for (var flt : filters) {
+            for (var filter : flt.split("[,;]")) {
+                var parts = filter.split("\\|");
+
+                chooser.addChoosableFileFilter(new FileNameExtensionFilter(
+                        String.format("%s (%s)", parts[0], parts[1]),
+                        Arrays.stream(parts[1].split(" ")).map(e -> e.substring(2)).toArray(String[]::new)));
+            }
+        }
+
+        chooser.setAcceptAllFileFilterUsed(true);
     }
 }

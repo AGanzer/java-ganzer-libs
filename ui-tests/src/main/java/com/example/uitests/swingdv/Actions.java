@@ -236,7 +236,7 @@ public class Actions {
 
         DVManager.addPropertyChangeListener(DVManager.ACTIVE_VIEW_PROPERTY, e -> {
             var view = (e.getNewValue() instanceof View<?> v) ? v : null;
-            System.out.println("Active document changed: " + (view != null ? view.getTitle() : "no active one"));
+            System.out.println("Active view changed: " + (view != null ? view.getTitle() : "no active one"));
         });
 
         DVManager.addPropertyChangeListener(DVManager.OPEN_DOCUMENTS_PROPERTY, e -> {
@@ -248,11 +248,12 @@ public class Actions {
                         .enabled(true)
                         .name(index + ": " + doc.getName())
                         .tag(doc)
+                        .selected(doc == DVManager.getActiveDocument())
                         .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0 + index, InputEvent.ALT_DOWN_MASK));
             }
 
             for (int i = index; i < windowToggleActions.length; i++) {
-                windowToggleActions[i].visible(false).enabled(false);
+                windowToggleActions[i].visible(false).enabled(false).selected(false);
             }
 
             var docOld = (e.getOldValue() instanceof Document d) ? d : null;

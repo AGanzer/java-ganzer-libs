@@ -53,6 +53,7 @@ public class MainWindow extends JXFrame {
 
             Actions.closeWindowAction.setEnabled(tabPane.isClosableAt(tabPane.getSelectedIndex()));
             Actions.closeAllWindowsAction.setEnabled(enableAll);
+            DVMSupport.viewChanged(tabPane.getSelectedComponent() instanceof View<?> v ? v : null);
         });
 
         tabPane.setSelectedIndex(tabPane.getTabCount() - 1);

@@ -14,16 +14,15 @@ public class WelcomeView extends JPanel implements View<WelcomeDocument> {
     private final ViewTemplate<WelcomeDocument, WelcomeView> template;
     private final WelcomeDocument document;
     private final ClosableTabsPane tabPane;
-    private final JLabel welcomeLabel;
 
-    public WelcomeView(ViewCreationInfo<WelcomeDocument, WelcomeView> creationInfo, ClosableTabsPane tabPane) {
+    public WelcomeView(ViewCreationInfo<WelcomeDocument, WelcomeView> info, ClosableTabsPane tabPane) {
         super(new BorderLayout());
 
-        this.template = creationInfo.getTemplate();
-        this.document = creationInfo.getDocument();
+        this.template = info.getTemplate();
+        this.document = info.getDocument();
         this.tabPane = tabPane;
 
-        welcomeLabel = new JLabel(document.getWelcomeText());
+        JLabel welcomeLabel = new JLabel(document.getWelcomeText());
 
         welcomeLabel.setFont(welcomeLabel.getFont().deriveFont(Font.BOLD, 40));
         welcomeLabel.setHorizontalAlignment(JLabel.CENTER);
