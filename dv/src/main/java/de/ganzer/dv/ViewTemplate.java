@@ -29,8 +29,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      */
     public static final int IS_MANDATORY = 0x04;
     /**
-     * If this option is set, the view as well as the document cannot be closed
-     * by the user.
+     * If this option is set, the view should be closeable by the user.
      */
     public static final int NOT_CLOSABLE = 0x08;
 
