@@ -11,6 +11,9 @@ import java.util.List;
  * <p>
  * A service implementation of this type has to be registered by
  * {@link Services#register(Class, Object)}.
+ * <pre>{@code
+ * Services.register(DVNavigationService.class, new MyDVNavigationServiceImpl());
+ * }</pre>
  *
  * @since 6.0.0
  */
