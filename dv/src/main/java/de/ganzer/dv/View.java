@@ -44,7 +44,7 @@ public interface View<D extends Document> {
                 : getDocument().isModified() ? getTemplate().getModificationHintFormat() : "%s";
         var title = String.format(format, getDocument().getTitle());
 
-        var views = getDocument().getViews();
+        var views = getDocument().getViews().stream().filter(v -> v.getTemplate().hasTitleNumber()).toList();
         int index = views.size() > 1 ? views.indexOf(this) : -1;
 
         if (index >= 0)

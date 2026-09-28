@@ -32,6 +32,11 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * If this option is set, the view should not be closeable by the user.
      */
     public static final int NOT_CLOSABLE = 0x08;
+    /**
+     * If this option is set, the view has no number in its title and is not
+     * counted if the document has multiple views.
+     */
+    public static final int NO_TITLE_NUMBER = 0x10;
 
     private final String displayName;
     private final ViewSupplier<D, V> viewSupplier;
@@ -148,6 +153,18 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      */
     public boolean isClosable() {
         return (options & NOT_CLOSABLE) == 0;
+    }
+
+    /**
+     * Indicates whether the view has a number in its title if the document has
+     * multiple views.
+     *
+     * @return {@code true} if the view has a number in its title.
+     *
+     * @see #NO_TITLE_NUMBER
+     */
+    public boolean hasTitleNumber() {
+        return (options & NO_TITLE_NUMBER) == 0;
     }
 
     /**
