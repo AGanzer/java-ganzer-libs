@@ -99,7 +99,7 @@ public class DVManager {
      * If {@code listener} is {@code null}, no exception is thrown and
      * no action is taken.
      *
-     * @param listener  The PropertyChangeListener to be added
+     * @param listener  The PropertyChangeListener to be added.
      */
     public static void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
@@ -115,7 +115,7 @@ public class DVManager {
      * If {@code listener} is {@code null}, or was never added, no exception is
      * thrown and no action is taken.
      *
-     * @param listener  The PropertyChangeListener to be removed
+     * @param listener  The PropertyChangeListener to be removed.
      */
     public static void removePropertyChangeListener(PropertyChangeListener listener) {
         pcs.removePropertyChangeListener(listener);
@@ -132,7 +132,7 @@ public class DVManager {
      * thrown and no action is taken.
      *
      * @param propertyName  The name of the property to listen on.
-     * @param listener  The PropertyChangeListener to be added
+     * @param listener  The PropertyChangeListener to be added.
      */
     public static void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(propertyName, listener);
@@ -150,7 +150,7 @@ public class DVManager {
      * property, no exception is thrown and no action is taken.
      *
      * @param propertyName  The name of the property that was listened on.
-     * @param listener  The PropertyChangeListener to be removed
+     * @param listener  The PropertyChangeListener to be removed.
      */
     public static void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         pcs.removePropertyChangeListener(propertyName, listener);
