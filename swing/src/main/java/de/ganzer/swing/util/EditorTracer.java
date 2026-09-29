@@ -14,7 +14,22 @@ import java.awt.event.ActionEvent;
 
 /**
  * A utility class that enables tracing of focusable components to enable
- * editableComponent actions globally.
+ * actions of editable components globally.
+ *
+ * <pre>{@code
+ * void installListeners() {
+ *     cutAction.addActionListener(e -> EditorTracer.getInstance().cut());
+ *     copyAction.addActionListener(e -> EditorTracer.getInstance().copy());
+ *     pasteAction.addActionListener(e -> EditorTracer.getInstance().paste());
+ * }
+ *
+ * // This is frequently invaloked:
+ * void updateActions() {
+ *     cutAction.setEnabled(EditorTracer.getInstance().canCut());
+ *     copyAction.setEnabled(EditorTracer.getInstance().canCopy());
+ *     pasteAction.setEnabled(EditorTracer.getInstance().canPaste());
+ * }
+ * }</pre>
  *
  * @since 6.0.0
  */
