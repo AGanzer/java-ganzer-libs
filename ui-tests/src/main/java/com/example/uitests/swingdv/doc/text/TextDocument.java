@@ -1,14 +1,14 @@
 package com.example.uitests.swingdv.doc.text;
 
 import de.ganzer.core.io.BOMInputStreamReader;
-import de.ganzer.dv.AbstractDocument;
 import de.ganzer.dv.DVLoadException;
+import de.ganzer.dv.Document;
 import de.ganzer.dv.DocumentCreationInfo;
 
 import java.io.*;
 import java.nio.charset.Charset;
 
-public class TextDocument extends AbstractDocument {
+public class TextDocument extends Document {
     public static final String TEXT_PROPERTY = "text";
 
     private String text;

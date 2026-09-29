@@ -1,6 +1,6 @@
 package com.example.uitests.swingdv.doc;
 
-import de.ganzer.dv.AbstractModel;
+import de.ganzer.dv.Model;
 import de.ganzer.dv.Undoable;
 
 import javax.swing.text.Document;
@@ -12,7 +12,7 @@ import javax.swing.undo.UndoableEdit;
  * <p>
  * Panels or windows that contain a {@link JTextComponent} derivation can use
  * this class to enable undoable actions that depend on the editor component
- * for a {@link AbstractModel}:
+ * for a {@link Model}:
  *
  * <pre>{@code
  * editor = new JTextArea();

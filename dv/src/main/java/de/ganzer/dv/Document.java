@@ -5,11 +5,12 @@ import de.ganzer.dv.services.DVNavigationService;
 
 import java.net.URI;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * An interface to a model that is created with template information.
+ * A basic abstract document that is created with template information.
  * <p>
  * Other than a basic model, a document is always file- or stream-based and is
  * usually able to load data and writes it into another target.
@@ -45,14 +46,35 @@ import java.util.List;
  *
  * @since 6.0.0
  */
-public interface Document extends Model {
+public abstract class Document extends Model {
+    private final DocumentTemplate<? extends Document> template;
+    private final List<View<? extends Document>> views = new ArrayList<>();
+
+    private boolean closed;
+
+    /**
+     * Creates a new instance.
+     * <p>
+     * {@link #doCreateData()} is invoked if {@link DocumentCreationInfo#isNewData()}
+     * is {@code true}; otherwise, {@link #doLoadData()} is invoked.
+     *
+     * @param info The information for initializing the model.
+     *
+     * @throws DVLoadException on any error loading data.
+     */
+    protected Document(DocumentCreationInfo<? extends Document> info) throws DVLoadException {
+        super(info.getName(), info.isReadOnly(), info.isNewData());
+        this.template = info.getTemplate();
+    }
+
     /**
      * Gets the parent document.
      *
      * @return The parent document or {@code null} if there is no parent. This
      *          implementation does always return {@code null}.
      */
-    default Document getParent() {
+    public Document getParent() {
+        // TODO: implement:
         return null;
     }
 
@@ -63,7 +85,8 @@ public interface Document extends Model {
      *          not have children. This implementation does always return an
      *          empty collection.
      */
-    default List<Document> getChildren() {
+    public List<Document> getChildren() {
+        // TODO: implement:
         return Collections.emptyList();
     }
 
@@ -72,7 +95,9 @@ public interface Document extends Model {
      *
      * @return The template that has created the document.
      */
-    DocumentTemplate<?> getTemplate();
+    public DocumentTemplate<? extends Document> getTemplate() {
+        return template;
+    }
 
     /**
      * Gets the title of the document.
@@ -82,7 +107,7 @@ public interface Document extends Model {
      * @return The title. This implementation does return the name part of
      *          {@link #getName()} if this is a file path or a URL.
      */
-    default String getTitle() {
+    public String getTitle() {
         try {
             URI uri = URI.create(getName());
 
@@ -100,7 +125,16 @@ public interface Document extends Model {
     }
 
     /**
-     * Adds a view to the document.
+     * Gets the views of the document.
+     *
+     * @return An unmodifiable list of the views of the document.
+     */
+    public List<View<? extends Document>> getViews() {
+        return Collections.unmodifiableList(views);
+    }
+
+    /**
+     * Adss a view to the document.
      * <p>
      * <b>NOTE:</b> This is invoked automatically after a view is created and
      * should never be called by any client code.
@@ -110,27 +144,35 @@ public interface Document extends Model {
      * @throws IllegalArgumentException If the view is already added to a
      *         document.
      */
-    void addView(View<? extends Document> view);
+    public void addView(View<? extends Document> view) {
+        if (view.getDocument() != this)
+            throw new IllegalArgumentException("View is already added to a document.");
+
+        views.add(view);
+    }
 
     /**
      * Removes a view from the document.
      * <p>
      * If {@link DocumentTemplate#isAutoClose()} of the document's template is
-     * {@code true} or if the given view is mandatory, the document will be
-     * closed automatically without any further action. To ensure that all data
-     * will be saved correctly, the view should invoke
-     * {@link #canCloseView(View)} before removing the view.
+     * {@code true}, the document will be closed automatically.
      * <p>
      * <b>NOTE:</b> This should always be invoked by a view that implements
      * {@link View} when the view is closed (closed in the sense of
-     * destroyed but not just hidden to re-show it later).
+     * destroyed but not just hidden to re-show it later). The view's document
+     * should be set to {@code null} by the view.
      * <p>
      * Implementors should ensure that {@code view.setDocument(null)} is
      * invoked.
      *
      * @param view The view to remove.
      */
-    void removeView(View<? extends Document> view);
+    public void removeView(View<? extends Document> view) {
+        views.remove(view);
+
+        if (view.getTemplate().isMandatory() || getTemplate().isAutoClose() && views.isEmpty())
+            close();
+    }
 
     /**
      * Gets a value indicating whether the given view can be closed.
@@ -142,7 +184,7 @@ public interface Document extends Model {
      *         set to auto-close. Otherwise, it returns {@code true} if there is
      *         more than one open view or if the document itself can be closed.
      */
-    default boolean canCloseView(View<? extends Document> view) {
+    public boolean canCloseView(View<? extends Document> view) {
         if (!view.getTemplate().isMandatory() && !getTemplate().isAutoClose())
             return true;
 
@@ -166,7 +208,7 @@ public interface Document extends Model {
      * @see DVNavigationService#querySave(String)
      * @see DVNavigationService#showError(String, Throwable)
      */
-    default boolean canClose() {
+    public boolean canClose() {
         if (!isModified())
             return true;
 
@@ -189,19 +231,52 @@ public interface Document extends Model {
     }
 
     /**
+     * Writes the data into a file, a database, or any other target.
+     * <p>
+     * This resets the modification, the read-only, and the new data flags.
+     *
+     * @throws DVSaveException on any error.
+     *
+     * @see #doSaveData()
+     */
+    @Override
+    public void saveData() throws DVSaveException {
+        if (isNewData())
+            saveDataAs();
+        else
+            super.saveData();
+    }
+
+    /**
      * Writes the data into a file, a database, or any other target where the
      * name is queried from the user as long as {@link #isSaveAsSupported()}
      * returns {@code true}.
      * <p>
-     * Implementors should reset the modification, the new-data nad the
-     * read-only flags.
+     * This implementation does nothing if the user cancels the operation;
+     * otherwise, it sets the new name and invokes {@link #saveData()}.
+     * <p>
+     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
+     * by {@link Services#register(Class, Object)}.
      *
      * @throws DVSaveException on any error.
      *
      * @see #saveData()
      * @see #isSaveAsSupported()
+     * @see DVNavigationService#querySaveLocation(String, String)
      */
-    void saveDataAs() throws DVSaveException;
+    public void saveDataAs() throws DVSaveException {
+        if (!isSaveAsSupported())
+            return;
+
+        var saveName = ((DVNavigationService) Services.get(DVNavigationService.class)).querySaveLocation(getName(), getTemplate().getFilter());
+
+        if (saveName == null)
+            return;
+
+        setName(saveName);
+        setNewData(false);
+        super.saveData();
+    }
 
     /**
      * Gets a value that indicates whether {link #saveDataAs()} is supported by
@@ -214,7 +289,7 @@ public interface Document extends Model {
      * @return {@code true} if {@link #saveDataAs()} is supported. This default
      *          implementation does always return {@code true}.
      */
-    default boolean isSaveAsSupported() {
+    public boolean isSaveAsSupported() {
         return true;
     }
 
@@ -222,24 +297,24 @@ public interface Document extends Model {
      * Closes the document with all its open views and without any further action.
      * <p>
      * To ensure that the document saves all modified data, invoke
-     * {@link #canClose()} befor invoking this method.
+     * {@link #canClose()} before invoking this method.
      * <p>
-     * <b>NOTE:</b> Implementors have to call {@link DVManager#documentClosed}
-     * if this method is invoked.
+     * <b>NOTE:</b> Inheritors have to ensure that the base method is invoked
+     * to remove the document from the manager's document list.
      */
-    void close();
+    public void close() {
+        closed = true;
+        DVManager.documentClosed(this);
+
+        views.forEach(View::forceClose);
+    }
 
     /**
      * Gets a value indicating whether the document is closed.
      *
      * @return {@code true} if the document is closed.
      */
-    boolean isClosed();
-
-    /**
-     * Gets the open views of the document.
-     *
-     * @return The open views of the document.
-     */
-    List<View<? extends Document>> getViews();
+    public boolean isClosed() {
+        return closed;
+    }
 }

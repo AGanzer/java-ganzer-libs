@@ -1,13 +1,13 @@
 package com.example.uitests.swingdv.doc.welcome;
 
 import com.example.uitests.swingdv.SwingDVApp;
-import de.ganzer.dv.AbstractDocument;
 import de.ganzer.dv.DVLoadException;
+import de.ganzer.dv.Document;
 import de.ganzer.dv.DocumentCreationInfo;
 
 import java.io.IOException;
 
-public class WelcomeDocument extends AbstractDocument {
+public class WelcomeDocument extends Document {
     public WelcomeDocument(DocumentCreationInfo<WelcomeDocument> info) throws DVLoadException {
         super(info);
     }
