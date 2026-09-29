@@ -5,8 +5,6 @@ import de.ganzer.dv.DVLoadException;
 import de.ganzer.dv.Document;
 import de.ganzer.dv.DocumentCreationInfo;
 
-import java.io.IOException;
-
 public class WelcomeDocument extends Document {
     public WelcomeDocument(DocumentCreationInfo<WelcomeDocument> info) throws DVLoadException {
         super(info);
@@ -21,11 +19,11 @@ public class WelcomeDocument extends Document {
     }
 
     @Override
-    protected void doLoadData() throws RuntimeException {
+    protected void doLoadData() {
     }
 
     @Override
-    protected void doSaveData() throws RuntimeException {
+    protected void doSaveData() {
     }
 
     @Override
