@@ -48,7 +48,9 @@ import java.util.List;
  */
 public abstract class Document extends Model {
     private final DocumentTemplate<? extends Document> template;
+    private final Document parent;
     private final List<View<? extends Document>> views = new ArrayList<>();
+    private final List<Document> children = new ArrayList<>();
 
     private boolean closed;
 
@@ -64,7 +66,9 @@ public abstract class Document extends Model {
      */
     protected Document(DocumentCreationInfo<? extends Document> info) throws DVLoadException {
         super(info.getName(), info.isReadOnly(), info.isNewData());
-        this.template = info.getTemplate();
+        template = info.getTemplate();
+        parent = info.getParent();
+        parent.addChild(this);
     }
 
     /**
@@ -74,8 +78,7 @@ public abstract class Document extends Model {
      *          implementation does always return {@code null}.
      */
     public Document getParent() {
-        // TODO: implement:
-        return null;
+        return parent;
     }
 
     /**
@@ -86,8 +89,7 @@ public abstract class Document extends Model {
      *          empty collection.
      */
     public List<Document> getChildren() {
-        // TODO: implement:
-        return Collections.emptyList();
+        return Collections.unmodifiableList(children);
     }
 
     /**
@@ -162,8 +164,9 @@ public abstract class Document extends Model {
      * destroyed but not just hidden to re-show it later). The view's document
      * should be set to {@code null} by the view.
      * <p>
-     * Implementors should ensure that {@code view.setDocument(null)} is
-     * invoked.
+     * <b>NOTE:</b> To ensure that the document saves all modified data in the
+     * case it is closed, invoke {@link #canCloseView(View)} before invoking
+     * this method.
      *
      * @param view The view to remove.
      */
@@ -189,45 +192,6 @@ public abstract class Document extends Model {
             return true;
 
         return getViews().size() > 1 || canClose();
-    }
-
-    /**
-     * Gets a value indicating whether the document can be closed.
-     * <p>
-     * This implementation queries the user to save if the document is modified.
-     * Depending on the user's choice, the document can be closed or not. On
-     * error, the error is shown to the user and {@code false} is returned.
-     * <p>
-     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
-     * by {@link Services#register(Class, Object)}.
-     *
-     * @return {@code true} if the document can be closed.
-     *
-     * @see #isModified()
-     * @see #setModified(boolean)
-     * @see DVNavigationService#querySave(String)
-     * @see DVNavigationService#showError(String, Throwable)
-     */
-    public boolean canClose() {
-        if (!isModified())
-            return true;
-
-        Boolean result = ((DVNavigationService) Services.get(DVNavigationService.class)).querySave(getName());
-
-        if (result == null)
-            return false;
-
-        if (!result)
-            return true;
-
-        try {
-            saveData();
-        } catch (DVSaveException e) {
-            ((DVNavigationService) Services.get(DVNavigationService.class)).showError(e.getLocalizedMessage(), e);
-            return false;
-        }
-
-        return !isModified();
     }
 
     /**
@@ -294,19 +258,56 @@ public abstract class Document extends Model {
     }
 
     /**
+     * Gets a value indicating whether the document can be closed.
+     * <p>
+     * This implementation queries the user to save if the document is modified.
+     * Depending on the user's choice, the document can be closed or not. On
+     * error, the error is shown to the user and {@code false} is returned.
+     * <p>
+     * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
+     * by {@link Services#register(Class, Object)}.
+     *
+     * @return {@code true} if the document can be closed.
+     *
+     * @see #isModified()
+     * @see #setModified(boolean)
+     * @see DVNavigationService#querySave(String)
+     * @see DVNavigationService#showError(String, Throwable)
+     */
+    public boolean canClose() {
+        if (!isModified())
+            return true;
+
+        Boolean result = ((DVNavigationService) Services.get(DVNavigationService.class)).querySave(getName());
+
+        if (result == null)
+            return false;
+
+        if (!result)
+            return true;
+
+        try {
+            saveData();
+        } catch (DVSaveException e) {
+            ((DVNavigationService) Services.get(DVNavigationService.class)).showError(e.getLocalizedMessage(), e);
+            return false;
+        }
+
+        return !isModified();
+    }
+
+    /**
      * Closes the document with all its open views and without any further action.
      * <p>
-     * To ensure that the document saves all modified data, invoke
+     * <b>NOTE:</b> To ensure that the document saves all modified data, invoke
      * {@link #canClose()} before invoking this method.
      * <p>
      * <b>NOTE:</b> Inheritors have to ensure that the base method is invoked
-     * to remove the document from the manager's document list.
+     * to remove the document from the manager's document list and its parent
+     * document.
      */
     public void close() {
-        closed = true;
-        DVManager.documentClosed(this);
-
-        views.forEach(View::forceClose);
+        close(true);
     }
 
     /**
@@ -316,5 +317,30 @@ public abstract class Document extends Model {
      */
     public boolean isClosed() {
         return closed;
+    }
+
+    private void close(boolean removeFromParent) {
+        closed = true;
+        DVManager.documentClosed(this);
+
+        views.forEach(View::forceClose);
+
+        if (removeFromParent)
+            parent.removeChild(this);
+
+        for (Document child : children)
+            child.close(false);
+
+        children.clear();
+    }
+
+    private void addChild(Document child) {
+        if (child != null)
+            children.add(child);
+    }
+
+    private void removeChild(Document child) {
+        if (child != null)
+            children.remove(child);
     }
 }

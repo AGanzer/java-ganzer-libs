@@ -36,17 +36,17 @@ public class TextView extends JPanel implements View<TextDocument> {
         editor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                document.setText(editor.getText(), this);
+                document.setText(editor.getText());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                document.setText(editor.getText(), this);
+                document.setText(editor.getText());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                document.setText(editor.getText(), this);
+                document.setText(editor.getText());
             }
         });
         editor.addMouseListener(new MouseAdapter() {
