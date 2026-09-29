@@ -462,7 +462,7 @@ public abstract class Document extends Model {
      *        completely.
      */
     protected void notifyDataChange(View<?> originator, Object context) {
-        for (View<? extends Document> view : getViews())
+        for (View<? extends Document> view : views)
             if (view != originator)
                 view.documentDataChanged(context);
     }
@@ -471,8 +471,11 @@ public abstract class Document extends Model {
      * Notifies all views to update its title.
      */
     private void notifyTitleChange() {
-        for (View<? extends Document> view : getViews())
-            view.updateTitle();
+        // May be invoked on initialization where the views are not created yet:
+        //
+        if (views != null)
+            for (View<? extends Document> view : views)
+                view.updateTitle();
     }
 
     private void close(boolean removeFromParent) {
