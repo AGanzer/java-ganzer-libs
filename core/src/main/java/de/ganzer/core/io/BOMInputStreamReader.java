@@ -236,8 +236,25 @@ public class BOMInputStreamReader extends Reader {
     /**
      * Reads the entire remaining text until the end of the stream.
      *
+     * Windows line endings ("\r\n") are converted to "\n".
+     *
+     * @return The text read from the stream.
+     *
+     * @throws IOException If an I/O error occurs.
+     *
+     * @see #readAll(boolean)
+     *
+     * @since 6.0.0
+     */
+    public String readAll() throws IOException {
+        return readAll(false);
+    }
+
+    /**
+     * Reads the entire remaining text until the end of the stream.
+     *
      * @param keepWindowsCRLF {@code true} to keep Windows line endings ("\r\n");
-     *                        {@code false} to convert Windows line endings ("\r\n") to "\n".
+     *        {@code false} to convert Windows line endings ("\r\n") to "\n".
      *
      * @return The text read from the stream.
      *
