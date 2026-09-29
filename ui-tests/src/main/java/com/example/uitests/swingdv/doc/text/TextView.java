@@ -31,6 +31,7 @@ public class TextView extends JPanel implements View<TextDocument> {
         editor = new JTextArea();
         editor.setWrapStyleWord(true);
         editor.setLineWrap(true);
+        editor.setText(document.getText());
         editor.getDocument().addUndoableEditListener(
                 e -> document.addUndoable(new SwingDocumentUndoable(e.getEdit())));
         editor.getDocument().addDocumentListener(new DocumentListener() {
