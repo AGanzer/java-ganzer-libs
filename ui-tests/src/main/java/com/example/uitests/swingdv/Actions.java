@@ -61,6 +61,13 @@ public class Actions {
         deleteAction.setEnabled(tracer.canDelete());
     }
 
+    public static void updateSaveActions() {
+        var doc = DVManager.getActiveDocument();
+        saveAction.setEnabled(doc != null && doc.isModified());
+        saveAsAction.setEnabled(doc != null && doc.isSaveAsSupported());
+        saveAllAction.setEnabled(DVManager.getOpenDocuments().stream().anyMatch(Document::isModified));
+    }
+
     private static final GAction[] windowToggleActions = new GAction[20];
 
     private static final PropertyChangeListener documentNameListener = evt ->
@@ -68,6 +75,7 @@ public class Actions {
                     .filter(a -> a.getTag().equals(evt.getSource()))
                     .findFirst()
                     .ifPresent(action -> action.setName(evt.getNewValue().toString()));
+    private static final PropertyChangeListener documentModifiedListener = evt -> updateSaveActions();
 
     static {
         var defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
@@ -260,11 +268,15 @@ public class Actions {
             var docOld = (e.getOldValue() instanceof Document d) ? d : null;
             var docNew = (e.getNewValue() instanceof Document d) ? d : null;
 
-            if (docOld != null)
+            if (docOld != null) {
                 docOld.removePropertyChangeListener(Document.NAME_PROPERTY, documentNameListener);
+                docOld.removePropertyChangeListener(Document.MODIFIED_PROPERTY, documentModifiedListener);
+            }
 
-            if (docNew != null)
+            if (docNew != null) {
                 docNew.addPropertyChangeListener(Document.NAME_PROPERTY, documentNameListener);
+                docNew.addPropertyChangeListener(Document.MODIFIED_PROPERTY, documentModifiedListener);
+            }
 
             saveAction.setEnabled(docNew != null && docNew.isModified());
             saveAsAction.setEnabled(docNew != null && docNew.isSaveAsSupported());

@@ -101,7 +101,7 @@ public class TextView extends JPanel implements View<TextDocument> {
     @Override
     public void toFront() {
         tabPane.setSelectedComponent(this);
-        SwingUtilities.invokeLater(this::requestFocusInWindow);
+        SwingUtilities.invokeLater(editor::requestFocusInWindow);
     }
 
     @Override
