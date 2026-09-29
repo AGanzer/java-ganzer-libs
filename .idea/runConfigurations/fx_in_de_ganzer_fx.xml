@@ -2,6 +2,8 @@
   <configuration default="false" name="fx in de-ganzer-fx" type="JUnit" factoryName="JUnit">
     <module name="de-ganzer-fx" />
     <option name="PACKAGE_NAME" value="de.ganzer.fx" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="package" />
     <option name="VM_PARAMETERS" value="--add-reads de.ganzer.fx=ALL-UNNAMED,org.junit.jupiter.api,org.junit.jupiter.params,org.junit.platform.commons --add-opens org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED --add-modules org.junit.jupiter.params" />
     <method v="2">
