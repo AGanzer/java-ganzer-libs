@@ -4,13 +4,12 @@ import de.ganzer.core.io.BOMInputStreamReader;
 import de.ganzer.dv.DVLoadException;
 import de.ganzer.dv.Document;
 import de.ganzer.dv.DocumentCreationInfo;
+import de.ganzer.dv.View;
 
 import java.io.*;
 import java.nio.charset.Charset;
 
 public class TextDocument extends Document {
-    public static final String TEXT_PROPERTY = "text";
-
     private String text;
     private String encoding;
 
@@ -22,12 +21,12 @@ public class TextDocument extends Document {
         return text;
     }
 
-    public void setText(String text) {
+    public void setText(String text, View<?> originator) {
         var old = this.text;
         this.text = text;
 
         setModified(true);
-        firePropertyChange(TEXT_PROPERTY, old, text);
+        notifyDataChange(originator, old);
     }
 
     @Override

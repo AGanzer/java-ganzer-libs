@@ -68,7 +68,9 @@ public abstract class Document extends Model {
         super(info.getName(), info.isReadOnly(), info.isNewData());
         template = info.getTemplate();
         parent = info.getParent();
-        parent.addChild(this);
+
+        if (parent != null)
+            parent.addChild(this);
     }
 
     /**
@@ -195,6 +197,34 @@ public abstract class Document extends Model {
     }
 
     /**
+     * Sets the name of the model.
+     * <p>
+     * This fires a property change event with the property name set to
+     * {@link #NAME_PROPERTY}.
+     *
+     * @param name The name to set.
+     */
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+        notifyTitleChange();
+    }
+
+    /**
+     * Sets or unsets the modification flag of the model.
+     * <p>
+     * This fires a property change event with the property name set to
+     * {@link #MODIFIED_PROPERTY}.
+     *
+     * @param modified {@code true} to indicate the model as modified.
+     */
+    @Override
+    public void setModified(boolean modified) {
+        super.setModified(modified);
+        notifyTitleChange();
+    }
+
+    /**
      * Writes the data into a file, a database, or any other target.
      * <p>
      * This resets the modification, the read-only, and the new data flags.
@@ -209,6 +239,18 @@ public abstract class Document extends Model {
             saveDataAs();
         else
             super.saveData();
+    }
+
+    /**
+     * Resets the read-only flag.
+     * <p>
+     * This fires a property change event with the property name set to
+     * {@link #READ_ONLY_PROPERTY}.
+     */
+    @Override
+    protected void resetReadOnly() {
+        super.resetReadOnly();
+        notifyTitleChange();
     }
 
     /**
@@ -319,13 +361,38 @@ public abstract class Document extends Model {
         return closed;
     }
 
+    /**
+     * Notifies all views about changes in the document's data.
+     * <p>
+     * Inheritors should invoke this to notify all views about changed data.
+     *
+     * @param originator The view that caused the change. This will not be
+     *        notified.
+     * @param context The context of change. This is implementation defined and
+     *        may be {@code null} to indicate that the view should be updated
+     *        completely.
+     */
+    protected void notifyDataChange(View<?> originator, Object context) {
+        for (View<? extends Document> view : getViews())
+            if (view != originator)
+                view.documentDataChanged(context);
+    }
+
+    /**
+     * Notifies all views to update its title.
+     */
+    private void notifyTitleChange() {
+        for (View<? extends Document> view : getViews())
+            view.updateTitle();
+    }
+
     private void close(boolean removeFromParent) {
         closed = true;
         DVManager.documentClosed(this);
 
         views.forEach(View::forceClose);
 
-        if (removeFromParent)
+        if (removeFromParent && parent != null)
             parent.removeChild(this);
 
         for (Document child : children)

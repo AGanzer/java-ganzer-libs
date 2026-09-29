@@ -53,9 +53,21 @@ public interface View<D extends Document> {
         return title;
     }
 
-    // TODO: implement this to make the document responsive for notifying views:
-//    void updateTitle();
-//    void documentDataChanged(Object context);
+    /**
+     * Invoked by the document to update the view's title.
+     *
+     * @see #getTitle()
+     */
+    void updateTitle();
+
+    /**
+     * Invoked by the document to notify the view about changes in its data.
+     *
+     * @param context The context of change. This is implementation defined and
+     *        may be {@code null} to indicate that the view should be updated
+     *        completely.
+     */
+    void documentDataChanged(Object context);
 
     /**
      * Invoked to bring the view to the front.

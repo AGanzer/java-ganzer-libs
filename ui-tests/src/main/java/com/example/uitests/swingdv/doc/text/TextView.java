@@ -36,17 +36,17 @@ public class TextView extends JPanel implements View<TextDocument> {
         editor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                document.setText(editor.getText());
+                document.setText(editor.getText(), TextView.this);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                document.setText(editor.getText());
+                document.setText(editor.getText(), TextView.this);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                document.setText(editor.getText());
+                document.setText(editor.getText(), TextView.this);
             }
         });
         editor.addMouseListener(new MouseAdapter() {
@@ -85,6 +85,17 @@ public class TextView extends JPanel implements View<TextDocument> {
     @Override
     public TextDocument getDocument() {
         return document;
+    }
+
+    @Override
+    public void updateTitle() {
+        tabPane.setTitleAt(tabPane.indexOfComponent(this), getTitle());
+    }
+
+    @Override
+    public void documentDataChanged(Object context) {
+        // TODO: save and restore selection
+        editor.setText(document.getText());
     }
 
     @Override

@@ -42,6 +42,15 @@ public class WelcomeView extends JPanel implements View<WelcomeDocument> {
     }
 
     @Override
+    public void updateTitle() {
+        tabPane.setTitleAt(tabPane.indexOfComponent(this), getTitle());
+    }
+
+    @Override
+    public void documentDataChanged(Object context) {
+    }
+
+    @Override
     public void toFront() {
         tabPane.setSelectedComponent(this);
     }
