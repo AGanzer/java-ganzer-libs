@@ -5,6 +5,7 @@ import de.ganzer.core.io.BOMInputStreamReader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,8 @@ import java.util.List;
  * or in the <a href="https://www.rfc-editor.org/rfc/rfc4180">RFC Editor</a>.
  */
 @SuppressWarnings("unused")
-public class CsvInputStreamReader extends BOMInputStreamReader {
+public class CsvInputStreamReader extends Reader {
+    private final BOMInputStreamReader reader;
     private char valueSeparator = ',';
     private char maskChar = '"';
     private boolean readEmptyLineAsEmptyValue;
@@ -28,24 +30,62 @@ public class CsvInputStreamReader extends BOMInputStreamReader {
     private boolean eol;
 
     /**
-     * {@inheritDoc}
+     * Creates a new CsvInputStreamReader.
+     *
+     * @param in The input stream to read.
+     * @throws IOException If an I/O error occurs.
      */
     public CsvInputStreamReader(InputStream in) throws IOException {
         super(in);
+        this.reader = new BOMInputStreamReader(in);
     }
 
     /**
-     * {@inheritDoc}
+     * Creates a new CsvInputStreamReader.
+     *
+     * @param in The input stream to read.
+     * @param charsetName The name of a supported charset to use as fallback.
+     * @throws IOException If an I/O error occurs.
      */
     public CsvInputStreamReader(InputStream in, String charsetName) throws IOException {
-        super(in, charsetName);
+        super(in);
+        this.reader = new BOMInputStreamReader(in, charsetName);
     }
 
     /**
-     * {@inheritDoc}
+     * Creates a new CsvInputStreamReader.
+     *
+     * @param in The input stream to read.
+     * @param cs The charset to use as fallback.
+     * @throws IOException If an I/O error occurs.
      */
     public CsvInputStreamReader(InputStream in, Charset cs) throws IOException {
-        super(in, cs);
+        super(in);
+        this.reader = new BOMInputStreamReader(in, cs);
+    }
+
+    /**
+     * Gets the input stream the reader works on.
+     *
+     * @return The input stream. This is not the same as the one that is set at
+     *         construction.
+     *
+     * @since 6.0.0
+     */
+    public InputStream getInputStream() {
+        return reader.getInputStream();
+    }
+
+    /**
+     * Returns the name of the character encoding being used by this stream.
+     *
+     * @return The historical name of this encoding, or {@code null} if the stream
+     *         has been closed.
+     *
+     * @since 6.0.0
+     */
+    public String getEncoding() {
+        return reader.getEncoding();
     }
 
     /**
@@ -115,6 +155,70 @@ public class CsvInputStreamReader extends BOMInputStreamReader {
      */
     public void setReadEmptyLineAsEmptyValue(boolean readEmptyLineAsEmptyValue) {
         this.readEmptyLineAsEmptyValue = readEmptyLineAsEmptyValue;
+    }
+
+    /**
+     * Reads a single character.
+     *
+     * @return The character read, or -1 if the end of the stream has been
+     *         reached.
+     *
+     * @exception  IOException  If an I/O error occurs.
+     *
+     * @since 6.0.0
+     */
+    @Override
+    public int read() throws IOException {
+        return reader.read();
+    }
+
+    /**
+     * Reads characters into a portion of an array.
+     *
+     * @param buf The destination buffer.
+     * @param off Offset at which to start storing characters
+     * @param len Maximum number of characters to read
+     *
+     * @return The number of characters read, or -1 if the end of the stream has
+     *         been reached
+     *
+     * @throws IOException If an I/O error occurs.
+     * @throws NullPointerException {@code buf} is {@code null}.
+     *
+     * @since 6.0.0
+     */
+    @Override
+    public int read(char[] buf, int off, int len) throws IOException {
+        return reader.read(buf, off, len);
+    }
+
+    /**
+     * Tells whether this stream is ready to be read.
+     * <p>
+     * An input stream reader is ready if its input buffer is not empty, or if
+     * bytes are available to be read from the underlying byte stream.
+     *
+     * @return {@code true} if the reader is ready; otherwise, {@code false}.
+     *
+     * @throws IOException  If an I/O error occurs.
+     *
+     * @since 6.0.0
+     */
+    @Override
+    public boolean ready() throws IOException {
+        return reader.ready();
+    }
+
+    /**
+     * Closes this reader.
+     *
+     * @throws IOException If an I/O error occurs.
+     *
+     * @since 6.0.0
+     */
+    @Override
+    public void close() throws IOException {
+        reader.close();
     }
 
     /**

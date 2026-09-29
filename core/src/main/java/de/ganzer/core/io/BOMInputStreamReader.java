@@ -33,10 +33,11 @@ import java.util.Objects;
  * @see InputStream
  * @see Charset
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "SynchronizeOnNonFinalField"})
 public class BOMInputStreamReader extends Reader {
     private final PushbackInputStream in;
     private final StreamDecoder sd;
+    private int pushedBackChar = -1;
 
     /**
      * Creates an InputStreamReader that uses the default charset as fallback.
@@ -126,7 +127,14 @@ public class BOMInputStreamReader extends Reader {
      */
     @Override
     public int read() throws IOException {
-        return sd.read();
+        synchronized (lock) {
+            if (pushedBackChar != -1) {
+                int c = pushedBackChar;
+                pushedBackChar = -1;
+                return c;
+            }
+            return sd.read();
+        }
     }
 
     /**
@@ -145,7 +153,112 @@ public class BOMInputStreamReader extends Reader {
     @Override
     public int read(char[] buf, int off, int len) throws IOException {
         Objects.requireNonNull(buf, "buf must not be null.");
-        return sd.read(buf, off, len);
+        synchronized (lock) {
+            if ((off < 0) || (off > buf.length) || (len < 0) || ((off + len) > buf.length) || ((off + len) < 0)) {
+                throw new IndexOutOfBoundsException();
+            }
+            if (len == 0) {
+                return 0;
+            }
+            if (pushedBackChar != -1) {
+                buf[off] = (char) pushedBackChar;
+                pushedBackChar = -1;
+                if (len == 1) {
+                    return 1;
+                }
+                int n = sd.read(buf, off + 1, len - 1);
+                return n == -1 ? 1 : n + 1;
+            }
+            return sd.read(buf, off, len);
+        }
+    }
+
+    /**
+     * Reads a single character.
+     *
+     * @return The character read.
+     *
+     * @throws EOFException If the end of the stream has been reached.
+     * @throws IOException  If an I/O error occurs.
+     *
+     * @since 6.0.0
+     */
+    public char readChar() throws IOException {
+        synchronized (lock) {
+            int c = read();
+            if (c == -1) {
+                throw new EOFException();
+            }
+            return (char) c;
+        }
+    }
+
+    /**
+     * Reads a line of text. A line is considered to be terminated by any one
+     * of a line feed ('\n'), a carriage return ('\r'), or a carriage return
+     * followed immediately by a linefeed ('\r\n').
+     *
+     * @return A String containing the contents of the line, not including
+     *         any line-termination characters, or {@code null} if the end of the
+     *         stream has been reached without reading any characters.
+     *
+     * @throws IOException If an I/O error occurs.
+     *
+     * @since 6.0.0
+     */
+    public String readLine() throws IOException {
+        synchronized (lock) {
+            int firstChar = read();
+            if (firstChar == -1) {
+                return null;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            int c = firstChar;
+            while (c != -1) {
+                if (c == '\n') {
+                    break;
+                } else if (c == '\r') {
+                    int next = read();
+                    if (next != '\n' && next != -1) {
+                        pushedBackChar = next;
+                    }
+                    break;
+                } else {
+                    sb.append((char) c);
+                }
+                c = read();
+            }
+            return sb.toString();
+        }
+    }
+
+    /**
+     * Reads the entire remaining text until the end of the stream.
+     *
+     * @param keepWindowsCRLF {@code true} to keep Windows line endings ("\r\n");
+     *                        {@code false} to convert Windows line endings ("\r\n") to "\n".
+     *
+     * @return The text read from the stream.
+     *
+     * @throws IOException If an I/O error occurs.
+     *
+     * @since 6.0.0
+     */
+    public String readAll(boolean keepWindowsCRLF) throws IOException {
+        synchronized (lock) {
+            StringBuilder sb = new StringBuilder();
+            char[] buffer = new char[8192];
+            int n;
+            while ((n = read(buffer, 0, buffer.length)) != -1) {
+                sb.append(buffer, 0, n);
+            }
+            String content = sb.toString();
+            if (!keepWindowsCRLF) {
+                return content.replace("\r\n", "\n");
+            }
+            return content;
+        }
     }
 
     /**
@@ -160,7 +273,9 @@ public class BOMInputStreamReader extends Reader {
      */
     @Override
     public boolean ready() throws IOException {
-        return sd.ready();
+        synchronized (lock) {
+            return pushedBackChar != -1 || sd.ready();
+        }
     }
 
     /**
@@ -170,7 +285,10 @@ public class BOMInputStreamReader extends Reader {
      */
     @Override
     public void close() throws IOException {
-        sd.close();
+        synchronized (lock) {
+            pushedBackChar = -1;
+            sd.close();
+        }
     }
 
     private enum BOM {
@@ -244,7 +362,6 @@ public class BOMInputStreamReader extends Reader {
         return StreamDecoder.forInputStreamReader(in, this, set);
     }
 
-    @SuppressWarnings("SynchronizeOnNonFinalField")
     private static class StreamDecoder extends Reader {
         public static StreamDecoder forInputStreamReader(InputStream in, Object lock, String charsetName) throws UnsupportedEncodingException {
             String csn = charsetName;
