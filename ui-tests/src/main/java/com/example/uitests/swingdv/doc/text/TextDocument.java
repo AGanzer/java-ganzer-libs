@@ -22,12 +22,12 @@ public class TextDocument extends Document {
         return text;
     }
 
-    public void setText(String text, Object originator) {
+    public void setText(String text) {
         var old = this.text;
         this.text = text;
 
         setModified(true);
-        fireChange(TEXT_PROPERTY, originator, old, text);
+        firePropertyChange(TEXT_PROPERTY, old, text);
     }
 
     @Override

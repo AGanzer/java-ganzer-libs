@@ -3,7 +3,9 @@ package de.ganzer.dv;
 import de.ganzer.core.util.Strings;
 import de.ganzer.dv.internals.DVMessages;
 
-import java.util.Collections;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 /**
@@ -18,66 +20,66 @@ import java.util.List;
  */
 public abstract class Model {
     /**
-     * The name of the "newData" property used for {@link ModelChangeEvent}'s.
+     * The name of the "newData" property used for {@link PropertyChangeEvent}'s.
      *
-     * @see #addChangeListener(ModelChangeListener, Object)
-     * @see #addChangeListener(String, ModelChangeListener, Object)
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String NEW_DATA_PROPERTY = "newData";
 
     /**
-     * The name of the "readOnly" property used for {@link ModelChangeEvent}'s.
+     * The name of the "readOnly" property used for {@link PropertyChangeEvent}'s.
      *
-     * @see #addChangeListener(ModelChangeListener, Object)
-     * @see #addChangeListener(String, ModelChangeListener, Object)
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String READ_ONLY_PROPERTY = "readOnly";
 
     /**
-     * The name of the "canUndo" property used for {@link ModelChangeEvent}'s.
+     * The name of the "canUndo" property used for {@link PropertyChangeEvent}'s.
      *
-     * @see #addChangeListener(ModelChangeListener, Object)
-     * @see #addChangeListener(String, ModelChangeListener, Object)
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String CAN_UNDO_PROPERTY = "canUndo";
 
     /**
-     * The name of the "canRedo" property used for {@link ModelChangeEvent}'s.
+     * The name of the "canRedo" property used for {@link PropertyChangeEvent}'s.
      *
-     * @see #addChangeListener(ModelChangeListener, Object)
-     * @see #addChangeListener(String, ModelChangeListener, Object)
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String CAN_REDO_PROPERTY = "canRedo";
 
     /**
-     * The name of the "undoTitle" property used for {@link ModelChangeEvent}'s.
+     * The name of the "undoTitle" property used for {@link PropertyChangeEvent}'s.
      *
-     * @see #addChangeListener(ModelChangeListener, Object)
-     * @see #addChangeListener(String, ModelChangeListener, Object)
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String UNDO_TITLE_PROPERTY = "undoTitle";
 
     /**
-     * The name of the "redoTitle" property used for {@link ModelChangeEvent}'s.
+     * The name of the "redoTitle" property used for {@link PropertyChangeEvent}'s.
      *
-     * @see #addChangeListener(ModelChangeListener, Object)
-     * @see #addChangeListener(String, ModelChangeListener, Object)
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String REDO_TITLE_PROPERTY = "redoTitle";
 
     /**
-     * The name of the "name" property used for {@link ModelChangeEvent}'s.
+     * The name of the "name" property used for {@link PropertyChangeEvent}'s.
      *
-     * @see #addChangeListener(ModelChangeListener, Object)
-     * @see #addChangeListener(String, ModelChangeListener, Object)
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String NAME_PROPERTY = "name";
 
     /**
-     * The name of the "modified" property used for {@link ModelChangeEvent}'s.
+     * The name of the "modified" property used for {@link PropertyChangeEvent}'s.
      *
-     * @see #addChangeListener(ModelChangeListener, Object)
-     * @see #addChangeListener(String, ModelChangeListener, Object)
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
      */
     public static final String MODIFIED_PROPERTY = "modified";
 
@@ -85,8 +87,7 @@ public abstract class Model {
     private static final int IS_READONLY = 0x02;
     private static final int IS_MODIFIED = 0x04;
 
-    // TODO: change to PropertyChangeSupport, ModelChangeSupport is not required here:
-    private final ModelChangeSupport pcs = new ModelChangeSupport(this);
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     private UndoManager undoManager = new UndoManager();
 
@@ -191,7 +192,7 @@ public abstract class Model {
         var org = this.name;
         this.name = name;
 
-        fireChange(NAME_PROPERTY, null, org, this.name);
+        firePropertyChange(NAME_PROPERTY, org, this.name);
     }
 
     /**
@@ -219,7 +220,7 @@ public abstract class Model {
         else
             flags &= ~IS_MODIFIED;
 
-        fireChange(MODIFIED_PROPERTY, null, old, modified);
+        firePropertyChange(MODIFIED_PROPERTY, old, modified);
     }
 
     /**
@@ -307,10 +308,10 @@ public abstract class Model {
 
         undoManager.clear();
 
-        fireChange(CAN_UNDO_PROPERTY, null, oldUndo, undoManager.canUndo());
-        fireChange(UNDO_TITLE_PROPERTY, null, oldUndoTitle, null);
-        fireChange(CAN_REDO_PROPERTY, null, oldRedo, undoManager.canRedo());
-        fireChange(REDO_TITLE_PROPERTY, null, oldRedoTitle, null);
+        firePropertyChange(CAN_UNDO_PROPERTY, oldUndo, undoManager.canUndo());
+        firePropertyChange(UNDO_TITLE_PROPERTY, oldUndoTitle, null);
+        firePropertyChange(CAN_REDO_PROPERTY, oldRedo, undoManager.canRedo());
+        firePropertyChange(REDO_TITLE_PROPERTY, oldRedoTitle, null);
     }
 
     /**
@@ -345,10 +346,10 @@ public abstract class Model {
         undoManager.add(undoable, execute);
         setModified(true);
 
-        fireChange(CAN_UNDO_PROPERTY, null, oldUndo, undoManager.canUndo());
-        fireChange(UNDO_TITLE_PROPERTY, null, oldUndoTitle, undoManager.getUndoTitle());
-        fireChange(CAN_REDO_PROPERTY, null, oldRedo, undoManager.canRedo());
-        fireChange(REDO_TITLE_PROPERTY, null, oldRedoTitle, undoManager.getRedoTitle());
+        firePropertyChange(CAN_UNDO_PROPERTY, oldUndo, undoManager.canUndo());
+        firePropertyChange(UNDO_TITLE_PROPERTY, oldUndoTitle, undoManager.getUndoTitle());
+        firePropertyChange(CAN_REDO_PROPERTY, oldRedo, undoManager.canRedo());
+        firePropertyChange(REDO_TITLE_PROPERTY, oldRedoTitle, undoManager.getRedoTitle());
     }
 
     /**
@@ -363,10 +364,10 @@ public abstract class Model {
         undoManager.undo();
         setModified(true);
 
-        fireChange(CAN_UNDO_PROPERTY, null, oldUndo, undoManager.canUndo());
-        fireChange(UNDO_TITLE_PROPERTY, null, oldUndoTitle, undoManager.getUndoTitle());
-        fireChange(CAN_REDO_PROPERTY, null, oldRedo, undoManager.canRedo());
-        fireChange(REDO_TITLE_PROPERTY, null, oldRedoTitle, undoManager.getRedoTitle());
+        firePropertyChange(CAN_UNDO_PROPERTY, oldUndo, undoManager.canUndo());
+        firePropertyChange(UNDO_TITLE_PROPERTY, oldUndoTitle, undoManager.getUndoTitle());
+        firePropertyChange(CAN_REDO_PROPERTY, oldRedo, undoManager.canRedo());
+        firePropertyChange(REDO_TITLE_PROPERTY, oldRedoTitle, undoManager.getRedoTitle());
     }
 
     /**
@@ -381,10 +382,10 @@ public abstract class Model {
         undoManager.redo();
         setModified(true);
 
-        fireChange(CAN_UNDO_PROPERTY, null, oldUndo, undoManager.canUndo());
-        fireChange(UNDO_TITLE_PROPERTY, null, oldUndoTitle, undoManager.getUndoTitle());
-        fireChange(CAN_REDO_PROPERTY, null, oldRedo, undoManager.canRedo());
-        fireChange(REDO_TITLE_PROPERTY, null, oldRedoTitle, undoManager.getRedoTitle());
+        firePropertyChange(CAN_UNDO_PROPERTY, oldUndo, undoManager.canUndo());
+        firePropertyChange(UNDO_TITLE_PROPERTY, oldUndoTitle, undoManager.getUndoTitle());
+        firePropertyChange(CAN_REDO_PROPERTY, oldRedo, undoManager.canRedo());
+        firePropertyChange(REDO_TITLE_PROPERTY, oldRedoTitle, undoManager.getRedoTitle());
     }
 
     /**
@@ -455,13 +456,12 @@ public abstract class Model {
      * Adds a listener for all properties.
      *
      * @param listener The listener to install.
-     * @param originator The originator that installs the event.
      *
      * @throws NullPointerException {@code originator} or {@code listener} is
      *          {@code null}.
      */
-    public void addChangeListener(ModelChangeListener listener, Object originator) {
-        pcs.addChangeListener(null, listener, originator);
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(null, listener);
     }
 
     /**
@@ -470,26 +470,24 @@ public abstract class Model {
      * @param propertyName The name of the property to add the listener fo or
      *         {@code null} or an empty string to listen to all properties.
      * @param listener The listener to install.
-     * @param originator The originator that installs the event.
      *
      * @throws NullPointerException {@code originator} or {@code listener} is
      *          {@code null}.
      */
-    public void addChangeListener(String propertyName, ModelChangeListener listener, Object originator) {
-        pcs.addChangeListener(propertyName, listener, originator);
+    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(propertyName, listener);
     }
 
     /**
      * Removes an installed listener.
      *
      * @param listener The listener to install.
-     * @param originator The originator that installs the event.
      *
      * @throws NullPointerException {@code originator} or {@code listener} is
      *          {@code null}.
      */
-    public void removeChangeListener(ModelChangeListener listener, Object originator) {
-        pcs.removeChangeListener(null, listener, originator);
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(null, listener);
     }
 
     /**
@@ -499,13 +497,12 @@ public abstract class Model {
      *         {@code null} or an empty string for listeners that are installed
      *         for all properties.
      * @param listener The listener to install.
-     * @param originator The originator that installs the event.
      *
      * @throws NullPointerException {@code originator} or {@code listener} is
      *          {@code null}.
      */
-    public void removeChangeListener(String propertyName, ModelChangeListener listener, Object originator) {
-        pcs.removeChangeListener(propertyName, listener, originator);
+    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(propertyName, listener);
     }
 
     /**
@@ -516,14 +513,11 @@ public abstract class Model {
      * No event is fired if old and new values are equal and non-null.
      *
      * @param propertyName  the programmatic name of the property that was changed
-     * @param originator The originator that causes the event. This is not
-     *         notified of the change. This should be {@code null} to notify
-     *         all listeners.
      * @param oldValue      the old value of the property
      * @param newValue      the new value of the property
      */
-    protected void fireChange(String propertyName, Object originator, Object oldValue, Object newValue) {
-        pcs.fireChange(propertyName, originator, oldValue, newValue);
+    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+        pcs.firePropertyChange(propertyName, oldValue, newValue);
     }
 
     /**
@@ -534,15 +528,12 @@ public abstract class Model {
      * No event is fired if old and new values are equal and non-null.
      *
      * @param propertyName  the programmatic name of the property that was changed
-     * @param originator The originator that causes the event. This is not
-     *         notified of the change. This should be {@code null} to notify
-     *         all listeners.
      * @param index         the index of the property element that was changed
      * @param oldValue      the old value of the property
      * @param newValue      the new value of the property
      */
-    protected void fireIndexedChange(String propertyName, Object originator, int index, Object oldValue, Object newValue) {
-        pcs.fireIndexedChange(propertyName, originator, index, oldValue, newValue);
+    protected void fireIndexedPropertyChange(String propertyName, int index, Object oldValue, Object newValue) {
+        pcs.fireIndexedPropertyChange(propertyName, index, oldValue, newValue);
     }
 
     /**
@@ -555,7 +546,7 @@ public abstract class Model {
         var old = isReadOnly();
         flags &= ~IS_READONLY;
 
-        fireChange(READ_ONLY_PROPERTY, null, old, false);
+        firePropertyChange(READ_ONLY_PROPERTY, old, false);
     }
 
     /**
@@ -574,7 +565,7 @@ public abstract class Model {
         else
             flags &= ~IS_NEW;
 
-        fireChange(NEW_DATA_PROPERTY, null, old, newData);
+        firePropertyChange(NEW_DATA_PROPERTY, old, newData);
     }
 
     /**

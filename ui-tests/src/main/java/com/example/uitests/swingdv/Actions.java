@@ -14,6 +14,7 @@ import javax.swing.KeyStroke;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 
 public class Actions {
@@ -62,12 +63,11 @@ public class Actions {
 
     private static final GAction[] windowToggleActions = new GAction[20];
 
-    private static final ModelChangeListener documentNameListener = evt -> {
-        Arrays.stream(windowToggleActions)
-                .filter(a -> a.getTag().equals(evt.getSource()))
-                .findFirst()
-                .ifPresent(action -> action.setName(evt.getNewValue().toString()));
-    };
+    private static final PropertyChangeListener documentNameListener = evt ->
+            Arrays.stream(windowToggleActions)
+                    .filter(a -> a.getTag().equals(evt.getSource()))
+                    .findFirst()
+                    .ifPresent(action -> action.setName(evt.getNewValue().toString()));
 
     static {
         var defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
@@ -261,10 +261,10 @@ public class Actions {
             var docNew = (e.getNewValue() instanceof Document d) ? d : null;
 
             if (docOld != null)
-                docOld.removeChangeListener(Document.NAME_PROPERTY, documentNameListener, Actions.class);
+                docOld.removePropertyChangeListener(Document.NAME_PROPERTY, documentNameListener);
 
             if (docNew != null)
-                docNew.addChangeListener(Document.NAME_PROPERTY, documentNameListener, Actions.class);
+                docNew.addPropertyChangeListener(Document.NAME_PROPERTY, documentNameListener);
 
             saveAction.setEnabled(docNew != null && docNew.isModified());
             saveAsAction.setEnabled(docNew != null && docNew.isSaveAsSupported());
