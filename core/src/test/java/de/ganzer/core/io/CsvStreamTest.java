@@ -1,8 +1,5 @@
 package de.ganzer.core.io;
 
-import de.ganzer.core.csv.CsvInputStreamReader;
-import de.ganzer.core.csv.CsvOutputStreamWriter;
-import de.ganzer.core.csv.InvalidCsvException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -96,7 +93,7 @@ public class CsvStreamTest {
                 "1,2,\"3\"\"3\n";
 
         Assertions.assertThrows(
-                de.ganzer.core.csv.InvalidCsvException.class,
+                InvalidCsvException.class,
                 () -> doReadWrite(csvContent, false, "\n", false),
                 "InvalidCsvException not thrown.");
     }
@@ -115,7 +112,7 @@ public class CsvStreamTest {
 
     private String doReadWrite(String csvContent, boolean maskAlways, String lineFeed, boolean emptyLineIsEmptyValue) throws IOException {
         InputStream is = new ByteArrayInputStream(csvContent.getBytes(StandardCharsets.UTF_8));
-        de.ganzer.core.csv.CsvInputStreamReader r = new CsvInputStreamReader(is, StandardCharsets.UTF_8);
+        CsvInputStreamReader r = new CsvInputStreamReader(is, StandardCharsets.UTF_8);
         r.setReadEmptyLineAsEmptyValue(emptyLineIsEmptyValue);
 
         List<List<String>> readContent = new ArrayList<>();
@@ -130,7 +127,7 @@ public class CsvStreamTest {
         }
 
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
-        de.ganzer.core.csv.CsvOutputStreamWriter w = new CsvOutputStreamWriter(os, StandardCharsets.UTF_8);
+        CsvOutputStreamWriter w = new CsvOutputStreamWriter(os, StandardCharsets.UTF_8);
         w.setLineSeparator(lineFeed);
 
         for (List<String> line : readContent)
