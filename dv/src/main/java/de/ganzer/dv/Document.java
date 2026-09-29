@@ -3,9 +3,7 @@ package de.ganzer.dv;
 import de.ganzer.core.Services;
 import de.ganzer.dv.services.DVNavigationService;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -379,14 +377,16 @@ public abstract class Document extends Model {
      */
     @Override
     protected void doLoadData() throws IOException {
-        try (InputStream in = createInputStream()) {
-            if (in == null)
-                return;
+        InputStream in = createInputStream();
 
-            doLoadData(in);
+        if (in == null)
+            return;
+
+        try (BufferedInputStream bin = new BufferedInputStream(in)) {
+            doLoadData(bin);
 
             for (var child : children)
-                child.doLoadData(in);
+                child.doLoadData(bin);
         }
     }
 
@@ -405,14 +405,16 @@ public abstract class Document extends Model {
      */
     @Override
     protected void doSaveData() throws IOException {
-        try (OutputStream out = createOutputStream()) {
-            if (out == null)
-                return;
+        OutputStream out = createOutputStream();
 
-            doSaveData(out);
+        if (out == null)
+            return;
+
+        try (BufferedOutputStream bout = new BufferedOutputStream(out)) {
+            doSaveData(bout);
 
             for (var child : children)
-                child.doSaveData(out);
+                child.doSaveData(bout);
         }
     }
 
