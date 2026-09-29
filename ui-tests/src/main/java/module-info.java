@@ -1,4 +1,4 @@
-module com.example.uitests {
+open module com.example.uitests {
     requires javafx.controls;
     requires javafx.fxml;
     requires de.ganzer.core;
@@ -13,8 +13,6 @@ module com.example.uitests {
     requires swingx.all;
     requires de.ganzer.dv;
     requires de.ganzer.swing.dlgfw;
-    opens com.example.uitests.fx to javafx.fxml;
-    opens com.example.uitests.fx.charts to javafx.fxml;
     exports com.example.uitests.fx;
     exports com.example.uitests.fx.charts;
     exports com.example.uitests.swing;
