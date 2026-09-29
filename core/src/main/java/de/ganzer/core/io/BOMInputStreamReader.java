@@ -235,7 +235,7 @@ public class BOMInputStreamReader extends Reader {
 
     /**
      * Reads the entire remaining text until the end of the stream.
-     *
+     * <p>
      * Windows line endings ("\r\n") are converted to "\n".
      *
      * @return The text read from the stream.
