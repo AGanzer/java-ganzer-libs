@@ -6,6 +6,7 @@ import de.ganzer.dv.View;
 import de.ganzer.dv.ViewCreationInfo;
 import de.ganzer.dv.ViewTemplate;
 import de.ganzer.swing.controls.ClosableTabsPane;
+import de.ganzer.swing.controls.GTextArea;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

@@ -49,16 +49,22 @@ public class Actions {
     public static final GAction helpAction;
     public static final GAction aboutAction;
 
+    @SuppressWarnings("DataFlowIssue")
     public static void updateEditActions() {
         var tracer = EditorTracer.getInstance();
         var doc = DVManager.getActiveDocument();
 
-        undoAction.setEnabled(tracer.canUndo() || doc != null && doc.canUndo());
-        redoAction.setEnabled(tracer.canRedo() || doc != null && doc.canRedo());
+        undoAction.setEnabled(doc != null && doc.canUndo());
+        redoAction.setEnabled(doc != null && doc.canRedo());
         cutAction.setEnabled(tracer.canCut());
         copyAction.setEnabled(tracer.canCopy());
         pasteAction.setEnabled(tracer.canPaste());
         deleteAction.setEnabled(tracer.canDelete());
+
+        undoAction.name(undoAction.isEnabled() ? "Undo " + doc.getUndoTitle() : "Undo")
+                .shortDescription(undoAction.isEnabled() ? "Undo " + doc.getUndoTitle() : "Undo the last action\"");
+        redoAction.name(redoAction.isEnabled() ? "Redo " + doc.getRedoTitle() : "Redo")
+                .shortDescription(redoAction.isEnabled() ? "Redo " + doc.getRedoTitle() : "Redo the last undone action");
     }
 
     public static void updateSaveActions() {
@@ -176,6 +182,10 @@ public class Actions {
                                 .largeIcon(SVGProvider.get("undo", 32))
                                 .enabled(false)
                                 .onAction(e -> {
+                                    var doc = DVManager.getActiveDocument();
+                                    if (doc != null) {
+                                        doc.undo();
+                                    }
                                 }),
                         redoAction = new GAction("Redo")
                                 .shortDescription("Redo the last undone action")
@@ -184,6 +194,10 @@ public class Actions {
                                 .largeIcon(SVGProvider.get("redo", 32))
                                 .enabled(false)
                                 .onAction(e -> {
+                                    var doc = DVManager.getActiveDocument();
+                                    if (doc != null) {
+                                        doc.redo();
+                                    }
                                 }),
                         new GSeparatorAction(),
                         cutAction = new GAction("Cut")
@@ -192,32 +206,28 @@ public class Actions {
                                 .smallIcon(SVGProvider.get("cut", 16))
                                 .largeIcon(SVGProvider.get("cut", 32))
                                 .enabled(false)
-                                .onAction(e -> {
-                                }),
+                                .onAction(e -> EditorTracer.getInstance().cut()),
                         copyAction = new GAction("Copy")
                                 .shortDescription("Copy the selected text")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, defaultModifier))
                                 .smallIcon(SVGProvider.get("copy", 16))
                                 .largeIcon(SVGProvider.get("copy", 32))
                                 .enabled(false)
-                                .onAction(e -> {
-                                }),
+                                .onAction(e -> EditorTracer.getInstance().copy()),
                         pasteAction = new GAction("Paste")
                                 .shortDescription("Paste the text from the clipboard")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, defaultModifier))
                                 .smallIcon(SVGProvider.get("paste", 16))
                                 .largeIcon(SVGProvider.get("paste", 32))
                                 .enabled(false)
-                                .onAction(e -> {
-                                }),
+                                .onAction(e -> EditorTracer.getInstance().paste()),
                         deleteAction = new GAction("Delete")
                                 .shortDescription("Delete the selected text")
                                 .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0))
                                 .smallIcon(SVGProvider.get("delete", 16))
                                 .largeIcon(SVGProvider.get("delete", 32))
                                 .enabled(false)
-                                .onAction(e -> {
-                                })
+                                .onAction(e -> EditorTracer.getInstance().delete())
                 ),
                 windowActions = new GActionGroup("Window").addAll(
                         closeWindowAction = new GAction("Close")

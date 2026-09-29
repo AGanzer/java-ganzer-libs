@@ -168,25 +168,25 @@ public final class EditorTracer {
 
         @Override
         public boolean canUndo() {
-            Action undo = component.getActionMap().get("undo");
+            Action undo = component.getActionMap().get("Undo");
             return undo != null && undo.isEnabled();
         }
 
         @Override
         public void undo() {
-            Action undo = component.getActionMap().get("undo");
+            Action undo = component.getActionMap().get("Undo");
             undo.actionPerformed(new ActionEvent(component, ActionEvent.ACTION_PERFORMED, null));
         }
 
         @Override
         public boolean canRedo() {
-            Action redo = component. getActionMap().get("redo");
+            Action redo = component. getActionMap().get("Redo");
             return redo != null && redo.isEnabled();
         }
 
         @Override
         public void redo() {
-            Action redo = component.getActionMap().get("redo");
+            Action redo = component.getActionMap().get("Redo");
             redo.actionPerformed(new ActionEvent(component, ActionEvent.ACTION_PERFORMED, null));
         }
 
