@@ -95,8 +95,12 @@ public class TextView extends JPanel implements View<TextDocument> {
 
     @Override
     public void documentDataChanged(Object context) {
-        // TODO: save and restore selection
+        var selStart = editor.getSelectionStart();
+        var selEnd = editor.getSelectionEnd();
+
         editor.setText(document.getText());
+
+        editor.select(selStart, selEnd);
     }
 
     @Override

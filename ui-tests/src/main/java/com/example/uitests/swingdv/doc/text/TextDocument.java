@@ -43,7 +43,7 @@ public class TextDocument extends Document {
              var bis = new BufferedInputStream(fis);
              var bir = new BOMInputStreamReader(bis)) {
             encoding = bir.getEncoding();
-            text = new String(bis.readAllBytes(), encoding);
+            text = bir.readAll();
         }
     }
 
