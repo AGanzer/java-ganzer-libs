@@ -23,7 +23,7 @@ import java.awt.event.ActionEvent;
  *     pasteAction.addActionListener(e -> EditorTracer.getInstance().paste());
  * }
  *
- * // This is frequently invaloked:
+ * // This is frequently invoked:
  * void updateActions() {
  *     cutAction.setEnabled(EditorTracer.getInstance().canCut());
  *     copyAction.setEnabled(EditorTracer.getInstance().canCopy());
