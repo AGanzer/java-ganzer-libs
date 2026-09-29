@@ -1,6 +1,8 @@
 package de.ganzer.swing.util;
 
 import de.ganzer.core.OS;
+import de.ganzer.swing.controls.GTextArea;
+import de.ganzer.swing.controls.GTextField;
 
 import javax.swing.Action;
 import javax.swing.text.DefaultEditorKit;
@@ -37,6 +39,10 @@ public final class EditorTracer {
     /**
      * Gets a value that indicates whether the current editor is able to undo
      * the last undoable action.
+     * <p>
+     * <b>NOTE:</b> This works only for controls that have an undo manager
+     * installed, like {@link GTextField} and {@link GTextArea}. By default,
+     * Java Swing does not provide this with {@link JTextComponent} derivations.
      *
      * @return {@code true} if an action can be undone.
      */
@@ -46,6 +52,10 @@ public final class EditorTracer {
 
     /**
      * Undoes the last undoable action.
+     * <p>
+     * <b>NOTE:</b> This works only for controls that have an undo manager
+     * installed, like {@link GTextField} and {@link GTextArea}. By default,
+     * Java Swing does not provide this with {@link JTextComponent} derivations.
      */
     public void undo() {
         if (canUndo())
@@ -55,6 +65,10 @@ public final class EditorTracer {
     /**
      * Gets a value that indicates whether the current editor is able to redo an
      * undone action.
+     * <p>
+     * <b>NOTE:</b> This works only for controls that have an undo manager
+     * installed, like {@link GTextField} and {@link GTextArea}. By default,
+     * Java Swing does not provide this with {@link JTextComponent} derivations.
      *
      * @return {@code true} if an action can be redone.
      */
@@ -64,6 +78,10 @@ public final class EditorTracer {
 
     /**
      * Redoes the last undone action.
+     * <p>
+     * <b>NOTE:</b> This works only for controls that have an undo manager
+     * installed, like {@link GTextField} and {@link GTextArea}. By default,
+     * Java Swing does not provide this with {@link JTextComponent} derivations.
      */
     public void redo() {
         if (canRedo())
