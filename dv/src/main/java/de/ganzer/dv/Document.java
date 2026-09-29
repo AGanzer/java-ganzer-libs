@@ -449,7 +449,8 @@ public abstract class Document extends Model {
      * <p>
      * This implementation does always return {@code null}.
      *
-     * @return The input stream.
+     * @return The input stream. This is always encapsulated within a
+     *         {@link BufferedInputStream} by {@link #doLoadData())}.
      *
      * @throws IOException on any error.
      *
@@ -465,7 +466,8 @@ public abstract class Document extends Model {
      * <p>
      * This implementation does always return {@code null}.
      *
-     * @return The output stream.
+     * @return The output stream. This is always encapsulated within a
+     *         {@link BufferedOutputStream} by {@link #doSaveData()}.
      *
      * @throws IOException on any error.
      *
