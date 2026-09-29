@@ -1,7 +1,6 @@
-package de.ganzer.core.csv;
+package de.ganzer.core.io;
 
 import de.ganzer.core.internals.CoreMessages;
-import de.ganzer.core.io.BOMInputStreamReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,17 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Reads values from a CSV formatted stream.
+ * Reads values from a CSV formatted stream where a BOM is recognized.
  * <p>
  * This implementation covers RFC 4180 that can be found in the
  * <a href="https://www.rfc-archive.org/getrfc.php?rfc=4180#gsc.tab=0">RFC Archive</a>
  * or in the <a href="https://www.rfc-editor.org/rfc/rfc4180">RFC Editor</a>.
- *
- * @deprecated since 6.0.0 User {@link de.ganzer.core.io.CsvInputStreamReader}
- * instead.
  */
 @SuppressWarnings("unused")
-@Deprecated(forRemoval = true, since = "6.0.0")
 public class CsvInputStreamReader extends Reader {
     private final BOMInputStreamReader reader;
     private char valueSeparator = ',';

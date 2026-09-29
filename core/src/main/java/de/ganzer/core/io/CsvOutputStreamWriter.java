@@ -1,4 +1,4 @@
-package de.ganzer.core.csv;
+package de.ganzer.core.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,12 +15,8 @@ import java.util.Objects;
  * This implementation covers RFC 4180 that can be found in the
  * <a href="https://www.rfc-archive.org/getrfc.php?rfc=4180#gsc.tab=0">RFC Archive</a>
  * or in the <a href="https://www.rfc-editor.org/rfc/rfc4180">RFC Editor</a>.
- *
- * @deprecated since 6.0.0 User {@link de.ganzer.core.io.CsvOutputStreamWriter}
- * instead.
  */
 @SuppressWarnings("unused")
-@Deprecated(forRemoval = true, since = "6.0.0")
 public class CsvOutputStreamWriter extends OutputStreamWriter {
     private String lineSeparator = System.lineSeparator();
     private char valueSeparator = ',';
