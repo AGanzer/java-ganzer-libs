@@ -36,7 +36,7 @@ public class TextDocument extends Document {
     }
 
     @Override
-    protected void doLoadData() throws RuntimeException {
+    protected void doLoadData() throws IOException {
         var file = new File(getName());
 
         try (var fis = new FileInputStream(file);
@@ -44,20 +44,16 @@ public class TextDocument extends Document {
              var bir = new BOMInputStreamReader(fis)) {
             encoding = bir.getEncoding();
             text = new String(bis.readAllBytes(), encoding);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    protected void doSaveData() throws RuntimeException {
+    protected void doSaveData() throws IOException {
         var file = new File(getName());
 
         try (var fos = new FileOutputStream(file);
              var bos = new BufferedOutputStream(fos)) {
             bos.write(text.getBytes(encoding));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

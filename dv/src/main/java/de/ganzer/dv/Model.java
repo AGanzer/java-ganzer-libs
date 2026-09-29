@@ -6,6 +6,7 @@ import de.ganzer.dv.internals.DVMessages;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -139,7 +140,7 @@ public abstract class Model {
         if (newData)
             doCreateData();
         else
-            doLoadData();
+            loadData();
     }
 
     /**
@@ -629,14 +630,14 @@ public abstract class Model {
     /**
      * Invoked by {@link #loadData()} to load data from a storage.
      *
-     * @throws DVLoadException on any error.
+     * @throws IOException on any error.
      */
-    protected abstract void doLoadData() throws DVLoadException;
+    protected abstract void doLoadData() throws IOException;
 
     /**
      * Invoked by {@link #saveData()} to write the data into a storage.
      *
-     * @throws DVLoadException on any error.
+     * @throws IOException on any error.
      */
-    protected abstract void doSaveData()throws DVLoadException;
+    protected abstract void doSaveData()throws IOException;
 }

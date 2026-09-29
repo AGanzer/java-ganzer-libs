@@ -3,6 +3,9 @@ package de.ganzer.dv;
 import de.ganzer.core.Services;
 import de.ganzer.dv.services.DVNavigationService;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -359,6 +362,92 @@ public abstract class Document extends Model {
      */
     public boolean isClosed() {
         return closed;
+    }
+
+    /**
+     * Invoked by {@link #loadData()} to load data from a storage.
+     * <p>
+     * This implementation invokes {@link #createInputStream()} and calls
+     * {@link #doLoadData(InputStream)} on itself and on all child documents.
+     * <p>
+     * The inheritors may decide whether to override this method if there
+     * are no children or the override {@link #createInputStream()} and
+     * @link #doLoadData(InputStream)}. If {@link #createInputStream()} returns
+     * {@code null}, this method does nothing.
+     *
+     * @throws IOException on any error.
+     */
+    @Override
+    protected void doLoadData() throws IOException {
+
+    }
+
+    /**
+     * Invoked by {@link #saveData()} to write the data into a storage.
+     * <p>
+     * This implementation invokes {@link #createOutputStream()} and calls
+     * {@link #doSaveData(OutputStream)} on itself and on all child documents.
+     * <p>
+     * The inheritors may decide whether to override this method if there
+     * are no children or the override {@link #createOutputStream()} and
+     * @link #doSaveData(OutputStream)}. If {@link #createOutputStream()}
+     * returns {@code null}, this method does nothing.
+     *
+     * @throws IOException on any error.
+     */
+    @Override
+    protected void doSaveData() throws IOException {
+
+    }
+
+    /**
+     * Invoked by {@link #loadData()} to load data from a storage.
+     * <p>
+     * This implementation does nothing.
+     *
+     * @throws IOException on any error.
+     *
+     * @see doLoadData()
+     */
+    protected void doLoadData(InputStream is) throws IOException {
+    }
+
+    /**
+     * Invoked by {@link #saveData()} to write the data into a storage.
+     * <p>
+     * This implementation does nothing.
+     *
+     * @throws IOException on any error.
+     *
+     * @see doSaveData()
+     */
+    protected void doSaveData(OutputStream os) throws IOException {
+    }
+
+    /**
+     * Invoked to create an input stream for reading the document's data.
+     * <p>
+     * This implementation does always return {@code null}.
+     *
+     * @return The input stream.
+     *
+     * @see doLoadData()
+     */
+    protected InputStream createInputStream() {
+        return null;
+    }
+
+    /**
+     * Invoked to create an output stream for writing the document's data.
+     * <p>
+     * This implementation does always return {@code null}.
+     *
+     * @return The output stream.
+     *
+     * @see doSaveData()
+     */
+    protected OutputStream createOutputStream() {
+        return null;
     }
 
     /**
