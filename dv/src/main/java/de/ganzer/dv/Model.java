@@ -131,14 +131,11 @@ public abstract class Model {
 
         this.name = name;
 
-        if (newData)
-            flags |= IS_NEW;
-
         if (readOnly)
             flags |= IS_READONLY;
 
         if (newData)
-            doCreateData();
+            createData();
         else
             loadData();
     }
@@ -152,7 +149,7 @@ public abstract class Model {
      *
      * @return {@code true} if the data is newly created.
      */
-    public boolean isNewData() {
+    public final boolean isNewData() {
         return (flags & IS_NEW) != 0;
     }
 
@@ -166,7 +163,7 @@ public abstract class Model {
      *
      * @return {@code false} if the data can be modified.
      */
-    public boolean isReadOnly() {
+    public final boolean isReadOnly() {
         return (flags & IS_READONLY) != 0;
     }
 
@@ -177,7 +174,7 @@ public abstract class Model {
      *
      * @return The name of the model or {@code null} if no name is available.
      */
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
@@ -201,7 +198,7 @@ public abstract class Model {
      *
      * @return {@code true} if the model's data is modified.
      */
-    public boolean isModified() {
+    public final boolean isModified() {
         return (flags & IS_MODIFIED) != 0;
     }
 
@@ -232,7 +229,7 @@ public abstract class Model {
      *
      * @return {@code true} if an action can be undone.
      */
-    public boolean canUndo() {
+    public final boolean canUndo() {
         return undoManager.canUndo();
     }
 
@@ -244,7 +241,7 @@ public abstract class Model {
      *
      * @return {@code true} if an action can be redone.
      */
-    public boolean canRedo() {
+    public final boolean canRedo() {
         return undoManager.canRedo();
     }
 
@@ -257,7 +254,7 @@ public abstract class Model {
      * If this is changed, implementors should fire a property change event with
      * the property name set to {@link #REDO_TITLE_PROPERTY}.
      *
-     * @return The title of tue current undoable action or {@code null} if there
+     * @return The title of the current undoable action or {@code null} if there
      *         is no undoable action.
      */
     public String getUndoTitle() {
@@ -273,7 +270,7 @@ public abstract class Model {
      * If this is changed, implementors should fire a property change event with
      * the property name set to {@link #UNDO_TITLE_PROPERTY}.
      *
-     * @return The title of tue current redoable action or {@code null} if there
+     * @return The title of the current redoable action or {@code null} if there
      *         is no redoable action.
      */
     public String getRedoTitle() {
@@ -327,7 +324,7 @@ public abstract class Model {
      *
      * @see #addUndoable(Undoable, boolean)
      */
-    public void addUndoable(Undoable undoable) {
+    public final void addUndoable(Undoable undoable) {
         addUndoable(undoable, false);
     }
 
@@ -392,7 +389,7 @@ public abstract class Model {
     /**
      * Creates new data.
      * <p>
-     * This resets the modification and the read-only flags and sets the new
+     * This resets the modification flag and sets the new
      * data flag.
      *
      * @see #doCreateData()
@@ -402,7 +399,6 @@ public abstract class Model {
 
         setModified(false);
         setNewData(true);
-        resetReadOnly();
     }
 
     /**
@@ -601,6 +597,7 @@ public abstract class Model {
      *         error message is available. This implementation does always
      *         return {@code null}.
      */
+    @SuppressWarnings("unused")
     protected String getLoadErrorMessage(String documentName, Throwable cause) {
         return null;
     }
@@ -618,6 +615,7 @@ public abstract class Model {
      *         error message is available. This implementation does always
      *         return {@code null}.
      */
+    @SuppressWarnings("unused")
     protected String getSaveErrorMessage(String documentName, Throwable cause) {
         return null;
     }

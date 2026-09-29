@@ -82,7 +82,7 @@ public abstract class Document extends Model {
      * @return The parent document or {@code null} if there is no parent. This
      *          implementation does always return {@code null}.
      */
-    public Document getParent() {
+    public final Document getParent() {
         return parent;
     }
 
@@ -93,7 +93,7 @@ public abstract class Document extends Model {
      *          not have children. This implementation does always return an
      *          empty collection.
      */
-    public List<Document> getChildren() {
+    public final List<Document> getChildren() {
         return Collections.unmodifiableList(children);
     }
 
@@ -102,7 +102,7 @@ public abstract class Document extends Model {
      *
      * @return The template that has created the document.
      */
-    public DocumentTemplate<? extends Document> getTemplate() {
+    public final DocumentTemplate<? extends Document> getTemplate() {
         return template;
     }
 
@@ -136,12 +136,12 @@ public abstract class Document extends Model {
      *
      * @return An unmodifiable list of the views of the document.
      */
-    public List<View<? extends Document>> getViews() {
+    public final List<View<? extends Document>> getViews() {
         return Collections.unmodifiableList(views);
     }
 
     /**
-     * Adss a view to the document.
+     * Adds a view to the document.
      * <p>
      * <b>NOTE:</b> This is invoked automatically after a view is created and
      * should never be called by any client code.
@@ -288,8 +288,8 @@ public abstract class Document extends Model {
     }
 
     /**
-     * Gets a value that indicates whether {link #saveDataAs()} is supported by
-     * this document.
+     * Gets a value that indicates whether this document supports
+     * {link #saveDataAs()}.
      * <p>
      * Normally each document can be saved under another name even if it is
      * read-only. For documents that should not be saved (like a Welcome page),
@@ -372,14 +372,22 @@ public abstract class Document extends Model {
      * <p>
      * The inheritors may decide whether to override this method if there
      * are no children or the override {@link #createInputStream()} and
-     * @link #doLoadData(InputStream)}. If {@link #createInputStream()} returns
+     * {@link #doLoadData(InputStream)}. If {@link #createInputStream()} returns
      * {@code null}, this method does nothing.
      *
      * @throws IOException on any error.
      */
     @Override
     protected void doLoadData() throws IOException {
+        try (InputStream in = createInputStream()) {
+            if (in == null)
+                return;
 
+            doLoadData(in);
+
+            for (var child : children)
+                child.doLoadData(in);
+        }
     }
 
     /**
@@ -390,14 +398,22 @@ public abstract class Document extends Model {
      * <p>
      * The inheritors may decide whether to override this method if there
      * are no children or the override {@link #createOutputStream()} and
-     * @link #doSaveData(OutputStream)}. If {@link #createOutputStream()}
+     * {@link #doSaveData(OutputStream)}. If {@link #createOutputStream()}
      * returns {@code null}, this method does nothing.
      *
      * @throws IOException on any error.
      */
     @Override
     protected void doSaveData() throws IOException {
+        try (OutputStream out = createOutputStream()) {
+            if (out == null)
+                return;
 
+            doSaveData(out);
+
+            for (var child : children)
+                child.doSaveData(out);
+        }
     }
 
     /**
@@ -409,6 +425,7 @@ public abstract class Document extends Model {
      *
      * @see doLoadData()
      */
+    @SuppressWarnings({"unused", "RedundantThrows"})
     protected void doLoadData(InputStream is) throws IOException {
     }
 
@@ -421,6 +438,7 @@ public abstract class Document extends Model {
      *
      * @see doSaveData()
      */
+    @SuppressWarnings({"RedundantThrows", "unused"})
     protected void doSaveData(OutputStream os) throws IOException {
     }
 
@@ -431,9 +449,12 @@ public abstract class Document extends Model {
      *
      * @return The input stream.
      *
+     * @throws IOException on any error.
+     *
      * @see doLoadData()
      */
-    protected InputStream createInputStream() {
+    @SuppressWarnings("RedundantThrows")
+    protected InputStream createInputStream() throws IOException {
         return null;
     }
 
@@ -444,9 +465,12 @@ public abstract class Document extends Model {
      *
      * @return The output stream.
      *
+     * @throws IOException on any error.
+     *
      * @see doSaveData()
      */
-    protected OutputStream createOutputStream() {
+    @SuppressWarnings("RedundantThrows")
+    protected OutputStream createOutputStream() throws IOException {
         return null;
     }
 
