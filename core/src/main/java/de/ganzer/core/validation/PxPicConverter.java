@@ -1,6 +1,4 @@
-package de.ganzer.core.util;
-
-import de.ganzer.core.validation.PxPicValidator;
+package de.ganzer.core.validation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
