@@ -26,8 +26,6 @@ import de.ganzer.swing.util.UISettings;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import java.awt.*;
-import java.awt.desktop.AboutEvent;
-import java.awt.desktop.AboutHandler;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
