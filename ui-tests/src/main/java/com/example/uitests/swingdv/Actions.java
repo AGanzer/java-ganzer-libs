@@ -121,12 +121,11 @@ public class Actions {
                                 .onAction(e -> {
                                 }),
                         new GSeparatorAction(),
-                        aboutAction = new GAction("About")
+                        aboutAction = new GAction("About " + SwingDVApp.TITLE)
                                 .shortDescription("Show about-dialog")
                                 .smallIcon(SVGProvider.get("about", 16))
                                 .largeIcon(SVGProvider.get("about", 32))
-                                .onAction(e -> {
-                                })
+                                .onAction(e -> NavigationService.getInstance().showAboutInfo())
                 )
         );
     }

@@ -22,6 +22,7 @@ public class ChooseFromListPanel<E> extends AbstractModifiableDataPanel<ChooseFr
         JScrollPane scrollPane = new JScrollPane(list);
 
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0  ));
         panel.add(scrollPane, BorderLayout.CENTER);
 
         return panel;

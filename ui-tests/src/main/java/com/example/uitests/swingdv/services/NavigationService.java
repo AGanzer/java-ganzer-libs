@@ -1,10 +1,9 @@
 package com.example.uitests.swingdv.services;
 
 import com.example.uitests.swingdv.SwingDVApp;
+import com.example.uitests.swingdv.dialogs.AboutDialog;
 import com.example.uitests.swingdv.dialogs.ChooseFromListData;
 import com.example.uitests.swingdv.dialogs.ChooseFromListDialog;
-import de.ganzer.dv.Document;
-import de.ganzer.dv.ViewTemplate;
 import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.services.DVNavigationService;
@@ -95,6 +94,11 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
             case JOptionPane.NO_OPTION -> false;
             default -> null;
         };
+    }
+
+    public void showAboutInfo() {
+        var dialog = new AboutDialog(SwingDVApp.getMainWindow());
+        dialog.setVisible(true);
     }
 
     private NavigationService() {
