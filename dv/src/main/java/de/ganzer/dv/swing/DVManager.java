@@ -19,11 +19,22 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 
+/**
+ * A document manager for Swing-based GUI applications.
+ *
+ * @see BasicDVManager
+ */
 public final class DVManager extends BasicDVManager {
     private static final GAction[] windowToggleActions = new GAction[20];
 
+    /**
+     * The action where the recently opened documents are inserted into.
+     */
     public static final GActionGroup recentDocsActions = new GActionGroup("Recent Documents")
                                 .enabled(false);
+    /**
+     * The action that saves a document.
+     */
     public static final GAction saveAction = new GAction("Save")
             .shortDescription("Save the active document")
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
@@ -35,6 +46,9 @@ public final class DVManager extends BasicDVManager {
                     ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
                 }
             });
+    /**
+     * The action that saves all documents.
+     */
     public static final GAction saveAllAction = new GAction("Save All")
             .shortDescription("Save all documents")
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | InputEvent.SHIFT_DOWN_MASK))
@@ -46,6 +60,9 @@ public final class DVManager extends BasicDVManager {
                     ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
                 }
             });
+    /**
+     * The action that saves the active document with a new name.
+     */
     public static final GAction saveAsAction = new GAction("Save As...")
             .shortDescription("Save the active document with a new name")
             .enabled(false)
@@ -56,7 +73,9 @@ public final class DVManager extends BasicDVManager {
                     ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
                 }
             });
-
+    /**
+     * The action that undoes the last action.
+     */
     public static final GAction undoAction = new GAction("Undo")
             .shortDescription("Undo the last action")
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
@@ -67,6 +86,9 @@ public final class DVManager extends BasicDVManager {
                     doc.undo();
                 }
             });
+    /**
+     * The action that redoes the last undone action.
+     */
     public static final GAction redoAction = new GAction("Redo")
             .shortDescription("Redo the last undone action")
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
@@ -77,27 +99,41 @@ public final class DVManager extends BasicDVManager {
                     doc.redo();
                 }
             });
+    /**
+     * The action that cuts the selected text.
+     */
     public static final GAction cutAction = new GAction("Cut")
             .shortDescription("Cut the selected text")
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
             .enabled(false)
             .onAction(e -> EditorTracer.getInstance().cut());
+    /**
+     * The action that copies the selected text.
+     */
     public static final GAction copyAction = new GAction("Copy")
             .shortDescription("Copy the selected text")
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
             .enabled(false)
             .onAction(e -> EditorTracer.getInstance().copy());
+    /**
+     * The action that pastes the text from the clipboard.
+     */
     public static final GAction pasteAction = new GAction("Paste")
             .shortDescription("Paste the text from the clipboard")
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
             .enabled(false)
             .onAction(e -> EditorTracer.getInstance().paste());
+    /**
+     * The action that deletes the selected text.
+     */
     public static final GAction deleteAction = new GAction("Delete")
             .shortDescription("Delete the selected text")
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0))
             .enabled(false)
             .onAction(e -> EditorTracer.getInstance().delete());
-
+    /**
+     * The action that closes the current window.
+     */
     public static final GAction closeWindowAction = new GAction("Close")
             .shortDescription("Close the current window")
             .accelerator(OS.isMac()
@@ -108,13 +144,22 @@ public final class DVManager extends BasicDVManager {
             .enabled(false)
             .onAction(e -> {
             });
+    /**
+     * The action that closes all windows.
+     */
     public static final GAction closeAllWindowsAction = new GAction("Close All")
             .shortDescription("Close all windows")
             .enabled(false)
             .onAction(e -> {
             });
+    /**
+     * The action that contains the open windows actions.
+     */
     public static final GToggleActionGroup chooseWindowActions = new GToggleActionGroup();
 
+    /**
+     * Updates the edit actions.
+     */
     @SuppressWarnings("DataFlowIssue")
     public static void updateEditActions() {
         var tracer = EditorTracer.getInstance();
@@ -133,6 +178,9 @@ public final class DVManager extends BasicDVManager {
                 .shortDescription(redoAction.isEnabled() ? "Redo " + doc.getRedoTitle() : "Redo the last undone action");
     }
 
+    /**
+     * Updates the save actions.
+     */
     public static void updateSaveActions() {
         var doc = getActiveDocument();
         saveAction.setEnabled(doc != null && doc.isModified());
