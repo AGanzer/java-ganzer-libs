@@ -250,6 +250,9 @@ public abstract class Document extends Model {
      */
     @Override
     protected void resetReadOnly() {
+        if (getTemplate().documentsAreReadOnly())
+            return;
+
         super.resetReadOnly();
         notifyTitleChange();
     }

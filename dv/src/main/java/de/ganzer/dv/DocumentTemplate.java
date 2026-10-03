@@ -48,6 +48,10 @@ public class DocumentTemplate<D extends Document> {
      * If this option is set, the model will not display numbers for new models.
      */
     public static final int NO_NEW_NUMBER = 0x20;
+    /**
+     * If this option is set, the created document is always write protected.
+     */
+    public static final int READ_ONLY_DOCUMENTS = 0x40;
 
     private static final Map<DocumentTemplate<?>, Integer> newNumbers = new HashMap<>();
 
@@ -200,6 +204,17 @@ public class DocumentTemplate<D extends Document> {
      */
     public boolean hasNewNumber() {
         return (options & NO_NEW_NUMBER) == 0;
+    }
+
+    /**
+     * Indicates whether the document is always write protected.
+     *
+     * @return {@code true} if the document is always write protected.
+     *
+     * @see #READ_ONLY_DOCUMENTS
+     */
+    public boolean documentsAreReadOnly() {
+        return (options & READ_ONLY_DOCUMENTS) != 0;
     }
 
     /**

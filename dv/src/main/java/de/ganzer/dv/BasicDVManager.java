@@ -360,7 +360,6 @@ public class BasicDVManager {
      */
     public static List<Document> openDocuments(Document parent, DocumentTemplate<?> template, boolean readOnly) throws DVLoadException {
         var filters = templates.stream()
-                .filter(t -> !t.isHidden())
                 .map(DocumentTemplate::getFilter)
                 .filter(f -> !Strings.isNullOrBlank(f))
                 .toList();

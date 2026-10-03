@@ -206,6 +206,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
         document.addView(view);
 
         showView.accept(view);
+        view.updateTitle();
 
         return view;
     }

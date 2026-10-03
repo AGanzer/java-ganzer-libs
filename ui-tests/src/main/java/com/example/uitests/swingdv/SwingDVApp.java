@@ -1,6 +1,8 @@
 package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
+import com.example.uitests.swingdv.doc.image.ImageDocument;
+import com.example.uitests.swingdv.doc.image.ImageView;
 import com.example.uitests.swingdv.doc.text.CSVDocument;
 import com.example.uitests.swingdv.doc.text.CSVView;
 import com.example.uitests.swingdv.doc.text.TextDocument;
@@ -153,9 +155,24 @@ public class SwingDVApp {
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.IS_DEFAULT));
 
+        var imageTpl = new DocumentTemplate<>(
+                "Image Files",
+                s -> s.toLowerCase().endsWith(".bmp") || s.toLowerCase().endsWith(".gif") || s.toLowerCase().endsWith(".jpg")
+                        || s.toLowerCase().endsWith(".jpeg") || s.toLowerCase().endsWith(".png") || s.toLowerCase().endsWith(".tiff"),
+                ImageDocument::new,
+                "",
+                "Image Files|*.bmp *.gif *.jpg *.jpeg *.png *.tiff",
+                DocumentTemplate.IS_HIDDEN | DocumentTemplate.READ_ONLY_DOCUMENTS);
+        imageTpl.registerViewTemplate(new ViewTemplate<ImageDocument, ImageView>(
+                "Image",
+                i -> new ImageView(i, mainWindow.getTabPane()),
+                v -> mainWindow.addChildView(v),
+                ViewTemplate.IS_DEFAULT));
+
         DVManager.registerDocumentTemplate(welcomeTpl);
         DVManager.registerDocumentTemplate(textTpl);
         DVManager.registerDocumentTemplate(csvTpl);
+        DVManager.registerDocumentTemplate(imageTpl);
     }
 
     private static void onIdle() {
