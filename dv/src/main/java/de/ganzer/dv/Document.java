@@ -369,7 +369,7 @@ public abstract class Document extends Model {
      * {@link #doLoadData(InputStream)} on itself and on all child documents.
      * <p>
      * The inheritors may decide whether to override this method if there
-     * are no children or the override {@link #createInputStream()} and
+     * are no children or to override {@link #createInputStream()} and
      * {@link #doLoadData(InputStream)}. If {@link #createInputStream()} returns
      * {@code null}, this method does nothing.
      *
@@ -397,7 +397,7 @@ public abstract class Document extends Model {
      * {@link #doSaveData(OutputStream)} on itself and on all child documents.
      * <p>
      * The inheritors may decide whether to override this method if there
-     * are no children or the override {@link #createOutputStream()} and
+     * are no children or to override {@link #createOutputStream()} and
      * {@link #doSaveData(OutputStream)}. If {@link #createOutputStream()}
      * returns {@code null}, this method does nothing.
      *
@@ -421,6 +421,9 @@ public abstract class Document extends Model {
     /**
      * Invoked by {@link #loadData()} to load data from a storage.
      * <p>
+     * <b>NOTE:</b> Inheritors have to ensure that the given stream is not
+     * closed after the data is read.
+     * <p>
      * This implementation does nothing.
      *
      * @throws IOException on any error.
@@ -433,6 +436,9 @@ public abstract class Document extends Model {
 
     /**
      * Invoked by {@link #saveData()} to write the data into a storage.
+     * <p>
+     * <b>NOTE:</b> Inheritors have to ensure that the given stream is not
+     * closed after the data is written.
      * <p>
      * This implementation does nothing.
      *
