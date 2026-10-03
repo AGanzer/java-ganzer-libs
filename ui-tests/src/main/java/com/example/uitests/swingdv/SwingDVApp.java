@@ -128,7 +128,7 @@ public class SwingDVApp {
 
         var textTpl = new DocumentTemplate<>(
                 "Text Files",
-                s -> false,
+                s -> s.toLowerCase().endsWith(".txt") || s.endsWith(".log") || s.endsWith(".c") || s.endsWith(".cpp") || s.endsWith(".h") || s.endsWith(".java") || s.endsWith(".py"),
                 TextDocument::new,
                 "New Text",
                 "Text Files|*.txt;Log Files|*.log;Source Files|*.c *.cpp *.h *.java *.py",
@@ -141,7 +141,7 @@ public class SwingDVApp {
 
         var csvTpl = new DocumentTemplate<>(
                 "CSV Files",
-                s -> false,
+                s -> s.toLowerCase().endsWith(".csv"),
                 CSVDocument::new,
                 "New CSV Table",
                 "CSV Files|*.csv",

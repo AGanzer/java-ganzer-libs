@@ -225,7 +225,13 @@ public class BasicDVManager {
      * @see #registerDocumentTemplate(DocumentTemplate)
      */
     public static Document createDocument(Document parent, DocumentTemplate<?> template) {
-        template = getTemplateToUse(null, template);
+        if (template == null) {
+            var tpls = templates.stream().filter(t -> !t.isHidden()).toList();
+
+            template = tpls.size() > 1
+                    ? ((DVNavigationService) Services.get(DVNavigationService.class)).chooseDocumentTemplate(tpls)
+                    : templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
+        }
 
         if (template == null)
             return null;
@@ -521,10 +527,6 @@ public class BasicDVManager {
         if (dataSource != null)
             return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
 
-        var tpls = templates.stream().filter(t -> !t.isHidden()).toList();
-
-        return tpls.size() > 1
-                ? ((DVNavigationService) Services.get(DVNavigationService.class)).chooseDocumentTemplate(tpls)
-                : templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
+        return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
     }
 }

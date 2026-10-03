@@ -8,8 +8,10 @@ import de.ganzer.dv.DocumentCreationInfo;
 import de.ganzer.dv.View;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CSVDocument extends Document {
     public static class ChangeContext {
@@ -69,16 +71,18 @@ public class CSVDocument extends Document {
 
     @Override
     protected void doCreateData() {
+        encoding = Charset.defaultCharset().name();
         data = new ArrayList<>();
     }
 
     @Override
-    protected void doLoadData(InputStream is) throws IOException {
+    protected void doLoadData() throws IOException {
         var file = new File(getName());
         var fis = new FileInputStream(file);
         var bis = new BufferedInputStream(fis);
 
         try (var csv = new CsvInputStreamReader(bis)) {
+            csv.setValueSeparator(Locale.getDefault().getLanguage().equals("de") ? ';' : ',');
             encoding = csv.getEncoding();
             data = new ArrayList<>();
 
@@ -94,12 +98,14 @@ public class CSVDocument extends Document {
     }
 
     @Override
-    protected void doSaveData(OutputStream os) throws IOException {
+    protected void doSaveData() throws IOException {
         var file = new File(getName());
         var fos = new FileOutputStream(file);
         var bos = new BufferedOutputStream(fos);
 
         try (var csv = new CsvOutputStreamWriter(bos, encoding)) {
+            csv.setValueSeparator(Locale.getDefault().getLanguage().equals("de") ? ';' : ',');
+
             for (var line : data)
                 csv.writeLine(line);
         }
