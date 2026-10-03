@@ -411,6 +411,9 @@ public class BasicDVManager {
      * @param view the new active view or {@code null} if no view is active.
      */
     public static void setActiveView(View<?> view) {
+        if (activeView == view)
+            return;
+
         var oldView = activeView;
         var oldDoc = activeView == null ? null : activeView.getDocument();
         var newDoc = view == null ? null : view.getDocument();
@@ -526,5 +529,12 @@ public class BasicDVManager {
             return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
 
         return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
+    }
+
+    private static DVManagerSupport getSupport() {
+        if (support == null)
+            throw new IllegalStateException("DVManagerSupport is not initialized.");
+
+        return support;
     }
 }
