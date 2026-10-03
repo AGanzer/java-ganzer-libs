@@ -304,7 +304,7 @@ public class BasicDVManager {
      * @param readOnly {@code true} if the documents should be opened in read-only
      *         mode, {@code false} otherwise.
      *
-     * @return The opened documents.
+     * @return The opened documents or an empty list if the user has canceled.
      *
      * @throws IllegalStateException If no document template is registered.
      * @throws DVLoadException on any error loading the data.
@@ -331,7 +331,7 @@ public class BasicDVManager {
      * @param readOnly {@code true} if the documents should be opened in read-only
      *         mode, {@code false} otherwise.
      *
-     * @return The opened documents.
+     * @return The opened documents or an empty list if the user has canceled.
      *
      * @throws IllegalStateException If no document template is registered.
      * @throws DVLoadException on any error loading the data.

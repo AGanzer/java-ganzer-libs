@@ -15,6 +15,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
+import de.ganzer.dv.DVLoadException;
 import de.ganzer.dv.swing.DVMSupport;
 import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.DocumentTemplate;
@@ -27,7 +28,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class SwingDVApp {
     public static final String NAME = "SwingDV";
@@ -44,13 +47,6 @@ public class SwingDVApp {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
 
             Taskbar.getTaskbar().setIconImage(SVGProvider.get("hamburger", 64).getImage());
-
-            Desktop.getDesktop().setQuitHandler((quitEvent, quitResponse) -> {
-                if (DVManager.canClose())
-                    quitResponse.performQuit();
-                else
-                    quitResponse.cancelQuit();
-            });
         }
 
         Toolkit.getDefaultToolkit()
@@ -68,6 +64,28 @@ public class SwingDVApp {
 
             if (desktop.isSupported(Desktop.Action.APP_ABOUT))
                 desktop.setAboutHandler(e -> NavigationService.getInstance().showAboutInfo());
+
+            if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
+                desktop.setQuitHandler((quitEvent, quitResponse) -> {
+                    if (DVManager.canClose())
+                        quitResponse.performQuit();
+                    else
+                        quitResponse.cancelQuit();
+                });
+            }
+
+            if (desktop.isSupported(Desktop.Action.APP_OPEN_FILE)) {
+                desktop.setOpenFileHandler(e -> {
+                    try {
+                        DVManager.openDocuments(
+                                null,
+                                e.getFiles().stream().map(File::getAbsolutePath).toList(),
+                                false);
+                    } catch (DVLoadException ex) {
+                        NavigationService.getInstance().showError(ex.getLocalizedMessage(), ex);
+                    }
+                });
+            }
 
             mainWindow = new MainWindow();
             mainWindow.setVisible(true);
