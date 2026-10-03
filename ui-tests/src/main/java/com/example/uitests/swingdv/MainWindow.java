@@ -1,5 +1,6 @@
 package com.example.uitests.swingdv;
 
+import de.ganzer.dv.swing.DVMSupport;
 import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
@@ -79,32 +80,7 @@ public class MainWindow extends JXFrame {
 
     private void initTabPane() {
         tabPane = new ClosableTabsPane();
-
-        tabPane.addCloseListener((i, c) -> {
-            if (c instanceof View<?> v) {
-                if (!v.getDocument().canCloseView(v))
-                    return;
-
-                v.getDocument().removeView(v);
-            }
-
-            tabPane.removeTabAt(i);
-        });
-
-        tabPane.addChangeListener(e -> {
-            var enableAll = false;
-
-            for (int i = 0; i < tabPane.getTabCount(); i++) {
-                if (tabPane.isClosableAt(i)) {
-                    enableAll = true;
-                    break;
-                }
-            }
-
-            DVManager.closeWindowAction.setEnabled(tabPane.getSelectedIndex() >= 0 && tabPane.isClosableAt(tabPane.getSelectedIndex()));
-            DVManager.closeAllWindowsAction.setEnabled(enableAll);
-            DVManager.setActiveView(tabPane.getSelectedComponent() instanceof View<?> v ? v : null);
-        });
+        DVMSupport.getInstance().setTabPane(tabPane);
 
         getContentPane().add(tabPane);
     }

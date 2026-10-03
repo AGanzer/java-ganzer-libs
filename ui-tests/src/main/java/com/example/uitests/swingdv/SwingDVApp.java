@@ -15,6 +15,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
+import de.ganzer.dv.swing.DVMSupport;
 import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.ViewTemplate;
@@ -53,7 +54,7 @@ public class SwingDVApp {
         setupLaF();
         registerServices();
         registerTemplates();
-        DVManager.registerSupport(new DVMSupport());
+        DVManager.registerSupport(DVMSupport.getInstance());
 
         SwingUtilities.invokeLater(() -> {
             mainWindow = new MainWindow();
