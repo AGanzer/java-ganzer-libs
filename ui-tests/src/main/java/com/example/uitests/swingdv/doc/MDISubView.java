@@ -34,7 +34,11 @@ public abstract class MDISubView<D extends Document> extends JPanel implements V
 
     @Override
     public void updateTitle() {
-        tabPane.setTitleAt(tabPane.indexOfComponent(this), getTitle());
+        int index = tabPane.indexOfComponent(this);
+        var title = getTitle();
+
+        tabPane.setTitleAt(index, title);
+        tabPane.setToolTipTextAt(index, title.equals(getDocument().getName()) ? null : getDocument().getName());
     }
 
     @Override
