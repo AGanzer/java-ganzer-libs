@@ -26,6 +26,8 @@ import de.ganzer.swing.util.UISettings;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import java.awt.*;
+import java.awt.desktop.AboutEvent;
+import java.awt.desktop.AboutHandler;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
@@ -57,6 +59,11 @@ public class SwingDVApp {
         DVManager.registerSupport(DVMSupport.getInstance());
 
         SwingUtilities.invokeLater(() -> {
+            Desktop desktop = Desktop.getDesktop();
+
+            if (desktop.isSupported(Desktop.Action.APP_ABOUT))
+                desktop.setAboutHandler(e -> NavigationService.getInstance().showAboutInfo());
+
             mainWindow = new MainWindow();
             mainWindow.setVisible(true);
             DVManager.createDocument(null, welcomeTpl);
