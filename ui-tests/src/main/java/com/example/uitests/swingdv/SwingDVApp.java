@@ -128,7 +128,8 @@ public class SwingDVApp {
 
         var textTpl = new DocumentTemplate<>(
                 "Text Files",
-                s -> s.toLowerCase().endsWith(".txt") || s.endsWith(".log") || s.endsWith(".c") || s.endsWith(".cpp") || s.endsWith(".h") || s.endsWith(".java") || s.endsWith(".py"),
+                s -> s.toLowerCase().endsWith(".txt") || s.endsWith(".log") || s.endsWith(".c") || s.endsWith(".cpp")
+                        || s.endsWith(".h") || s.endsWith(".java") || s.endsWith(".py"),
                 TextDocument::new,
                 "New Text",
                 "Text Files|*.txt;Log Files|*.log;Source Files|*.c *.cpp *.h *.java *.py",
