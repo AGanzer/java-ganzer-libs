@@ -631,7 +631,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
     protected AbstractButton[] createWindowButtons() {
         okButton = new JButton(getMainButtonText());
         okButton.setEnabled(false);
-        okButton.addActionListener(e -> closeDialog(false));
+        okButton.addActionListener(e -> closeDialog(true));
         getRootPane().setDefaultButton(okButton);
 
         JButton cancelButton = new JButton(SwingDialogsMessages.get("commons.buttons.cancel"));
