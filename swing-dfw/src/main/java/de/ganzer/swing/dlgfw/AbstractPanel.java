@@ -298,9 +298,10 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
         title.setLayout(new BoxLayout(title, BoxLayout.X_AXIS));
         title.setBackground(titleBackground);
         title.setOpaque(true);
-        title.setPreferredSize(new Dimension(100, 50));
 
         fillTitlePanel(title);
+
+        title.setPreferredSize(new Dimension(title.getPreferredSize().width, 50));
 
         return title;
     }
@@ -343,10 +344,10 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
 
         further = createRightTitleExtension();
 
-        if (further != null) {
+        if (further != null)
             titlePanel.add(further);
-            titlePanel.add(Box.createHorizontalStrut(10));
-        }
+
+        titlePanel.add(Box.createHorizontalStrut(10));
     }
 
     private void setup() {
