@@ -32,7 +32,7 @@ public interface DVNavigationService {
      * @param initialFilter The initial filter to set or {@code null} if no
      *         initial filter is provided.
      *
-     * @return The list of locations to open or {@code null} of an empty list
+     * @return The list of locations to open or {@code null} or an empty list
      *          if the user has canceled.
      */
     Collection<String> queryLocationsToOpen(List<String> filters, String initialFilter);

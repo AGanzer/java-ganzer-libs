@@ -361,7 +361,9 @@ public class BasicDVManager {
         var initial = getTemplateToUse(null, template);
         var locations = ((DVNavigationService) Services.get(DVNavigationService.class)).queryLocationsToOpen(filters, initial.getFilter());
 
-        return openDocuments(parent, locations, readOnly);
+        return locations == null || locations.isEmpty()
+                ? List.of()
+                : openDocuments(parent, locations, readOnly);
     }
 
     /**
@@ -485,7 +487,7 @@ public class BasicDVManager {
     /**
      * Removes the document from the manager's document list.
      * <p>
-     * <b>NOTE:</b> This is automatically invoked by {@link AbstractDocument}
+     * <b>NOTE:</b> This is automatically invoked by {@link Document}
      * when it is closed. Implementors of {@link Document} have to ensure that
      * a closed document is removed from the manager's document list.
      *
