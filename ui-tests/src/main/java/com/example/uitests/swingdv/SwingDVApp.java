@@ -46,6 +46,13 @@ public class SwingDVApp {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
 
             Taskbar.getTaskbar().setIconImage(SVGProvider.get("hamburger", 64).getImage());
+
+            Desktop.getDesktop().setQuitHandler((quitEvent, quitResponse) -> {
+                if (DVManager.canClose())
+                    quitResponse.performQuit();
+                else
+                    quitResponse.cancelQuit();
+            });
         }
 
         Toolkit.getDefaultToolkit()
