@@ -103,7 +103,7 @@ public class MainWindow extends JXFrame {
 
             DVManager.closeWindowAction.setEnabled(tabPane.getSelectedIndex() >= 0 && tabPane.isClosableAt(tabPane.getSelectedIndex()));
             DVManager.closeAllWindowsAction.setEnabled(enableAll);
-            DVMSupport.viewChanged(tabPane.getSelectedComponent() instanceof View<?> v ? v : null);
+            DVManager.setActiveView(tabPane.getSelectedComponent() instanceof View<?> v ? v : null);
         });
 
         getContentPane().add(tabPane);

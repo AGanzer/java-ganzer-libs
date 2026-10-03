@@ -67,26 +67,7 @@ public class BasicDVManager {
      * @param support The support to set.
      */
     public static void registerSupport(DVManagerSupport support) {
-        if (BasicDVManager.support == support)
-            return;
-
-        if (BasicDVManager.support != null)
-            BasicDVManager.support.setActiveViewChangedListener(null);
-
         BasicDVManager.support = support;
-
-        if (support != null) {
-            support.setActiveViewChangedListener(v -> {
-                var oldView = activeView;
-                var oldDoc = activeView == null ? null : activeView.getDocument();
-                var newDoc = v == null ? null : v.getDocument();
-
-                activeView = v;
-
-                pcs.firePropertyChange(ACTIVE_VIEW_PROPERTY, oldView, activeView);
-                pcs.firePropertyChange(ACTIVE_DOCUMENT_PROPERTY, oldDoc, newDoc);
-            });
-        }
     }
 
     /**
@@ -420,6 +401,24 @@ public class BasicDVManager {
      */
     public static View<?> getActiveView() {
         return activeView;
+    }
+
+    /**
+     * Sets the active view and the active document.
+     * <p>
+     * <b>NOTE:</b> The client should invoke this if the active view has changed.
+     *
+     * @param view the new active view or {@code null} if no view is active.
+     */
+    public static void setActiveView(View<?> view) {
+        var oldView = activeView;
+        var oldDoc = activeView == null ? null : activeView.getDocument();
+        var newDoc = view == null ? null : view.getDocument();
+
+        activeView = view;
+
+        pcs.firePropertyChange(ACTIVE_VIEW_PROPERTY, oldView, activeView);
+        pcs.firePropertyChange(ACTIVE_DOCUMENT_PROPERTY, oldDoc, newDoc);
     }
 
     /**
