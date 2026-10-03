@@ -29,6 +29,14 @@ public class CSVDocument extends Document {
         super(info);
     }
 
+    public int getRowCount() {
+        return data.size();
+    }
+
+    public int getColumnCount() {
+        return data.isEmpty() ? 0 : data.get(0).size();
+    }
+
     public String getValue(int row, int column) {
         if (row < 0 || row >= data.size())
             return null;
