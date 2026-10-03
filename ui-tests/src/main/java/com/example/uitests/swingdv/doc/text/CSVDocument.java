@@ -78,11 +78,13 @@ public class CSVDocument extends Document {
     @Override
     protected void doLoadData() throws IOException {
         var file = new File(getName());
-        var fis = new FileInputStream(file);
-        var bis = new BufferedInputStream(fis);
 
-        try (var csv = new CsvInputStreamReader(bis)) {
+        try (var fis = new FileInputStream(file)) {
+            var bis = new BufferedInputStream(fis);
+            var csv = new CsvInputStreamReader(bis);
+
             csv.setValueSeparator(Locale.getDefault().getLanguage().equals("de") ? ';' : ',');
+
             encoding = csv.getEncoding();
             data = new ArrayList<>();
 
@@ -100,10 +102,11 @@ public class CSVDocument extends Document {
     @Override
     protected void doSaveData() throws IOException {
         var file = new File(getName());
-        var fos = new FileOutputStream(file);
-        var bos = new BufferedOutputStream(fos);
 
-        try (var csv = new CsvOutputStreamWriter(bos, encoding)) {
+        try (var fos = new FileOutputStream(file)) {
+            var bos = new BufferedOutputStream(fos);
+            var csv = new CsvOutputStreamWriter(bos, encoding);
+
             csv.setValueSeparator(Locale.getDefault().getLanguage().equals("de") ? ';' : ',');
 
             for (var line : data)

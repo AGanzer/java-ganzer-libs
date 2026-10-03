@@ -38,10 +38,11 @@ public class TextDocument extends Document {
     @Override
     protected void doLoadData() throws IOException {
         var file = new File(getName());
-        var fis = new FileInputStream(file);
-        var bis = new BufferedInputStream(fis);
 
-        try (var bir = new BOMInputStreamReader(bis)) {
+        try (var fis = new FileInputStream(file)) {
+            var bis = new BufferedInputStream(fis);
+            var bir = new BOMInputStreamReader(bis);
+
             encoding = bir.getEncoding();
             text = bir.readAll();
         }
@@ -50,9 +51,9 @@ public class TextDocument extends Document {
     @Override
     protected void doSaveData() throws IOException {
         var file = new File(getName());
-        var fos = new FileOutputStream(file);
 
-        try (var bos = new BufferedOutputStream(fos)) {
+        try (var fos = new FileOutputStream(file)) {
+            var bos = new BufferedOutputStream(fos);
             bos.write(text.getBytes(encoding));
         }
     }
