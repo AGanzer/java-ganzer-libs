@@ -5,6 +5,7 @@ import com.example.uitests.swingdv.doc.SwingDocumentUndoable;
 import de.ganzer.dv.View;
 import de.ganzer.dv.ViewCreationInfo;
 import de.ganzer.dv.ViewTemplate;
+import de.ganzer.dv.swing.DVManager;
 import de.ganzer.swing.controls.ClosableTabsPane;
 
 import javax.swing.*;
@@ -64,16 +65,16 @@ public class TextView extends JPanel implements View<TextDocument> {
         add(scrollPane, BorderLayout.CENTER);
 
         popupMenu = new JPopupMenu();
-        popupMenu.add(Actions.undoAction.createMenuItem());
-        popupMenu.add(Actions.redoAction.createMenuItem());
+        popupMenu.add(DVManager.undoAction.createMenuItem());
+        popupMenu.add(DVManager.redoAction.createMenuItem());
         popupMenu.add(new JSeparator());
-        popupMenu.add(Actions.cutAction.createMenuItem());
-        popupMenu.add(Actions.copyAction.createMenuItem());
-        popupMenu.add(Actions.pasteAction.createMenuItem());
-        popupMenu.add(Actions.deleteAction.createMenuItem());
+        popupMenu.add(DVManager.cutAction.createMenuItem());
+        popupMenu.add(DVManager.copyAction.createMenuItem());
+        popupMenu.add(DVManager.pasteAction.createMenuItem());
+        popupMenu.add(DVManager.deleteAction.createMenuItem());
         popupMenu.add(new JSeparator());
-        popupMenu.add(Actions.saveAction.createMenuItem());
-        popupMenu.add(Actions.saveAsAction.createMenuItem());
+        popupMenu.add(DVManager.saveAction.createMenuItem());
+        popupMenu.add(DVManager.saveAsAction.createMenuItem());
 
         SwingUtilities.invokeLater(editor::requestFocus);
     }

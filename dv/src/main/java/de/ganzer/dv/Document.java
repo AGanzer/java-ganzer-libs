@@ -17,7 +17,7 @@ import java.util.List;
  * usually able to load data and writes it into another target.
  * <p>
  * For a more easy creation of documents and their possible views, document types
- * can be registered by {@link DVManager#registerDocumentTemplate}.
+ * can be registered by {@link BasicDVManager#registerDocumentTemplate}.
  * <p>
  * The following example shows how a template is created that simply creates a
  * static view that cannot be edited and that cannot be closed:
@@ -36,14 +36,14 @@ import java.util.List;
  *         ViewTemplate.NOT_CLOSABLE,
  *         null,
  *         null));
- * DVManager.registerDocumentTemplate(tpl);
+ * BasicDVManager.registerDocumentTemplate(tpl);
  * }</pre>
  * This interface provides child documents, but the implementation itself is
  * responsive for managing child documents with all its actions.
  * <p>
  * Other than a model, a document does implement all logic that is necessary to
  * manage its children, its data, and its views, in conjunction with the
- * {@link DVManager}.
+ * {@link BasicDVManager}.
  *
  * @since 6.0.0
  */
@@ -508,7 +508,7 @@ public abstract class Document extends Model {
 
     private void close(boolean removeFromParent) {
         closed = true;
-        DVManager.documentClosed(this);
+        BasicDVManager.documentClosed(this);
 
         views.forEach(View::forceClose);
 

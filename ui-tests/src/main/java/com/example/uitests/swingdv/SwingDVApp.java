@@ -11,7 +11,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
-import de.ganzer.dv.DVManager;
+import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.ViewTemplate;
 import de.ganzer.dv.services.DVNavigationService;
@@ -142,7 +142,7 @@ public class SwingDVApp {
     }
 
     private static void onIdle() {
-        Actions.updateEditActions();
+        DVManager.updateEditActions();
     }
 
     private static class ExceptionHandlingEventQueue extends EventQueue {

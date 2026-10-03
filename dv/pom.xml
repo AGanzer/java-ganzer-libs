@@ -43,6 +43,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>de.ganzer.swing</groupId>
+            <artifactId>de-ganzer-swing</artifactId>
+            <version>6.0.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,7 +1,7 @@
 package com.example.uitests.swingdv.services;
 
 import com.example.uitests.swingdv.SwingDVApp;
-import de.ganzer.dv.DVManager;
+import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;

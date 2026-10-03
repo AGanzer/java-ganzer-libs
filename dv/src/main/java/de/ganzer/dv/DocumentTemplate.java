@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 /**
- * A template to use with {@link DVManager} to create a template-based document.
+ * A template to use with {@link BasicDVManager} to create a template-based document.
  *
  * @param <D> the type of the document ot create.
  *

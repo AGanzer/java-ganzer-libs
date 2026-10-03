@@ -3,7 +3,7 @@ package de.ganzer.dv;
 import java.util.function.Consumer;
 
 /**
- * This interface is used to provide additional functionality to the DVManager.
+ * This interface is used to provide additional functionality to the BasicDVManager.
  */
 public interface DVManagerSupport {
     /**

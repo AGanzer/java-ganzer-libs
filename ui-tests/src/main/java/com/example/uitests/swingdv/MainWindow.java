@@ -1,13 +1,12 @@
 package com.example.uitests.swingdv;
 
-import de.ganzer.dv.DVManager;
+import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import org.jdesktop.swingx.JXFrame;
 
 import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.WindowEvent;
 
@@ -62,20 +61,20 @@ public class MainWindow extends JXFrame {
         toolBar.add(Actions.newAction.createButton());
         toolBar.add(Actions.openAction.createButton());
         toolBar.addSeparator();
-        toolBar.add(Actions.saveAction.createButton());
-        toolBar.add(Actions.saveAsAction.createButton());
-        toolBar.add(Actions.saveAllAction.createButton());
+        toolBar.add(DVManager.saveAction.createButton());
+        toolBar.add(DVManager.saveAsAction.createButton());
+        toolBar.add(DVManager.saveAllAction.createButton());
         toolBar.addSeparator();
-        toolBar.add(Actions.undoAction.createButton());
-        toolBar.add(Actions.redoAction.createButton());
+        toolBar.add(DVManager.undoAction.createButton());
+        toolBar.add(DVManager.redoAction.createButton());
         toolBar.addSeparator();
-        toolBar.add(Actions.cutAction.createButton());
-        toolBar.add(Actions.copyAction.createButton());
-        toolBar.add(Actions.pasteAction.createButton());
-        toolBar.add(Actions.deleteAction.createButton());
+        toolBar.add(DVManager.cutAction.createButton());
+        toolBar.add(DVManager.copyAction.createButton());
+        toolBar.add(DVManager.pasteAction.createButton());
+        toolBar.add(DVManager.deleteAction.createButton());
         toolBar.addSeparator();
-        toolBar.add(Actions.closeWindowAction.createButton());
-        toolBar.add(Actions.closeAllWindowsAction.createButton());
+        toolBar.add(DVManager.closeWindowAction.createButton());
+        toolBar.add(DVManager.closeAllWindowsAction.createButton());
     }
 
     private void initTabPane() {
@@ -102,8 +101,8 @@ public class MainWindow extends JXFrame {
                 }
             }
 
-            Actions.closeWindowAction.setEnabled(tabPane.getSelectedIndex() >= 0 && tabPane.isClosableAt(tabPane.getSelectedIndex()));
-            Actions.closeAllWindowsAction.setEnabled(enableAll);
+            DVManager.closeWindowAction.setEnabled(tabPane.getSelectedIndex() >= 0 && tabPane.isClosableAt(tabPane.getSelectedIndex()));
+            DVManager.closeAllWindowsAction.setEnabled(enableAll);
             DVMSupport.viewChanged(tabPane.getSelectedComponent() instanceof View<?> v ? v : null);
         });
 

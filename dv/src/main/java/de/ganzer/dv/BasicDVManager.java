@@ -22,7 +22,7 @@ import java.util.*;
  *
  * @since 6.0.0
  */
-public class DVManager {
+public class BasicDVManager {
     /**
      * The name of the "activeView" property used for {@link PropertyChangeEvent}'s.
      *
@@ -50,7 +50,7 @@ public class DVManager {
      */
     public static final String OPEN_DOCUMENTS_PROPERTY = "openDocuments";
 
-    private static final PropertyChangeSupport pcs = new PropertyChangeSupport(DVManager.class);
+    private static final PropertyChangeSupport pcs = new PropertyChangeSupport(BasicDVManager.class);
     private static final List<DocumentTemplate<?>> templates = new ArrayList<>();
     private static final List<Document> openDocuments = new ArrayList<>();
 
@@ -58,7 +58,7 @@ public class DVManager {
     private static View<?> activeView;
 
     /**
-     * Sets the support for the DVManager.
+     * Sets the support for the BasicDVManager.
      * <p>
      * The manager needs some support to perform certain operations that depend
      * on the used UI framework. This support should be installed once at
@@ -67,13 +67,13 @@ public class DVManager {
      * @param support The support to set.
      */
     public static void registerSupport(DVManagerSupport support) {
-        if (DVManager.support == support)
+        if (BasicDVManager.support == support)
             return;
 
-        if (DVManager.support != null)
-            DVManager.support.setActiveViewChangedListener(null);
+        if (BasicDVManager.support != null)
+            BasicDVManager.support.setActiveViewChangedListener(null);
 
-        DVManager.support = support;
+        BasicDVManager.support = support;
 
         if (support != null) {
             support.setActiveViewChangedListener(v -> {
@@ -447,7 +447,7 @@ public class DVManager {
     /**
      * Save the active document.
      * <p>
-     * This is a shortcut for {@code DVManager.getActiveDocument().saveData()}.
+     * This is a shortcut for {@code BasicDVManager.getActiveDocument().saveData()}.
      *
      * @throws DVSaveException on any error.
      */
@@ -461,7 +461,7 @@ public class DVManager {
     /**
      * Save the active document with another name.
      * <p>
-     * This is a shortcut for {@code DVManager.getActiveDocument().saveDataAs()}.
+     * This is a shortcut for {@code BasicDVManager.getActiveDocument().saveDataAs()}.
      *
      * @throws DVSaveException on any error.
      */
