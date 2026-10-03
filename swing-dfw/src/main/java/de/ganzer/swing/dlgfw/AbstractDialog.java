@@ -449,9 +449,9 @@ public abstract class AbstractDialog extends JDialog {
     }
 
     /**
-     * Called to get the text of the dialogs main button.
+     * Called to get the text of the dialog's main button.
      * <p>
-     * This method can be overridden if no additional buttons should be shown
+     * This method can be overridden if no additional buttons should be shown,
      * but the text "Close" is not applicable.
      *
      * @return The text to use for the main button. This implementation does

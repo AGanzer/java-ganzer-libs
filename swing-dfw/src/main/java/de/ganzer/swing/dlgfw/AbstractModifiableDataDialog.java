@@ -598,7 +598,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
     }
 
     /**
-     * Gets a value the indicates whether the data is modified by the user.
+     * Gets a value that indicates whether the data is modified by the user.
      *
      * @return {@code true} if the data is modified; otherwise, {@code false}.
      */
@@ -643,17 +643,17 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
     }
 
     /**
-     * Called to get the text of the dialogs main button.
+     * Called to get the text of the dialog's main button.
      * <p>
-     * This method can be overridden if no additional buttons should be shown
-     * but the text "Save" is not applicable.
+     * This method can be overridden if no additional buttons should be shown,
+     * but the text "OK" is not applicable.
      *
      * @return The text to use for the main button. This implementation does
-     *         always return "Save".
+     *         always return "OK".
      */
     @Override
     protected String getMainButtonText() {
-        return SwingDialogsMessages.get("commons.buttons.save");
+        return SwingDialogsMessages.get("commons.buttons.ok");
     }
 
     /**
