@@ -426,6 +426,9 @@ public abstract class Document extends Model {
      * <p>
      * This implementation does nothing.
      *
+     * @param is The input stream to read the data from. This is already
+     *        buffered and will be closed by the {@link #loadData()} method.
+     *
      * @throws IOException on any error.
      *
      * @see doLoadData()
@@ -441,6 +444,9 @@ public abstract class Document extends Model {
      * closed after the data is written.
      * <p>
      * This implementation does nothing.
+     *
+     * @param os The output stream to write the data to. This is already
+     *        buffered and will be closed by the {@link #saveData()} method.
      *
      * @throws IOException on any error.
      *
