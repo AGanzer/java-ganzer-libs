@@ -1,18 +1,19 @@
 package com.example.uitests.swingdv.dialogs;
 
-import de.ganzer.swing.dlgfw.AbstractDataDialog;
+import de.ganzer.swing.dlgfw.AbstractModifiableDataDialog;
 
 import javax.swing.JPanel;
 import java.awt.Window;
-import java.util.List;
 
-public class ChooseFromListDialog extends AbstractDataDialog<List<?>> {
-    public ChooseFromListDialog(Window owner, String title, List<?> data) {
-        super(owner, title, data);
+public class ChooseFromListDialog<E> extends AbstractModifiableDataDialog<ChooseFromListData<E>> {
+    public ChooseFromListDialog(Window owner, ChooseFromListData<E> data) {
+        super(owner, data);
+        setSize(300, 300);
+        setLocationRelativeTo(owner);
     }
 
     @Override
     protected JPanel createCenterPanel() {
-        return null;
+        return new ChooseFromListPanel<E>(this);
     }
 }

@@ -310,4 +310,9 @@ public class DocumentTemplate<D extends Document> {
 
         return document;
     }
+
+    @Override
+    public String toString() {
+        return displayName;
+    }
 }

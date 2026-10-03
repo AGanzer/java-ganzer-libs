@@ -1,6 +1,9 @@
 package com.example.uitests.swingdv.services;
 
 import com.example.uitests.swingdv.SwingDVApp;
+import com.example.uitests.swingdv.dialogs.ChooseFromListData;
+import com.example.uitests.swingdv.dialogs.ChooseFromListDialog;
+import de.ganzer.dv.Document;
 import de.ganzer.dv.ViewTemplate;
 import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.DocumentTemplate;
@@ -75,12 +78,11 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
      */
     @Override
     public DocumentTemplate<?> chooseDocumentTemplate(List<DocumentTemplate<?>> templates) {
-        var tpls = templates.stream().filter(t -> (!t.isHidden())).toList();
+        var data = new ChooseFromListData<>("Coose Template", templates);
+        var dialog = new ChooseFromListDialog<>(SwingDVApp.getMainWindow(), data);
+        dialog.setVisible(true);
 
-        if (tpls.isEmpty())
-            return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
-
-        return tpls.size() == 1 ? tpls.get(0) : showChooseTemplateDialog(tpls);
+        return dialog.isAccepted() ? data.chosen : null;
     }
 
     @Override
@@ -96,11 +98,6 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
     }
 
     private NavigationService() {
-    }
-
-    private DocumentTemplate<?> showChooseTemplateDialog(List<DocumentTemplate<?>> templates) {
-        // TODO show dialog
-        return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
     }
 
     private Component getParent(Component parent) {

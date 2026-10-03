@@ -209,4 +209,9 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
 
         return view;
     }
+
+    @Override
+    public String toString() {
+        return displayName;
+    }
 }
