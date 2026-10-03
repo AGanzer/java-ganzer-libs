@@ -159,6 +159,9 @@ public final class DVManager extends BasicDVManager {
 
     /**
      * Updates the edit actions.
+     * <p>
+     * This should be called once each time when the application enters the idle
+     * mode.
      */
     @SuppressWarnings("DataFlowIssue")
     public static void updateEditActions() {
@@ -178,10 +181,7 @@ public final class DVManager extends BasicDVManager {
                 .shortDescription(redoAction.isEnabled() ? "Redo " + doc.getRedoTitle() : "Redo the last undone action");
     }
 
-    /**
-     * Updates the save actions.
-     */
-    public static void updateSaveActions() {
+    private static void updateSaveActions() {
         var doc = getActiveDocument();
         saveAction.setEnabled(doc != null && doc.isModified());
         saveAsAction.setEnabled(doc != null && doc.isSaveAsSupported());
