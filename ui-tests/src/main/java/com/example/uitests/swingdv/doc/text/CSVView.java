@@ -42,20 +42,22 @@ public class CSVView extends MDISubView<CSVDocument> {
     @Override
     public void toFront() {
         super.toFront();
-        table.requestFocusInWindow();
+        SwingUtilities.invokeLater(table::requestFocusInWindow);
     }
 
     private class CSVTable extends JXTable {
         private final RowHeader rowHeader;
 
         public CSVTable(RowHeader rowHeader) {
+            this.rowHeader = rowHeader;
+
             setModel(new CSVTableModel());
             setDefaultRenderer(String.class, new CellRenderer(this));
             setDefaultEditor(String.class, new CellEditor(this));
             getTableHeader().setDefaultRenderer(new ColumnHeaderCellRenderer());
             setShowGrid(true);
             setAutoResizeMode(JXTable.AUTO_RESIZE_OFF);
-            this.rowHeader = rowHeader;
+            setCellSelectionEnabled(true);
         }
 
         @Override
