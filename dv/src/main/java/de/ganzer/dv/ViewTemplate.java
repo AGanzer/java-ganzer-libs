@@ -41,6 +41,16 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * counted if the document has multiple views.
      */
     public static final int NO_TITLE_NUMBER = 0x10;
+    /**
+     * If this option is set, the view has no hint in its title if its document
+     * is read-only.
+     */
+    public static final int NO_READ_ONLY_HINT = 0x20;
+    /**
+     * If this option is set, the view has no modification hint in its title if
+     * its document is modified.
+     */
+    public static final int NO_MODIFICATION_HINT = 0x40;
 
     private final String displayName;
     private final ViewSupplier<D, V> viewSupplier;
@@ -169,6 +179,28 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      */
     public boolean hasTitleNumber() {
         return (options & NO_TITLE_NUMBER) == 0;
+    }
+
+    /**
+     * Indicates whether the view shows a read-only hint in its title.
+     *
+     * @return {@code true} if the view shows a read-only hint.
+     *
+     * @see #NO_READ_ONLY_HINT
+     */
+    public boolean showReadOnlyHint() {
+        return (options & NO_READ_ONLY_HINT) == 0;
+    }
+
+    /**
+     * Indicates whether the view shows a modification hint in its title.
+     *
+     * @return {@code true} if the view shows a modification hint.
+     *
+     * @see #NO_MODIFICATION_HINT
+     */
+    public boolean showModificationHint() {
+        return (options & NO_MODIFICATION_HINT) == 0;
     }
 
     /**

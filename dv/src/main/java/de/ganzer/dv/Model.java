@@ -197,6 +197,8 @@ public abstract class Model {
      * indicates whether the model is modified.
      *
      * @return {@code true} if the model's data is modified.
+     *
+     * @see #setModified(boolean)
      */
     public final boolean isModified() {
         return (flags & IS_MODIFIED) != 0;
@@ -209,8 +211,15 @@ public abstract class Model {
      * {@link #MODIFIED_PROPERTY}.
      *
      * @param modified {@code true} to indicate the model as modified.
+     *
+     * @throws UnsupportedOperationException if the model is read-only.
+     *
+     * @see #isReadOnly()
      */
     public void setModified(boolean modified) {
+        if (modified && isReadOnly())
+            throw new UnsupportedOperationException("Model is read-only");
+
         var old = isModified();
 
         if (modified)

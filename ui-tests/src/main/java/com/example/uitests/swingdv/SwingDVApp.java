@@ -192,7 +192,7 @@ public class SwingDVApp {
                 ImageDocument::new,
                 "",
                 "Image Files|*.bmp *.gif *.jpg *.jpeg *.png *.tiff",
-                DocumentTemplate.IS_HIDDEN | DocumentTemplate.READ_ONLY_DOCUMENTS);
+                DocumentTemplate.IS_HIDDEN);
         imageTpl.registerViewTemplate(new ViewTemplate<ImageDocument, ImageView>(
                 "Image",
                 i -> new ImageView(i, mainWindow.getTabPane()),

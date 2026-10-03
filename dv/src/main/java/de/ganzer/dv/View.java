@@ -40,8 +40,8 @@ public interface View<D extends Document> {
      */
     default String getTitle() {
         var format = getDocument().isReadOnly()
-                ? getTemplate().getReadOnlyHintFormat()
-                : getDocument().isModified() ? getTemplate().getModificationHintFormat() : "%s";
+                ? getTemplate().showReadOnlyHint() ? getTemplate().getReadOnlyHintFormat() : "%s"
+                : getDocument().isModified() && getTemplate().showModificationHint() ? getTemplate().getModificationHintFormat() : "%s";
         var title = String.format(format, getDocument().getTitle());
 
         var views = getDocument().getViews().stream().filter(v -> v.getTemplate().hasTitleNumber()).toList();

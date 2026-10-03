@@ -24,6 +24,7 @@ public class TextView extends MDISubView<TextDocument> {
         editor.setWrapStyleWord(true);
         editor.setLineWrap(true);
         editor.setText(getDocument().getText());
+        editor.setEditable(!getDocument().isReadOnly());
         editor.getDocument().addUndoableEditListener(
                 e -> getDocument().addUndoable(new SwingDocumentUndoable(e.getEdit())));
         editor.getDocument().addDocumentListener(new DocumentListener() {
@@ -78,6 +79,12 @@ public class TextView extends MDISubView<TextDocument> {
         editor.setText(getDocument().getText());
 
         editor.select(selStart, selEnd);
+    }
+
+    @Override
+    public void updateTitle() {
+        super.updateTitle();
+        editor.setEditable(!getDocument().isReadOnly());
     }
 
     @Override

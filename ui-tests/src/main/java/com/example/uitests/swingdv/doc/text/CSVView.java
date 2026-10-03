@@ -99,7 +99,7 @@ public class CSVView extends MDISubView<CSVDocument> {
 
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return true;
+            return !getDocument().isReadOnly();
         }
 
         @Override

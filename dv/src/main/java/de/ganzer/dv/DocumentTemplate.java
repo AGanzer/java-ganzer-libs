@@ -304,7 +304,7 @@ public class DocumentTemplate<D extends Document> {
             }
         }
 
-        var info = new DocumentCreationInfo<>(this, parent, name, readOnly, newData);
+        var info = new DocumentCreationInfo<>(this, parent, name, readOnly || documentsAreReadOnly(), newData);
         D document = documentSupplier.createDocument(info);
 
         var template = viewTemplates.stream().filter(ViewTemplate::isMandatory).findFirst();
