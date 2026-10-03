@@ -13,6 +13,10 @@ import java.util.function.Consumer;
  */
 public class ViewTemplate<D extends Document, V extends View<D>> {
     /**
+     * No options.
+     */
+    public static final int NONE = 0x00;
+    /**
      * If this option is set, the template is not shown in the list of available
      * templates for new views.
      */

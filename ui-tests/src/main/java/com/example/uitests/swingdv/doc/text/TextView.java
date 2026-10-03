@@ -1,10 +1,8 @@
 package com.example.uitests.swingdv.doc.text;
 
-import com.example.uitests.swingdv.Actions;
+import com.example.uitests.swingdv.doc.MDISubView;
 import com.example.uitests.swingdv.doc.SwingDocumentUndoable;
-import de.ganzer.dv.View;
 import de.ganzer.dv.ViewCreationInfo;
-import de.ganzer.dv.ViewTemplate;
 import de.ganzer.dv.swing.DVManager;
 import de.ganzer.swing.controls.ClosableTabsPane;
 
@@ -15,40 +13,33 @@ import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class TextView extends JPanel implements View<TextDocument> {
-    private final ViewTemplate<TextDocument, TextView> template;
-    private final TextDocument document;
-    private final ClosableTabsPane tabPane;
+public class TextView extends MDISubView<TextDocument> {
     private final JTextArea editor;
     private final JPopupMenu popupMenu;
 
     public TextView(ViewCreationInfo<TextDocument, TextView> info, ClosableTabsPane tabPane) {
-        super(new BorderLayout());
-
-        this.template = info.getTemplate();
-        this.document = info.getDocument();
-        this.tabPane = tabPane;
+        super(info, tabPane);
 
         editor = new JTextArea();
         editor.setWrapStyleWord(true);
         editor.setLineWrap(true);
-        editor.setText(document.getText());
+        editor.setText(getDocument().getText());
         editor.getDocument().addUndoableEditListener(
-                e -> document.addUndoable(new SwingDocumentUndoable(e.getEdit())));
+                e -> getDocument().addUndoable(new SwingDocumentUndoable(e.getEdit())));
         editor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                document.setText(editor.getText(), TextView.this);
+                getDocument().setText(editor.getText(), TextView.this);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                document.setText(editor.getText(), TextView.this);
+                getDocument().setText(editor.getText(), TextView.this);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                document.setText(editor.getText(), TextView.this);
+                getDocument().setText(editor.getText(), TextView.this);
             }
         });
         editor.addMouseListener(new MouseAdapter() {
@@ -80,38 +71,18 @@ public class TextView extends JPanel implements View<TextDocument> {
     }
 
     @Override
-    public ViewTemplate<TextDocument, ? extends View<TextDocument>> getTemplate() {
-        return template;
-    }
-
-    @Override
-    public TextDocument getDocument() {
-        return document;
-    }
-
-    @Override
-    public void updateTitle() {
-        tabPane.setTitleAt(tabPane.indexOfComponent(this), getTitle());
-    }
-
-    @Override
     public void documentDataChanged(Object context) {
         var selStart = editor.getSelectionStart();
         var selEnd = editor.getSelectionEnd();
 
-        editor.setText(document.getText());
+        editor.setText(getDocument().getText());
 
         editor.select(selStart, selEnd);
     }
 
     @Override
     public void toFront() {
-        tabPane.setSelectedComponent(this);
+        super.toFront();
         SwingUtilities.invokeLater(editor::requestFocusInWindow);
-    }
-
-    @Override
-    public void forceClose() {
-        tabPane.remove(this);
     }
 }

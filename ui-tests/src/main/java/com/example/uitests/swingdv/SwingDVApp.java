@@ -1,6 +1,8 @@
 package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
+import com.example.uitests.swingdv.doc.text.CSVDocument;
+import com.example.uitests.swingdv.doc.text.CSVView;
 import com.example.uitests.swingdv.doc.text.TextDocument;
 import com.example.uitests.swingdv.doc.text.TextView;
 import com.example.uitests.swingdv.doc.welcome.WelcomeDocument;
@@ -137,8 +139,22 @@ public class SwingDVApp {
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.IS_DEFAULT));
 
+        var csvTpl = new DocumentTemplate<>(
+                "CSV Files",
+                s -> false,
+                CSVDocument::new,
+                "New CSV Table",
+                "CSV Files|*.csv",
+                DocumentTemplate.NONE);
+        csvTpl.registerViewTemplate(new ViewTemplate<CSVDocument, CSVView>(
+                "CSV",
+                i -> new CSVView(i, mainWindow.getTabPane()),
+                v -> mainWindow.addChildView(v),
+                ViewTemplate.IS_DEFAULT));
+
         DVManager.registerDocumentTemplate(welcomeTpl);
         DVManager.registerDocumentTemplate(textTpl);
+        DVManager.registerDocumentTemplate(csvTpl);
     }
 
     private static void onIdle() {
