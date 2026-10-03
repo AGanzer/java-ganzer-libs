@@ -30,7 +30,6 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 
 public class SwingDVApp {
     public static final String NAME = "SwingDV";
