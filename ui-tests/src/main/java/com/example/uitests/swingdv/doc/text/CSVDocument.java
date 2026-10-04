@@ -2,6 +2,7 @@ package com.example.uitests.swingdv.doc.text;
 
 import de.ganzer.core.io.CsvInputStreamReader;
 import de.ganzer.core.io.CsvOutputStreamWriter;
+import de.ganzer.core.util.Strings;
 import de.ganzer.dv.DVLoadException;
 import de.ganzer.dv.Document;
 import de.ganzer.dv.DocumentCreationInfo;
@@ -51,19 +52,23 @@ public class CSVDocument extends Document {
         return line.get(column);
     }
 
-    public void setValue(Object value, int row, int column, View<?> originator) {
+    public void setValue(String value, int row, int column, View<?> originator) {
         if (row < 0 || column < 0)
+            return;
+
+        if (Strings.isNullOrEmpty(value) && (row >= data.size() || column >= data.get(row).size()))
             return;
 
         while (row >= data.size())
             data.add(new ArrayList<>());
 
-        var line = data.get(row);
+        for (var line : data) {
+            while (column >= line.size())
+                line.add("");
+        }
 
-        while (column >= line.size())
-            line.add("");
-
-        line.set(column, (String) value);
+        if (value != null)
+            data.get(row).set(column, value);
 
         setModified(true);
         notifyDataChange(originator, new ChangeContext(row, column));

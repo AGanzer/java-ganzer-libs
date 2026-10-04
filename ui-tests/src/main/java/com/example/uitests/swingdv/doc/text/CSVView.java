@@ -108,7 +108,7 @@ public class CSVView extends MDISubView<CSVDocument> {
 
         @Override
         public void setValueAt(Object value, int rowIndex, int columnIndex) {
-            getDocument().setValue(value, rowIndex, columnIndex, CSVView.this);
+            getDocument().setValue((String) value, rowIndex, columnIndex, CSVView.this);
         }
     }
 
