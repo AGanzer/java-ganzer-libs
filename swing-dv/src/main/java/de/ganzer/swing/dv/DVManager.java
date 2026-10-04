@@ -282,10 +282,8 @@ public final class DVManager extends BasicDVManager {
                     .selectable(true)
                     .onAction(e -> DVManager.activateDocument((Document) (((GAction) e.getSource()).getTag())));
 
-            if (i < 9)
+            if (i < 10)
                 windowToggleActions[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, InputEvent.ALT_DOWN_MASK));
-            else if (i == 9)
-                windowToggleActions[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, InputEvent.ALT_DOWN_MASK));
         }
 
         chooseWindowActions.addAll(windowToggleActions);
