@@ -153,6 +153,7 @@ import java.beans.PropertyChangeListener;
  * @see #registerSupport(DVManagerSupport)
  * @see DVManagerSupport
  * @see BasicDVManager
+ *
  * @since 6.0.0
  */
 public final class DVManager extends BasicDVManager {
