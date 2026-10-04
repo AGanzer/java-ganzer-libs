@@ -67,8 +67,7 @@ public class CSVDocument extends Document {
                 line.add("");
         }
 
-        if (value != null)
-            data.get(row).set(column, value);
+        data.get(row).set(column, value != null ? value : "");
 
         setModified(true);
         notifyDataChange(originator, new ChangeContext(row, column));
