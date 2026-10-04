@@ -328,6 +328,6 @@ public class DocumentTemplate<D extends Document> {
 
     @Override
     public String toString() {
-        return displayName;
+        return getDisplayName();
     }
 }
