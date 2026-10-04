@@ -5,6 +5,7 @@ import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TabCloseListener;
 
+import javax.swing.JMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.Component;
@@ -18,7 +19,7 @@ import java.util.List;
  *
  * @since 6.0.0
  */
-public class ClosableTabsPaneDVMSupport implements DVManagerSupport {
+public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
     private ClosableTabsPane tabPane;
 
     /**
@@ -26,12 +27,26 @@ public class ClosableTabsPaneDVMSupport implements DVManagerSupport {
      *
      * @param tabPane The tabbed pane to use or {@code null} to set the tabbed
      *         pane later.
+     * @param windowMenu The window menu to manage or {@code null} to set it
+     *        later.
      *
      * @see #setTabPane(ClosableTabsPane)
      * @see DVManager#registerSupport(DVManagerSupport)
      */
-    public ClosableTabsPaneDVMSupport(ClosableTabsPane tabPane) {
+    public ClosableTabsPaneDVMSupport(ClosableTabsPane tabPane, JMenu windowMenu) {
+        super(windowMenu);
         setTabPane(tabPane);
+    }
+
+    /**
+     * Getter for the {@link ClosableTabsPane} that is used to hold the MDI
+     * subviews of the application.
+     *
+     * @return The managed tabbed pane or {@code null} if there is no tabbed
+     *         set.
+     */
+    public ClosableTabsPane getTabPane() {
+        return tabPane;
     }
 
     /**

@@ -27,4 +27,10 @@ public interface DVManagerSupport {
      *         subviews.
      */
     List<View<? extends Document>> getAllMDISubViews();
+
+    /**
+     * Invoked to update the menu items in the "Window" menu with the currently
+     * opened documents.
+     */
+    void updateOpenDocumentsMenu();
 }

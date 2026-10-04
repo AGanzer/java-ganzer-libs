@@ -6,6 +6,7 @@ import de.ganzer.swing.dv.ClosableTabsPaneDVMSupport;
 import de.ganzer.swing.dv.DVManager;
 import org.jdesktop.swingx.JXFrame;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 import java.awt.Component;
@@ -80,8 +81,19 @@ public class MainWindow extends JXFrame {
 
     private void initTabPane() {
         tabPane = new ClosableTabsPane();
-        DVManager.registerSupport(new ClosableTabsPaneDVMSupport(tabPane));
+        DVManager.registerSupport(new ClosableTabsPaneDVMSupport(tabPane, getWindowMenu()));
 
         getContentPane().add(tabPane);
+    }
+
+    private JMenu getWindowMenu() {
+        for (int i = 0; i < getJMenuBar().getMenuCount(); i++) {
+            var menu = getJMenuBar().getMenu(i);
+
+            if (menu.getAction() == Actions.windowActions)
+                return menu;
+        }
+
+        return null;
     }
 }

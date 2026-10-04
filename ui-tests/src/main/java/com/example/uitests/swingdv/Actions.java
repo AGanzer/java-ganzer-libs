@@ -102,9 +102,7 @@ public class Actions {
                                 .largeIcon(SVGProvider.get("window_close", 32)),
                         DVManager.closeAllWindowsAction
                                 .smallIcon(SVGProvider.get("windows_close", 16))
-                                .largeIcon(SVGProvider.get("windows_close", 32)),
-                        new GSeparatorAction(),
-                        DVManager.chooseWindowActions
+                                .largeIcon(SVGProvider.get("windows_close", 32))
                 ),
                 settingsActions = new GActionGroup("Settings").addAll(
                         optionsAction = new GAction("Options")

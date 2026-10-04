@@ -18,7 +18,6 @@ import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Arrays;
 
 /**
  * A document manager for Swing-based GUI applications.
@@ -38,8 +37,6 @@ import java.util.Arrays;
  * @since 6.0.0
  */
 public final class DVManager extends BasicDVManager {
-    private static final GAction[] windowToggleActions = new GAction[20];
-
     /**
      * The action where the recently opened documents are inserted into.
      */
@@ -188,7 +185,7 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action that contains the open windows actions.
      */
-    public static final GToggleActionGroup chooseWindowActions = new GToggleActionGroup();
+    public static final GToggleActionGroup openDocumentsActions = new GToggleActionGroup();
 
     /**
      * Updates the edit actions.
@@ -270,27 +267,17 @@ public final class DVManager extends BasicDVManager {
         saveAllAction.setEnabled(getOpenDocuments().stream().anyMatch(Document::isModified));
     }
 
-    private static final PropertyChangeListener documentNameListener = evt ->
-            Arrays.stream(windowToggleActions)
-                    .filter(a -> a.getTag().equals(evt.getSource()))
-                    .findFirst()
-                    .ifPresent(action -> action.setName(evt.getNewValue().toString()));
     private static final PropertyChangeListener documentModifiedListener = evt -> updateSaveActions();
+    private static final PropertyChangeListener documentNameListener = evt -> {
+        for (GAction action : openDocumentsActions) {
+            if (action.getTag().equals(evt.getSource())) {
+                action.setName(evt.getNewValue().toString());
+                break;
+            }
+        }
+    };
 
     static {
-        for (int i = 0; i < windowToggleActions.length; i++) {
-            windowToggleActions[i] = new GAction()
-                    .visible(false)
-                    .enabled(false)
-                    .selectable(true)
-                    .onAction(e -> DVManager.activateDocument((Document) ((GAction) e.getSource()).getTag()));
-
-            if (i < 10)
-                windowToggleActions[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, InputEvent.ALT_DOWN_MASK));
-        }
-
-        chooseWindowActions.addAll(windowToggleActions);
-
         addPropertyChangeListener(ACTIVE_DOCUMENT_PROPERTY, e -> {
             var docOld = (e.getOldValue() instanceof Document d) ? d : null;
             var docNew = (e.getNewValue() instanceof Document d) ? d : null;
@@ -304,9 +291,9 @@ public final class DVManager extends BasicDVManager {
                 docNew.addPropertyChangeListener(Document.NAME_PROPERTY, documentNameListener);
                 docNew.addPropertyChangeListener(Document.MODIFIED_PROPERTY, documentModifiedListener);
 
-                for (GAction windowToggleAction : windowToggleActions) {
-                    if (windowToggleAction.getTag() == docNew) {
-                        windowToggleAction.setSelected(true);
+                for (GAction action : openDocumentsActions) {
+                    if (action.getTag() == docNew) {
+                        action.setSelected(true);
                         break;
                     }
                 }
@@ -325,23 +312,41 @@ public final class DVManager extends BasicDVManager {
         });
 
         addPropertyChangeListener(OPEN_DOCUMENTS_PROPERTY, e -> {
-            int index = 0;
+            var mi = openDocumentsActions.iterator();
+            var di = getOpenDocuments().iterator();
+            var ai = 0;
 
-            for (var doc : getOpenDocuments()) {
-                windowToggleActions[index++]
-                        .visible(true)
-                        .enabled(true)
+            while(mi.hasNext() && di.hasNext()) {
+                var doc = di.next();
+                mi.next().name(doc.getName())
+                        .selected(doc == getActiveDocument())
+                        .tag(doc);
+                ++ai;
+            }
+
+            while(mi.hasNext()) {
+                mi.next();
+                mi.remove();
+            }
+
+            while (di.hasNext()) {
+                var doc = di.next();
+                var action = new GAction()
                         .name(doc.getName())
+                        .selectable(true)
                         .tag(doc)
-                        .selected(doc == getActiveDocument());
+                        .onAction(evt -> DVManager.activateDocument(doc));
+                openDocumentsActions.addAll(action);
+
+                action.setSelected(doc == getActiveDocument());
+
+                if (ai < 10)
+                    action.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0 + ai, InputEvent.ALT_DOWN_MASK));
+
+                ++ai;
             }
 
-            for (int i = index; i < windowToggleActions.length; i++) {
-                if (!windowToggleActions[i].isVisible())
-                    break;
-
-                windowToggleActions[i].visible(false).enabled(false);
-            }
+            getSupport().updateOpenDocumentsMenu();
 
             var docOld = (e.getOldValue() instanceof Document d) ? d : null;
             var docNew = (e.getNewValue() instanceof Document d) ? d : null;
