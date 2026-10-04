@@ -78,7 +78,7 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
      */
     @Override
     public DocumentTemplate<?> chooseDocumentTemplate(List<DocumentTemplate<?>> templates) {
-        var data = new ChooseFromListData<>("Coose Template", templates);
+        var data = new ChooseFromListData<>("Choose Document Type", templates);
         var dialog = new ChooseFromListDialog<>(SwingDVApp.getMainWindow(), data);
         dialog.setVisible(true);
 
@@ -95,7 +95,7 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
      */
     @Override
     public ViewTemplate<?, ?> chooseViewTemplate(List<ViewTemplate<?, ?>> templates) {
-        var data = new ChooseFromListData<>("Coose Template", templates);
+        var data = new ChooseFromListData<>("Choose View Type", templates);
         var dialog = new ChooseFromListDialog<>(SwingDVApp.getMainWindow(), data);
         dialog.setVisible(true);
 
