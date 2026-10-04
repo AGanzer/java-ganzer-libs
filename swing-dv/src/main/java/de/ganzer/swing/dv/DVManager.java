@@ -10,6 +10,7 @@ import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
 import de.ganzer.swing.actions.GToggleActionGroup;
+import de.ganzer.swing.dv.internals.SwingDVMessages;
 import de.ganzer.swing.util.EditorTracer;
 
 import javax.swing.KeyStroke;
@@ -38,13 +39,13 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action where the recently opened documents are inserted into.
      */
-    public static final GActionGroup recentDocsActions = new GActionGroup("Recent Documents")
+    public static final GActionGroup recentDocsActions = new GActionGroup(SwingDVMessages.get("menu.recentDocs"))
                                 .enabled(false);
     /**
      * The action that saves a document.
      */
-    public static final GAction saveAction = new GAction("Save")
-            .shortDescription("Save the active document")
+    public static final GAction saveAction = new GAction(SwingDVMessages.get("menu.save"))
+            .shortDescription(SwingDVMessages.get("menu.save.tooltip"))
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
             .enabled(false)
             .onAction(e -> {
@@ -57,8 +58,8 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action that saves all documents.
      */
-    public static final GAction saveAllAction = new GAction("Save All")
-            .shortDescription("Save all documents")
+    public static final GAction saveAllAction = new GAction(SwingDVMessages.get("menu.saveAll"))
+            .shortDescription(SwingDVMessages.get("menu.saveAll.tooltip"))
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | InputEvent.SHIFT_DOWN_MASK))
             .enabled(false)
             .onAction(e -> {
@@ -71,8 +72,8 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action that saves the active document with a new name.
      */
-    public static final GAction saveAsAction = new GAction("Save As...")
-            .shortDescription("Save the active document with a new name")
+    public static final GAction saveAsAction = new GAction(SwingDVMessages.get("menu.saveAs"))
+            .shortDescription(SwingDVMessages.get("menu.saveAs.tooltip"))
             .enabled(false)
             .onAction(e -> {
                 try {
@@ -84,12 +85,13 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action that undoes the last action.
      */
-    public static final GAction undoAction = new GAction("Undo")
-            .shortDescription("Undo the last action")
+    public static final GAction undoAction = new GAction(SwingDVMessages.get("menu.undo"))
+            .shortDescription(SwingDVMessages.get("menu.undo.tooltip"))
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
             .enabled(false)
             .onAction(e -> {
                 var doc = getActiveDocument();
+
                 if (doc != null) {
                     doc.undo();
                 }
@@ -97,12 +99,13 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action that redoes the last undone action.
      */
-    public static final GAction redoAction = new GAction("Redo")
-            .shortDescription("Redo the last undone action")
+    public static final GAction redoAction = new GAction(SwingDVMessages.get("menu.redo"))
+            .shortDescription(SwingDVMessages.get("menu.redo.tooltip"))
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
             .enabled(false)
             .onAction(e -> {
                 var doc = getActiveDocument();
+
                 if (doc != null) {
                     doc.redo();
                 }
@@ -110,40 +113,40 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action that cuts the selected text.
      */
-    public static final GAction cutAction = new GAction("Cut")
-            .shortDescription("Cut the selected text")
+    public static final GAction cutAction = new GAction(SwingDVMessages.get("menu.cut"))
+            .shortDescription(SwingDVMessages.get("menu.cut.tooltip"))
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
             .enabled(false)
             .onAction(e -> EditorTracer.getInstance().cut());
     /**
      * The action that copies the selected text.
      */
-    public static final GAction copyAction = new GAction("Copy")
-            .shortDescription("Copy the selected text")
+    public static final GAction copyAction = new GAction(SwingDVMessages.get("menu.copy"))
+            .shortDescription(SwingDVMessages.get("menu.copy.tooltip"))
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
             .enabled(false)
             .onAction(e -> EditorTracer.getInstance().copy());
     /**
      * The action that pastes the text from the clipboard.
      */
-    public static final GAction pasteAction = new GAction("Paste")
-            .shortDescription("Paste the text from the clipboard")
+    public static final GAction pasteAction = new GAction(SwingDVMessages.get("menu.paste"))
+            .shortDescription(SwingDVMessages.get("menu.paste.tooltip"))
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()))
             .enabled(false)
             .onAction(e -> EditorTracer.getInstance().paste());
     /**
      * The action that deletes the selected text.
      */
-    public static final GAction deleteAction = new GAction("Delete")
-            .shortDescription("Delete the selected text")
+    public static final GAction deleteAction = new GAction(SwingDVMessages.get("menu.delete"))
+            .shortDescription(SwingDVMessages.get("menu.delete.tooltip"))
             .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0))
             .enabled(false)
             .onAction(e -> EditorTracer.getInstance().delete());
     /**
      * The action that closes the current window.
      */
-    public static final GAction closeWindowAction = new GAction("Close")
-            .shortDescription("Close the current window")
+    public static final GAction closeWindowAction = new GAction(SwingDVMessages.get("menu.close"))
+            .shortDescription(SwingDVMessages.get("menu.close.tooltip"))
             .accelerator(OS.isMac()
                                  ? KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.META_DOWN_MASK)
                                  : OS.isWindows()
@@ -161,8 +164,8 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action that closes all windows.
      */
-    public static final GAction closeAllWindowsAction = new GAction("Close All")
-            .shortDescription("Close all windows")
+    public static final GAction closeAllWindowsAction = new GAction(SwingDVMessages.get("menu.closeAll"))
+            .shortDescription(SwingDVMessages.get("menu.closeAll.tooltip"))
             .enabled(false)
             .onAction(e -> {
                 var views = getSupport().getAllMDISubViews();
@@ -201,10 +204,18 @@ public final class DVManager extends BasicDVManager {
         pasteAction.setEnabled(tracer.canPaste());
         deleteAction.setEnabled(tracer.canDelete());
 
-        undoAction.name(undoAction.isEnabled() ? "Undo " + doc.getUndoTitle() : "Undo")
-                .shortDescription(undoAction.isEnabled() ? "Undo " + doc.getUndoTitle() : "Undo the last action\"");
-        redoAction.name(redoAction.isEnabled() ? "Redo " + doc.getRedoTitle() : "Redo")
-                .shortDescription(redoAction.isEnabled() ? "Redo " + doc.getRedoTitle() : "Redo the last undone action");
+        undoAction.name(undoAction.isEnabled()
+                                ? SwingDVMessages.get("menu.undo.format", doc.getUndoTitle())
+                                : SwingDVMessages.get("menu.undo"))
+                .shortDescription(undoAction.isEnabled()
+                                          ? SwingDVMessages.get("menu.undo.format", doc.getUndoTitle())
+                                          : SwingDVMessages.get("menu.undo.tooltip"));
+        redoAction.name(redoAction.isEnabled()
+                                ? SwingDVMessages.get("menu.redo.format", doc.getRedoTitle())
+                                : SwingDVMessages.get("menu.redo"))
+                .shortDescription(redoAction.isEnabled()
+                                          ? SwingDVMessages.get("menu.redo.format", doc.getRedoTitle())
+                                          : SwingDVMessages.get("menu.redo.tooltip"));
     }
 
     private static DVManagerSupport support;
