@@ -31,7 +31,7 @@ import java.beans.PropertyChangeListener;
  * actions. To update this, clients have to call {@link #updateEditActions()}
  * whenever the event queue enters the idle mode.
  * <p>
- * An Example of how the actions of this manager can be integrated into a
+ * An Example of how the actions of this manager can be integrated into an
  * application's actions:
  * <pre>{@code
  * public final class Actions {
