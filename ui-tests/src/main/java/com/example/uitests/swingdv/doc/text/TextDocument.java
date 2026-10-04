@@ -55,6 +55,8 @@ public class TextDocument extends Document {
         try (var fos = new FileOutputStream(file)) {
             var bos = new BufferedOutputStream(fos);
             bos.write(text.getBytes(encoding));
+
+            bos.flush();
         }
     }
 }

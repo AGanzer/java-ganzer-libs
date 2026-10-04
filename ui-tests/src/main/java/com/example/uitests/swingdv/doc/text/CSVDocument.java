@@ -3,16 +3,14 @@ package com.example.uitests.swingdv.doc.text;
 import de.ganzer.core.io.CsvInputStreamReader;
 import de.ganzer.core.io.CsvOutputStreamWriter;
 import de.ganzer.core.util.Strings;
-import de.ganzer.dv.DVLoadException;
-import de.ganzer.dv.Document;
-import de.ganzer.dv.DocumentCreationInfo;
-import de.ganzer.dv.View;
+import de.ganzer.dv.*;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class CSVDocument extends Document {
     public static class ChangeContext {
@@ -59,18 +57,10 @@ public class CSVDocument extends Document {
         if (Strings.isNullOrEmpty(value) && (row >= data.size() || column >= data.get(row).size()))
             return;
 
-        while (row >= data.size())
-            data.add(new ArrayList<>());
+        if (row < data.size() && column < data.get(row).size() && Objects.equals(value, data.get(row).get(column)))
+            return;
 
-        for (var line : data) {
-            while (column >= line.size())
-                line.add("");
-        }
-
-        data.get(row).set(column, value != null ? value : "");
-
-        setModified(true);
-        notifyDataChange(originator, new ChangeContext(row, column));
+        addUndoable(new UndoableCSV(row, column, value, originator));
     }
 
     @Override
@@ -115,6 +105,82 @@ public class CSVDocument extends Document {
 
             for (var line : data)
                 csv.writeLine(line);
+
+            csv.flush();
+        }
+    }
+
+    private class UndoableCSV implements Undoable {
+        private final int row;
+        private final int column;
+        private final String value;
+        private final int[] orgRowSizes;
+        private final int newRowSize;
+        private final String title;
+
+        private String orgValue;
+
+        public UndoableCSV(int row, int column, String value, View<?> originator) {
+            this.row = row;
+            this.column = column;
+            this.value = value != null ? value : "";
+
+            orgRowSizes = new int[data.size()];
+
+            int max = 0;
+
+            for (int i = 0; i < data.size(); i++) {
+                orgRowSizes[i] = data.get(i).size();
+                max = Math.max(orgRowSizes[i], max);
+            }
+
+            newRowSize = Math.max(max, column + 1);
+
+            title = row >= orgRowSizes.length || column >= orgRowSizes[row] ? "Add Value" : "Change Value";
+
+            execute(originator);
+        }
+
+        @Override
+        public String getTitle() {
+            return title;
+        }
+
+        @Override
+        public void execute() {
+            execute(null);
+        }
+
+        @Override
+        public void undo() {
+            data.get(row).set(column, orgValue);
+
+            while (data.size() > orgRowSizes.length)
+                data.remove(data.size() - 1);
+
+            for (int i = 0; i < orgRowSizes.length; i++) {
+                while (data.get(i).size() > orgRowSizes[i])
+                    data.get(i).remove(data.get(i).size() - 1);
+            }
+
+            setModified(true);
+            notifyDataChange(null, new ChangeContext(row, column));
+        }
+
+        private void execute(View<?> originator) {
+            while (row >= data.size())
+                data.add(new ArrayList<>());
+
+            for (var line : data) {
+                while (newRowSize > line.size())
+                    line.add("");
+            }
+
+            orgValue = data.get(row).get(column);
+            data.get(row).set(column, value != null ? value : "");
+
+            setModified(true);
+            notifyDataChange(originator, new ChangeContext(row, column));
         }
     }
 }
