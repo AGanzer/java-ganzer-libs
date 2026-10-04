@@ -40,6 +40,11 @@
             <version>${ganzer.version}</version>
         </dependency>
         <dependency>
+            <groupId>de.ganzer.swing.dv</groupId>
+            <artifactId>de-ganzer-swing-dv</artifactId>
+            <version>${ganzer.version}</version>
+        </dependency>
+        <dependency>
             <groupId>de.ganzer.swing.dlgfw</groupId>
             <artifactId>de-ganzer-swing-dlgfw</artifactId>
             <version>${ganzer.version}</version>

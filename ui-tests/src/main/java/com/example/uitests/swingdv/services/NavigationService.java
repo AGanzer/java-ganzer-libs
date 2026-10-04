@@ -4,10 +4,10 @@ import com.example.uitests.swingdv.SwingDVApp;
 import com.example.uitests.swingdv.dialogs.AboutDialog;
 import com.example.uitests.swingdv.dialogs.ChooseFromListData;
 import com.example.uitests.swingdv.dialogs.ChooseFromListDialog;
-import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
+import de.ganzer.swing.dv.DVManager;
 
 import javax.swing.FocusManager;
 import javax.swing.JFileChooser;

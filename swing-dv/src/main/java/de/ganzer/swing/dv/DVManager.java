@@ -1,4 +1,4 @@
-package de.ganzer.dv.swing;
+package de.ganzer.swing.dv;
 
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
@@ -21,7 +21,13 @@ import java.util.Arrays;
 
 /**
  * A document manager for Swing-based GUI applications.
+ * <p>
+ * The manager needs some support to perform certain operations that depend
+ * on the used UI framework. This support should be installed once at
+ * application startup
  *
+ * @see #registerSupport(DVManagerSupport)
+ * @see DVManagerSupport
  * @see BasicDVManager
  */
 public final class DVManager extends BasicDVManager {
@@ -179,6 +185,37 @@ public final class DVManager extends BasicDVManager {
                 .shortDescription(undoAction.isEnabled() ? "Undo " + doc.getUndoTitle() : "Undo the last action\"");
         redoAction.name(redoAction.isEnabled() ? "Redo " + doc.getRedoTitle() : "Redo")
                 .shortDescription(redoAction.isEnabled() ? "Redo " + doc.getRedoTitle() : "Redo the last undone action");
+    }
+
+    private static DVManagerSupport support;
+
+    /**
+     * Sets the support for the BasicDVManager.
+     * <p>
+     * The manager needs some support to perform certain operations that depend
+     * on the used UI framework. This support should be installed once at
+     * application startup.
+     *
+     * @param support The support to set.
+     */
+    public static void registerSupport(DVManagerSupport support) {
+        DVManager.support = support;
+    }
+
+    /**
+     * Gets the registered support.
+     *
+     * @return The registered support.
+     *
+     * @throws IllegalStateException if no support is registered.
+     *
+     * @see #registerSupport(DVManagerSupport)
+     */
+    protected static DVManagerSupport getSupport() {
+        if (support == null)
+            throw new IllegalStateException("DVManagerSupport is not registered.");
+
+        return support;
     }
 
     private static void updateSaveActions() {

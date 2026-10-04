@@ -3,8 +3,8 @@ package com.example.uitests.swingdv.doc.text;
 import com.example.uitests.swingdv.doc.MDISubView;
 import com.example.uitests.swingdv.doc.SwingDocumentUndoable;
 import de.ganzer.dv.ViewCreationInfo;
-import de.ganzer.dv.swing.DVManager;
 import de.ganzer.swing.controls.ClosableTabsPane;
+import de.ganzer.swing.dv.DVManager;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

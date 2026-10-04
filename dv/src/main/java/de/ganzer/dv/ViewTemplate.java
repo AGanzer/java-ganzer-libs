@@ -51,6 +51,12 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * its document is modified.
      */
     public static final int NO_MODIFICATION_HINT = 0x40;
+    /**
+     * If this option is set, the view can always be closed and does never
+     * prevent a document from being closed if other views are closed and the
+     * document's {@link DocumentTemplate#isAutoClose()} returns {@code true}.
+     */
+    public static final int IGNORE_ON_OTHER_VIEW_CLOSED = 0x80;
 
     private final String displayName;
     private final ViewSupplier<D, V> viewSupplier;
@@ -201,6 +207,18 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      */
     public boolean showModificationHint() {
         return (options & NO_MODIFICATION_HINT) == 0;
+    }
+
+    /**
+     * Indicates whether the view can always be closed and does never prevent a
+     * document from being closed.
+     *
+     * @return {@code true} if the view can always be closed.
+     *
+     * @see #IGNORE_ON_OTHER_VIEW_CLOSED
+     */
+    public boolean ignoreOnOtherViewClosed() {
+        return (options & IGNORE_ON_OTHER_VIEW_CLOSED) != 0;
     }
 
     /**

@@ -4,10 +4,10 @@ import com.example.uitests.swing.SVGProvider;
 import com.example.uitests.swingdv.services.NavigationService;
 import de.ganzer.core.OS;
 import de.ganzer.dv.*;
-import de.ganzer.dv.swing.DVManager;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
 import de.ganzer.swing.actions.GSeparatorAction;
+import de.ganzer.swing.dv.DVManager;
 
 import javax.swing.KeyStroke;
 import java.awt.Toolkit;

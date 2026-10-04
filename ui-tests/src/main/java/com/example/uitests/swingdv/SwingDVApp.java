@@ -16,12 +16,12 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
 import de.ganzer.dv.DVLoadException;
-import de.ganzer.dv.swing.DVMSupport;
-import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.ViewTemplate;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
+import de.ganzer.swing.dv.ClosableTabsPaneDVMSupport;
+import de.ganzer.swing.dv.DVManager;
 import de.ganzer.swing.util.UISettings;
 
 import javax.swing.SwingUtilities;
@@ -56,7 +56,7 @@ public class SwingDVApp {
         setupLaF();
         registerServices();
         registerTemplates();
-        DVManager.registerSupport(DVMSupport.getInstance());
+        DVManager.registerSupport(ClosableTabsPaneDVMSupport.getInstance());
 
         SwingUtilities.invokeLater(() -> {
             Desktop desktop = Desktop.getDesktop();

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.ganzer.dv</groupId>
-    <artifactId>de-ganzer-dv</artifactId>
+    <groupId>de.ganzer.swing.dv</groupId>
+    <artifactId>de-ganzer-swing-dv</artifactId>
     <version>${ganzer.version}</version>
 
     <properties>
@@ -23,6 +23,18 @@
             <groupId>de.ganzer.core</groupId>
             <artifactId>de-ganzer-core</artifactId>
             <version>${ganzer.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.ganzer.swing</groupId>
+            <artifactId>de-ganzer-swing</artifactId>
+            <version>${ganzer.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.ganzer.dv</groupId>
+            <artifactId>de-ganzer-dv</artifactId>
+            <version>${ganzer.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

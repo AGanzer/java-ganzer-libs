@@ -12,13 +12,6 @@ import java.util.*;
 
 /**
  * A singleton document-view-manager.
- * <p>
- * The manager needs some support to perform certain operations that depend
- * on the used UI framework. This support should be installed once at
- * application startup
- *
- * @see #registerSupport(DVManagerSupport)
- * @see DVManagerSupport
  *
  * @since 6.0.0
  */
@@ -54,21 +47,7 @@ public class BasicDVManager {
     private static final List<DocumentTemplate<?>> templates = new ArrayList<>();
     private static final List<Document> openDocuments = new ArrayList<>();
 
-    private static DVManagerSupport support;
     private static View<?> activeView;
-
-    /**
-     * Sets the support for the BasicDVManager.
-     * <p>
-     * The manager needs some support to perform certain operations that depend
-     * on the used UI framework. This support should be installed once at
-     * application startup.
-     *
-     * @param support The support to set.
-     */
-    public static void registerSupport(DVManagerSupport support) {
-        BasicDVManager.support = support;
-    }
 
     /**
      * Add a PropertyChangeListener to the listener list.
@@ -396,8 +375,6 @@ public class BasicDVManager {
      * @return the active view or {@code null} if no view is active.
      *
      * @throws IllegalStateException if no support is registered.
-     *
-     * @see #registerSupport(DVManagerSupport)
      */
     public static View<?> getActiveView() {
         return activeView;
@@ -529,12 +506,5 @@ public class BasicDVManager {
             return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
 
         return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
-    }
-
-    private static DVManagerSupport getSupport() {
-        if (support == null)
-            throw new IllegalStateException("DVManagerSupport is not initialized.");
-
-        return support;
     }
 }

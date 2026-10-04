@@ -194,7 +194,8 @@ public abstract class Document extends Model {
         if (!view.getTemplate().isMandatory() && !getTemplate().isAutoClose())
             return true;
 
-        return getViews().size() > 1 || canClose();
+        return getViews().stream()
+                .filter(v -> !v.getTemplate().ignoreOnOtherViewClosed()).count() > 1 || canClose();
     }
 
     /**

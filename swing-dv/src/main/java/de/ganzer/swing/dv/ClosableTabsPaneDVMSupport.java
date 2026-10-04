@@ -1,6 +1,5 @@
-package de.ganzer.dv.swing;
+package de.ganzer.swing.dv;
 
-import de.ganzer.dv.DVManagerSupport;
 import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TabCloseListener;
@@ -14,15 +13,15 @@ import java.awt.Component;
  * uses a {@link ClosableTabsPane} to inform the {@link DVManager} about
  * changed views.
  */
-public class DVMSupport implements DVManagerSupport {
+public class ClosableTabsPaneDVMSupport implements DVManagerSupport {
     /**
-     * Gets the instance of the {@link DVMSupport}.
+     * Gets the instance of the {@link ClosableTabsPaneDVMSupport}.
      *
-     * @return The only instance of the {@link DVMSupport}.
+     * @return The only instance of the {@link ClosableTabsPaneDVMSupport}.
      */
-    public static DVMSupport getInstance() {
+    public static ClosableTabsPaneDVMSupport getInstance() {
         if (instance == null)
-            instance = new DVMSupport();
+            instance = new ClosableTabsPaneDVMSupport();
 
         return instance;
     }
@@ -50,7 +49,7 @@ public class DVMSupport implements DVManagerSupport {
         }
     }
 
-    private static DVMSupport instance;
+    private static ClosableTabsPaneDVMSupport instance;
 
     private final TabCloseListener tabCloseListener = new TabCloseListener() {
         @Override
@@ -85,6 +84,6 @@ public class DVMSupport implements DVManagerSupport {
 
     private ClosableTabsPane tabPane;
 
-    private DVMSupport() {
+    private ClosableTabsPaneDVMSupport() {
     }
 }

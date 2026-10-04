@@ -12,6 +12,7 @@ open module com.example.uitests {
     requires batik.svggen;
     requires swingx.all;
     requires de.ganzer.dv;
+    requires de.ganzer.swing.dv;
     requires de.ganzer.swing.dlgfw;
     exports com.example.uitests.fx;
     exports com.example.uitests.fx.charts;

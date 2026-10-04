@@ -1,9 +1,9 @@
 package com.example.uitests.swingdv;
 
-import de.ganzer.dv.swing.DVMSupport;
-import de.ganzer.dv.swing.DVManager;
 import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
+import de.ganzer.swing.dv.ClosableTabsPaneDVMSupport;
+import de.ganzer.swing.dv.DVManager;
 import org.jdesktop.swingx.JXFrame;
 
 import javax.swing.JMenuBar;
@@ -80,7 +80,7 @@ public class MainWindow extends JXFrame {
 
     private void initTabPane() {
         tabPane = new ClosableTabsPane();
-        DVMSupport.getInstance().setTabPane(tabPane);
+        ClosableTabsPaneDVMSupport.getInstance().setTabPane(tabPane);
 
         getContentPane().add(tabPane);
     }
