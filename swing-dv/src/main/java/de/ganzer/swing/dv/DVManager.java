@@ -339,6 +339,9 @@ public final class DVManager extends BasicDVManager {
             }
 
             for (int i = index; i < windowToggleActions.length; i++) {
+                if (!windowToggleActions[i].isVisible())
+                    break;
+
                 windowToggleActions[i].visible(false).enabled(false);
             }
 
