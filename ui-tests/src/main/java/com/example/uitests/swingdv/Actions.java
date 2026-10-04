@@ -14,7 +14,7 @@ import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-public class Actions {
+public final class Actions {
     public static final GActionGroup allActions;
     public static final GActionGroup fileActions;
     public static final GActionGroup editActions;
