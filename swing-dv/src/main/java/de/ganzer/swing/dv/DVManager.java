@@ -285,7 +285,7 @@ public final class DVManager extends BasicDVManager {
                     .visible(false)
                     .enabled(false)
                     .selectable(true)
-                    .onAction(e -> DVManager.activateDocument((Document) (((GAction) e.getSource()).getTag())));
+                    .onAction(e -> DVManager.activateDocument((Document) ((GAction) e.getSource()).getTag()));
 
             if (i < 10)
                 windowToggleActions[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, InputEvent.ALT_DOWN_MASK));
