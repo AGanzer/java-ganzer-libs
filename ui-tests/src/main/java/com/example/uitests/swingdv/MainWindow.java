@@ -80,7 +80,7 @@ public class MainWindow extends JXFrame {
 
     private void initTabPane() {
         tabPane = new ClosableTabsPane();
-        ClosableTabsPaneDVMSupport.getInstance().setTabPane(tabPane);
+        DVManager.registerSupport(new ClosableTabsPaneDVMSupport(tabPane));
 
         getContentPane().add(tabPane);
     }

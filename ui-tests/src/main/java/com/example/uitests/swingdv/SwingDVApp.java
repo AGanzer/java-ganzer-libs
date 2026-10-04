@@ -20,7 +20,6 @@ import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.ViewTemplate;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
-import de.ganzer.swing.dv.ClosableTabsPaneDVMSupport;
 import de.ganzer.swing.dv.DVManager;
 import de.ganzer.swing.util.UISettings;
 
@@ -56,7 +55,6 @@ public class SwingDVApp {
         setupLaF();
         registerServices();
         registerTemplates();
-        DVManager.registerSupport(ClosableTabsPaneDVMSupport.getInstance());
 
         SwingUtilities.invokeLater(() -> {
             Desktop desktop = Desktop.getDesktop();

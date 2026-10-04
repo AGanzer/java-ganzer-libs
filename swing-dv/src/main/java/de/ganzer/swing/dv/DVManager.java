@@ -29,6 +29,8 @@ import java.util.Arrays;
  * @see #registerSupport(DVManagerSupport)
  * @see DVManagerSupport
  * @see BasicDVManager
+ *
+ * @since 6.0.0
  */
 public final class DVManager extends BasicDVManager {
     private static final GAction[] windowToggleActions = new GAction[20];
@@ -149,6 +151,12 @@ public final class DVManager extends BasicDVManager {
                     : KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK))
             .enabled(false)
             .onAction(e -> {
+                var view = getSupport().getActiveMDISubView();
+
+                if (view != null && view.getTemplate().isClosable() && view.getDocument().canCloseView(view)) {
+                    view.getDocument().removeView(view);
+                    view.forceClose();
+                }
             });
     /**
      * The action that closes all windows.
@@ -157,6 +165,18 @@ public final class DVManager extends BasicDVManager {
             .shortDescription("Close all windows")
             .enabled(false)
             .onAction(e -> {
+                var views = getSupport().getAllMDISubViews();
+
+                for (var view : views) {
+                    if (!view.getTemplate().isClosable())
+                        continue;
+
+                    if (!view.getDocument().canCloseView(view))
+                        break;
+
+                    view.getDocument().removeView(view);
+                    view.forceClose();
+                }
             });
     /**
      * The action that contains the open windows actions.
@@ -203,6 +223,16 @@ public final class DVManager extends BasicDVManager {
     }
 
     /**
+     * Checks if the support for the {@link DVManager} is registered.
+     *
+     * @return {@code true} if the support is registered, {@code false}
+     *          otherwise.
+     */
+    public static boolean isSupportRegistered() {
+        return support != null;
+    }
+
+    /**
      * Gets the registered support.
      *
      * @return The registered support.
@@ -210,8 +240,9 @@ public final class DVManager extends BasicDVManager {
      * @throws IllegalStateException if no support is registered.
      *
      * @see #registerSupport(DVManagerSupport)
+     * @see #isSupportRegistered()
      */
-    protected static DVManagerSupport getSupport() {
+    public static DVManagerSupport getSupport() {
         if (support == null)
             throw new IllegalStateException("DVManagerSupport is not registered.");
 

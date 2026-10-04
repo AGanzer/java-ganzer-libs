@@ -1,5 +1,6 @@
 package de.ganzer.swing.dv;
 
+import de.ganzer.dv.Document;
 import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TabCloseListener;
@@ -7,23 +8,30 @@ import de.ganzer.swing.controls.TabCloseListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A default singleton support implementation for the {@link DVManager} that
- * uses a {@link ClosableTabsPane} to inform the {@link DVManager} about
+ * A default implementation for the {@link DVManager} that uses a
+ * {@link ClosableTabsPane} to inform the {@link DVManager} about
  * changed views.
+ *
+ * @since 6.0.0
  */
 public class ClosableTabsPaneDVMSupport implements DVManagerSupport {
-    /**
-     * Gets the instance of the {@link ClosableTabsPaneDVMSupport}.
-     *
-     * @return The only instance of the {@link ClosableTabsPaneDVMSupport}.
-     */
-    public static ClosableTabsPaneDVMSupport getInstance() {
-        if (instance == null)
-            instance = new ClosableTabsPaneDVMSupport();
+    private ClosableTabsPane tabPane;
 
-        return instance;
+    /**
+     * Creates a new instance of {@link ClosableTabsPaneDVMSupport}.
+     *
+     * @param tabPane The tabbed pane to use or {@code null} to set the tabbed
+     *         pane later.
+     *
+     * @see #setTabPane(ClosableTabsPane)
+     * @see DVManager#registerSupport(DVManagerSupport)
+     */
+    public ClosableTabsPaneDVMSupport(ClosableTabsPane tabPane) {
+        setTabPane(tabPane);
     }
 
     /**
@@ -49,13 +57,42 @@ public class ClosableTabsPaneDVMSupport implements DVManagerSupport {
         }
     }
 
-    private static ClosableTabsPaneDVMSupport instance;
+    /**
+     * Invoked to get the active MDI subview.
+     *
+     * @return The active MDI subview or {@code null} if there is no active MDI
+     *         subview.
+     */
+    @Override
+    public View<? extends Document> getActiveMDISubView() {
+        return tabPane.getSelectedComponent() instanceof View<?> v ? v : null;
+    }
+
+    /**
+     * Invoked to get a list of all open MDI subviews.
+     *
+     * @return All open MDI subviews or an empty list if there are no open MDI
+     *         subviews.
+     */
+    @Override
+    public List<View<? extends Document>> getAllMDISubViews() {
+        var views = new ArrayList<View<? extends Document>>();
+
+        for (int i = 0; i < tabPane.getTabCount(); i++) {
+            var component = tabPane.getComponentAt(i);
+
+            if (component instanceof View<?> v)
+                views.add(v);
+        }
+
+        return views;
+    }
 
     private final TabCloseListener tabCloseListener = new TabCloseListener() {
         @Override
         public void closeTabPerformed(int index, Component component) {
             if (component instanceof View<?> v) {
-                if (!v.getDocument().canCloseView(v))
+                if (!v.getTemplate().isClosable() || !v.getDocument().canCloseView(v))
                     return;
 
                 v.getDocument().removeView(v);
@@ -81,9 +118,4 @@ public class ClosableTabsPaneDVMSupport implements DVManagerSupport {
             DVManager.setActiveView(tabPane.getSelectedComponent() instanceof View<?> v ? v : null);
         }
     };
-
-    private ClosableTabsPane tabPane;
-
-    private ClosableTabsPaneDVMSupport() {
-    }
 }
