@@ -14,12 +14,15 @@ public abstract class MDISubView<D extends Document> extends JPanel implements V
     private final D document;
     private final ClosableTabsPane tabPane;
 
-    protected MDISubView(ViewCreationInfo<D, ? extends View<D>> info, ClosableTabsPane tabPane) {
+    protected MDISubView(ViewCreationInfo<D, ? extends View<D>> info, ClosableTabsPane tabPane, boolean forceFocus) {
         super(new BorderLayout());
 
         this.template = info.getTemplate();
         this.document = info.getDocument();
         this.tabPane = tabPane;
+
+        if (forceFocus)
+            tabPane.addChangeListener(e -> focusContent());
     }
 
     @Override
@@ -49,5 +52,8 @@ public abstract class MDISubView<D extends Document> extends JPanel implements V
     @Override
     public void forceClose() {
         tabPane.remove(this);
+    }
+
+    protected void focusContent() {
     }
 }

@@ -10,7 +10,7 @@ import java.awt.Font;
 
 public class WelcomeView extends MDISubView<WelcomeDocument> {
     public WelcomeView(ViewCreationInfo<WelcomeDocument, WelcomeView> info, ClosableTabsPane tabPane) {
-        super(info, tabPane);
+        super(info, tabPane, false);
 
         JLabel welcomeLabel = new JLabel(getDocument().getWelcomeText());
 

@@ -20,7 +20,7 @@ public class CSVView extends MDISubView<CSVDocument> {
     private final JXTable table;
 
     public CSVView(ViewCreationInfo<CSVDocument, CSVView> info, ClosableTabsPane tabPane) {
-        super(info, tabPane);
+        super(info, tabPane, true);
 
         var rowHeader = new RowHeader();
 
@@ -40,8 +40,7 @@ public class CSVView extends MDISubView<CSVDocument> {
     }
 
     @Override
-    public void toFront() {
-        super.toFront();
+    protected void focusContent() {
         SwingUtilities.invokeLater(table::requestFocusInWindow);
     }
 

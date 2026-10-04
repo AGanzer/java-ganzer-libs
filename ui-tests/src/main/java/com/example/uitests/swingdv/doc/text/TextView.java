@@ -18,7 +18,7 @@ public class TextView extends MDISubView<TextDocument> {
     private final JPopupMenu popupMenu;
 
     public TextView(ViewCreationInfo<TextDocument, TextView> info, ClosableTabsPane tabPane) {
-        super(info, tabPane);
+        super(info, tabPane, true);
 
         editor = new JTextArea();
         editor.setWrapStyleWord(true);
@@ -88,8 +88,7 @@ public class TextView extends MDISubView<TextDocument> {
     }
 
     @Override
-    public void toFront() {
-        super.toFront();
+    protected void focusContent() {
         SwingUtilities.invokeLater(editor::requestFocusInWindow);
     }
 }

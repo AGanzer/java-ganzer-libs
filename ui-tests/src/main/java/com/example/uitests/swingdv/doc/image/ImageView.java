@@ -11,7 +11,7 @@ import java.awt.BorderLayout;
 
 public class ImageView extends MDISubView<ImageDocument> {
     public ImageView(ViewCreationInfo<ImageDocument, ImageView> info, ClosableTabsPane tabPane) {
-        super(info, tabPane);
+        super(info, tabPane, false);
 
         var label = new JLabel(new ImageIcon(getDocument().getImage()));
         var scroller = new JScrollPane(label);
