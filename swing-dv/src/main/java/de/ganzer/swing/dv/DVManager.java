@@ -339,7 +339,7 @@ public final class DVManager extends BasicDVManager {
             }
 
             for (int i = index; i < windowToggleActions.length; i++) {
-                windowToggleActions[i].visible(false).enabled(false).selected(false);
+                windowToggleActions[i].visible(false).enabled(false);
             }
 
             var docOld = (e.getOldValue() instanceof Document d) ? d : null;
