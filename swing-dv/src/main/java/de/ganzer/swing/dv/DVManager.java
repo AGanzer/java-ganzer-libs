@@ -259,10 +259,10 @@ public final class DVManager extends BasicDVManager {
      * @see #isSupportRegistered()
      */
     public static DVManagerSupport getSupport() {
-        if (support == null)
-            throw new IllegalStateException("DVManagerSupport is not registered.");
+        if (isSupportRegistered())
+            return support;
 
-        return support;
+        throw new IllegalStateException("DVManagerSupport is not registered.");
     }
 
     private static void updateSaveActions() {
