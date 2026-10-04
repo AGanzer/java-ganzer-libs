@@ -398,8 +398,8 @@ public abstract class Model {
     /**
      * Creates new data.
      * <p>
-     * This resets the modification flag and sets the new
-     * data flag.
+     * This resets the modification flag and sets the new data flag and removes
+     * all undoable actions.
      *
      * @see #doCreateData()
      */
@@ -408,12 +408,15 @@ public abstract class Model {
 
         setModified(false);
         setNewData(true);
+
+        undoManager.clear();
     }
 
     /**
      * Loads data from a file, a database, or any other source.
      * <p>
-     * This resets the modification and the new data flags.
+     * This resets the modification and the new data flags and removes all
+     * undoable actions.
      *
      * @throws DVLoadException on any error.
      *
@@ -431,6 +434,8 @@ public abstract class Model {
 
         setModified(false);
         setNewData(false);
+
+        undoManager.clear();
     }
 
     /**
