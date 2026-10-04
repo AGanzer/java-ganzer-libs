@@ -25,7 +25,12 @@ import java.util.Arrays;
  * <p>
  * The manager needs some support to perform certain operations that depend
  * on the used UI framework. This support should be installed once at
- * application startup
+ * application startup.
+ * <p>
+ * The manager provides all actions of type {@link GAction} required to manage
+ * documents. The only actions that are not updated automatically are the edit
+ * actions. To update this, clients have to call {@link #updateEditActions()}
+ * whenever the event queue enters the idle mode.
  *
  * @see #registerSupport(DVManagerSupport)
  * @see DVManagerSupport
