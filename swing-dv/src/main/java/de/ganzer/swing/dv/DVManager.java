@@ -35,7 +35,6 @@ import java.util.Arrays;
  * @see #registerSupport(DVManagerSupport)
  * @see DVManagerSupport
  * @see BasicDVManager
- *
  * @since 6.0.0
  */
 public final class DVManager extends BasicDVManager {
@@ -45,7 +44,7 @@ public final class DVManager extends BasicDVManager {
      * The action where the recently opened documents are inserted into.
      */
     public static final GActionGroup recentDocsActions = new GActionGroup(SwingDVMessages.get("menu.recentDocs"))
-                                .enabled(false);
+            .enabled(false);
     /**
      * The action that saves a document.
      */
@@ -209,18 +208,18 @@ public final class DVManager extends BasicDVManager {
         pasteAction.setEnabled(tracer.canPaste());
         deleteAction.setEnabled(tracer.canDelete());
 
-        undoAction.name(undoAction.isEnabled()
-                                ? SwingDVMessages.get("menu.undo.format", doc.getUndoTitle())
-                                : SwingDVMessages.get("menu.undo"))
-                .shortDescription(undoAction.isEnabled()
-                                          ? SwingDVMessages.get("menu.undo.format", doc.getUndoTitle())
-                                          : SwingDVMessages.get("menu.undo.tooltip"));
-        redoAction.name(redoAction.isEnabled()
-                                ? SwingDVMessages.get("menu.redo.format", doc.getRedoTitle())
-                                : SwingDVMessages.get("menu.redo"))
-                .shortDescription(redoAction.isEnabled()
-                                          ? SwingDVMessages.get("menu.redo.format", doc.getRedoTitle())
-                                          : SwingDVMessages.get("menu.redo.tooltip"));
+        undoAction.setName(undoAction.isEnabled()
+                                   ? SwingDVMessages.get("menu.undo.format", doc.getUndoTitle())
+                                   : SwingDVMessages.get("menu.undo"));
+        undoAction.setShortDescription(undoAction.isEnabled()
+                                               ? SwingDVMessages.get("menu.undo.format", doc.getUndoTitle())
+                                               : SwingDVMessages.get("menu.undo.tooltip"));
+        redoAction.setName(redoAction.isEnabled()
+                                   ? SwingDVMessages.get("menu.redo.format", doc.getRedoTitle())
+                                   : SwingDVMessages.get("menu.redo"));
+        redoAction.setShortDescription(redoAction.isEnabled()
+                                               ? SwingDVMessages.get("menu.redo.format", doc.getRedoTitle())
+                                               : SwingDVMessages.get("menu.redo.tooltip"));
     }
 
     private static DVManagerSupport support;
@@ -242,7 +241,7 @@ public final class DVManager extends BasicDVManager {
      * Checks if the support for the {@link DVManager} is registered.
      *
      * @return {@code true} if the support is registered, {@code false}
-     *          otherwise.
+     *         otherwise.
      */
     public static boolean isSupportRegistered() {
         return support != null;
@@ -254,7 +253,6 @@ public final class DVManager extends BasicDVManager {
      * @return The registered support.
      *
      * @throws IllegalStateException if no support is registered.
-     *
      * @see #registerSupport(DVManagerSupport)
      * @see #isSupportRegistered()
      */
