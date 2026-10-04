@@ -31,6 +31,7 @@ public class DocumentTemplate<D extends Document> {
      * If this option is set, Creating a new document does not automatically
      * create a new view except that one of the registered view templates marks
      * a view as mandatory.
+     *
      * @see ViewTemplate#IS_MANDATORY
      */
     public static final int NO_AUTO_VIEW = 0x04;
@@ -71,13 +72,13 @@ public class DocumentTemplate<D extends Document> {
      *
      * @param displayName The display name of the template.
      * @param canHandleSource Determines whether a data source can be read by
-     *        the document.
+     *         the document.
      * @param documentSupplier Creates the document.
      * @param newName The name of new documents.
      * @param filter The filter to use to open documents from existing sources.
      * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
-     *        {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
-     *        and {@link #NO_NEW_NUMBER}.
+     *         {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
+     *         and {@link #NO_NEW_NUMBER}.
      *
      * @throws NullPointerException {@code displayName}, {@code canHandleSource}
      *         {@code documentSupplier} or {@code newName} is {@code null}.
@@ -96,15 +97,15 @@ public class DocumentTemplate<D extends Document> {
      *
      * @param displayName The display name of the template.
      * @param canHandleSource Determines whether a data source can be read by
-     *        the document.
+     *         the document.
      * @param documentSupplier Creates the document.
      * @param newName The name of new documents.
      * @param filter The filter to use to open documents from existing sources.
      * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
-     *        {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
-     *        and {@link #NO_NEW_NUMBER}.
+     *         {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
+     *         and {@link #NO_NEW_NUMBER}.
      * @param newNameNumberFormat The format String to use for new documents that
-     *        have a new number. If this is {@code null} "%s %d" is used.
+     *         have a new number. If this is {@code null} "%s %d" is used.
      *
      * @throws NullPointerException {@code displayName}, {@code canHandleSource}
      *         {@code documentSupplier} or {@code newName} is {@code null}.

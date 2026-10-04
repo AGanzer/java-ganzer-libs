@@ -5,6 +5,7 @@ import com.example.uitests.swingdv.dialogs.AboutDialog;
 import com.example.uitests.swingdv.dialogs.ChooseFromListData;
 import com.example.uitests.swingdv.dialogs.ChooseFromListDialog;
 import de.ganzer.dv.DocumentTemplate;
+import de.ganzer.dv.ViewTemplate;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
 import de.ganzer.swing.dv.DVManager;
@@ -77,6 +78,23 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
      */
     @Override
     public DocumentTemplate<?> chooseDocumentTemplate(List<DocumentTemplate<?>> templates) {
+        var data = new ChooseFromListData<>("Coose Template", templates);
+        var dialog = new ChooseFromListDialog<>(SwingDVApp.getMainWindow(), data);
+        dialog.setVisible(true);
+
+        return dialog.isAccepted() ? data.chosen : null;
+    }
+
+    /**
+     * Invoked to choose a view template.
+     *
+     * @param templates The available templates to choose from.
+     *
+     * @return The chosen document template or {@code null} if the user has
+     *         canceled.
+     */
+    @Override
+    public ViewTemplate<?, ?> chooseViewTemplate(List<ViewTemplate<?, ?>> templates) {
         var data = new ChooseFromListData<>("Coose Template", templates);
         var dialog = new ChooseFromListDialog<>(SwingDVApp.getMainWindow(), data);
         dialog.setVisible(true);

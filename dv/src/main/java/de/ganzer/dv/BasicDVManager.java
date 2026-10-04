@@ -204,6 +204,58 @@ public class BasicDVManager {
     }
 
     /**
+     * Creates a new view for the specified document.
+     * <p>
+     * The user will be queried to choose a template if the document's template
+     * does contain more than one unhidden view template; otherwise, the default
+     * template will be used.
+     *
+     * @param document The document where to create the view for.
+     *
+     * @return The created view or {@code null} if the user has canceled.
+     *
+     * @param <D> The type of the document.
+     */
+    public static <D extends Document> View<?> createView(D document) {
+        return createView(document, null);
+    }
+
+    /**
+     * Creates a new view for the specified document.
+     *
+     * @param document The document where to create the view for.
+     * @param template The template to use for creating the view. If this is
+     *         {@code null}, the user will be queried to choose a template if
+     *         the document's template does contain more than one unhidden view
+     *         template; otherwise, the default template will be used.
+     *
+     * @return The created view or {@code null} if the user has canceled.
+     *
+     * @param <D> The type of the document.
+     */
+    public static <D extends Document> View<?> createView(D document, ViewTemplate<D, ?> template) {
+        Objects.requireNonNull(document, "Document must not be null.");
+
+        ViewTemplate<D, ?> templateToUse = template;
+
+        if (templateToUse == null) {
+            var docViewTemplates = document.getTemplate().getViewTemplates();
+            var tpls = docViewTemplates.stream()
+                    .filter(t -> !t.isHidden())
+                    .toList();
+
+            ViewTemplate<?, ?> chosen = tpls.size() > 1
+                    ? ((DVNavigationService) Services.get(DVNavigationService.class)).chooseViewTemplate(tpls)
+                    : docViewTemplates.stream().filter(ViewTemplate::isDefault).findFirst().orElse(docViewTemplates.get(0));
+
+            //noinspection unchecked
+            templateToUse = (ViewTemplate<D, ?>) chosen;
+        }
+
+         return templateToUse != null ? templateToUse.createView(document) : null;
+    }
+
+    /**
      * Opens an existing data source based on the template that matches the
      * source and adds it to the list of open documents.
      * <p>

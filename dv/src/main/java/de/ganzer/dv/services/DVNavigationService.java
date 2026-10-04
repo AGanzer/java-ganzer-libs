@@ -2,6 +2,7 @@ package de.ganzer.dv.services;
 
 import de.ganzer.core.Services;
 import de.ganzer.dv.DocumentTemplate;
+import de.ganzer.dv.ViewTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -84,4 +85,14 @@ public interface DVNavigationService {
      *         canceled.
      */
     DocumentTemplate<?> chooseDocumentTemplate(List<DocumentTemplate<?>> templates);
+
+    /**
+     * Invoked to choose a view template.
+     *
+     * @param templates The available templates to choose from.
+     *
+     * @return The chosen document template or {@code null} if the user has
+     *         canceled.
+     */
+    ViewTemplate<?, ?> chooseViewTemplate(List<ViewTemplate<?, ?>> templates);
 }
