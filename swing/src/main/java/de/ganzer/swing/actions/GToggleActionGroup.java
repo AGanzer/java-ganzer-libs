@@ -180,7 +180,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     /**
-     * Creates the menu items that visualizes this toggle group and inserts them
+     * Creates the menu items that visualize this toggle group and inserts them
      * into the specified target.
      *
      * @param target The menu where to insert the menu items.
@@ -194,7 +194,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     /**
-     * Creates the buttons that visualizes this toggle group and inserts them
+     * Creates the buttons that visualize this toggle group and inserts them
      * into the specified target.
      *
      * @param target The toolbar where to insert the buttons.
@@ -210,11 +210,28 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     /**
-     * {@inheritDoc}
+     * Gets a forward iterator for iterating the contained items.
+     *
+     * @return A forward iterator for iterating the contained items.
+     *
+     * @see #backIterator()
      */
     @Override
     public Iterator<GAction> iterator() {
         return actions.iterator();
+    }
+
+    /**
+     * Gets a backward iterator for iterating the contained items.
+     *
+     * @return A backward iterator for iterating the contained items.
+     *
+     * @see #iterator()
+     *
+     * @since 6.0.0
+     */
+    public Iterator<GAction> backIterator() {
+        return actions.listIterator(actions.size());
     }
 
     private boolean hasNoSelection() {

@@ -117,11 +117,28 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     }
 
     /**
-     * {@inheritDoc}
+     * Gets a forward iterator for iterating the contained items.
+     *
+     * @return A forward iterator for iterating the contained items.
+     *
+     * @see #backIterator()
      */
     @Override
     public Iterator<Action> iterator() {
         return actions.iterator();
+    }
+
+    /**
+     * Gets a backward iterator for iterating the contained items.
+     *
+     * @return A backward iterator for iterating the contained items.
+     *
+     * @since 6.0.0
+     *
+     * @see #iterator()
+     */
+    public Iterator<Action> backIterator() {
+        return actions.listIterator(actions.size());
     }
 
     /**

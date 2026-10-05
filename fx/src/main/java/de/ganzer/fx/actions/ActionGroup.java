@@ -216,11 +216,28 @@ public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
     }
 
     /**
-     * {@inheritDoc}
+     * Gets a forward iterator for iterating the contained items.
+     *
+     * @return A forward iterator for iterating the contained items.
+     *
+     * @see #backIterator()
      */
     @Override
     public Iterator<ActionItemBuilder> iterator() {
         return actions.iterator();
+    }
+
+    /**
+     * Gets a backward iterator for iterating the contained items.
+     *
+     * @return A backward iterator for iterating the contained items.
+     *
+     * @see #iterator()
+     *
+     * @since 6.0.0
+     */
+    public Iterator<ActionItemBuilder> backIterator() {
+        return actions.listIterator(actions.size());
     }
 
     /**
