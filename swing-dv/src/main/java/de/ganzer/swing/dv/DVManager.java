@@ -2,13 +2,11 @@ package de.ganzer.swing.dv;
 
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
-import de.ganzer.dv.BasicDVManager;
-import de.ganzer.dv.DVSaveException;
-import de.ganzer.dv.Document;
-import de.ganzer.dv.View;
+import de.ganzer.dv.*;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
+import de.ganzer.swing.actions.GActionItemBuilder;
 import de.ganzer.swing.actions.GToggleActionGroup;
 import de.ganzer.swing.dv.internals.SwingDVMessages;
 import de.ganzer.swing.util.EditorTracer;
@@ -18,6 +16,7 @@ import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 
 /**
  * A document manager for Swing-based GUI applications.
@@ -307,6 +306,64 @@ public final class DVManager extends BasicDVManager {
      */
     public static final GToggleActionGroup openDocumentsActions = new GToggleActionGroup();
 
+    private static int maxRecentDocuments;
+
+    /**
+     * Get the number of maximum recently used documents in the
+     * {@link #recentDocsActions}.
+     *
+     * @return The maximum number of documents that can be stored in the
+     *         {@link #recentDocsActions}. The default is 6.
+     */
+    public static int getMaxRecentDocuments() {
+        return maxRecentDocuments;
+    }
+
+    /**
+     * Set the number of maximum recently used documents in the
+     * {@link #recentDocsActions}.
+     *
+     * @param maxRecentDocuments The maximum number of documents that can be
+     *        stored in the {@link #recentDocsActions}.
+     */
+    public static void setMaxRecentDocuments(int maxRecentDocuments) {
+        if (DVManager.maxRecentDocuments == maxRecentDocuments)
+            return;
+
+        DVManager.maxRecentDocuments = maxRecentDocuments;
+
+        var mi = recentDocsActions.iterator();
+        int count = 0;
+
+        while (mi.hasNext()) {
+            ++count;
+            mi.next();
+
+            if (count > maxRecentDocuments)
+                break;
+        }
+
+        while (mi.hasNext()) {
+            ++count;
+            mi.next();
+            mi.remove();
+        }
+
+        while (count <= maxRecentDocuments) {
+            ++count;
+            var action = new GAction()
+                    .enabled(false)
+                    .visible(false)
+                    .onAction(e -> {
+                        try {
+                            openDocument(null, e.getActionCommand(), false);
+                        } catch (DVLoadException ex) {
+                            ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
+                        }
+                    });
+        }
+    }
+
     /**
      * Updates the edit actions.
      * <p>
@@ -390,14 +447,51 @@ public final class DVManager extends BasicDVManager {
     private static final PropertyChangeListener documentModifiedListener = evt -> updateSaveActions();
     private static final PropertyChangeListener documentNameListener = evt -> {
         for (GAction action : openDocumentsActions) {
-            if (action.getTag().equals(evt.getSource())) {
+            if (Objects.equals(action.getTag(), evt.getSource())) {
                 action.setName(evt.getNewValue().toString());
                 break;
             }
         }
+
+        boolean found = false;
+
+        for (GActionItemBuilder ib : recentDocsActions) {
+            var action = (GAction) ib;
+
+            if (Objects.equals(action.getName(), evt.getOldValue())) {
+                action.setName(evt.getNewValue().toString());
+                action.setCommand(evt.getNewValue().toString());
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+            updateRecentDocumentsActions((Document) evt.getSource());
     };
 
+    private static void updateRecentDocumentsActions(Document document) {
+        if (document.getParent() != null || document.isNewData())
+            return;
+
+//        if (recentDocsActions.getItemCount() > 0) {
+//            if (((GAction) recentDocsActions.getItemAt(0)).getCommand().equals(document.getName()))
+//                return;
+//
+//            for (int i = 1; i < recentDocsActions.getItemCount() - 1; i++) {
+//                var action1 = (GAction) recentDocsActions.getItemAt(i);
+//                var action2 = (GAction) recentDocsActions.getItemAt(i + 1);
+//
+//                if (action2.getCommand().equals(document.getName())) {
+//                    break;
+//                }
+//            }
+//        }
+    }
+
     static {
+        setMaxRecentDocuments(6);
+
         addPropertyChangeListener(ACTIVE_DOCUMENT_PROPERTY, e -> {
             var docOld = (e.getOldValue() instanceof Document d) ? d : null;
             var docNew = (e.getNewValue() instanceof Document d) ? d : null;
