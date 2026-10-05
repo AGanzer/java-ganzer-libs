@@ -241,6 +241,32 @@ public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
     }
 
     /**
+     * Gets the number of items in this group.
+     *
+     * @return The number of items in this group.
+     *
+     * @since 6.0.0
+     */
+    public int getItemCount() {
+        return actions.size();
+    }
+
+    /**
+     * Gets the item at the specified index.
+     *
+     * @param index The index of the item to retrieve.
+     *
+     * @return The item at the specified index.
+     *
+     * @throws IndexOutOfBoundsException If the index is out of range.
+     *
+     * @since 6.0.0
+     */
+    public ActionItemBuilder getItemAt(int index) {
+        return actions.get(index);
+    }
+
+    /**
      * Creates a menu with all containing actions.
      *
      * @return The created menu.

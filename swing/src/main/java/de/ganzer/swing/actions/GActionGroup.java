@@ -334,6 +334,32 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
+     * Gets the number of items in this group.
+     *
+     * @return The number of items in this group.
+     *
+     * @since 6.0.0
+     */
+    public int getItemCount() {
+        return actions.size();
+    }
+
+    /**
+     * Gets the item at the specified index.
+     *
+     * @param index The index of the item to retrieve.
+     *
+     * @return The item at the specified index.
+     *
+     * @throws IndexOutOfBoundsException If the index is out of range.
+     *
+     * @since 6.0.0
+     */
+    public GActionItemBuilder getItemAt(int index) {
+        return actions.get(index);
+    }
+
+    /**
      * Gets a backward iterator for iterating the contained items.
      *
      * @return A backward iterator for iterating the contained items.
