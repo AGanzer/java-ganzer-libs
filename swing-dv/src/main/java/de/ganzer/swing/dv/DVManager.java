@@ -6,12 +6,12 @@ import de.ganzer.dv.*;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
-import de.ganzer.swing.actions.GActionItemBuilder;
 import de.ganzer.swing.actions.GToggleActionGroup;
 import de.ganzer.swing.dv.internals.SwingDVMessages;
 import de.ganzer.swing.util.EditorTracer;
 
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -306,8 +306,6 @@ public final class DVManager extends BasicDVManager {
      */
     public static final GToggleActionGroup openDocumentsActions = new GToggleActionGroup();
 
-    private static int maxRecentFiles;
-
     /**
      * Get the number of maximum recently used documents in the
      * {@link #recentFilesActions}.
@@ -316,7 +314,7 @@ public final class DVManager extends BasicDVManager {
      *         {@link #recentFilesActions}. The default is 6.
      */
     public static int getMaxRecentFiles() {
-        return maxRecentFiles;
+        return recentFilesActions.getItemCount();
     }
 
     /**
@@ -327,10 +325,8 @@ public final class DVManager extends BasicDVManager {
      *        stored in the {@link #recentFilesActions}.
      */
     public static void setMaxRecentFiles(int maxRecentFiles) {
-        if (DVManager.maxRecentFiles == maxRecentFiles)
+        if (DVManager.recentFilesActions.getItemCount() == maxRecentFiles)
             return;
-
-        DVManager.maxRecentFiles = maxRecentFiles;
 
         var mi = recentFilesActions.iterator();
         int count = 0;
@@ -352,7 +348,6 @@ public final class DVManager extends BasicDVManager {
         while (count <= maxRecentFiles) {
             ++count;
             var action = new GAction()
-                    .enabled(false)
                     .visible(false)
                     .onAction(e -> {
                         try {
@@ -364,7 +359,8 @@ public final class DVManager extends BasicDVManager {
             recentFilesActions.addAll(action);
         }
 
-        getSupport().updateRecentFilesMenu();
+        if (isSupportRegistered())
+            getSupport().updateRecentFilesMenu();
     }
 
     /**
@@ -456,40 +452,36 @@ public final class DVManager extends BasicDVManager {
             }
         }
 
-        boolean found = false;
-
-        for (GActionItemBuilder ib : recentFilesActions) {
-            var action = (GAction) ib;
-
-            if (Objects.equals(action.getName(), evt.getOldValue())) {
-                action.setName(evt.getNewValue().toString());
-                action.setCommand(evt.getNewValue().toString());
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-            updateRecentDocumentsActions((Document) evt.getSource());
+        // Invoke later because the document may be new
+        // and this flag ist not removed yet:
+        //
+        SwingUtilities.invokeLater(() -> updateRecentDocumentsActions((Document) evt.getSource()));
     };
 
     private static void updateRecentDocumentsActions(Document document) {
         if (document.getParent() != null || document.isNewData())
             return;
 
-//        if (recentDocsActions.getItemCount() > 0) {
-//            if (((GAction) recentDocsActions.getItemAt(0)).getCommand().equals(document.getName()))
-//                return;
-//
-//            for (int i = 1; i < recentDocsActions.getItemCount() - 1; i++) {
-//                var action1 = (GAction) recentDocsActions.getItemAt(i);
-//                var action2 = (GAction) recentDocsActions.getItemAt(i + 1);
-//
-//                if (action2.getCommand().equals(document.getName())) {
-//                    break;
-//                }
-//            }
-//        }
+        var newText = document.getName();
+
+        for ( int i = 0; i < recentFilesActions.getItemCount(); i++) {
+            var action = (GAction) recentFilesActions.getItemAt(i);
+            var oldText = action.getCommand();
+
+            action.name(newText).command(newText);
+
+            if (Objects.equals(oldText, document.getName()))
+                break;
+
+            if (!action.isVisible()) {
+                action.setVisible(true);
+                break;
+            }
+
+            newText = oldText;
+        }
+
+        recentFilesActions.setEnabled(true);
     }
 
     static {
@@ -567,6 +559,9 @@ public final class DVManager extends BasicDVManager {
 
             var docOld = (e.getOldValue() instanceof Document d) ? d : null;
             var docNew = (e.getNewValue() instanceof Document d) ? d : null;
+
+            if (docNew != null)
+                updateRecentDocumentsActions(docNew);
 
             if (docOld != null)
                 System.out.println("Document closed: " + docOld.getName());
