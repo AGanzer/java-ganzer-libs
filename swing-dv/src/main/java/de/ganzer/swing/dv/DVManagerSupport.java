@@ -33,4 +33,10 @@ public interface DVManagerSupport {
      * opened documents.
      */
     void updateOpenDocumentsMenu();
+
+    /**
+     * Invoked to update the menu items in the recent files menu with the
+     * recently opened files.
+     */
+    void updateRecentFilesMenu();
 }

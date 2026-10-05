@@ -159,7 +159,7 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action where the recently opened documents are inserted into.
      */
-    public static final GActionGroup recentDocsActions = new GActionGroup(SwingDVMessages.get("menu.recentDocs"))
+    public static final GActionGroup recentFilesActions = new GActionGroup(SwingDVMessages.get("menu.recentDocs"))
             .enabled(false);
     /**
      * The action that saves a document.
@@ -306,40 +306,40 @@ public final class DVManager extends BasicDVManager {
      */
     public static final GToggleActionGroup openDocumentsActions = new GToggleActionGroup();
 
-    private static int maxRecentDocuments;
+    private static int maxRecentFiles;
 
     /**
      * Get the number of maximum recently used documents in the
-     * {@link #recentDocsActions}.
+     * {@link #recentFilesActions}.
      *
      * @return The maximum number of documents that can be stored in the
-     *         {@link #recentDocsActions}. The default is 6.
+     *         {@link #recentFilesActions}. The default is 6.
      */
-    public static int getMaxRecentDocuments() {
-        return maxRecentDocuments;
+    public static int getMaxRecentFiles() {
+        return maxRecentFiles;
     }
 
     /**
      * Set the number of maximum recently used documents in the
-     * {@link #recentDocsActions}.
+     * {@link #recentFilesActions}.
      *
-     * @param maxRecentDocuments The maximum number of documents that can be
-     *        stored in the {@link #recentDocsActions}.
+     * @param maxRecentFiles The maximum number of documents that can be
+     *        stored in the {@link #recentFilesActions}.
      */
-    public static void setMaxRecentDocuments(int maxRecentDocuments) {
-        if (DVManager.maxRecentDocuments == maxRecentDocuments)
+    public static void setMaxRecentFiles(int maxRecentFiles) {
+        if (DVManager.maxRecentFiles == maxRecentFiles)
             return;
 
-        DVManager.maxRecentDocuments = maxRecentDocuments;
+        DVManager.maxRecentFiles = maxRecentFiles;
 
-        var mi = recentDocsActions.iterator();
+        var mi = recentFilesActions.iterator();
         int count = 0;
 
         while (mi.hasNext()) {
             ++count;
             mi.next();
 
-            if (count > maxRecentDocuments)
+            if (count > maxRecentFiles)
                 break;
         }
 
@@ -349,7 +349,7 @@ public final class DVManager extends BasicDVManager {
             mi.remove();
         }
 
-        while (count <= maxRecentDocuments) {
+        while (count <= maxRecentFiles) {
             ++count;
             var action = new GAction()
                     .enabled(false)
@@ -361,7 +361,10 @@ public final class DVManager extends BasicDVManager {
                             ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
                         }
                     });
+            recentFilesActions.addAll(action);
         }
+
+        getSupport().updateRecentFilesMenu();
     }
 
     /**
@@ -455,7 +458,7 @@ public final class DVManager extends BasicDVManager {
 
         boolean found = false;
 
-        for (GActionItemBuilder ib : recentDocsActions) {
+        for (GActionItemBuilder ib : recentFilesActions) {
             var action = (GAction) ib;
 
             if (Objects.equals(action.getName(), evt.getOldValue())) {
@@ -490,7 +493,7 @@ public final class DVManager extends BasicDVManager {
     }
 
     static {
-        setMaxRecentDocuments(6);
+        setMaxRecentFiles(6);
 
         addPropertyChangeListener(ACTIVE_DOCUMENT_PROPERTY, e -> {
             var docOld = (e.getOldValue() instanceof Document d) ? d : null;

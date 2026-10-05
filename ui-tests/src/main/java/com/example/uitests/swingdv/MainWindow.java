@@ -81,7 +81,7 @@ public class MainWindow extends JXFrame {
 
     private void initTabPane() {
         tabPane = new ClosableTabsPane();
-        DVManager.registerSupport(new ClosableTabsPaneDVMSupport(tabPane, getWindowMenu()));
+        DVManager.registerSupport(new ClosableTabsPaneDVMSupport(tabPane, getWindowMenu(), getRecentFilesMenu()));
 
         getContentPane().add(tabPane);
     }
@@ -91,6 +91,17 @@ public class MainWindow extends JXFrame {
             var menu = getJMenuBar().getMenu(i);
 
             if (menu.getAction() == Actions.windowActions)
+                return menu;
+        }
+
+        return null;
+    }
+
+    private JMenu getRecentFilesMenu() {
+        for (int i = 0; i < getJMenuBar().getMenuCount(); i++) {
+            var menu = getJMenuBar().getMenu(i);
+
+            if (menu.getAction() == DVManager.recentFilesActions)
                 return menu;
         }
 

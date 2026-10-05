@@ -17,6 +17,8 @@ import java.util.List;
  * {@link ClosableTabsPane} to inform the {@link DVManager} about
  * changed views.
  *
+ * @see DVManager#registerSupport(DVManagerSupport)
+ *
  * @since 6.0.0
  */
 public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
@@ -29,12 +31,16 @@ public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
      *         pane later.
      * @param windowMenu The window menu to manage or {@code null} to set it
      *        later.
+     * @param recentFilesMenu The recent files menu to manage or {@code null}
+     *        to set it later.
      *
      * @see #setTabPane(ClosableTabsPane)
+     * @see #setWindowMenu(JMenu)
+     * @see #setRecentFilesMenu(JMenu)
      * @see DVManager#registerSupport(DVManagerSupport)
      */
-    public ClosableTabsPaneDVMSupport(ClosableTabsPane tabPane, JMenu windowMenu) {
-        super(windowMenu);
+    public ClosableTabsPaneDVMSupport(ClosableTabsPane tabPane, JMenu windowMenu, JMenu recentFilesMenu) {
+        super(windowMenu, recentFilesMenu);
         setTabPane(tabPane);
     }
 

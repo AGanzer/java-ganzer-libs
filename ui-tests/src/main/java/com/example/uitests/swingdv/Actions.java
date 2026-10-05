@@ -58,7 +58,7 @@ public final class Actions {
                                     }
                                 }),
                         new GSeparatorAction(),
-                        DVManager.recentDocsActions,
+                        DVManager.recentFilesActions,
                         new GSeparatorAction(),
                         DVManager.saveAction
                                 .smallIcon(SVGProvider.get("save", 16))
