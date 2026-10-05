@@ -236,7 +236,7 @@ public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
      *
      * @since 6.0.0
      */
-    public Iterator<ActionItemBuilder> backIterator() {
+    public ListIterator<ActionItemBuilder> backIterator() {
         return actions.listIterator(actions.size());
     }
 

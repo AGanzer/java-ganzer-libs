@@ -4,10 +4,7 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Groups actions that are exclusively selectable.
@@ -230,7 +227,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
      *
      * @since 6.0.0
      */
-    public Iterator<GAction> backIterator() {
+    public ListIterator<GAction> backIterator() {
         return actions.listIterator(actions.size());
     }
 

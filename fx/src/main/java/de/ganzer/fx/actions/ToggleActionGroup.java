@@ -137,7 +137,7 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
      *
      * @see #iterator()
      */
-    public Iterator<Action> backIterator() {
+    public ListIterator<Action> backIterator() {
         return actions.listIterator(actions.size());
     }
 

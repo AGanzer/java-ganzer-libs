@@ -6,10 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Groups several actions to enable the creation of menus and menu items.
@@ -345,7 +342,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
      *
      * @since 6.0.0
      */
-    public Iterator<GActionItemBuilder> backIterator() {
+    public ListIterator<GActionItemBuilder> backIterator() {
         return actions.listIterator(actions.size());
     }
 
