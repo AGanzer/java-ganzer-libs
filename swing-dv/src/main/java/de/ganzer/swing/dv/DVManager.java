@@ -3,7 +3,6 @@ package de.ganzer.swing.dv;
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
 import de.ganzer.core.util.Settings;
-import de.ganzer.core.util.Strings;
 import de.ganzer.dv.*;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.actions.GAction;
