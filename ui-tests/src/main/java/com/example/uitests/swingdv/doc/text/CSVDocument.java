@@ -77,7 +77,8 @@ public class CSVDocument extends Document {
             var bis = new BufferedInputStream(fis);
             var csv = new CsvInputStreamReader(bis);
 
-            csv.setValueSeparator(Locale.getDefault().getLanguage().equals("de") ? ';' : ',');
+//            csv.setValueSeparator(Locale.getDefault().getLanguage().equals("de") ? ';' : ',');
+            csv.setValueSeparator(';');
 
             encoding = csv.getEncoding();
             data = new ArrayList<>();
@@ -101,7 +102,8 @@ public class CSVDocument extends Document {
             var bos = new BufferedOutputStream(fos);
             var csv = new CsvOutputStreamWriter(bos, encoding);
 
-            csv.setValueSeparator(Locale.getDefault().getLanguage().equals("de") ? ';' : ',');
+//            csv.setValueSeparator(Locale.getDefault().getLanguage().equals("de") ? ';' : ',');
+            csv.setValueSeparator(';');
 
             for (var line : data)
                 csv.writeLine(line);

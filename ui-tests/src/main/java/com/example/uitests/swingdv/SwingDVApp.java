@@ -47,6 +47,8 @@ public class SwingDVApp {
             Taskbar.getTaskbar().setIconImage(SVGProvider.get("hamburger", 64).getImage());
         }
 
+        CommandLineParser.parse(args);
+
         Toolkit.getDefaultToolkit()
                 .getSystemEventQueue()
                 .push(new ExceptionHandlingEventQueue());
