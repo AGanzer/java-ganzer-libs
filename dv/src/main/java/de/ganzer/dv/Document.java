@@ -1,6 +1,8 @@
 package de.ganzer.dv;
 
 import de.ganzer.core.Services;
+import de.ganzer.core.util.FileNames;
+import de.ganzer.core.util.Strings;
 import de.ganzer.dv.services.DVNavigationService;
 
 import java.io.*;
@@ -283,6 +285,12 @@ public abstract class Document extends Model {
 
         if (saveName == null)
             return;
+
+        if (!Strings.isNullOrBlank(getTemplate().getDefaultExtension()) && FileNames.getExtension(saveName).isEmpty()) {
+            saveName += saveName.endsWith(".")
+                    ? getTemplate().getDefaultExtension()
+                    : "." + getTemplate().getDefaultExtension();
+        }
 
         setName(saveName);
         setNewData(false);

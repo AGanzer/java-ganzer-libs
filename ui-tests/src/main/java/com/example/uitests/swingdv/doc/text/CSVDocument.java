@@ -157,6 +157,8 @@ public class CSVDocument extends Document {
         public void undo() {
             data.get(row).set(column, orgValue);
 
+            var oldRowCount = getRowCount();
+
             while (data.size() > orgRowSizes.length)
                 data.remove(data.size() - 1);
 
@@ -166,10 +168,12 @@ public class CSVDocument extends Document {
             }
 
             setModified(true);
-            notifyDataChange(null, new ChangeContext(row, column));
+            notifyDataChange(null, oldRowCount != getRowCount() ? null : new ChangeContext(row, column));
         }
 
         private void execute(View<?> originator) {
+            var oldRowCount = getRowCount();
+
             while (row >= data.size())
                 data.add(new ArrayList<>());
 
@@ -182,7 +186,7 @@ public class CSVDocument extends Document {
             data.get(row).set(column, value != null ? value : "");
 
             setModified(true);
-            notifyDataChange(originator, new ChangeContext(row, column));
+            notifyDataChange(originator, oldRowCount != getRowCount() ? null : new ChangeContext(row, column));
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.uitests.swingdv;
 
 import com.example.uitests.swing.SVGProvider;
+import com.example.uitests.swingdv.doc.db.PersonDocument;
+import com.example.uitests.swingdv.doc.db.PersonView;
 import com.example.uitests.swingdv.doc.image.ImageDocument;
 import com.example.uitests.swingdv.doc.image.ImageView;
 import com.example.uitests.swingdv.doc.text.CSVDocument;
@@ -151,6 +153,7 @@ public class SwingDVApp {
                 WelcomeDocument::new,
                 "Welcome",
                 null,
+                null,
                 DocumentTemplate.NO_NEW_NUMBER | DocumentTemplate.IS_HIDDEN);
         welcomeTpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, WelcomeView>(
                 "Welcome",
@@ -165,6 +168,7 @@ public class SwingDVApp {
                 TextDocument::new,
                 "New Text",
                 "Text Files|*.txt;Log Files|*.log;Source Files|*.c *.cpp *.h *.java *.py",
+                "txt",
                 DocumentTemplate.IS_DEFAULT);
         textTpl.registerViewTemplate(new ViewTemplate<TextDocument, TextView>(
                 "Text",
@@ -178,10 +182,11 @@ public class SwingDVApp {
                 CSVDocument::new,
                 "New CSV Table",
                 "CSV Files|*.csv",
+                "csv",
                 DocumentTemplate.NONE);
-        csvTpl.registerViewTemplate(new ViewTemplate<CSVDocument, CSVView>(
+        csvTpl.registerViewTemplate(new ViewTemplate<CSVDocument, CSVView<CSVDocument>>(
                 "CSV",
-                i -> new CSVView(i, mainWindow.getTabPane()),
+                i -> new CSVView<>(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.IS_DEFAULT));
 
@@ -192,6 +197,7 @@ public class SwingDVApp {
                 ImageDocument::new,
                 "",
                 "Image Files|*.bmp *.gif *.jpg *.jpeg *.png *.tiff",
+                null,
                 DocumentTemplate.IS_HIDDEN);
         imageTpl.registerViewTemplate(new ViewTemplate<ImageDocument, ImageView>(
                 "Image",
@@ -199,10 +205,30 @@ public class SwingDVApp {
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.IS_DEFAULT));
 
+        var personTpl = new DocumentTemplate<>(
+                "Person Files",
+                s -> s.toLowerCase().endsWith(".person"),
+                PersonDocument::new,
+                "New Person Table",
+                "Person Files|*.person",
+                "person",
+                DocumentTemplate.NONE);
+        personTpl.registerViewTemplate(new ViewTemplate<PersonDocument, PersonView>(
+                "Person Table",
+                i -> new PersonView(i, mainWindow.getTabPane()),
+                v -> mainWindow.addChildView(v),
+                ViewTemplate.IS_DEFAULT));
+        personTpl.registerViewTemplate(new ViewTemplate<PersonDocument, CSVView<PersonDocument>>(
+                "CSV",
+                i -> new CSVView<>(i, mainWindow.getTabPane()),
+                v -> mainWindow.addChildView(v),
+                ViewTemplate.NONE));
+
         DVManager.registerDocumentTemplate(welcomeTpl);
         DVManager.registerDocumentTemplate(textTpl);
         DVManager.registerDocumentTemplate(csvTpl);
         DVManager.registerDocumentTemplate(imageTpl);
+        DVManager.registerDocumentTemplate(personTpl);
     }
 
     private static void onIdle() {

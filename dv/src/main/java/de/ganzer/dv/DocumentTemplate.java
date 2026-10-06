@@ -80,6 +80,7 @@ public class DocumentTemplate<D extends Document> {
     private final DocumentSupplier<D> documentSupplier;
     private final String newName;
     private final String filter;
+    private final String defaultExtension;
     private final int options;
     private final String newNameNumberFormat;
 
@@ -92,6 +93,8 @@ public class DocumentTemplate<D extends Document> {
      * @param documentSupplier Creates the document.
      * @param newName The name of new documents.
      * @param filter The filter to use to open documents from existing sources.
+     * @param defaultExtension The default extension to use for saving documents
+     *        if none is specified or {@code null} for no extension.
      * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
      *         {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
      *         and {@link #NO_NEW_NUMBER}.
@@ -104,8 +107,9 @@ public class DocumentTemplate<D extends Document> {
                             DocumentSupplier<D> documentSupplier,
                             String newName,
                             String filter,
+                            String defaultExtension,
                             int options) {
-        this(displayName, canHandleSource, documentSupplier, newName, filter, options, null);
+        this(displayName, canHandleSource, documentSupplier, newName, filter, defaultExtension, options, null);
     }
 
     /**
@@ -117,6 +121,8 @@ public class DocumentTemplate<D extends Document> {
      * @param documentSupplier Creates the document.
      * @param newName The name of new documents.
      * @param filter The filter to use to open documents from existing sources.
+     * @param defaultExtension The default extension to use for saving documents
+     *        if none is specified or {@code null} for no extension.
      * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
      *         {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
      *         and {@link #NO_NEW_NUMBER}.
@@ -131,6 +137,7 @@ public class DocumentTemplate<D extends Document> {
                             DocumentSupplier<D> documentSupplier,
                             String newName,
                             String filter,
+                            String defaultExtension,
                             int options,
                             String newNameNumberFormat) {
         Objects.requireNonNull(displayName, "displayName must not be null");
@@ -143,6 +150,7 @@ public class DocumentTemplate<D extends Document> {
         this.documentSupplier = documentSupplier;
         this.newName = newName;
         this.filter = filter;
+        this.defaultExtension = defaultExtension;
         this.options = options;
         this.newNameNumberFormat = newNameNumberFormat != null ? newNameNumberFormat : "%s %d";
     }
@@ -163,6 +171,16 @@ public class DocumentTemplate<D extends Document> {
      */
     public String getFilter() {
         return filter;
+    }
+
+    /**
+     * Gets the default file extension used for saving documents.
+     *
+     * @return The default file extension or {@code null} if no default
+     *         extension is set.
+     */
+    public String getDefaultExtension() {
+        return defaultExtension;
     }
 
     /**

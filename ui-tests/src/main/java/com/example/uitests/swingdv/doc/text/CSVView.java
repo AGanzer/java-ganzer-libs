@@ -16,10 +16,10 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 
-public class CSVView extends MDISubView<CSVDocument> {
+public class CSVView<D extends CSVDocument> extends MDISubView<D> {
     private final JXTable table;
 
-    public CSVView(ViewCreationInfo<CSVDocument, CSVView> info, ClosableTabsPane tabPane) {
+    public CSVView(ViewCreationInfo<D, CSVView<D>> info, ClosableTabsPane tabPane) {
         super(info, tabPane, true);
 
         var rowHeader = new RowHeader();
@@ -31,6 +31,7 @@ public class CSVView extends MDISubView<CSVDocument> {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void documentDataChanged(Object context) {
         if (context instanceof CSVDocument.ChangeContext c)

@@ -222,10 +222,8 @@ public class BasicDVManager {
      * @param document The document where to create the view for.
      *
      * @return The created view or {@code null} if the user has canceled.
-     *
-     * @param <D> The type of the document.
      */
-    public static <D extends Document> View<?> createView(D document) {
+    public static View<?> createView(Document document) {
         return createView(document, null);
     }
 
@@ -242,7 +240,7 @@ public class BasicDVManager {
      *
      * @param <D> The type of the document.
      */
-    public static <D extends Document> View<?> createView(D document, ViewTemplate<D, ?> template) {
+    public static <D extends Document> View<?> createView(Document document, ViewTemplate<D, ?> template) {
         Objects.requireNonNull(document, "Document must not be null.");
 
         ViewTemplate<D, ?> templateToUse = template;
@@ -261,7 +259,17 @@ public class BasicDVManager {
             templateToUse = (ViewTemplate<D, ?>) chosen;
         }
 
-         return templateToUse != null ? templateToUse.createView(document) : null;
+        if (templateToUse == null)
+            return null;
+
+        //noinspection unchecked
+         var view = templateToUse.createView((D) document);
+
+         for (var v : document.getViews())
+             if (v != view)
+                 v.updateTitle();
+
+         return view;
     }
 
     /**
