@@ -23,7 +23,7 @@ public class MainWindow extends JXFrame {
         initTabPane();
         setSize(800, 600);
         setLocationRelativeTo(null);
-        SwingDVApp.uiSettings.apply(getClass().getSimpleName(), this);
+        LocalSettings.ui.apply(getClass().getSimpleName(), this);
     }
 
     public ClosableTabsPane getTabPane() {
@@ -42,7 +42,8 @@ public class MainWindow extends JXFrame {
             if (!DVManager.canClose())
                 return;
 
-            SwingDVApp.saveSettings();
+            LocalSettings.ui.write(getClass().getSimpleName(), this);
+            LocalSettings.save();
         }
 
         super.processWindowEvent(e);
