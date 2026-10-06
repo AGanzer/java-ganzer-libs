@@ -34,11 +34,6 @@ public class ChooseFromListPanel<E> extends AbstractModifiableDataPanel<ChooseFr
     }
 
     @Override
-    protected JComponent createTitleIcon() {
-        return null;
-    }
-
-    @Override
     public void initControls(ChooseFromListData<E> data) {
         titleLabel.setText(data.title);
 
