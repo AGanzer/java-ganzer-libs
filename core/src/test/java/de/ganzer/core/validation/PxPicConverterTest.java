@@ -22,7 +22,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionWhenPatternIsNull() {
             NullPointerException ex = assertThrows(
                     NullPointerException.class,
-                    () -> PxPicConverter.toParadoxPicture(null, Locale.GERMANY)
+                    () -> PxPicConverter.toPicture(null, Locale.GERMANY)
             );
             assertEquals("pattern must not be null.", ex.getMessage());
         }
@@ -31,132 +31,132 @@ class PxPicConverterTest {
         void shouldThrowExceptionWhenLocaleIsNull() {
             NullPointerException ex = assertThrows(
                     NullPointerException.class,
-                    () -> PxPicConverter.toParadoxPicture("yyyy-MM-dd", null)
+                    () -> PxPicConverter.toPicture("yyyy-MM-dd", null)
             );
             assertEquals("locale must not be null.", ex.getMessage());
         }
 
         @Test
         void shouldConvertNumericDatePatterns() {
-            assertEquals("##.##.####", PxPicConverter.toParadoxPicture("dd.MM.yyyy", Locale.GERMANY));
-            assertEquals("#[#].#[#].####", PxPicConverter.toParadoxPicture("d.M.y", Locale.GERMANY));
-            assertEquals("####-##-##", PxPicConverter.toParadoxPicture("yyyy-MM-dd", Locale.US));
-            assertEquals("##-##-##", PxPicConverter.toParadoxPicture("yy-MM-dd", Locale.US));
-            assertEquals("###-##-##", PxPicConverter.toParadoxPicture("yyy-MM-dd", Locale.US));
-            assertEquals("####-##-##", PxPicConverter.toParadoxPicture("uuuu-MM-dd", Locale.US));
-            assertEquals("##-##-##", PxPicConverter.toParadoxPicture("uu-MM-dd", Locale.US));
-            assertEquals("####-##-##", PxPicConverter.toParadoxPicture("u-MM-dd", Locale.US));
+            assertEquals("##.##.####", PxPicConverter.toPicture("dd.MM.yyyy", Locale.GERMANY));
+            assertEquals("#[#].#[#].####", PxPicConverter.toPicture("d.M.y", Locale.GERMANY));
+            assertEquals("####-##-##", PxPicConverter.toPicture("yyyy-MM-dd", Locale.US));
+            assertEquals("##-##-##", PxPicConverter.toPicture("yy-MM-dd", Locale.US));
+            assertEquals("###-##-##", PxPicConverter.toPicture("yyy-MM-dd", Locale.US));
+            assertEquals("####-##-##", PxPicConverter.toPicture("uuuu-MM-dd", Locale.US));
+            assertEquals("##-##-##", PxPicConverter.toPicture("uu-MM-dd", Locale.US));
+            assertEquals("####-##-##", PxPicConverter.toPicture("u-MM-dd", Locale.US));
         }
 
         @Test
         void shouldConvertTimePatterns() {
-            assertEquals("##:##:##", PxPicConverter.toParadoxPicture("HH:mm:ss", Locale.GERMANY));
-            assertEquals("#[#]:#[#]:#[#]", PxPicConverter.toParadoxPicture("H:m:s", Locale.GERMANY));
-            assertEquals("#[#]:#[#]", PxPicConverter.toParadoxPicture("k:K", Locale.GERMANY));
-            assertEquals("#[#]:##", PxPicConverter.toParadoxPicture("h:mm", Locale.US));
-            assertEquals("#", PxPicConverter.toParadoxPicture("S", Locale.GERMANY));
-            assertEquals("##", PxPicConverter.toParadoxPicture("SS", Locale.GERMANY));
-            assertEquals("###", PxPicConverter.toParadoxPicture("SSS", Locale.GERMANY));
-            assertEquals("######", PxPicConverter.toParadoxPicture("SSSSSS", Locale.GERMANY));
+            assertEquals("##:##:##", PxPicConverter.toPicture("HH:mm:ss", Locale.GERMANY));
+            assertEquals("#[#]:#[#]:#[#]", PxPicConverter.toPicture("H:m:s", Locale.GERMANY));
+            assertEquals("#[#]:#[#]", PxPicConverter.toPicture("k:K", Locale.GERMANY));
+            assertEquals("#[#]:##", PxPicConverter.toPicture("h:mm", Locale.US));
+            assertEquals("#", PxPicConverter.toPicture("S", Locale.GERMANY));
+            assertEquals("##", PxPicConverter.toPicture("SS", Locale.GERMANY));
+            assertEquals("###", PxPicConverter.toPicture("SSS", Locale.GERMANY));
+            assertEquals("######", PxPicConverter.toPicture("SSSSSS", Locale.GERMANY));
         }
 
         @Test
         void shouldConvertWeekAndDayFields() {
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("w", Locale.GERMANY));
-            assertEquals("##", PxPicConverter.toParadoxPicture("ww", Locale.GERMANY));
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("W", Locale.GERMANY));
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("D", Locale.GERMANY));
-            assertEquals("###", PxPicConverter.toParadoxPicture("DDD", Locale.GERMANY));
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("F", Locale.GERMANY));
-            assertEquals("####", PxPicConverter.toParadoxPicture("YYYY", Locale.GERMANY));
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("A", Locale.GERMANY));
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("n", Locale.GERMANY));
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("N", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("w", Locale.GERMANY));
+            assertEquals("##", PxPicConverter.toPicture("ww", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("W", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("D", Locale.GERMANY));
+            assertEquals("###", PxPicConverter.toPicture("DDD", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("F", Locale.GERMANY));
+            assertEquals("####", PxPicConverter.toPicture("YYYY", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("A", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("n", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("N", Locale.GERMANY));
         }
 
         @Test
         void shouldConvertAmPmAndFlexibleDayPeriod() {
-            assertEquals("{AM,PM}", PxPicConverter.toParadoxPicture("a", Locale.US));
-            assertEquals("{AM,PM}", PxPicConverter.toParadoxPicture("B", Locale.US));
+            assertEquals("{AM,PM}", PxPicConverter.toPicture("a", Locale.US));
+            assertEquals("{AM,PM}", PxPicConverter.toPicture("B", Locale.US));
         }
 
         @Test
         void shouldConvertDayOfWeekFields() {
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("e", Locale.GERMANY));
-            assertEquals("##", PxPicConverter.toParadoxPicture("ee", Locale.GERMANY));
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("c", Locale.GERMANY));
-            assertEquals("##", PxPicConverter.toParadoxPicture("cc", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("e", Locale.GERMANY));
+            assertEquals("##", PxPicConverter.toPicture("ee", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("c", Locale.GERMANY));
+            assertEquals("##", PxPicConverter.toPicture("cc", Locale.GERMANY));
 
-            String eShort = PxPicConverter.toParadoxPicture("EEE", Locale.GERMANY);
+            String eShort = PxPicConverter.toPicture("EEE", Locale.GERMANY);
             assertNotNull(eShort);
             assertTrue(eShort.startsWith("{") && eShort.endsWith("}"));
 
-            String eFull = PxPicConverter.toParadoxPicture("EEEE", Locale.GERMANY);
+            String eFull = PxPicConverter.toPicture("EEEE", Locale.GERMANY);
             assertNotNull(eFull);
             assertTrue(eFull.startsWith("{") && eFull.endsWith("}"));
 
-            String eNarrow = PxPicConverter.toParadoxPicture("EEEEE", Locale.GERMANY);
+            String eNarrow = PxPicConverter.toPicture("EEEEE", Locale.GERMANY);
             assertNotNull(eNarrow);
 
-            String eee = PxPicConverter.toParadoxPicture("eee", Locale.GERMANY);
+            String eee = PxPicConverter.toPicture("eee", Locale.GERMANY);
             assertNotNull(eee);
-            String eeee = PxPicConverter.toParadoxPicture("eeee", Locale.GERMANY);
+            String eeee = PxPicConverter.toPicture("eeee", Locale.GERMANY);
             assertNotNull(eeee);
-            String eeeee = PxPicConverter.toParadoxPicture("eeeee", Locale.GERMANY);
+            String eeeee = PxPicConverter.toPicture("eeeee", Locale.GERMANY);
             assertNotNull(eeeee);
         }
 
         @Test
         void shouldConvertQuarters() {
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("Q", Locale.GERMANY));
-            assertEquals("##", PxPicConverter.toParadoxPicture("QQ", Locale.GERMANY));
-            assertEquals("#[#]", PxPicConverter.toParadoxPicture("q", Locale.GERMANY));
-            assertEquals("##", PxPicConverter.toParadoxPicture("qq", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("Q", Locale.GERMANY));
+            assertEquals("##", PxPicConverter.toPicture("QQ", Locale.GERMANY));
+            assertEquals("#[#]", PxPicConverter.toPicture("q", Locale.GERMANY));
+            assertEquals("##", PxPicConverter.toPicture("qq", Locale.GERMANY));
 
-            String q3 = PxPicConverter.toParadoxPicture("QQQ", Locale.GERMANY);
+            String q3 = PxPicConverter.toPicture("QQQ", Locale.GERMANY);
             assertNotNull(q3);
-            String q4 = PxPicConverter.toParadoxPicture("QQQQ", Locale.GERMANY);
+            String q4 = PxPicConverter.toPicture("QQQQ", Locale.GERMANY);
             assertNotNull(q4);
-            String q5 = PxPicConverter.toParadoxPicture("QQQQQ", Locale.GERMANY);
+            String q5 = PxPicConverter.toPicture("QQQQQ", Locale.GERMANY);
             assertNotNull(q5);
-            String qLower3 = PxPicConverter.toParadoxPicture("qqq", Locale.GERMANY);
+            String qLower3 = PxPicConverter.toPicture("qqq", Locale.GERMANY);
             assertNotNull(qLower3);
-            String qLower4 = PxPicConverter.toParadoxPicture("qqqq", Locale.GERMANY);
+            String qLower4 = PxPicConverter.toPicture("qqqq", Locale.GERMANY);
             assertNotNull(qLower4);
-            String qLower5 = PxPicConverter.toParadoxPicture("qqqqq", Locale.GERMANY);
+            String qLower5 = PxPicConverter.toPicture("qqqqq", Locale.GERMANY);
             assertNotNull(qLower5);
         }
 
         @Test
         void shouldConvertEra() {
-            String g1 = PxPicConverter.toParadoxPicture("G", Locale.US);
+            String g1 = PxPicConverter.toPicture("G", Locale.US);
             assertEquals("{AD,BC}", g1);
 
-            String g4 = PxPicConverter.toParadoxPicture("GGGG", Locale.US);
+            String g4 = PxPicConverter.toPicture("GGGG", Locale.US);
             assertEquals("{Anno Domini,Before Christ}", g4);
 
-            String g5 = PxPicConverter.toParadoxPicture("GGGGG", Locale.US);
+            String g5 = PxPicConverter.toPicture("GGGGG", Locale.US);
             assertEquals("{A,B}", g5);
         }
 
         @Test
         void shouldConvertMonthNamesAndFactorPrefixes() {
-            String mmm = PxPicConverter.toParadoxPicture("MMM", Locale.GERMANY);
+            String mmm = PxPicConverter.toPicture("MMM", Locale.GERMANY);
             assertNotNull(mmm);
             assertTrue(mmm.startsWith("{") && mmm.endsWith("}"));
 
-            String mmmm = PxPicConverter.toParadoxPicture("MMMM", Locale.GERMANY);
+            String mmmm = PxPicConverter.toPicture("MMMM", Locale.GERMANY);
             assertNotNull(mmmm);
             assertTrue(mmmm.startsWith("{") && mmmm.endsWith("}"));
 
-            String mmmmm = PxPicConverter.toParadoxPicture("MMMMM", Locale.GERMANY);
+            String mmmmm = PxPicConverter.toPicture("MMMMM", Locale.GERMANY);
             assertNotNull(mmmmm);
 
-            String lll = PxPicConverter.toParadoxPicture("LLL", Locale.GERMANY);
+            String lll = PxPicConverter.toPicture("LLL", Locale.GERMANY);
             assertEquals(mmm, lll);
-            String llll = PxPicConverter.toParadoxPicture("LLLL", Locale.GERMANY);
+            String llll = PxPicConverter.toPicture("LLLL", Locale.GERMANY);
             assertEquals(mmmm, llll);
-            String lllll = PxPicConverter.toParadoxPicture("LLLLL", Locale.GERMANY);
+            String lllll = PxPicConverter.toPicture("LLLLL", Locale.GERMANY);
             assertEquals(mmmmm, lllll);
         }
 
@@ -164,42 +164,42 @@ class PxPicConverterTest {
         void shouldThrowExceptionOnInvalidMonthWidth() {
             IllegalArgumentException ex = assertThrows(
                     IllegalArgumentException.class,
-                    () -> PxPicConverter.toParadoxPicture("MMMMMM", Locale.GERMANY)
+                    () -> PxPicConverter.toPicture("MMMMMM", Locale.GERMANY)
             );
             assertTrue(ex.getMessage().contains("Invalid month field width"));
         }
 
         @Test
         void shouldHandleQuotedLiteralsAndEscapeApostrophes() {
-            assertEquals("T", PxPicConverter.toParadoxPicture("'T'", Locale.US));
-            assertEquals("o'clock", PxPicConverter.toParadoxPicture("'o''clock'", Locale.US));
-            assertEquals("yyyy", PxPicConverter.toParadoxPicture("'yyyy'", Locale.US));
-            assertEquals(";#;?;@;&;!;;;*;[;];;;{;};,", PxPicConverter.toParadoxPicture("'#?@&!;*[];{},'", Locale.US));
+            assertEquals("T", PxPicConverter.toPicture("'T'", Locale.US));
+            assertEquals("o'clock", PxPicConverter.toPicture("'o''clock'", Locale.US));
+            assertEquals("yyyy", PxPicConverter.toPicture("'yyyy'", Locale.US));
+            assertEquals(";#;?;@;&;!;;;*;[;];;;{;};,", PxPicConverter.toPicture("'#?@&!;*[];{},'", Locale.US));
         }
 
         @Test
         void shouldThrowExceptionOnUnterminatedQuotedLiteral() {
             IllegalArgumentException ex = assertThrows(
                     IllegalArgumentException.class,
-                    () -> PxPicConverter.toParadoxPicture("'unclosed", Locale.US)
+                    () -> PxPicConverter.toPicture("'unclosed", Locale.US)
             );
             assertTrue(ex.getMessage().contains("Unterminated quoted literal in pattern"));
         }
 
         @Test
         void shouldEscapeParadoxSpecialCharactersInOrdinaryLiterals() {
-            assertEquals("####/##/##", PxPicConverter.toParadoxPicture("yyyy/MM/dd", Locale.US));
-            assertEquals("####-##-##", PxPicConverter.toParadoxPicture("yyyy-MM-dd", Locale.US));
-            assertEquals("####.##.##", PxPicConverter.toParadoxPicture("yyyy.MM.dd", Locale.US));
-            assertEquals("####;###", PxPicConverter.toParadoxPicture("yyyy#dd", Locale.US));
-            assertEquals("####;[##;]", PxPicConverter.toParadoxPicture("yyyy[dd]", Locale.US));
-            assertEquals("####;{##;,##;}", PxPicConverter.toParadoxPicture("yyyy{MM,dd}", Locale.US));
-            assertEquals("####;;##", PxPicConverter.toParadoxPicture("yyyy;dd", Locale.US));
-            assertEquals("####;?##", PxPicConverter.toParadoxPicture("yyyy?dd", Locale.US));
-            assertEquals("####;@##", PxPicConverter.toParadoxPicture("yyyy@dd", Locale.US));
-            assertEquals("####;&##", PxPicConverter.toParadoxPicture("yyyy&dd", Locale.US));
-            assertEquals("####;!##", PxPicConverter.toParadoxPicture("yyyy!dd", Locale.US));
-            assertEquals("####;*##", PxPicConverter.toParadoxPicture("yyyy*dd", Locale.US));
+            assertEquals("####/##/##", PxPicConverter.toPicture("yyyy/MM/dd", Locale.US));
+            assertEquals("####-##-##", PxPicConverter.toPicture("yyyy-MM-dd", Locale.US));
+            assertEquals("####.##.##", PxPicConverter.toPicture("yyyy.MM.dd", Locale.US));
+            assertEquals("####;###", PxPicConverter.toPicture("yyyy#dd", Locale.US));
+            assertEquals("####;[##;]", PxPicConverter.toPicture("yyyy[dd]", Locale.US));
+            assertEquals("####;{##;,##;}", PxPicConverter.toPicture("yyyy{MM,dd}", Locale.US));
+            assertEquals("####;;##", PxPicConverter.toPicture("yyyy;dd", Locale.US));
+            assertEquals("####;?##", PxPicConverter.toPicture("yyyy?dd", Locale.US));
+            assertEquals("####;@##", PxPicConverter.toPicture("yyyy@dd", Locale.US));
+            assertEquals("####;&##", PxPicConverter.toPicture("yyyy&dd", Locale.US));
+            assertEquals("####;!##", PxPicConverter.toPicture("yyyy!dd", Locale.US));
+            assertEquals("####;*##", PxPicConverter.toPicture("yyyy*dd", Locale.US));
         }
 
         @ParameterizedTest
@@ -207,7 +207,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionOnTimezoneFields(char timezoneChar) {
             IllegalArgumentException ex = assertThrows(
                     IllegalArgumentException.class,
-                    () -> PxPicConverter.toParadoxPicture("HH:mm:ss " + timezoneChar, Locale.US)
+                    () -> PxPicConverter.toPicture("HH:mm:ss " + timezoneChar, Locale.US)
             );
             assertTrue(ex.getMessage().contains("Cannot convert timezone field"));
         }
@@ -216,7 +216,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionOnPaddingModifier() {
             IllegalArgumentException ex = assertThrows(
                     IllegalArgumentException.class,
-                    () -> PxPicConverter.toParadoxPicture("ppHH", Locale.US)
+                    () -> PxPicConverter.toPicture("ppHH", Locale.US)
             );
             assertTrue(ex.getMessage().contains("DateTimeFormatter padding modifier 'p' is not supported"));
         }
@@ -230,14 +230,14 @@ class PxPicConverterTest {
         void shouldThrowExceptionWhenPatternIsNull() {
             assertThrows(
                     NullPointerException.class,
-                    () -> PxPicConverter.toParadoxPicture(null)
+                    () -> PxPicConverter.toPicture(null)
             );
         }
 
         @Test
         void shouldConvertUsingDefaultLocale() {
-            String resultWithDefault = PxPicConverter.toParadoxPicture("yyyy-MM-dd");
-            String resultExplicit = PxPicConverter.toParadoxPicture("yyyy-MM-dd", Locale.getDefault());
+            String resultWithDefault = PxPicConverter.toPicture("yyyy-MM-dd");
+            String resultExplicit = PxPicConverter.toPicture("yyyy-MM-dd", Locale.getDefault());
             assertEquals(resultExplicit, resultWithDefault);
             assertEquals("####-##-##", resultWithDefault);
         }
@@ -251,7 +251,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionWhenStyleIsNull() {
             NullPointerException ex = assertThrows(
                     NullPointerException.class,
-                    () -> PxPicConverter.toLocalizedDatePicture(null, Locale.GERMANY)
+                    () -> PxPicConverter.toDatePicture(null, Locale.GERMANY)
             );
             assertEquals("style must not be null", ex.getMessage());
         }
@@ -260,7 +260,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionWhenLocaleIsNull() {
             NullPointerException ex = assertThrows(
                     NullPointerException.class,
-                    () -> PxPicConverter.toLocalizedDatePicture(FormatStyle.SHORT, null)
+                    () -> PxPicConverter.toDatePicture(FormatStyle.SHORT, null)
             );
             assertEquals("locale must not be null", ex.getMessage());
         }
@@ -268,12 +268,12 @@ class PxPicConverterTest {
         @ParameterizedTest
         @EnumSource(value = FormatStyle.class, names = {"SHORT", "MEDIUM"})
         void shouldConvertValidStyles(FormatStyle style) {
-            String germanDatePic = PxPicConverter.toLocalizedDatePicture(style, Locale.GERMANY);
+            String germanDatePic = PxPicConverter.toDatePicture(style, Locale.GERMANY);
             assertNotNull(germanDatePic);
             assertFalse(germanDatePic.isEmpty());
             assertTrue(new PxPicValidator().checkSyntax(germanDatePic));
 
-            String usDatePic = PxPicConverter.toLocalizedDatePicture(style, Locale.US);
+            String usDatePic = PxPicConverter.toDatePicture(style, Locale.US);
             assertNotNull(usDatePic);
             assertFalse(usDatePic.isEmpty());
             assertTrue(new PxPicValidator().checkSyntax(usDatePic));
@@ -284,7 +284,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionOnUnsupportedStyles(FormatStyle style) {
             IllegalArgumentException ex = assertThrows(
                     IllegalArgumentException.class,
-                    () -> PxPicConverter.toLocalizedDatePicture(style, Locale.GERMANY)
+                    () -> PxPicConverter.toDatePicture(style, Locale.GERMANY)
             );
             assertEquals("style must be FormatStyle.SHORT or FormatStyle.MEDIUM", ex.getMessage());
         }
@@ -298,7 +298,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionWhenStyleIsNull() {
             NullPointerException ex = assertThrows(
                     NullPointerException.class,
-                    () -> PxPicConverter.toLocalizedDatePicture(null)
+                    () -> PxPicConverter.toDatePicture(null)
             );
             assertEquals("style must not be null", ex.getMessage());
         }
@@ -306,8 +306,8 @@ class PxPicConverterTest {
         @ParameterizedTest
         @EnumSource(value = FormatStyle.class, names = {"SHORT", "MEDIUM"})
         void shouldConvertUsingDefaultLocale(FormatStyle style) {
-            String resultDefault = PxPicConverter.toLocalizedDatePicture(style);
-            String resultExplicit = PxPicConverter.toLocalizedDatePicture(style, Locale.getDefault());
+            String resultDefault = PxPicConverter.toDatePicture(style);
+            String resultExplicit = PxPicConverter.toDatePicture(style, Locale.getDefault());
             assertEquals(resultExplicit, resultDefault);
             assertTrue(new PxPicValidator().checkSyntax(resultDefault));
         }
@@ -317,7 +317,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionOnUnsupportedStyles(FormatStyle style) {
             IllegalArgumentException ex = assertThrows(
                     IllegalArgumentException.class,
-                    () -> PxPicConverter.toLocalizedDatePicture(style)
+                    () -> PxPicConverter.toDatePicture(style)
             );
             assertEquals("style must be FormatStyle.SHORT or FormatStyle.MEDIUM", ex.getMessage());
         }
@@ -331,7 +331,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionWhenStyleIsNull() {
             NullPointerException ex = assertThrows(
                     NullPointerException.class,
-                    () -> PxPicConverter.toLocalizedTimePicture(null, Locale.GERMANY)
+                    () -> PxPicConverter.toTimePicture(null, Locale.GERMANY)
             );
             assertEquals("style must not be null", ex.getMessage());
         }
@@ -340,7 +340,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionWhenLocaleIsNull() {
             NullPointerException ex = assertThrows(
                     NullPointerException.class,
-                    () -> PxPicConverter.toLocalizedTimePicture(FormatStyle.SHORT, null)
+                    () -> PxPicConverter.toTimePicture(FormatStyle.SHORT, null)
             );
             assertEquals("locale must not be null", ex.getMessage());
         }
@@ -348,12 +348,12 @@ class PxPicConverterTest {
         @ParameterizedTest
         @EnumSource(value = FormatStyle.class, names = {"SHORT", "MEDIUM"})
         void shouldConvertValidStyles(FormatStyle style) {
-            String germanTimePic = PxPicConverter.toLocalizedTimePicture(style, Locale.GERMANY);
+            String germanTimePic = PxPicConverter.toTimePicture(style, Locale.GERMANY);
             assertNotNull(germanTimePic);
             assertFalse(germanTimePic.isEmpty());
             assertTrue(new PxPicValidator().checkSyntax(germanTimePic));
 
-            String usTimePic = PxPicConverter.toLocalizedTimePicture(style, Locale.US);
+            String usTimePic = PxPicConverter.toTimePicture(style, Locale.US);
             assertNotNull(usTimePic);
             assertFalse(usTimePic.isEmpty());
             assertTrue(new PxPicValidator().checkSyntax(usTimePic));
@@ -364,7 +364,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionOnUnsupportedStyles(FormatStyle style) {
             IllegalArgumentException ex = assertThrows(
                     IllegalArgumentException.class,
-                    () -> PxPicConverter.toLocalizedTimePicture(style, Locale.GERMANY)
+                    () -> PxPicConverter.toTimePicture(style, Locale.GERMANY)
             );
             assertEquals("style must be FormatStyle.SHORT or FormatStyle.MEDIUM", ex.getMessage());
         }
@@ -378,7 +378,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionWhenStyleIsNull() {
             NullPointerException ex = assertThrows(
                     NullPointerException.class,
-                    () -> PxPicConverter.toLocalizedTimePicture(null)
+                    () -> PxPicConverter.toTimePicture(null)
             );
             assertEquals("style must not be null", ex.getMessage());
         }
@@ -386,8 +386,8 @@ class PxPicConverterTest {
         @ParameterizedTest
         @EnumSource(value = FormatStyle.class, names = {"SHORT", "MEDIUM"})
         void shouldConvertUsingDefaultLocale(FormatStyle style) {
-            String resultDefault = PxPicConverter.toLocalizedTimePicture(style);
-            String resultExplicit = PxPicConverter.toLocalizedTimePicture(style, Locale.getDefault());
+            String resultDefault = PxPicConverter.toTimePicture(style);
+            String resultExplicit = PxPicConverter.toTimePicture(style, Locale.getDefault());
             assertEquals(resultExplicit, resultDefault);
             assertTrue(new PxPicValidator().checkSyntax(resultDefault));
         }
@@ -397,7 +397,7 @@ class PxPicConverterTest {
         void shouldThrowExceptionOnUnsupportedStyles(FormatStyle style) {
             IllegalArgumentException ex = assertThrows(
                     IllegalArgumentException.class,
-                    () -> PxPicConverter.toLocalizedTimePicture(style)
+                    () -> PxPicConverter.toTimePicture(style)
             );
             assertEquals("style must be FormatStyle.SHORT or FormatStyle.MEDIUM", ex.getMessage());
         }
@@ -409,7 +409,7 @@ class PxPicConverterTest {
 
         @Test
         void shouldValidateLocalizedGermanShortDate() {
-            String pic = PxPicConverter.toLocalizedDatePicture(FormatStyle.SHORT, Locale.GERMANY);
+            String pic = PxPicConverter.toDatePicture(FormatStyle.SHORT, Locale.GERMANY);
             var validator = new PxPicValidator(pic);
 
             assertTrue(validator.isValidInput(new StringBuilder("01.01.24"), false));
@@ -418,7 +418,7 @@ class PxPicConverterTest {
 
         @Test
         void shouldValidateLocalizedGermanMediumDate() {
-            String pic = PxPicConverter.toLocalizedDatePicture(FormatStyle.MEDIUM, Locale.GERMANY);
+            String pic = PxPicConverter.toDatePicture(FormatStyle.MEDIUM, Locale.GERMANY);
             var validator = new PxPicValidator(pic);
 
             assertTrue(validator.isValidInput(new StringBuilder("01.01.2024"), false));
@@ -427,7 +427,7 @@ class PxPicConverterTest {
 
         @Test
         void shouldValidateLocalizedGermanShortTime() {
-            String pic = PxPicConverter.toLocalizedTimePicture(FormatStyle.SHORT, Locale.GERMANY);
+            String pic = PxPicConverter.toTimePicture(FormatStyle.SHORT, Locale.GERMANY);
             var validator = new PxPicValidator(pic);
 
             assertTrue(validator.isValidInput(new StringBuilder("14:30"), false));
@@ -436,7 +436,7 @@ class PxPicConverterTest {
 
         @Test
         void shouldValidateLocalizedGermanMediumTime() {
-            String pic = PxPicConverter.toLocalizedTimePicture(FormatStyle.MEDIUM, Locale.GERMANY);
+            String pic = PxPicConverter.toTimePicture(FormatStyle.MEDIUM, Locale.GERMANY);
             var validator = new PxPicValidator(pic);
 
             assertTrue(validator.isValidInput(new StringBuilder("14:30:45"), false));
