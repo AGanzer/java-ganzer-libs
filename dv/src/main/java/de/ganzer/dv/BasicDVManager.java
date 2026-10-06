@@ -563,9 +563,6 @@ public class BasicDVManager {
         if (template != null)
             return template;
 
-        if (dataSource != null)
-            return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
-
         return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
     }
 }
