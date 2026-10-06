@@ -87,8 +87,8 @@ public class DocumentTemplate<D extends Document> {
      * Creates a new instance.
      *
      * @param displayName The display name of the template.
-     * @param canHandleSource Determines whether a data source can be read by
-     *         the document.
+     * @param canHandleSource Determines whether the document can read a data
+     *        source.
      * @param documentSupplier Creates the document.
      * @param newName The name of new documents.
      * @param filter The filter to use to open documents from existing sources.
@@ -112,8 +112,8 @@ public class DocumentTemplate<D extends Document> {
      * Creates a new instance.
      *
      * @param displayName The display name of the template.
-     * @param canHandleSource Determines whether a data source can be read by
-     *         the document.
+     * @param canHandleSource Determines whether the document can read a data
+     *        source.
      * @param documentSupplier Creates the document.
      * @param newName The name of new documents.
      * @param filter The filter to use to open documents from existing sources.
@@ -157,8 +157,7 @@ public class DocumentTemplate<D extends Document> {
     }
 
     /**
-     * Gets the filter that is used to filter data sources to open with this
-     * template.
+     * Gets the filter used to filter data sources to open with this template.
      *
      * @return The filter or {@code null} if no filter is set.
      */

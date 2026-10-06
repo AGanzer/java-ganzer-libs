@@ -5,8 +5,8 @@ import de.ganzer.core.util.Strings;
 import java.util.Objects;
 
 /**
- * Holds the information that is used to create a model that is derived from
- * {@link AbstractDocument}.
+ * Holds the information used to create a model that is derived from
+ * {@link Document}.
  *
  * @param <D> The type of the document.
  */
@@ -46,7 +46,7 @@ public class DocumentCreationInfo<D extends Document> {
     }
 
     /**
-     * Gets the templates that has created the information.
+     * Gets the template that has created the information.
      *
      * @return The template.
      */

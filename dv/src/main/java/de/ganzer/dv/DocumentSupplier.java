@@ -1,7 +1,5 @@
 package de.ganzer.dv;
 
-import java.io.IOException;
-
 /**
  * Used by {@link DocumentTemplate} to create a new document.
  *

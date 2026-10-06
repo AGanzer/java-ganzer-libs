@@ -135,7 +135,7 @@ public class UndoManager {
     /**
      * Gets the title of the current undoable action.
      *
-     * @return The title of tue current undoable action or {@code null} if there
+     * @return The title of the current undoable action or {@code null} if there
      *          is no undoable action.
      */
     public String getUndoTitle() {
@@ -145,7 +145,7 @@ public class UndoManager {
     /**
      * Gets the title of the current redoable action.
      *
-     * @return The title of tue current redoable action or {@code null} if there
+     * @return The title of the current redoable action or {@code null} if there
      *          is no redoable action.
      */
     public String getRedoTitle() {
