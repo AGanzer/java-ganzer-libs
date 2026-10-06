@@ -56,6 +56,19 @@ public class DocumentTemplate<D extends Document> {
      * If this option is set, the created document is always write protected.
      */
     public static final int READ_ONLY_DOCUMENTS = 0x40;
+    /**
+     * If this option is set, the document will use the views of the parent
+     * document instead of creating its own views.
+     * <p>
+     * <b>NOTE:</b> Mandatory views are always created even if this option is
+     * set.
+     */
+    public static final int USE_PARENT_VIEWS = 0x80;
+    /**
+     * If this option is set, the document will notify all views of the child
+     * documents about changes in the document's data.
+     */
+    public static final int NOTIFY_CHILD_VIEWS_ON_CHANGE = 0x100;
 
     private static final Map<DocumentTemplate<?>, Integer> newNumbers = new HashMap<>();
 
@@ -222,6 +235,32 @@ public class DocumentTemplate<D extends Document> {
     }
 
     /**
+     * Indicates whether the document will use the views of the parent document
+     * instead of creating its own views.
+     *
+     * @return {@code true} if the document will use the views of the parent
+     *         document.
+     *
+     * @see #USE_PARENT_VIEWS
+     */
+    public boolean useParentViews() {
+        return (options & USE_PARENT_VIEWS) != 0;
+    }
+
+    /**
+     * Indicates whether the document will notify all views of the child
+     * documents about changes in the document's data.
+     *
+     * @return {@code true} if the document will notify all views of the child
+     *         documents about changes in the document's data.
+     *
+     * @see #NOTIFY_CHILD_VIEWS_ON_CHANGE
+     */
+    public boolean notifyChildViewsOnChange() {
+        return (options & NOTIFY_CHILD_VIEWS_ON_CHANGE) != 0;
+    }
+
+    /**
      * Gets the registered view templates.
      *
      * @return An unmodifiable list of registered view templates.
@@ -333,7 +372,7 @@ public class DocumentTemplate<D extends Document> {
                 .findFirst()
                 .ifPresent(tpl -> tpl.createView(document));
 
-        if (autoCreateView()) {
+        if (autoCreateView() && (parent == null || !useParentViews())) {
             var template = viewTemplates.stream().filter(ViewTemplate::isDefault).findFirst();
 
             if (template.isPresent() && !template.get().isMandatory())

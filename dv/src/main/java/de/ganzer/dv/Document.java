@@ -497,18 +497,25 @@ public abstract class Document extends Model {
     /**
      * Notifies all views about changes in the document's data.
      * <p>
-     * Inheritors should invoke this to notify all views about changed data.
+     * Inheritors should invoke this to notify all views and all views of the
+     * child documents about changed data.
      *
      * @param originator The view that caused the change. This will not be
      *        notified.
      * @param context The context of change. This is implementation defined and
      *        may be {@code null} to indicate that the view should be updated
      *        completely.
+     *
+     * @see DocumentTemplate#NOTIFY_CHILD_VIEWS_ON_CHANGE
      */
     protected void notifyDataChange(View<?> originator, Object context) {
-        for (View<? extends Document> view : views)
+        for (var view : views)
             if (view != originator)
                 view.documentDataChanged(context);
+
+        if (getTemplate().notifyChildViewsOnChange())
+            for (var child : children)
+                child.notifyDataChange(originator, context);
     }
 
     /**
