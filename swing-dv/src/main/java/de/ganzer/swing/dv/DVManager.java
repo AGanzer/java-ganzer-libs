@@ -370,6 +370,23 @@ public final class DVManager extends BasicDVManager {
      * @param settings The settings to write the recently used files into.
      */
     public static void saveRecentFiles(Settings settings) {
+        settings.write("recentFiles.maxItems", getMaxRecentFiles());
+
+        var recent = new StringBuilder();
+
+        for (int i = 0; i < recentFilesActions.getItemCount(); ++i) {
+            var action = (GAction) recentFilesActions.getItemAt(i);
+
+            if (action.isVisible()) {
+                if (i > 0)
+                    recent.append(";::;");
+
+                recent.append(action.getCommand());
+            }
+        }
+
+        if (!recent.isEmpty())
+            settings.write("recentFiles", recent.toString());
     }
 
     /**
