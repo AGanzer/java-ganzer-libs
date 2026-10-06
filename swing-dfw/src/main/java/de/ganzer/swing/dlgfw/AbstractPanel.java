@@ -19,10 +19,12 @@ import java.util.Objects;
  * order they are queried and created:
  *
  * <ul>
- *     <li>{@link BorderLayout#CENTER}: The mandatory main content of the frame
- *         or dialog.</li>
- *     <li>{@link BorderLayout#NORTH}: The mandatory title panel that contains
- *         the name of the dialog or frame.</li>
+ *     <li>{@link BorderLayout#CENTER}: The mandatory main content of the panel.
+ *         </li>
+ *     <li>{@link BorderLayout#NORTH}: The optional title panel that contains
+ *         the name of the dialog or frame. if no title panel is wanted,
+ *         inheritors should override {@link #createTitlePanel()} and return
+ *         {@code null}.</li>
  *     <li>{@link BorderLayout#SOUTH}: An optional panel for additional controls.
  *         </li>
  *     <li>{@link BorderLayout#EAST}: An optional panel for additional controls.
