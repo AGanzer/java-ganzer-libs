@@ -17,7 +17,6 @@ import java.util.Objects;
  * a factory method that fills all layout positions that are predefined for all
  * frames and dialogs. This contains the following sub panels in the
  * order they are queried and created:
- *
  * <ul>
  *     <li>{@link BorderLayout#CENTER}: The mandatory main content of the panel.
  *         </li>
@@ -32,7 +31,6 @@ import java.util.Objects;
  *     <li>{@link BorderLayout#WEST}: An optional panel for additional controls.
  *         </li>
  * </ul>
- *
  * All these panels are created in the derived classes, except the title panel.
  * This is created by {@code AbstractVPContentPane} itself and the only methods
  * that have to be overridden are {@link #createTitleLabel()} and optionally
@@ -40,6 +38,10 @@ import java.util.Objects;
  * optional image that is displayed in front of the title. If the title shall be
  * filled with further controls, {@link #createCenteredTitleExtension()} and
  * {@link #createRightTitleExtension()} should be overridden.
+ * <p>
+ * If no title is wanted, inheritors should override {@link #createTitlePanel()}
+ * and return {@code null}. In all other cases at least {@link #createTitleLabel()}
+ * should be overridden to provide a caption.
  *
  * @since 6.0.0
  */
@@ -246,7 +248,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * Called to create the panel with the main controls of the frame or dialog.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      *
      * @return The panel that shall be inserted into the center of the frame or
      *         dialog. This must not be {@code null}.
@@ -257,11 +259,15 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * Called to create the caption for the title of the dialog or frame.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
+     * <p>
+     * This implementation does always return {@code null}.
      *
      * @return The title to set or {@code null} if no caption shall be displayed.
      */
-    protected abstract JComponent createTitleLabel();
+    protected JComponent createTitleLabel() {
+        return null;
+    }
 
     /**
      * Called to create the image icon of the dialog or frame.
@@ -270,19 +276,23 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * x {@link #DEFAULT_TITLE_ICON_SIZE}.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
+     * <p>
+     * This implementation does always return {@code null}.
      *
      * @return The image icon to display or {@code null} if no image shall be
      *         displayed.
      */
-    protected abstract JComponent createTitleIcon();
+    protected JComponent createTitleIcon() {
+        return null;
+    }
 
     /**
      * Called to create a component that contains further controls that shall be
      * displayed in the center of the title panel.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -298,7 +308,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * displayed on the right side of the title panel.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -314,7 +324,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * displayed the south of the frame or dialog.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -330,7 +340,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * displayed the east of the frame or dialog.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -346,7 +356,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * displayed the west of the frame or dialog.
      * <p>
      * Note that this is called during construction. Therefor derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -375,7 +385,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * }</pre>
      * <p>
      * Note that this is called during construction. Therefor derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      *
      * @return The created panel. Inheritors may return {@code null} if no title
      *          panel is wanted.
@@ -398,7 +408,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * controls.
      * <p>
      * Note that this is called during construction. Therefor derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      *
      * @param titlePanel The panel to fill.
      */
