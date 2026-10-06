@@ -441,7 +441,7 @@ public class PxPicValidator extends CharCountValidator {
      * Creates a new instance of the validator where every input is valid.
      * <p>
      * This sets the options to
-     * {@code {@link ValidatorOptions#NEEDS_INPUT} | {@link ValidatorOptions#AUTO_FILL}}.
+     * {@code ValidatorOptions#NEEDS_INPUT | ValidatorOptions#AUTO_FILL}.
      */
     public PxPicValidator() {
         super(ValidatorOptions.NEEDS_INPUT | ValidatorOptions.AUTO_FILL);
@@ -461,7 +461,7 @@ public class PxPicValidator extends CharCountValidator {
      * Creates a new instance of the validator.
      * <p>
      * This sets the options to
-     * {@code {@link ValidatorOptions#NEEDS_INPUT} | {@link ValidatorOptions#AUTO_FILL}}.
+     * {@code ValidatorOptions#NEEDS_INPUT | ValidatorOptions#AUTO_FILL}.
      * <p>
      * If the picture's syntax is invalid, an {@code IllegalArgumentException}
      * is thrown. To avoid this, the picture's syntax can be validated by

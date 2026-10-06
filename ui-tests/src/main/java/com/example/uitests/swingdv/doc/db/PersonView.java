@@ -2,8 +2,8 @@ package com.example.uitests.swingdv.doc.db;
 
 import com.example.uitests.swingdv.doc.MDISubView;
 import com.example.uitests.swingdv.doc.text.CSVDocument;
+import de.ganzer.core.validation.DateValidator;
 import de.ganzer.core.validation.NumberValidator;
-import de.ganzer.core.validation.PxPicValidator;
 import de.ganzer.core.validation.Validator;
 import de.ganzer.dv.View;
 import de.ganzer.dv.ViewCreationInfo;
@@ -45,7 +45,7 @@ public class PersonView extends MDISubView<PersonDocument> {
         });
 
         table.getColumnModel().getColumn(1).setCellEditor(
-                new ValidatedEditor(new PxPicValidator("####-##-##")));
+                new ValidatedEditor(new DateValidator(LocalDate.of(1900, 1, 1), LocalDate.now())));
         table.getColumnModel().getColumn(2).setCellEditor(
                 new ValidatedEditor(new NumberValidator(0.0, 1_000_000.0, 2)));
         JScrollPane scroller = new JScrollPane(table);

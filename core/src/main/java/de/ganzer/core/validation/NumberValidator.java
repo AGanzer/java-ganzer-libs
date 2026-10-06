@@ -461,7 +461,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * This implementation calls the {@link Validator#doInputValidation} and checks
+     * This implementation calls the {@link Validator#doValidate} and checks
      * whether the input is a valid number in the range from {@link #getMinValue()}
      * to {@link #getMaxValue()}.
      *
