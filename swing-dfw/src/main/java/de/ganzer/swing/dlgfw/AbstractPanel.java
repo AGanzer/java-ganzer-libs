@@ -70,7 +70,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
 
     private static Color titleBackground = DEFAULT_TITLE_BACKGROUND;
     private static Color titleForeground = DEFAULT_TITLE_FOREGROUND;
-    private static int titleHeight = DEFAULT_TITLE_HEIGHT;
+    private static int preferredTitleHeight = DEFAULT_TITLE_HEIGHT;
     private static Font titleFont = DEFAULT_TITLE_FONT;
 
     private final GAction queryCloseAction = new GAction();
@@ -142,26 +142,26 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     }
 
     /**
-     * Gets the height to use for titles.
+     * Gets the preferred height to use for titles.
      *
-     * @return The height. The default is {@link #DEFAULT_TITLE_HEIGHT}.
+     * @return The preferred height. The default is {@link #DEFAULT_TITLE_HEIGHT}.
      */
-    public static int getTitleHeight() {
-        return titleHeight;
+    public static int getPreferredTitleHeight() {
+        return preferredTitleHeight;
     }
 
     /**
-     * Sets the height to use for titles.
+     * Sets the preferred height to use for titles.
      *
-     * @param height The height to set.
+     * @param height The preferred height to set.
      *
-     * @throws IllegalArgumentException {@code height} is less than 10.
+     * @throws IllegalArgumentException {@code height} is less than 20.
      */
-    public static void setTitleHeight(int height) {
-        if (height < 10)
-            throw new IllegalArgumentException("titleHeight must be at least 10.");
+    public static void setPreferredTitleHeight(int height) {
+        if (height < 20)
+            throw new IllegalArgumentException("titleHeight must be at least 20.");
 
-        titleHeight = height;
+        preferredTitleHeight = height;
     }
 
     /**
@@ -398,7 +398,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
 
         fillTitlePanel(title);
 
-        title.setPreferredSize(new Dimension(title.getPreferredSize().width, titleHeight));
+        title.setPreferredSize(new Dimension(title.getPreferredSize().width, preferredTitleHeight));
 
         return title;
     }
