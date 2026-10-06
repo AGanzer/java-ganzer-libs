@@ -317,6 +317,13 @@ public class ActionGroup extends Action implements Iterable<ActionItemBuilder> {
     }
 
     /**
+     * Removes all actions from this group.
+     */
+    public void clear() {
+        actions.clear();
+    }
+
+    /**
      * Creates a menu button with all containing actions.
      *
      * @param focusTraversable Indicates whether the button can get the keyboard

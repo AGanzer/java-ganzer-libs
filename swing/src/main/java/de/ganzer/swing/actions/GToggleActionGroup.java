@@ -107,6 +107,13 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     /**
+     * Removes all actions from this group.
+     */
+    public void clear() {
+        actions.clear();
+    }
+
+    /**
      * Disables all actions of this group.
      *
      * @param disabled {@code true} to disable all contained actions.

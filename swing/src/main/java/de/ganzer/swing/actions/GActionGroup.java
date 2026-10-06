@@ -53,6 +53,13 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
+     * Removes all actions from this group.
+     */
+    public void clear() {
+        actions.clear();
+    }
+
+    /**
      * Calls {@link GAction#name(String)}.
      *
      * @param name The name to set.
@@ -199,7 +206,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
-     * Creates the menus that visualizes this action group and inserts them into
+     * Creates the menus that visualize this action group and inserts them into
      * the specified target.
      * <p>
      * This implementation does only create menus for items that are implementing
@@ -222,7 +229,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
-     * Creates the menu items that visualizes this action group and inserts them
+     * Creates the menu items that visualize this action group and inserts them
      * into the specified target.
      * <p>
      * This implementation calls {@link #createMenu()} for all items that are

@@ -117,6 +117,13 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     }
 
     /**
+     * Removes all actions from this group.
+     */
+    public void clear() {
+        actions.clear();
+    }
+
+    /**
      * Gets a forward iterator for iterating the contained items.
      *
      * @return A forward iterator for iterating the contained items.
