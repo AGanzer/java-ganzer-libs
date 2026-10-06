@@ -45,7 +45,7 @@ public class PersonView extends MDISubView<PersonDocument> {
         });
 
         table.getColumnModel().getColumn(1).setCellEditor(
-                new ValidatedEditor(new DateValidator(LocalDate.of(1900, 1, 1), LocalDate.now())));
+                new ValidatedEditor(new DateValidator(LocalDate.of(1900, 1, 1), LocalDate.now(), "yyyy-MM-dd")));
         table.getColumnModel().getColumn(2).setCellEditor(
                 new ValidatedEditor(new NumberValidator(0.0, 1_000_000.0, 2)));
         JScrollPane scroller = new JScrollPane(table);
