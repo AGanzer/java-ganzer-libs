@@ -44,6 +44,8 @@ public class PersonView extends MDISubView<PersonDocument> {
             }
         });
 
+        table.getColumnModel().getColumn(0).setCellEditor(
+                new ValidatedEditor(new Validator()));
         table.getColumnModel().getColumn(1).setCellEditor(
                 new ValidatedEditor(new DateValidator(LocalDate.of(1900, 1, 1), LocalDate.now(), "yyyy-MM-dd")));
         table.getColumnModel().getColumn(2).setCellEditor(
