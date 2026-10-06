@@ -46,8 +46,28 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * The default size of a title icon.
      */
     protected static final int DEFAULT_TITLE_ICON_SIZE = 32;
+    /**
+     * The default height of a title.
+     */
+    protected static final Color DEFAULT_TITLE_BACKGROUND = Color.WHITE;
+    /**
+     * The default height of a title.
+     */
+    protected static final Color DEFAULT_TITLE_FOREGROUND = Color.BLACK;
+    /**
+     * The default height of a title.
+     */
+    protected static final int DEFAULT_TITLE_HEIGHT = 50;
+    /**
+     * The default font to use for titles. This does only affect the title text,
+     * not the buttons or any other controls within the title.
+     */
+    protected static final Font DEFAULT_TITLE_FONT = new Font("Arial", Font.BOLD, 18);
 
-    private static Color titleBackground = Color.WHITE;
+    private static Color titleBackground = DEFAULT_TITLE_BACKGROUND;
+    private static Color titleForeground = DEFAULT_TITLE_FOREGROUND;
+    private static int titleHeight = DEFAULT_TITLE_HEIGHT;
+    private static Font titleFont = DEFAULT_TITLE_FONT;
 
     private final GAction queryCloseAction = new GAction();
 
@@ -94,6 +114,71 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     public static void setTitleBackground(Color color) {
         Objects.requireNonNull(color, "color cannot be null.");
         titleBackground = color;
+    }
+
+    /**
+     * Gets the color to use as foreground-color for titles.
+     *
+     * @return The color. The default is {@link Color#BLACK}.
+     */
+    public static Color getTitleForeground() {
+        return titleForeground;
+    }
+
+    /**
+     * Sets the color to use as foreground-color for titles.
+     *
+     * @param color The color to set.
+     *
+     * @throws NullPointerException {@code color} is {@code null}.
+     */
+    public static void setTitleForeground(Color color) {
+        Objects.requireNonNull(color, "color cannot be null.");
+        titleForeground = color;
+    }
+
+    /**
+     * Gets the height to use for titles.
+     *
+     * @return The height. The default is {@link #DEFAULT_TITLE_HEIGHT}.
+     */
+    public static int getTitleHeight() {
+        return titleHeight;
+    }
+
+    /**
+     * Sets the height to use for titles.
+     *
+     * @param height The height to set.
+     *
+     * @throws IllegalArgumentException {@code height} is less than 10.
+     */
+    public static void setTitleHeight(int height) {
+        if (height < 10)
+            throw new IllegalArgumentException("titleHeight must be at least 10.");
+
+        titleHeight = height;
+    }
+
+    /**
+     * Gets the font to use for titles.
+     *
+     * @return The font. The default is {@link #DEFAULT_TITLE_FONT}.
+     */
+    public static Font getTitleFont() {
+        return titleFont;
+    }
+
+    /**
+     * Sets the font to use for titles.
+     *
+     * @param font The font to set.
+     *
+     * @throws NullPointerException {@code font} is {@code null}.
+     */
+    public static void setTitleFont(Font font) {
+        Objects.requireNonNull(font, "font must not be null.");
+        titleFont = font;
     }
 
     /**
@@ -301,7 +386,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
 
         fillTitlePanel(title);
 
-        title.setPreferredSize(new Dimension(title.getPreferredSize().width, 50));
+        title.setPreferredSize(new Dimension(title.getPreferredSize().width, titleHeight));
 
         return title;
     }
@@ -327,8 +412,8 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
         }
 
         if (text != null) {
-            text.setFont(new Font("Arial", Font.BOLD, 18));
-            text.setForeground(Color.BLACK);
+            text.setFont(titleFont);
+            text.setForeground(titleForeground);
 
             titlePanel.add(text);
         }
