@@ -3,6 +3,7 @@ package de.ganzer.swing.dv;
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
 import de.ganzer.core.util.Settings;
+import de.ganzer.core.util.Strings;
 import de.ganzer.dv.*;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.actions.GAction;
@@ -378,18 +379,21 @@ public final class DVManager extends BasicDVManager {
      */
     public static void restoreRecentFiles(Settings settings) {
         int maxItems = settings.read("recentFiles.maxItems", 6);
-        var recentFiles = settings.read("recentFiles", "").split(";::;");
+        var recent = settings.read("recentFiles", (String) null);
+        var recentFiles = recent != null ? recent.split(";::;") : null;
 
         initRecentFilesActions(maxItems);
 
-        for (int i = 0; i < recentFiles.length && i < maxItems; i++) {
-            ((GAction) recentFilesActions.getItemAt(i))
-                    .name(recentFiles[i])
-                    .command(recentFiles[i])
-                    .visible(true);
+        if (recentFiles != null) {
+            for (int i = 0; i < recentFiles.length && i < maxItems; i++) {
+                ((GAction) recentFilesActions.getItemAt(i))
+                        .name(recentFiles[i])
+                        .command(recentFiles[i])
+                        .visible(true);
+            }
         }
 
-        recentFilesActions.setEnabled(recentFiles.length > 0);
+        recentFilesActions.setEnabled(recentFiles != null);
     }
 
     /**
@@ -530,6 +534,9 @@ public final class DVManager extends BasicDVManager {
         }
 
         recentFilesActions.setEnabled(false);
+
+        if (isSupportRegistered())
+            getSupport().updateRecentFilesMenu();
     }
 
     static {

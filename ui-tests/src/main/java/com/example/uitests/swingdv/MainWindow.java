@@ -23,6 +23,7 @@ public class MainWindow extends JXFrame {
         initTabPane();
         setSize(800, 600);
         setLocationRelativeTo(null);
+
         LocalSettings.ui.apply(getClass().getSimpleName(), this);
     }
 
@@ -43,6 +44,8 @@ public class MainWindow extends JXFrame {
                 return;
 
             LocalSettings.ui.write(getClass().getSimpleName(), this);
+            DVManager.saveRecentFiles(LocalSettings.user);
+
             LocalSettings.save();
         }
 

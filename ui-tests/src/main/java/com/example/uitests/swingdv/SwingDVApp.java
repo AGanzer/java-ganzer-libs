@@ -55,7 +55,8 @@ public class SwingDVApp {
         setupLaF();
         registerServices();
         registerTemplates();
-
+        DVManager.restoreRecentFiles(LocalSettings.user);
+        
         SwingUtilities.invokeLater(() -> {
             Desktop desktop = Desktop.getDesktop();
 
