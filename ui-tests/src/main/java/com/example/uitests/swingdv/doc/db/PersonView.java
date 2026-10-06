@@ -2,19 +2,24 @@ package com.example.uitests.swingdv.doc.db;
 
 import com.example.uitests.swingdv.doc.MDISubView;
 import com.example.uitests.swingdv.doc.text.CSVDocument;
+import de.ganzer.core.validation.NumberValidator;
+import de.ganzer.core.validation.PxPicValidator;
+import de.ganzer.core.validation.Validator;
 import de.ganzer.dv.View;
 import de.ganzer.dv.ViewCreationInfo;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.actions.GActionGroup;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.dv.DVManager;
+import de.ganzer.swing.validaton.ValidationBehavior;
+import de.ganzer.swing.validaton.ValidationFilter;
 import org.jdesktop.swingx.JXTable;
 
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -39,6 +44,10 @@ public class PersonView extends MDISubView<PersonDocument> {
             }
         });
 
+        table.getColumnModel().getColumn(1).setCellEditor(
+                new ValidatedEditor(new PxPicValidator("####-##-##")));
+        table.getColumnModel().getColumn(2).setCellEditor(
+                new ValidatedEditor(new NumberValidator(0.0, 1_000_000.0, 2)));
         JScrollPane scroller = new JScrollPane(table);
         add(scroller, BorderLayout.CENTER);
     }
@@ -120,6 +129,34 @@ public class PersonView extends MDISubView<PersonDocument> {
                 case 1 -> getDocument().setPersonBirthday(rowIndex, LocalDate.parse(val), PersonView.this);
                 case 2 -> getDocument().setPersonSalary(rowIndex, BigDecimal.valueOf(Double.parseDouble(val)), PersonView.this);
             }
+        }
+    }
+
+    private static class ValidatedEditor extends AbstractCellEditor implements TableCellEditor {
+        private final JTextField component;
+        private final ValidationFilter filter;
+
+        private ValidatedEditor(Validator validator) {
+            component = new JTextField();
+            this.filter = new ValidationFilter(validator, component, false, true);
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            return component;
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            if (filter.validate(ValidationBehavior.SET_VISUAL_HINTS))
+                return super.stopCellEditing();
+
+            return false;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return component.getText();
         }
     }
 }
