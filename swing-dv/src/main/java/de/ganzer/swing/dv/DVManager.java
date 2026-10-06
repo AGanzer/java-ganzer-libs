@@ -2,6 +2,7 @@ package de.ganzer.swing.dv;
 
 import de.ganzer.core.OS;
 import de.ganzer.core.Services;
+import de.ganzer.core.util.Settings;
 import de.ganzer.dv.*;
 import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.actions.GAction;
@@ -159,8 +160,7 @@ public final class DVManager extends BasicDVManager {
     /**
      * The action where the recently opened documents are inserted into.
      */
-    public static final GActionGroup recentFilesActions = new GActionGroup(SwingDVMessages.get("menu.recentDocs"))
-            .enabled(false);
+    public static final GActionGroup recentFilesActions = new GActionGroup(SwingDVMessages.get("menu.recentDocs"));
     /**
      * The action that saves a document.
      */
@@ -364,6 +364,35 @@ public final class DVManager extends BasicDVManager {
     }
 
     /**
+     * Writes the recently used files into the given settings.
+     *
+     * @param settings The settings to write the recently used files into.
+     */
+    public static void saveRecentFiles(Settings settings) {
+    }
+
+    /**
+     * Restores the recently used files from the given settings.
+     *
+     * @param settings The settings to read the recently used files from.
+     */
+    public static void restoreRecentFiles(Settings settings) {
+        int maxItems = settings.read("recentFiles.maxItems", 6);
+        var recentFiles = settings.read("recentFiles", "").split(";::;");
+
+        initRecentFilesActions(maxItems);
+
+        for (int i = 0; i < recentFiles.length && i < maxItems; i++) {
+            ((GAction) recentFilesActions.getItemAt(i))
+                    .name(recentFiles[i])
+                    .command(recentFiles[i])
+                    .visible(true);
+        }
+
+        recentFilesActions.setEnabled(recentFiles.length > 0);
+    }
+
+    /**
      * Updates the edit actions.
      * <p>
      * This should be called once each time when the application enters the idle
@@ -484,8 +513,27 @@ public final class DVManager extends BasicDVManager {
         recentFilesActions.setEnabled(true);
     }
 
+    private static void initRecentFilesActions(int maxItems) {
+        recentFilesActions.clear();
+
+        for (int i = 0; i < maxItems; i++) {
+            var action = new GAction()
+                    .visible(false)
+                    .onAction(e -> {
+                        try {
+                            openDocument(null, e.getActionCommand(), false);
+                        } catch (DVLoadException ex) {
+                            ((DVNavigationService) Services.get(DVNavigationService.class)).showError(ex.getLocalizedMessage(), ex);
+                        }
+                    });
+            recentFilesActions.addAll(action);
+        }
+
+        recentFilesActions.setEnabled(false);
+    }
+
     static {
-        setMaxRecentFiles(6);
+        initRecentFilesActions(6);
 
         addPropertyChangeListener(ACTIVE_DOCUMENT_PROPERTY, e -> {
             var docOld = (e.getOldValue() instanceof Document d) ? d : null;
