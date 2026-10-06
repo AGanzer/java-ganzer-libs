@@ -63,7 +63,7 @@ public final class PxPicConverter {
      * @throws NullPointerException if {@code pattern} or {@code locale} is
      *          {@code null}.
      */
-    public static String toParadoxPicture(String pattern, Locale locale) {
+    public static String toPicture(String pattern, Locale locale) {
         Objects.requireNonNull(pattern, "pattern must not be null.");
         Objects.requireNonNull(locale, "locale must not be null.");
 
@@ -111,8 +111,8 @@ public final class PxPicConverter {
      *
      * @throws NullPointerException if {@code pattern} is {@code null}.
      */
-    public static String toParadoxPicture(String pattern) {
-        return toParadoxPicture(pattern, Locale.getDefault());
+    public static String toPicture(String pattern) {
+        return toPicture(pattern, Locale.getDefault());
     }
 
     /**
@@ -128,7 +128,7 @@ public final class PxPicConverter {
      * @throws IllegalArgumentException if {@code style} is not
      *          {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
      */
-    public static String toLocalizedDatePicture(FormatStyle style, Locale locale) {
+    public static String toDatePicture(FormatStyle style, Locale locale) {
         Objects.requireNonNull(style, "style must not be null");
         Objects.requireNonNull(locale, "locale must not be null");
 
@@ -141,7 +141,7 @@ public final class PxPicConverter {
                 IsoChronology.INSTANCE,
                 locale);
 
-        return toParadoxPicture(pattern, locale);
+        return toPicture(pattern, locale);
     }
 
     /**
@@ -155,8 +155,8 @@ public final class PxPicConverter {
      * @throws IllegalArgumentException if {@code style} is not
      *          {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
      */
-    public static String toLocalizedDatePicture(FormatStyle style) {
-        return toLocalizedDatePicture(style, Locale.getDefault());
+    public static String toDatePicture(FormatStyle style) {
+        return toDatePicture(style, Locale.getDefault());
     }
 
     /**
@@ -172,7 +172,7 @@ public final class PxPicConverter {
      * @throws IllegalArgumentException if {@code style} is not
      *          {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
      */
-    public static String toLocalizedTimePicture(FormatStyle style, Locale locale) {
+    public static String toTimePicture(FormatStyle style, Locale locale) {
         Objects.requireNonNull(style, "style must not be null");
         Objects.requireNonNull(locale, "locale must not be null");
 
@@ -185,7 +185,7 @@ public final class PxPicConverter {
                 IsoChronology.INSTANCE,
                 locale);
 
-        return toParadoxPicture(pattern, locale);
+        return toPicture(pattern, locale);
     }
 
     /**
@@ -199,8 +199,8 @@ public final class PxPicConverter {
      * @throws IllegalArgumentException if {@code style} is not
      *          {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
      */
-    public static String toLocalizedTimePicture(FormatStyle style) {
-        return toLocalizedTimePicture(style, Locale.getDefault());
+    public static String toTimePicture(FormatStyle style) {
+        return toTimePicture(style, Locale.getDefault());
     }
 
     private PxPicConverter() {

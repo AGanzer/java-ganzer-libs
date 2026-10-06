@@ -46,10 +46,10 @@ public class NumberValidator extends Validator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT},
-     * the {@link #getMinValue smallest} allowed value to {@code Long.MIN_VALUE} and
-     * the {@link #getMaxValue greatest} allowed value to {@code Long.MAX_VALUE}.
-     * Input of {@link #getNumDecimals post decimal digits} is forbidden.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT},
+     * the smallest allowed value to {@link Long#MIN_VALUE} and the greatest
+     * allowed value to {@link Long#MAX_VALUE}. Input of post-decimal digits
+     * is prohibited.
      */
     public NumberValidator() {
     }
@@ -71,7 +71,7 @@ public class NumberValidator extends Validator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      * Input of {@link #getNumDecimals post decimal digits} is forbidden.
      *
      * @param minValue The smallest allowed value.
@@ -102,7 +102,7 @@ public class NumberValidator extends Validator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      * Input of {@link #getNumDecimals post decimal digits} is forbidden.
      *
      * @param minValue The smallest allowed value.
@@ -124,7 +124,7 @@ public class NumberValidator extends Validator {
      *                 {@link ValidatorOptions} constants.
      * @param minValue The smallest allowed value.
      * @param maxValue The greatest allowed value.
-     * @param numDecimals The number of post decimal digits to allow.
+     * @param numDecimals The number of post-decimal digits to allow.
      *
      * @throws IllegalArgumentException minValue is greater than maxValue.
      */
@@ -140,7 +140,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Gets the message that is shown if the input is out of the allowed range.
+     * Gets the message shown if the input is out of the allowed range.
      *
      * @return The error message to use. The default is
      *         {@link #DEFAULT_RANGE_ERROR_MESSAGE}.
@@ -152,7 +152,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Sets the message that is shown if the input is out of the allowed range.
+     * Sets the message shown if the input is out of the allowed range.
      * <p>
      * <b>NOTE:</b> The message to set must contain 2 placeholders in the form
      * {@code %1$s} (for the minimum allowed number) and {@code %2$s} (for the
@@ -171,7 +171,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Gets the message that is shown if the input is not a number.
+     * Gets the message shown if the input is not a number.
      *
      * @return The error message to use. The default is
      *         {@link #DEFAULT_NUMBER_ERROR_MESSAGE}.
@@ -183,7 +183,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Sets the message that is shown if the input is not a number.
+     * Sets the message shown if the input is not a number.
      *
      * @param numberErrorMessage The message to use. If this is
      *        {@code null}, empty or does contain white spaces only,
@@ -326,7 +326,7 @@ public class NumberValidator extends Validator {
      *
      * @param minValue The smallest allowed value.
      * @param maxValue The greatest allowed value.
-     * @param numDecimals The number of post decimal digits to allow.
+     * @param numDecimals The number of post-decimal digits to allow.
      *
      * @throws IllegalArgumentException If minValue is greater than maxValue.
      */
