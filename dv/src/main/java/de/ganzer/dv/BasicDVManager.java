@@ -120,8 +120,17 @@ public class BasicDVManager {
      * Adds a document template to the manager.
      *
      * @param template The template to add.
+     *
+     * @throws NullPointerException if {@code template} is {@code null}.
+     * @throws IllegalArgumentException if {@code template} is default and a
+     *         default view template is already registered.
      */
     public static void registerDocumentTemplate(DocumentTemplate<?> template) {
+        Objects.requireNonNull(template, "template must not be null.");
+
+        if (template.isDefault() && templates.stream().anyMatch(DocumentTemplate::isDefault))
+            throw new IllegalArgumentException("A default document template is already registered.");
+
         templates.add(template);
     }
 

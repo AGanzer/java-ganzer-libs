@@ -23,13 +23,25 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
     public static final int IS_HIDDEN = 0x01;
     /**
      * This option marks the template as the default that is used if no template
-     * is specified to create a view.
+     * is specified to create a view. This view is created even if another view
+     * is marked as {@link #IS_MANDATORY}.
+     * <p>
+     * <b>NOTE:</b> Only one default view template can be registered within a
+     * {@link DocumentTemplate}.
+     *
+     * @see DocumentTemplate#NO_AUTO_VIEW
      */
     public static final int IS_DEFAULT = 0x02;
     /**
      * This option marks the template as mandatory. A document cannot exist
      * without a mandatory view. If this view is closed, the document is closed
      * also.
+     * <p>
+     * <b>NOTE:</b> Only one mandatory view template can be registered within a
+     * {@link DocumentTemplate}.
+     *
+     * @see DocumentTemplate#NO_AUTO_VIEW
+     * @see DocumentTemplate#NO_AUTO_CLOSE
      */
     public static final int IS_MANDATORY = 0x04;
     /**
@@ -57,6 +69,11 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * document's {@link DocumentTemplate#isAutoClose()} returns {@code true}.
      */
     public static final int IGNORE_ON_OTHER_VIEW_CLOSED = 0x80;
+    /**
+     * If this option is set, the view is automatically created, even if another
+     * view is marked as {@link #IS_MANDATORY} or {@link #IS_DEFAULT}.
+     */
+    public static final int IS_AUTO_VIEW = 0x100;
 
     private final String displayName;
     private final ViewSupplier<D, V> viewSupplier;
@@ -219,6 +236,18 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      */
     public boolean ignoreOnOtherViewClosed() {
         return (options & IGNORE_ON_OTHER_VIEW_CLOSED) != 0;
+    }
+
+    /**
+     * Indicates whether the view is automatically created when the document is
+     * opened.
+     *
+     * @return {@code true} if the view is automatically created.
+     *
+     * @see #IS_AUTO_VIEW
+     */
+    public boolean isAutoView() {
+        return (options & IS_AUTO_VIEW) != 0;
     }
 
     /**

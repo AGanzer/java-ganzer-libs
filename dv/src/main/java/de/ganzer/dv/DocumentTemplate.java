@@ -43,6 +43,9 @@ public class DocumentTemplate<D extends Document> {
     /**
      * This option marks the template as the default that is used if no template
      * is specified to create a document.
+     * <p>
+     * <b>NOTE:</b> Only one default view template can be registered by
+     * {@link BasicDVManager#registerDocumentTemplate(DocumentTemplate)}.
      */
     public static final int IS_DEFAULT = 0x10;
     /**
@@ -232,10 +235,27 @@ public class DocumentTemplate<D extends Document> {
     /**
      * Registers a view template.
      *
-     * @param viewTemplate The template to register.
+     * @param template The template to register.
+     *
+     * @throws NullPointerException if {@code template} is {@code null}.
+     * @throws IllegalArgumentException if {@code template} is mandatory and
+     *         a mandatory view template is already registered or of
+     *         {@code template} is default and a default view template is
+     *         already registered.
+     *
+     * @see ViewTemplate#IS_MANDATORY
+     * @see ViewTemplate#IS_DEFAULT
      */
-    public void registerViewTemplate(ViewTemplate<D, ?> viewTemplate) {
-        viewTemplates.add(viewTemplate);
+    public void registerViewTemplate(ViewTemplate<D, ?> template) {
+        Objects.requireNonNull(template, "template must not be null.");
+
+        if (template.isMandatory() && viewTemplates.stream().anyMatch(ViewTemplate::isMandatory))
+            throw new IllegalArgumentException("A mandatory view template is already registered.");
+
+        if (template.isDefault() && viewTemplates.stream().anyMatch(ViewTemplate::isDefault))
+            throw new IllegalArgumentException("A default view template is already registered.");
+
+        viewTemplates.add(template);
     }
 
     /**
@@ -308,20 +328,31 @@ public class DocumentTemplate<D extends Document> {
         var info = new DocumentCreationInfo<>(this, parent, name, readOnly || documentsAreReadOnly(), newData);
         D document = documentSupplier.createDocument(info);
 
-        var template = viewTemplates.stream().filter(ViewTemplate::isMandatory).findFirst();
+        viewTemplates.stream()
+                .filter(ViewTemplate::isMandatory)
+                .findFirst()
+                .ifPresent(tpl -> tpl.createView(document));
 
-        if (template.isPresent()) {
-            template.get().createView(document);
-        } else if (autoCreateView()) {
-            template = viewTemplates.stream().filter(ViewTemplate::isDefault).findFirst();
+        if (autoCreateView()) {
+            var template = viewTemplates.stream().filter(ViewTemplate::isDefault).findFirst();
 
-            if (template.isEmpty())
+            if (template.isPresent() && !template.get().isMandatory())
+                template.get().createView(document);
+
+            var templates = viewTemplates.stream().filter(ViewTemplate::isAutoView).toList();
+
+            for (var tpl : templates)
+                if (!tpl.isMandatory() && !tpl.isDefault())
+                    tpl.createView(document);
+
+            if (document.getViews().isEmpty()) {
                 template = viewTemplates.stream().findFirst();
 
-            if (template.isEmpty())
-                throw new IllegalStateException("DocumentTemplate " + displayName + " has no view template defined.");
+                if (template.isEmpty())
+                    throw new IllegalStateException("DocumentTemplate " + displayName + " has no view template defined.");
 
-            template.get().createView(document);
+                template.get().createView(document);
+            }
         }
 
         return document;
