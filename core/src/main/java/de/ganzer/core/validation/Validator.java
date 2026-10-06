@@ -340,7 +340,7 @@ public class Validator {
     }
 
     /**
-     * Called to reformats the specified text.
+     * Called to reformat the specified text.
      * <p>
      * This implementation does nothing and returns text. Inheritors should overwrite
      * this to reformat the text.
