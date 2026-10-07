@@ -149,6 +149,8 @@ import java.util.Objects;
  *     }
  * }
  * }</pre>
+ * <b>NOTE:</b> Many of the predefined actions require a {@link DVNavigationService}
+ * to be registered via {@link Services#register(Class, Object)}.
  *
  * @see #registerSupport(DVManagerSupport)
  * @see DVManagerSupport

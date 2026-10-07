@@ -272,6 +272,9 @@ public abstract class Document extends Model {
      * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
      * by {@link Services#register(Class, Object)}.
      *
+     * @throws IllegalStateException if {@link #isSaveAsSupported()} returns
+     *         {@code false} and no {@link DVNavigationService} is
+     *         registered via {@link Services#register(Class, Object)}.
      * @throws DVSaveException on any error.
      *
      * @see #saveData()
@@ -281,6 +284,9 @@ public abstract class Document extends Model {
     public void saveDataAs() throws DVSaveException {
         if (!isSaveAsSupported())
             return;
+
+        if (!Services.has(DVNavigationService.class))
+            throw new IllegalStateException("No DVNavigationService registered via Services#register(Class, Object)");
 
         var saveName = ((DVNavigationService) Services.get(DVNavigationService.class)).querySaveLocation(getName(), getTemplate().getFilter());
 
@@ -325,6 +331,10 @@ public abstract class Document extends Model {
      *
      * @return {@code true} if the document can be closed.
      *
+     * @throws IllegalArgumentException if {@link #isModified()} return
+     *         {@code false} and no {@link DVNavigationService} is
+     *         registered via {@link Services#register(Class, Object)}.
+     *
      * @see #isModified()
      * @see #setModified(boolean)
      * @see DVNavigationService#querySave(String)
@@ -333,6 +343,9 @@ public abstract class Document extends Model {
     public boolean canClose() {
         if (!isModified())
             return true;
+
+        if (!Services.has(DVNavigationService.class))
+            throw new IllegalStateException("No DVNavigationService registered via Services#register(Class, Object)");
 
         Boolean result = ((DVNavigationService) Services.get(DVNavigationService.class)).querySave(getName());
 

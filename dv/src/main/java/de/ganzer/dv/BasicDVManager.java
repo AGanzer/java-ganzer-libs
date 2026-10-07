@@ -221,11 +221,16 @@ public class BasicDVManager {
      *
      * @return The newly created document or {@code null} if the user has canceled.
      *
-     * @throws IllegalStateException If no document template is registered.
+     * @throws IllegalStateException If no document template is registered
+     *         or if no {@link DVNavigationService} is registered via
+     *         {@link Services#register(Class, Object)}.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
      */
     public static Document createDocument(Document parent, DocumentTemplate<?> template) {
+        if (!Services.has(DVNavigationService.class))
+            throw new IllegalStateException("No DVNavigationService registered via Services#register(Class, Object)");
+
         if (template == null) {
             var tpls = templates.stream().filter(t -> !t.isHidden()).toList();
 
@@ -254,6 +259,10 @@ public class BasicDVManager {
      * @param document The document where to create the view for.
      *
      * @return The created view or {@code null} if the user has canceled.
+     *
+     * @throws NullPointerException if {@code document} is {@code null}.
+     * @throws IllegalArgumentException if no {@link DVNavigationService} is
+     *         registered via {@link Services#register(Class, Object)}.
      */
     public static View<?> createView(Document document) {
         return createView(document, null);
@@ -271,9 +280,16 @@ public class BasicDVManager {
      * @return The created view or {@code null} if the user has canceled.
      *
      * @param <D> The type of the document.
+     *
+     * @throws NullPointerException if {@code document} is {@code null}.
+     * @throws IllegalStateException if no {@link DVNavigationService} is
+     *         registered via {@link Services#register(Class, Object)}.
      */
     public static <D extends Document> View<?> createView(Document document, ViewTemplate<D, ?> template) {
         Objects.requireNonNull(document, "Document must not be null.");
+
+        if (!Services.has(DVNavigationService.class))
+            throw new IllegalStateException("No DVNavigationService registered via Services#register(Class, Object)");
 
         ViewTemplate<D, ?> templateToUse = template;
 
@@ -386,7 +402,9 @@ public class BasicDVManager {
      *
      * @return The opened documents or an empty list if the user has canceled.
      *
-     * @throws IllegalStateException If no document template is registered.
+     * @throws IllegalStateException If no document template is registered
+     *         or if no {@link DVNavigationService} is registered via
+     *         {@link Services#register(Class, Object)}.
      * @throws DVLoadException on any error loading the data.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
@@ -413,13 +431,18 @@ public class BasicDVManager {
      *
      * @return The opened documents or an empty list if the user has canceled.
      *
-     * @throws IllegalStateException If no document template is registered.
+     * @throws IllegalStateException If no document template is registered
+     *         or if no {@link DVNavigationService} is registered via
+     *         {@link Services#register(Class, Object)}.
      * @throws DVLoadException on any error loading the data.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
      * @see DVNavigationService#queryLocationsToOpen(List, String)
      */
     public static List<Document> openDocuments(Document parent, DocumentTemplate<?> initialTemplate, boolean readOnly) throws DVLoadException {
+        if (!Services.has(DVNavigationService.class))
+            throw new IllegalStateException("No DVNavigationService registered via Services#register(Class, Object)");
+
         var filters = templates.stream()
                 .map(DocumentTemplate::getFilter)
                 .filter(f -> !Strings.isNullOrBlank(f))
