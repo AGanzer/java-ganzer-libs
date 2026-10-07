@@ -364,7 +364,8 @@ public class BasicDVManager {
      * @param readOnly {@code true} if the document should be opened in read-only
      *         mode, {@code false} otherwise.
      *
-     * @return The opened document.
+     * @return The opened document or {@code null} if the user was queried and
+     *         has canceled the operation.
      *
      * @throws DVLoadException on any error loading the data.
      * @throws NullPointerException If the given data source is {@code null}.
@@ -387,6 +388,9 @@ public class BasicDVManager {
             activateDocument(document);
         } else {
             template = getTemplateToUse(dataSource, template);
+
+            if (template == null)
+                return null;
 
             document = template.createDocument(dataSource, parent, false, readOnly);
             openDocuments.add(document);
