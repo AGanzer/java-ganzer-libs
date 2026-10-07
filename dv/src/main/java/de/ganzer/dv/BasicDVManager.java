@@ -334,7 +334,7 @@ public class BasicDVManager {
      * adds it to the list of open documents.
      * <p>
      * If the given source is already opened, the existing document will be
-     * activated by bringing its default view to the front and is returned.
+     * returned and is activated by bringing its default view to the front.
      *
      * @param parent The parent document, or {@code null} if the document has no
      *        parent.
@@ -404,9 +404,9 @@ public class BasicDVManager {
      *
      * @param parent The parent documents, or {@code null} if the documents have
      *        no parent.
-     * @param template The template that's filter should be initially used to
-     *        choose a data source. If this is {@code null}, a default template
-     *        will be used. If there is no default template, the first
+     * @param initialTemplate The template that's filter should be initially used
+     *        to choose a data source. If this is {@code null}, the default
+     *        template will be used. If there is no default template, the first
      *        registered template will be used.
      * @param readOnly {@code true} if the documents should be opened in read-only
      *         mode, {@code false} otherwise.
@@ -419,12 +419,12 @@ public class BasicDVManager {
      * @see #registerDocumentTemplate(DocumentTemplate)
      * @see DVNavigationService#queryLocationsToOpen(List, String)
      */
-    public static List<Document> openDocuments(Document parent, DocumentTemplate<?> template, boolean readOnly) throws DVLoadException {
+    public static List<Document> openDocuments(Document parent, DocumentTemplate<?> initialTemplate, boolean readOnly) throws DVLoadException {
         var filters = templates.stream()
                 .map(DocumentTemplate::getFilter)
                 .filter(f -> !Strings.isNullOrBlank(f))
                 .toList();
-        var initial = getTemplateToUse(null, template);
+        var initial = getTemplateToUse(null, initialTemplate);
         var locations = ((DVNavigationService) Services.get(DVNavigationService.class)).queryLocationsToOpen(filters, initial.getFilter());
 
         return locations == null || locations.isEmpty()

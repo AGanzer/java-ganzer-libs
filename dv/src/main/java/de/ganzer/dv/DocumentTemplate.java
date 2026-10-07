@@ -92,7 +92,8 @@ public class DocumentTemplate<D extends Document> {
      *        source.
      * @param documentSupplier Creates the document.
      * @param newName The name of new documents.
-     * @param filter The filter to use to open documents from existing sources.
+     * @param filter The filter to use to open documents from existing sources
+     *        or {@code null} to hide the template in open dialogs.
      * @param defaultExtension The default extension to use for saving documents
      *        if none is specified or {@code null} for no extension.
      * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
@@ -120,7 +121,8 @@ public class DocumentTemplate<D extends Document> {
      *        source.
      * @param documentSupplier Creates the document.
      * @param newName The name of new documents.
-     * @param filter The filter to use to open documents from existing sources.
+     * @param filter The filter to use to open documents from existing sources
+     *        or {@code null} to hide the template in open dialogs.
      * @param defaultExtension The default extension to use for saving documents
      *        if none is specified or {@code null} for no extension.
      * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
@@ -394,11 +396,13 @@ public class DocumentTemplate<D extends Document> {
      *
      * @return The created document.
      *
-     * @throws IllegalStateException If {@link #autoCreateView()} is {@code true}
-     *         and no view template is registered.
+     * @throws IllegalStateException If no view template is registered.
      * @throws DVLoadException on any error loading the data.
      */
     public D createDocument(String name, Document parent, boolean newData, boolean readOnly) throws DVLoadException {
+        if (viewTemplates.isEmpty())
+            throw new IllegalStateException("DocumentTemplate " + displayName + " has no view template defined.");
+
         if (newData) {
             if (Strings.isNullOrBlank(name))
                 name = newName;
@@ -438,14 +442,8 @@ public class DocumentTemplate<D extends Document> {
                 if (!tpl.isMandatory() && !tpl.isDefault())
                     tpl.createView(document);
 
-            if (document.getViews().isEmpty()) {
-                template = viewTemplates.stream().findFirst();
-
-                if (template.isEmpty())
-                    throw new IllegalStateException("DocumentTemplate " + displayName + " has no view template defined.");
-
-                template.get().createView(document);
-            }
+            if (document.getViews().isEmpty())
+                viewTemplates.stream().findFirst().ifPresent(t -> t.createView(document));
         }
 
         return document;
