@@ -155,7 +155,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @see #IS_HIDDEN
      */
-    public boolean isHidden() {
+    public final boolean isHidden() {
         return (options & IS_HIDDEN) != 0;
     }
 
@@ -166,7 +166,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @see #IS_DEFAULT
      */
-    public boolean isDefault() {
+    public final boolean isDefault() {
         return (options & IS_DEFAULT) != 0;
     }
 
@@ -177,7 +177,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @see #IS_MANDATORY
      */
-    public boolean isMandatory() {
+    public final boolean isMandatory() {
         return (options & IS_MANDATORY) != 0;
     }
 
@@ -188,7 +188,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @see #NOT_CLOSABLE
      */
-    public boolean isClosable() {
+    public final boolean isClosable() {
         return (options & NOT_CLOSABLE) == 0;
     }
 
@@ -200,7 +200,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @see #NO_TITLE_NUMBER
      */
-    public boolean hasTitleNumber() {
+    public final boolean hasTitleNumber() {
         return (options & NO_TITLE_NUMBER) == 0;
     }
 
@@ -211,7 +211,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @see #NO_READ_ONLY_HINT
      */
-    public boolean showReadOnlyHint() {
+    public final boolean showReadOnlyHint() {
         return (options & NO_READ_ONLY_HINT) == 0;
     }
 
@@ -222,7 +222,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @see #NO_MODIFICATION_HINT
      */
-    public boolean showModificationHint() {
+    public final boolean showModificationHint() {
         return (options & NO_MODIFICATION_HINT) == 0;
     }
 
@@ -234,7 +234,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @see #IGNORE_ON_OTHER_VIEW_CLOSED
      */
-    public boolean ignoreOnOtherViewClosed() {
+    public final boolean ignoreOnOtherViewClosed() {
         return (options & IGNORE_ON_OTHER_VIEW_CLOSED) != 0;
     }
 
@@ -246,7 +246,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @see #IS_AUTO_VIEW
      */
-    public boolean isAutoView() {
+    public final boolean isAutoView() {
         return (options & IS_AUTO_VIEW) != 0;
     }
 

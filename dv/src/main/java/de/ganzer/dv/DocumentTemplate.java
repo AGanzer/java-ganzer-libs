@@ -190,7 +190,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @see #IS_HIDDEN
      */
-    public boolean isHidden() {
+    public final boolean isHidden() {
         return (options & IS_HIDDEN) != 0;
     }
 
@@ -201,7 +201,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @see #IS_DEFAULT
      */
-    public boolean isDefault() {
+    public final boolean isDefault() {
         return (options & IS_DEFAULT) != 0;
     }
 
@@ -212,7 +212,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @see #NO_AUTO_VIEW
      */
-    public boolean autoCreateView() {
+    public final boolean autoCreateView() {
         return (options & NO_AUTO_VIEW) == 0;
     }
 
@@ -224,7 +224,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @see #NO_AUTO_CLOSE
      */
-    public boolean isAutoClose() {
+    public final boolean isAutoClose() {
         return (options & NO_AUTO_CLOSE) == 0;
     }
 
@@ -236,7 +236,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @see #NO_NEW_NUMBER
      */
-    public boolean hasNewNumber() {
+    public final boolean hasNewNumber() {
         return (options & NO_NEW_NUMBER) == 0;
     }
 
@@ -247,7 +247,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @see #READ_ONLY_DOCUMENTS
      */
-    public boolean documentsAreReadOnly() {
+    public final boolean documentsAreReadOnly() {
         return (options & READ_ONLY_DOCUMENTS) != 0;
     }
 
@@ -260,7 +260,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @see #USE_PARENT_VIEWS
      */
-    public boolean useParentViews() {
+    public final boolean useParentViews() {
         return (options & USE_PARENT_VIEWS) != 0;
     }
 
@@ -273,7 +273,7 @@ public class DocumentTemplate<D extends Document> {
      *
      * @see #NOTIFY_CHILD_VIEWS_ON_CHANGE
      */
-    public boolean notifyChildViewsOnChange() {
+    public final boolean notifyChildViewsOnChange() {
         return (options & NOTIFY_CHILD_VIEWS_ON_CHANGE) != 0;
     }
 
