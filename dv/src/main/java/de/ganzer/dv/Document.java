@@ -65,6 +65,7 @@ public abstract class Document extends Model {
      *
      * @param info The information for initializing the model.
      *
+     * @throws IllegalStateException If the parent document is already closed.
      * @throws DVLoadException on any error loading data.
      */
     protected Document(DocumentCreationInfo<? extends Document> info) throws DVLoadException {
@@ -572,12 +573,15 @@ public abstract class Document extends Model {
     }
 
     private void addChild(Document child) {
+        if (child.isClosed())
+            throw new IllegalStateException("child is already closed.");
+
         children.add(child);
         childAdded(child);
     }
 
     private void removeChild(Document child) {
-        children.remove(child);
-        childRemoved(child);
+        if (children.remove(child))
+            childRemoved(child);
     }
 }
