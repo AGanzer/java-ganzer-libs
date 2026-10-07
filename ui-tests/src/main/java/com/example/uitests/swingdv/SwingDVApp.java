@@ -52,6 +52,7 @@ public class SwingDVApp {
         Toolkit.getDefaultToolkit()
                 .getSystemEventQueue()
                 .push(new ExceptionHandlingEventQueue());
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> throwable.printStackTrace(System.err));
 
         setupLaF();
         registerServices();
