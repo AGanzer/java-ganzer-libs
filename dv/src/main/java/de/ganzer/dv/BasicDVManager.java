@@ -356,9 +356,11 @@ public class BasicDVManager {
      *        parent.
      * @param template The template to use for creating the document. If this is
      *        {@code null}, a template will be used that matches the given source.
-     *        If there is no template that matches the given source, a default
-     *        template will be used. If there is no default template, the first
-     *        registered template will be used.
+     *        If there is no template that matches the given source, the user is
+     *        queried to choose a template if more than one template is registered
+     *        and not hidden; otherwise, the default template will be used. If
+     *        there is no default template, the first registered template will be
+     *        used.
      * @param readOnly {@code true} if the document should be opened in read-only
      *         mode, {@code false} otherwise.
      *
@@ -366,7 +368,9 @@ public class BasicDVManager {
      *
      * @throws DVLoadException on any error loading the data.
      * @throws NullPointerException If the given data source is {@code null}.
-     * @throws IllegalStateException If no document template is registered.
+     * @throws IllegalStateException If no document template is registered or
+     *         no template does match the given data source in the case that
+     *         more than one template is registered and not hidden.
      *
      * @see #registerDocumentTemplate(DocumentTemplate)
      */
@@ -621,11 +625,18 @@ public class BasicDVManager {
 
         DocumentTemplate<?> template = null;
 
-        if (!Strings.isNullOrBlank(dataSource))
+        if (!Strings.isNullOrBlank(dataSource)) {
             template = templates.stream().filter(t -> t.canHandleDataSource(dataSource)).findFirst().orElse(null);
 
-        if (template != null)
-            return template;
+            if (template != null)
+                return template;
+
+            var tpls = templates.stream().filter(t -> !t.isHidden()).toList();
+
+            return tpls.size() > 1
+                    ? ((DVNavigationService) Services.get(DVNavigationService.class)).chooseDocumentTemplate(tpls)
+                    : templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
+        }
 
         return templates.stream().filter(DocumentTemplate::isDefault).findFirst().orElse(templates.get(0));
     }
