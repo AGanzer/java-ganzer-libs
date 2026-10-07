@@ -216,8 +216,10 @@ public class BasicDVManager {
      * @param parent The parent document, or {@code null} if the document has no
      *        parent.
      * @param template The template to use for creating the document. If this is
-     *        {@code null}, a default template will be used. If there is no
-     *        default template, the first registered template will be used.
+     *        {@code null}, the user will be queried to choose a template if
+     *        the document's template does contain more than one unhidden view
+     *        template; otherwise, the default template will be used. If there
+     *        is no default template, the first registered template will be used.
      *
      * @return The newly created document or {@code null} if the user has canceled.
      *
@@ -275,7 +277,9 @@ public class BasicDVManager {
      * @param template The template to use for creating the view. If this is
      *         {@code null}, the user will be queried to choose a template if
      *         the document's template does contain more than one unhidden view
-     *         template; otherwise, the default template will be used.
+     *         template; otherwise, the default template will be used. If there
+     *         is no default template, the first registered template will be
+     *         used.
      *
      * @return The created view or {@code null} if the user has canceled.
      *
