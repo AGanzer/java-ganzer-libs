@@ -21,6 +21,7 @@ import de.ganzer.dv.DVLoadException;
 import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.ViewTemplate;
 import de.ganzer.dv.services.DVNavigationService;
+import de.ganzer.swing.dlgfw.AbstractPanel;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
 import de.ganzer.swing.dv.DVManager;
 
@@ -100,23 +101,32 @@ public class SwingDVApp {
     }
 
     private static void setupLaF() {
-        if (OS.isMac())
-            FlatMacLightLaf.setup();
-        else
-            FlatIntelliJLaf.setup();
+        if (!CommandLineParser.isLafSet()) {
+            if (OS.isMac())
+                FlatMacLightLaf.setup();
+            else
+                FlatIntelliJLaf.setup();
 
-        try {
-            String value = LocalSettings.ui.read("lookAndFeel", "");
+            try {
+                String value = LocalSettings.ui.read("lookAndFeel", "");
 
-            if (!value.isEmpty())
-                UIManager.setLookAndFeel(value);
-        } catch (Exception ex) {
-            System.err.println("Failed to initialize LaF");
-            ex.printStackTrace(System.err);
+                if (!value.isEmpty())
+                    UIManager.setLookAndFeel(value);
+            } catch (Exception ex) {
+                System.err.println("Failed to initialize LaF");
+                ex.printStackTrace(System.err);
+            }
         }
 
         UIManager.put("TitlePane.menuBarEmbedded", false);
         UIManager.put("Table.intercellSpacing", new Dimension(1, 1));
+
+        Color panelBackgroundColor = UIManager.getColor("Panel.background");
+        Color titleForegroundColor = Colors.getContrastingColor(panelBackgroundColor);
+        Color titleBackgroundColor = Colors.getContrastingColor(titleForegroundColor);
+
+        AbstractPanel.setTitleBackground(titleBackgroundColor);
+        AbstractPanel.setTitleForeground(titleForegroundColor);
 
         FlatLaf.updateUI();
     }

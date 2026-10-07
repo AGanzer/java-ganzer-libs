@@ -17,6 +17,8 @@ import javax.swing.UIManager;
 import java.util.Locale;
 
 public class CommandLineParser {
+    private static boolean lafSet;
+
     public static void parse(final String[] args) {
         for (var arg: args) {
             if (arg.startsWith("--theme=")) {
@@ -31,12 +33,18 @@ public class CommandLineParser {
         }
     }
 
+    public static boolean isLafSet() {
+        return lafSet;
+    }
+
     private static void adjustLocale(String arg) {
         Locale.setDefault(Locale.forLanguageTag(arg));
     }
 
     private static void adjustLaf(String arg) {
         try {
+            lafSet = true;
+
             switch (arg.toLowerCase()) {
                 case "light": {
                     FlatLightLaf.setup();
@@ -122,6 +130,11 @@ public class CommandLineParser {
                     break;
                 }
 
+                case "system": {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    break;
+                }
+
                 default: {
                     UIManager.setLookAndFeel(arg);
                 }
@@ -129,6 +142,7 @@ public class CommandLineParser {
         } catch(Exception e) {
             System.err.println("Look & Feel cannot be set.");
             e.printStackTrace(System.err);
+            lafSet = false;
         }
     }
 }

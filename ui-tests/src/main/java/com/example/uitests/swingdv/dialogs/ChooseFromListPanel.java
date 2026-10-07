@@ -1,5 +1,6 @@
 package com.example.uitests.swingdv.dialogs;
 
+import com.example.uitests.swing.SVGProvider;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.AbstractModifiableDataPanel;
 
@@ -31,6 +32,11 @@ public class ChooseFromListPanel<E> extends AbstractModifiableDataPanel<ChooseFr
     @Override
     protected JComponent createTitleLabel() {
         return titleLabel = new JLabel();
+    }
+
+    @Override
+    protected JComponent createTitleIcon() {
+        return new JLabel(SVGProvider.get("hand_count_three", DEFAULT_TITLE_ICON_SIZE));
     }
 
     @Override

@@ -26,6 +26,6 @@ public class AboutPanel extends AbstractPanel {
 
     @Override
     protected JComponent createTitleIcon() {
-        return new JLabel(SVGProvider.get("about", DEFAULT_TITLE_ICON_SIZE));
+        return new JLabel(SVGProvider.get("hamburger", DEFAULT_TITLE_ICON_SIZE));
     }
 }
