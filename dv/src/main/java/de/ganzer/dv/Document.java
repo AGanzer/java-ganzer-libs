@@ -527,8 +527,27 @@ public abstract class Document extends Model {
     }
 
     /**
-     * Notifies all views to update its title.
+     * Invoked to inform inheritors about a child document has been added.
+     * <p>
+     * This implementation does nothing.
+     *
+     * @param child The child document that has been added.
      */
+    @SuppressWarnings("unused")
+    protected void childAdded(Document child) {
+    }
+
+    /**
+     * Invoked to inform inheritors about a child document has been removed.
+     * <p>
+     * This implementation does nothing.
+     *
+     * @param child The child document that has been removed.
+     */
+    @SuppressWarnings("unused")
+    protected void childRemoved(Document child) {
+    }
+
     private void notifyTitleChange() {
         // May be invoked on initialization where the views are not created yet:
         //
@@ -553,12 +572,12 @@ public abstract class Document extends Model {
     }
 
     private void addChild(Document child) {
-        if (child != null)
-            children.add(child);
+        children.add(child);
+        childAdded(child);
     }
 
     private void removeChild(Document child) {
-        if (child != null)
-            children.remove(child);
+        children.remove(child);
+        childRemoved(child);
     }
 }
