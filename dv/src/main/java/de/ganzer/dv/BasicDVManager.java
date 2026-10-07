@@ -137,9 +137,9 @@ public class BasicDVManager {
     /**
      * Removes a document template from the manager.
      * <p>
-     * This implementation tries to close each document that was created by the
-     * given template. If any document cannot be closed, the template is not
-     * removed and {@code false} is returned.
+     * This implementation tries to close each document created by the given
+     * template. If any document cannot be closed, the template is not removed
+     * and {@code false} is returned.
      *
      * @param template The template to remove.
      *
@@ -574,7 +574,7 @@ public class BasicDVManager {
      * <p>
      * <b>NOTE:</b> This is automatically invoked by {@link Document}
      * when it is closed. Inheritors of {@link Document} that overrides
-     * {@link Document#close()} have to ensure that  a closed document
+     * {@link Document#close()} have to ensure that a closed document
      * is removed from the manager's document list.
      *
      * @param doc The document to remove.
