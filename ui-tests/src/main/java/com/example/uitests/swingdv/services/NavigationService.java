@@ -6,22 +6,14 @@ import com.example.uitests.swingdv.dialogs.ChooseFromListData;
 import com.example.uitests.swingdv.dialogs.ChooseFromListDialog;
 import de.ganzer.dv.DocumentTemplate;
 import de.ganzer.dv.ViewTemplate;
-import de.ganzer.dv.services.DVNavigationService;
 import de.ganzer.swing.dlgfw.services.DFWNavigationService;
-import de.ganzer.swing.dv.DVManager;
+import de.ganzer.swing.dv.services.AbstractDVNavigationService;
 
-import javax.swing.FocusManager;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Component;
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-public class NavigationService implements DVNavigationService, DFWNavigationService {
+public class NavigationService extends AbstractDVNavigationService implements DFWNavigationService {
     private static NavigationService instance;
 
     public static NavigationService getInstance() {
@@ -32,51 +24,6 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
     }
 
     @Override
-    public Collection<String> queryLocationsToOpen(List<String> filters, String initialFilter) {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setMultiSelectionEnabled(true);
-        chooser.setDialogTitle(SwingDVApp.TITLE);
-        setFilters(chooser, filters);
-
-        return chooser.showOpenDialog(SwingDVApp.getMainWindow()) == JFileChooser.APPROVE_OPTION
-                ? Arrays.stream(chooser.getSelectedFiles()).map(File::getAbsolutePath).toList()
-                : null;
-    }
-
-    @Override
-    public Boolean querySave(String name) {
-        return getConfirmation(null, String.format("\"%s\" has changed.\n\nSave it now?", name), null);
-    }
-
-    @Override
-    public String querySaveLocation(String initialLocation, String filter) {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setMultiSelectionEnabled(false);
-        chooser.setDialogTitle(SwingDVApp.TITLE);
-        chooser.setSelectedFile(new File(initialLocation));
-        setFilters(chooser, Collections.singletonList(filter));
-
-        return chooser.showSaveDialog(SwingDVApp.getMainWindow()) == JFileChooser.APPROVE_OPTION
-                ? chooser.getSelectedFile().getAbsolutePath()
-                : null;
-    }
-
-    @Override
-    public void showError(String message, Throwable cause) {
-        JOptionPane.showMessageDialog(getParent(null), message, SwingDVApp.TITLE, JOptionPane.ERROR_MESSAGE);
-    }
-
-    /**
-     * Invoked to choose a document template.
-     *
-     * @param templates The available templates to choose from.
-     *
-     * @return The chosen document template or {@code null} if the user has
-     *         canceled.
-     */
-    @Override
     public DocumentTemplate<?> chooseDocumentTemplate(List<DocumentTemplate<?>> templates) {
         var data = new ChooseFromListData<>("Choose Document Type", templates);
         var dialog = new ChooseFromListDialog<>(SwingDVApp.getMainWindow(), data);
@@ -85,14 +32,6 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
         return dialog.isAccepted() ? data.chosen : null;
     }
 
-    /**
-     * Invoked to choose a view template.
-     *
-     * @param templates The available templates to choose from.
-     *
-     * @return The chosen document template or {@code null} if the user has
-     *         canceled.
-     */
     @Override
     public ViewTemplate<?, ?> chooseViewTemplate(List<ViewTemplate<?, ?>> templates) {
         var data = new ChooseFromListData<>("Choose View Type", templates);
@@ -104,7 +43,7 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
 
     @Override
     public Boolean getConfirmation(Component parent, String question, String title) {
-        return switch (JOptionPane.showConfirmDialog(getParent(parent),
+        return switch (JOptionPane.showConfirmDialog(findParentComponent(parent),
                                                      question,
                                                      title != null ? title : SwingDVApp.TITLE,
                                                      JOptionPane.YES_NO_CANCEL_OPTION)) {
@@ -119,34 +58,11 @@ public class NavigationService implements DVNavigationService, DFWNavigationServ
         dialog.setVisible(true);
     }
 
+    @Override
+    protected String getDialogTitle() {
+        return SwingDVApp.TITLE;
+    }
+
     private NavigationService() {
-    }
-
-    private Component getParent(Component parent) {
-        if (parent != null)
-            return parent;
-
-        parent = (Component) DVManager.getActiveView();
-
-        if (parent == null)
-            parent = FocusManager.getCurrentManager().getPermanentFocusOwner();
-
-        return parent;
-    }
-
-    private void setFilters(JFileChooser chooser, List<String> filters) {
-        chooser.setAcceptAllFileFilterUsed(false);
-
-        for (var flt : filters) {
-            for (var filter : flt.split("[,;]")) {
-                var parts = filter.split("\\|");
-
-                chooser.addChoosableFileFilter(new FileNameExtensionFilter(
-                        String.format("%s (%s)", parts[0], parts[1]),
-                        Arrays.stream(parts[1].split(" ")).map(e -> e.substring(2)).toArray(String[]::new)));
-            }
-        }
-
-        chooser.setAcceptAllFileFilterUsed(true);
     }
 }
