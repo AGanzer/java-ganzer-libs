@@ -141,6 +141,32 @@ public abstract class Model {
     }
 
     /**
+     * The name of the model.
+     * <p>
+     * The meaning of the name is implementation defined.
+     *
+     * @return The name of the model or {@code null} if no name is available.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the name of the model.
+     * <p>
+     * This fires a property change event with the property name set to
+     * {@link #NAME_PROPERTY}.
+     *
+     * @param name The name to set.
+     */
+    public void setName(String name) {
+        var org = this.name;
+        this.name = name;
+
+        firePropertyChange(NAME_PROPERTY, org, this.name);
+    }
+
+    /**
      * Indicates whether this data is read from a persistent memory or if it is
      * created newly.
      * <p>
@@ -165,32 +191,6 @@ public abstract class Model {
      */
     public final boolean isReadOnly() {
         return (flags & IS_READONLY) != 0;
-    }
-
-    /**
-     * The name of the model.
-     * <p>
-     * The meaning of the name is implementation defined.
-     *
-     * @return The name of the model or {@code null} if no name is available.
-     */
-    public final String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the name of the model.
-     * <p>
-     * This fires a property change event with the property name set to
-     * {@link #NAME_PROPERTY}.
-     *
-     * @param name The name to set.
-     */
-    public void setName(String name) {
-        var org = this.name;
-        this.name = name;
-
-        firePropertyChange(NAME_PROPERTY, org, this.name);
     }
 
     /**
