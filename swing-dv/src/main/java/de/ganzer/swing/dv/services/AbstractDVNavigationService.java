@@ -19,11 +19,48 @@ import java.util.List;
  * provides basic dialogs.
  */
 public abstract class AbstractDVNavigationService implements DVNavigationService {
+    private boolean rememberLastOpenDir;
+    private File lastOpenDir;
+
+    /**
+     * Creates a new instance.
+     *
+     * @param rememberLastOpenDir Indicates whether the last open directory
+     *        should be remembered.
+     */
+    protected AbstractDVNavigationService(boolean rememberLastOpenDir) {
+        this.rememberLastOpenDir = rememberLastOpenDir;
+    }
+
+    /**
+     * Indicates whether the last open directory should be remembered.
+     *
+     * @return {@code true} if the last open directory should be remembered,
+     *          {@code false} otherwise.
+     *
+     * @see #AbstractDVNavigationService(boolean)
+     */
+    public boolean shouldRememberLastOpenDir() {
+        return rememberLastOpenDir;
+    }
+
+    /**
+     * Sets whether the last open directory should be remembered.
+     *
+     * @param rememberLastOpenDir {@code true} to remember the last open
+     *         directory, {@code false} otherwise.
+     */
+    public void setRememberLastOpenDir(boolean rememberLastOpenDir) {
+        this.rememberLastOpenDir = rememberLastOpenDir;
+    }
+
     /**
      * Invoked to get one or more locations that shall be opened as documents.
      * <p>
      * This implementation opens a {@link JFileChooser} dialog and uses
      * {@link #setFilters(JFileChooser, List)} to parse and set the filters.
+     * The initial directory is set to the last open directory if available
+     * and if {@link #shouldRememberLastOpenDir()} returns {@code true}.
      *
      * @param filters The filters to filter the possible results or {@code null}
      *         if no filter is provided.
@@ -39,11 +76,17 @@ public abstract class AbstractDVNavigationService implements DVNavigationService
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setMultiSelectionEnabled(true);
         chooser.setDialogTitle(getDialogTitle());
+        chooser.setCurrentDirectory(lastOpenDir);
         setFilters(chooser, filters);
 
-        return chooser.showOpenDialog(findParentComponent(null)) == JFileChooser.APPROVE_OPTION
+        var files = chooser.showOpenDialog(findParentComponent(null)) == JFileChooser.APPROVE_OPTION
                 ? Arrays.stream(chooser.getSelectedFiles()).map(File::getAbsolutePath).toList()
                 : null;
+
+        if (files != null)
+            lastOpenDir = chooser.getCurrentDirectory();
+
+        return files;
     }
 
     /**

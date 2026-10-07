@@ -64,5 +64,6 @@ public class NavigationService extends AbstractDVNavigationService implements DF
     }
 
     private NavigationService() {
+        super(true);
     }
 }
