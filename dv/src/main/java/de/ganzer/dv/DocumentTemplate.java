@@ -443,7 +443,7 @@ public class DocumentTemplate<D extends Document> {
                     tpl.createView(document);
 
             if (document.getViews().isEmpty())
-                viewTemplates.stream().findFirst().ifPresent(t -> t.createView(document));
+                viewTemplates.get(0).createView(document);
         }
 
         return document;
