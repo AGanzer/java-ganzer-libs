@@ -289,6 +289,43 @@ public class DocumentTemplate<D extends Document> {
     }
 
     /**
+     * Removes the given view template from this document template.
+     * <p>
+     * This implementation tries to close all open views that are created by the
+     * given template. If at least one view cannot be closed, {@code false}
+     * is returned.
+     *
+     * @param template The view template to remove.
+     *
+     * @return {@code true} if the view template was removed, {@code false}
+     *         otherwise.
+     */
+    public boolean removeViewTemplate(ViewTemplate<?, ?> template) {
+        if (!viewTemplates.contains(template))
+            return false;
+
+        List<View<?>> views = new ArrayList<>();
+
+        for (var doc : BasicDVManager.getOpenDocuments()) {
+            for (var view : doc.getViews()) {
+                if (view.getTemplate() == template) {
+                    if (doc.canCloseView(view))
+                        views.add(view);
+                    else
+                        return false;
+                }
+            }
+        }
+
+        for (var view : views) {
+            view.getDocument().removeView(view);
+            view.forceClose();
+        }
+
+        return viewTemplates.remove(template);
+    }
+
+    /**
      * Registers a view template.
      *
      * @param template The template to register.

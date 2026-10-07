@@ -135,6 +135,38 @@ public class BasicDVManager {
     }
 
     /**
+     * Removes a document template from the manager.
+     * <p>
+     * This implementation tries to close each document that was created by the
+     * given template. If any document cannot be closed, the template is not
+     * removed and {@code false} is returned.
+     *
+     * @param template The template to remove.
+     *
+     * @return {@code true} if the template was removed, {@code false} otherwise.
+     */
+    public boolean removeDocumentTemplate(DocumentTemplate<?> template) {
+        if (!templates.contains(template))
+            return false;
+
+        List<Document> docs = new ArrayList<>();
+
+        for (var doc : getOpenDocuments()) {
+            if (doc.getTemplate() == template) {
+                if (doc.canClose())
+                    docs.add(doc);
+                else
+                    return false;
+            }
+        }
+
+        for (var doc : docs)
+            doc.close();
+
+        return templates.remove(template);
+    }
+
+    /**
      * Gets a list of all registered document templates.
      *
      * @return An unmodifiable list of registered document templates.
@@ -541,8 +573,9 @@ public class BasicDVManager {
      * Removes the document from the manager's document list.
      * <p>
      * <b>NOTE:</b> This is automatically invoked by {@link Document}
-     * when it is closed. Implementors of {@link Document} have to ensure that
-     * a closed document is removed from the manager's document list.
+     * when it is closed. Inheritors of {@link Document} that overrides
+     * {@link Document#close()} have to ensure that  a closed document
+     * is removed from the manager's document list.
      *
      * @param doc The document to remove.
      *
