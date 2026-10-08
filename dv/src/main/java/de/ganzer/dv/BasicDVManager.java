@@ -561,6 +561,9 @@ public class BasicDVManager {
     public static void activateDocument(Document document) {
         Objects.requireNonNull(document, "document must not be null.");
 
+        if (getActiveDocument() == document)
+            return;
+
         document.getViews().stream()
                 .filter(v -> v.getTemplate().isDefault())
                 .findFirst().ifPresent(View::toFront);

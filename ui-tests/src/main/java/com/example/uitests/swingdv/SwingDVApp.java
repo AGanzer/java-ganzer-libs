@@ -156,7 +156,9 @@ public class SwingDVApp {
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                        | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
+                        | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
         var textTpl = new DocumentTemplate<>(
                 "Text Files",
@@ -176,7 +178,9 @@ public class SwingDVApp {
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                        | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
+                        | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
         var csvTpl = new DocumentTemplate<>(
                 "CSV Files",
@@ -195,7 +199,9 @@ public class SwingDVApp {
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                        | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
+                        | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
         var imageTpl = new DocumentTemplate<>(
                 "Image Files",
@@ -215,7 +221,9 @@ public class SwingDVApp {
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                        | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
+                        | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
         var personTpl = new DocumentTemplate<>(
                 "Person Files",
@@ -239,7 +247,9 @@ public class SwingDVApp {
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                        | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
+                        | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
         DVManager.registerDocumentTemplate(welcomeTpl);
         DVManager.registerDocumentTemplate(textTpl);

@@ -5,11 +5,14 @@ import de.ganzer.dv.Document;
 import de.ganzer.dv.View;
 import de.ganzer.dv.ViewCreationInfo;
 import de.ganzer.dv.ViewTemplate;
+import de.ganzer.swing.dv.DVManager;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ThumbnailView<D extends Document> extends JPanel implements View<D> {
     private final ViewTemplate<?, ?> template;
@@ -18,6 +21,7 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
     private final JLabel title;
     private final JLabel thumbnail;
 
+    @SuppressWarnings("unchecked")
     public ThumbnailView(ViewCreationInfo<?, ?> info, ThumbnailPanel ownerPanel) {
         super(new BorderLayout());
 
@@ -25,16 +29,34 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
         this.document = (D) info.getDocument();
         this.ownerPanel = ownerPanel;
 
-        this.title = new JLabel();
+        this.title = new JLabel(getTitle());
         this.thumbnail = new JLabel();
         this.thumbnail.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 
         this.add(title, BorderLayout.NORTH);
         this.add(thumbnail, BorderLayout.CENTER);
+
+        SwingUtilities.invokeLater(this::updateThumbnail);
+
+        updateBorder();
+
+        DVManager.addPropertyChangeListener(DVManager.ACTIVE_DOCUMENT_PROPERTY, evt -> {
+            if (evt.getNewValue() == document || evt.getOldValue() == document)
+                updateBorder();
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON1)
+                    DVManager.activateDocument(document);
+            }
+        });
     }
 
     @Override
     public ViewTemplate<D, ?> getTemplate() {
+        //noinspection unchecked
         return (ViewTemplate<D, ?>) template;
     }
 
@@ -60,19 +82,29 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
     @Override
     public void forceClose() {
         ownerPanel.remove(this);
+        ownerPanel.revalidate();
+        ownerPanel.repaint();
     }
 
     public void setSize(int size) {
-        title.setPreferredSize(new Dimension(size, title.getPreferredSize().height));
-        title.setSize(size, title.getPreferredSize().height);
+        var insets = getBorder().getBorderInsets(this);
+        int innerSize = size - insets.left - insets.right;
 
-        thumbnail.setPreferredSize(new Dimension(size, size));
-        thumbnail.setSize(size, size);
+        title.setPreferredSize(new Dimension(innerSize, title.getPreferredSize().height));
+        thumbnail.setPreferredSize(new Dimension(innerSize, innerSize));
+        var dim = new Dimension(size, title.getPreferredSize().height + size);
+        setPreferredSize(dim);
+        setMaximumSize(dim);
 
-        setPreferredSize(new Dimension(size, getPreferredSize().height));
-        setMaximumSize(new Dimension(size, getPreferredSize().height));
-
+        revalidate();
         updateThumbnail();
+        repaint();
+    }
+
+    private void updateBorder() {
+        setBorder(DVManager.getActiveDocument() == document
+                          ? BorderFactory.createLineBorder(UIManager.getColor("Component.focusColor"), 2)
+                          : BorderFactory.createEmptyBorder(2, 2, 2, 2));
     }
 
     private void updateThumbnail() {
@@ -80,12 +112,12 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
                 .filter(v -> v.getTemplate().isDefault())
                 .findFirst()
                 .orElse(document.getViews().get(0));
-        var borderInsets = getBorder().getBorderInsets(thumbnail);
+        var borderInsets = thumbnail.getBorder().getBorderInsets(thumbnail);
         var borderWidth = borderInsets.left + borderInsets.right;
         var borderHeight = borderInsets.top + borderInsets.bottom;
         var image = Thumbnail.create((JComponent) mainView,
-                                     thumbnail.getWidth() - borderWidth,
-                                     thumbnail.getHeight() - borderHeight);
+                                     thumbnail.getPreferredSize().width - borderWidth,
+                                     thumbnail.getPreferredSize().height - borderHeight);
         thumbnail.setIcon(image != null ? new ImageIcon(image) : null);
     }
 }

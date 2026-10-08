@@ -18,6 +18,8 @@ public class ThumbnailPanel extends JPanel {
         remove(glue);
         add(thumbnailView);
         add(glue);
+
+        thumbnailView.setSize(getWidth());
     }
 
     public void setWidth(int width) {

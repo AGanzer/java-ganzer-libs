@@ -179,8 +179,10 @@ public abstract class Document extends Model {
     public void removeView(View<? extends Document> view) {
         views.remove(view);
 
-        if (view.getTemplate().isMandatory() || getTemplate().isAutoClose() && views.isEmpty())
+        if (view.getTemplate().isMandatory()
+                || (getTemplate().isAutoClose() && views.stream().allMatch(v -> v.getTemplate().ignoreOnOtherViewClosed()))) {
             close();
+        }
     }
 
     /**
@@ -197,8 +199,9 @@ public abstract class Document extends Model {
         if (!view.getTemplate().isMandatory() && !getTemplate().isAutoClose())
             return true;
 
-        return getViews().stream()
-                .filter(v -> !v.getTemplate().ignoreOnOtherViewClosed()).count() > 1 || canClose();
+        return views.stream()
+                .filter(v -> !v.getTemplate().ignoreOnOtherViewClosed())
+                .count() > 1 || canClose();
     }
 
     /**
