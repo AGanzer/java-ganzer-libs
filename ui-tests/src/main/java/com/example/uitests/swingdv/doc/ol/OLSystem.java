@@ -2,7 +2,7 @@ package com.example.uitests.swingdv.doc.ol;
 
 import java.util.*;
 
-public final class OLSystem {
+public final class OLSystem implements Comparable<OLSystem> {
     private static final List<OLSystem> predefinedSystems = new ArrayList<>();
 
     private final boolean predefined;
@@ -95,6 +95,29 @@ public final class OLSystem {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof OLSystem olSystem))
+            return false;
+
+        return Objects.equals(name, olSystem.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
+
+    @Override
+    public int compareTo(OLSystem o) {
+        return name.compareTo(o.name);
+    }
+
     public static List<OLSystem> getPredefinedSystems() {
         if (predefinedSystems.isEmpty()) {
             predefinedSystems.add(new OLSystem(true,
@@ -175,6 +198,8 @@ public final class OLSystem {
                                                60,
                                                4,
                                                "X:X+YF++YF-FX--FXFX-YF+", "Y:-FX+YFYF++YF+FX--FX-Y"));
+
+            Collections.sort(predefinedSystems);
         }
 
         return predefinedSystems;
