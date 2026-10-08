@@ -158,7 +158,7 @@ public class SwingDVApp {
                 v -> mainWindow.addThumbnailView(v),
                 ViewTemplate.AUTO_VIEW | ViewTemplate.HIDDEN
                         | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
-                        | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
+                        | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED | ViewTemplate.NOT_CLOSABLE));
 
         var textTpl = new DocumentTemplate<>(
                 "Text Files",

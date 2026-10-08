@@ -9,8 +9,10 @@ import de.ganzer.swing.dv.DVManager;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import javax.swing.plaf.basic.BasicButtonUI;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,7 +20,7 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
     private final ViewTemplate<?, ?> template;
     private final D document;
     private final ThumbnailPanel ownerPanel;
-    private final JLabel title;
+    private final Title title;
     private final JLabel thumbnail;
 
     @SuppressWarnings("unchecked")
@@ -29,7 +31,7 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
         this.document = (D) info.getDocument();
         this.ownerPanel = ownerPanel;
 
-        this.title = new JLabel(getTitle());
+        this.title = new Title(getTitle());
         this.thumbnail = new JLabel();
         this.thumbnail.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 
@@ -119,5 +121,76 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
                                      thumbnail.getPreferredSize().width - borderWidth,
                                      thumbnail.getPreferredSize().height - borderHeight);
         thumbnail.setIcon(image != null ? new ImageIcon(image) : null);
+    }
+
+    private class Title extends JPanel {
+        private final JLabel label;
+
+        private Title(String text) {
+            super(new BorderLayout(5, 0));
+
+            label = new JLabel(text);
+            add(label, BorderLayout.CENTER);
+
+            if (getTemplate().isClosable()) {
+                var button = new Button();
+                add(button, BorderLayout.EAST);
+            }
+        }
+
+        public void setText(String text) {
+            label.setText(text);
+        }
+
+        private class Button extends JButton implements ActionListener {
+            public Button() {
+                int size = 17;
+
+                setPreferredSize(new Dimension(size, size));
+                setToolTipText("Close");
+                setUI(new BasicButtonUI());
+                setContentAreaFilled(false);
+                setFocusable(false);
+                setBorder(BorderFactory.createEtchedBorder());
+                setBorderPainted(false);
+                setRolloverEnabled(true);
+
+                addActionListener(this);
+            }
+
+            public void updateUI() {
+                // Don't update UI for this button.
+            }
+
+            public void actionPerformed(ActionEvent e) {
+                if (document.canClose())
+                    document.close();
+            }
+
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                Graphics2D g2 = (Graphics2D) g.create();
+
+                if (getModel().isPressed())
+                    g2.translate(1, 1);
+
+                g2.setStroke(new BasicStroke(2));
+
+                setVisible(isEnabled());
+
+                if (getModel().isRollover())
+                    g2.setColor(Color.MAGENTA);
+                else
+                    g2.setColor(getForeground());
+
+                int delta = 6;
+
+                g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
+                g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
+
+                g2.dispose();
+            }
+        }
     }
 }
