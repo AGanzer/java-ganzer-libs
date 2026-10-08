@@ -97,6 +97,7 @@ public class OLDocument extends Document {
 
     @Override
     protected void doSaveData() throws IOException {
+        // TODO: save data.
     }
 
     private static abstract class AbstractUndoableOL implements Undoable {
