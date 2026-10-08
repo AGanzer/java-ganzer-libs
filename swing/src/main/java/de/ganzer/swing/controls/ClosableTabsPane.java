@@ -807,7 +807,7 @@ public class ClosableTabsPane extends JTabbedPane {
                 else if (pane.getSelectedComponent() == component)
                     g2.setColor(UIManager.getColor("TabbedPane.selectedForeground"));
                 else
-                    g2.setColor(UIManager.getColor("TabbedPane.foreground"));
+                    g2.setColor(TabHeaderPanel.this.getForeground());
 
                 int delta = 6;
 
