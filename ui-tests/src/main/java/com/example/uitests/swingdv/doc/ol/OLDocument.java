@@ -37,7 +37,7 @@ public class OLDocument extends Document {
         if (system.isPredefined())
             setModified(false);
 
-        notifyDataChange(originator, null);
+        notifyDataChange(originator, system);
     }
 
     public String getOLName() {

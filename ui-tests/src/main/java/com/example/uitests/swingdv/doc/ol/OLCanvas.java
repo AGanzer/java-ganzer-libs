@@ -41,7 +41,7 @@ import java.util.List;
  * therefore remains constant regardless of the scale factor used to fit
  * the drawing into the component.</p>
  */
-public class TurtleCanvas extends JPanel {
+public class OLCanvas extends JPanel {
     private String movements = "";
     private double stepLength = 10.0;
     private double turnAngle = 90.0;
@@ -50,9 +50,9 @@ public class TurtleCanvas extends JPanel {
     private int padding = 10;
 
     /**
-     * Creates a new {@code TurtleCanvas}.
+     * Creates a new {@code OLCanvas}.
      */
-    public TurtleCanvas() {
+    public OLCanvas() {
         setOpaque(true);
         setBackground(Color.WHITE);
     }
