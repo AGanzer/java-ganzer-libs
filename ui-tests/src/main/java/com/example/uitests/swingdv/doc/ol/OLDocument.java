@@ -28,6 +28,8 @@ public class OLDocument extends Document {
     }
 
     public void setOLSystem(OLSystem system, View<?> originator) {
+        Objects.requireNonNull(system, "system must not be null.");
+
         olName = system.getName();
         olAxiom = system.getAxiom();
         olAngle = system.getAngle();
