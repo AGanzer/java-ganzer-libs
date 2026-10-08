@@ -42,35 +42,11 @@ import java.util.List;
  * the drawing into the component.</p>
  */
 public class TurtleCanvas extends JPanel {
-    /**
-     * The sequence of turtle commands.
-     */
     private String movements = "";
-
-    /**
-     * The length of one turtle step in logical units.
-     */
     private double stepLength = 10.0;
-
-    /**
-     * The turtle's turn angle in degrees.
-     */
     private double turnAngle = 90.0;
-
-    /**
-     * The color used for drawing lines.
-     */
     private Color lineColor = Color.BLACK;
-
-    /**
-     * The line width in screen pixels.
-     */
     private float lineWidth = 1.0f;
-
-    /**
-     * The minimum distance between the drawing and the panel border,
-     * measured in screen pixels.
-     */
     private int padding = 10;
 
     /**
@@ -105,6 +81,7 @@ public class TurtleCanvas extends JPanel {
      *
      * @param stepLength the step length in logical units; must be greater
      *                   than zero
+     *
      * @throws IllegalArgumentException if {@code stepLength} is less than
      *                                  or equal to zero
      */
@@ -151,6 +128,7 @@ public class TurtleCanvas extends JPanel {
      * Sets the color used for drawing turtle lines.
      *
      * @param lineColor the line color; must not be {@code null}
+     *
      * @throws IllegalArgumentException if {@code lineColor} is {@code null}
      */
     public void setLineColor(Color lineColor) {
@@ -181,6 +159,7 @@ public class TurtleCanvas extends JPanel {
      *
      * @param lineWidth the line width in screen pixels; must be greater
      *                  than zero
+     *
      * @throws IllegalArgumentException if {@code lineWidth} is less than
      *                                  or equal to zero
      */
@@ -208,6 +187,7 @@ public class TurtleCanvas extends JPanel {
      * Sets the minimum distance between the drawing and the panel border.
      *
      * @param padding the padding in screen pixels; must not be negative
+     *
      * @throws IllegalArgumentException if {@code padding} is negative
      */
     public void setPadding(int padding) {
@@ -240,7 +220,6 @@ public class TurtleCanvas extends JPanel {
      * @return a list containing all line segments drawn by the turtle
      */
     private List<Line2D.Double> createLines() {
-
         List<Line2D.Double> lines = new ArrayList<>();
 
         // Initial position.
