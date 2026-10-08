@@ -22,8 +22,8 @@ public class ThumbnailPanel extends JPanel {
 
     public void setWidth(int width) {
         for (Component component : getComponents()) {
-            var view = (ThumbnailView<?>) component;
-            view.setSize(width);
+            if (component instanceof ThumbnailView<?> view)
+                view.setSize(width);
         }
 
         revalidate();

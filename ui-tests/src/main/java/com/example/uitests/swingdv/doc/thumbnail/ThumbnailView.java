@@ -69,6 +69,9 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
         thumbnail.setPreferredSize(new Dimension(size, size));
         thumbnail.setSize(size, size);
 
+        setPreferredSize(new Dimension(size, getPreferredSize().height));
+        setMaximumSize(new Dimension(size, getPreferredSize().height));
+
         updateThumbnail();
     }
 
