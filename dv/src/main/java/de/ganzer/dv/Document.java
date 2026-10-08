@@ -524,6 +524,10 @@ public abstract class Document extends Model {
      * <p>
      * Inheritors should invoke this to notify all views and all views of the
      * child documents about changed data.
+     * <p>
+     * This method does not set the modification flag because a change may have
+     * restored data and wants to reset the modification. Inheritors have to
+     * take care about the modification status by itself.
      *
      * @param originator The view that caused the change. This will not be
      *        notified.
@@ -531,6 +535,7 @@ public abstract class Document extends Model {
      *        may be {@code null} to indicate that the view should be updated
      *        completely.
      *
+     * @see #setModified(boolean)
      * @see DocumentTemplate#NOTIFY_CHILD_VIEWS_ON_CHANGE
      */
     protected void notifyDataChange(View<?> originator, Object context) {

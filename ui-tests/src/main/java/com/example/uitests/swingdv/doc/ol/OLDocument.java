@@ -3,66 +3,117 @@ package com.example.uitests.swingdv.doc.ol;
 import de.ganzer.dv.DVLoadException;
 import de.ganzer.dv.Document;
 import de.ganzer.dv.DocumentCreationInfo;
+import de.ganzer.dv.View;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Objects;
 
 public class OLDocument extends Document {
+    public enum ChangeContext {
+        NAME,
+        AXIOM,
+        ANGLE,
+        CYCLES,
+        REPLACEMENTS
+    }
+
     private String olName;
     private String olAxiom;
     private int olAngle;
     private int olCycles;
-    private List<String> olReplacements;
+    private String olReplacements;
 
     public OLDocument(DocumentCreationInfo<OLDocument> info) throws DVLoadException {
         super(info);
+    }
+
+    public void setOLSystem(OLSystem system, View<?> originator) {
+        olName = system.getName();
+        olAxiom = system.getAxiom();
+        olAngle = system.getAngle();
+        olCycles = system.getPreferredCycles();
+        olReplacements = String.join("\n", system.getReplacementsList());
+
+        if (system.isPredefined())
+            setModified(false);
+
+        notifyDataChange(originator, null);
     }
 
     public String getOLName() {
         return olName;
     }
 
-    public void setOLName(String olName) {
+    public void setOLName(String olName, View<?> originator) {
+        Objects.requireNonNull(olName, "olName must not be null.");
+
+        if (this.olName.equals(olName))
+            return;
+
         this.olName = olName;
+
         setModified(true);
+        notifyDataChange(originator, ChangeContext.NAME);
     }
 
     public String getOLAxiom() {
         return olAxiom;
     }
 
-    public void setOLAxiom(String olAxiom) {
+    public void setOLAxiom(String olAxiom, View<?> originator) {
+        Objects.requireNonNull(olAxiom, "olAxiom must not be null.");
+
+        if (this.olAxiom.equals(olAxiom))
+            return;
+
         this.olAxiom = olAxiom;
+
         setModified(true);
+        notifyDataChange(originator, ChangeContext.AXIOM);
     }
 
     public int getOLAngle() {
         return olAngle;
     }
 
-    public void setOLAngle(int olAngle) {
+    public void setOLAngle(int olAngle, View<?> originator) {
+        if (this.olAngle == olAngle)
+            return;
+
         this.olAngle = olAngle;
+
         setModified(true);
+        notifyDataChange(originator, ChangeContext.ANGLE);
     }
 
     public int getOLCycles() {
         return olCycles;
     }
 
-    public void setOLCycles(int olCycles) {
+    public void setOLCycles(int olCycles, View<?> originator) {
+        if (this.olCycles == olCycles)
+            return;
+
         this.olCycles = olCycles;
+
         setModified(true);
+        notifyDataChange(originator, ChangeContext.CYCLES);
     }
 
-    public List<String> getOLReplacements() {
-        return Collections.unmodifiableList(olReplacements);
+    public String getOLReplacements() {
+        return olReplacements;
     }
 
-    public void setOLReplacements(List<String> olReplacements) {
+    public void setOLReplacements(String olReplacements, View<?> originator) {
+        Objects.requireNonNull(olReplacements, "olReplacements must not be null.");
+
+        if (this.olReplacements.equals(olReplacements))
+            return;
+
         this.olReplacements = olReplacements;
+
         setModified(true);
+        notifyDataChange(originator, ChangeContext.REPLACEMENTS);
     }
 
     @Override
@@ -71,7 +122,7 @@ public class OLDocument extends Document {
         olAxiom = "";
         olAngle = 60;
         olCycles = 2;
-        olReplacements = new ArrayList<>();
+        olReplacements = "";
     }
 
     @Override
