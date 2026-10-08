@@ -20,18 +20,18 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * If this option is set, the template is not shown in the list of available
      * templates for new views.
      */
-    public static final int IS_HIDDEN = 0x01;
+    public static final int HIDDEN = 0x01;
     /**
      * This option marks the template as the default that is used if no template
      * is specified to create a view. This view is created even if another view
-     * is marked as {@link #IS_MANDATORY}.
+     * is marked as {@link #MANDATORY}.
      * <p>
      * <b>NOTE:</b> Only one default view template can be registered within a
      * {@link DocumentTemplate}.
      *
      * @see DocumentTemplate#NO_AUTO_VIEW
      */
-    public static final int IS_DEFAULT = 0x02;
+    public static final int DEFAULT = 0x02;
     /**
      * This option marks the template as mandatory. A document cannot exist
      * without a mandatory view. If this view is closed, the document is closed
@@ -43,7 +43,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * @see DocumentTemplate#NO_AUTO_VIEW
      * @see DocumentTemplate#NO_AUTO_CLOSE
      */
-    public static final int IS_MANDATORY = 0x04;
+    public static final int MANDATORY = 0x04;
     /**
      * If this option is set, the view should not be closeable by the user.
      */
@@ -71,9 +71,9 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
     public static final int IGNORE_ON_OTHER_VIEW_CLOSED = 0x80;
     /**
      * If this option is set, the view is automatically created, even if another
-     * view is marked as {@link #IS_MANDATORY} or {@link #IS_DEFAULT}.
+     * view is marked as {@link #MANDATORY} or {@link #DEFAULT}.
      */
-    public static final int IS_AUTO_VIEW = 0x100;
+    public static final int AUTO_VIEW = 0x100;
 
     private final String displayName;
     private final ViewSupplier<D, V> viewSupplier;
@@ -89,7 +89,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * @param viewSupplier Creates a new view.
      * @param showView Displays the view.
      * @param options The options to set. This can be any combination of
-     *        {@link #IS_HIDDEN}, {@link #IS_DEFAULT}, {@link #IS_MANDATORY}
+     *        {@link #HIDDEN}, {@link #DEFAULT}, {@link #MANDATORY}
      *        and {@link #NOT_CLOSABLE}.
      *
      * @throws NullPointerException {@code displayName}, {@code presenterSupplier}
@@ -109,7 +109,7 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      * @param viewSupplier Creates a new view.
      * @param showView Displays the view.
      * @param options The options to set. This can be any combination of
-     *        {@link #IS_HIDDEN}, {@link #IS_DEFAULT}, {@link #IS_MANDATORY}
+     *        {@link #HIDDEN}, {@link #DEFAULT}, {@link #MANDATORY}
      *        and {@link #NOT_CLOSABLE}.
      * @param modificationHintFormat The format string to use to display the
      *        document's name with a modification mark. If this is {@code null},
@@ -153,10 +153,10 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @return {@code true} if the template is hidden.
      *
-     * @see #IS_HIDDEN
+     * @see #HIDDEN
      */
     public final boolean isHidden() {
-        return (options & IS_HIDDEN) != 0;
+        return (options & HIDDEN) != 0;
     }
 
     /**
@@ -164,10 +164,10 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @return {@code true} if the template is the default.
      *
-     * @see #IS_DEFAULT
+     * @see #DEFAULT
      */
     public final boolean isDefault() {
-        return (options & IS_DEFAULT) != 0;
+        return (options & DEFAULT) != 0;
     }
 
     /**
@@ -175,10 +175,10 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @return {@code true} if the view is mandatory.
      *
-     * @see #IS_MANDATORY
+     * @see #MANDATORY
      */
     public final boolean isMandatory() {
-        return (options & IS_MANDATORY) != 0;
+        return (options & MANDATORY) != 0;
     }
 
     /**
@@ -244,10 +244,10 @@ public class ViewTemplate<D extends Document, V extends View<D>> {
      *
      * @return {@code true} if the view is automatically created.
      *
-     * @see #IS_AUTO_VIEW
+     * @see #AUTO_VIEW
      */
     public final boolean isAutoView() {
-        return (options & IS_AUTO_VIEW) != 0;
+        return (options & AUTO_VIEW) != 0;
     }
 
     /**

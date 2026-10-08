@@ -146,17 +146,17 @@ public class SwingDVApp {
                 "Welcome",
                 null,
                 null,
-                DocumentTemplate.NO_NEW_NUMBER | DocumentTemplate.IS_HIDDEN);
+                DocumentTemplate.NO_NEW_NUMBER | DocumentTemplate.HIDDEN);
         welcomeTpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, WelcomeView>(
                 "Welcome",
                 i -> new WelcomeView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
-                ViewTemplate.IS_DEFAULT | ViewTemplate.NOT_CLOSABLE));
+                ViewTemplate.DEFAULT | ViewTemplate.NOT_CLOSABLE));
         welcomeTpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, ThumbnailView<WelcomeDocument>>(
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                ViewTemplate.AUTO_VIEW | ViewTemplate.HIDDEN
                         | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
                         | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
@@ -168,17 +168,17 @@ public class SwingDVApp {
                 "New Text",
                 "Text Files|*.txt;Log Files|*.log;Source Files|*.c *.cpp *.h *.java *.py",
                 "txt",
-                DocumentTemplate.IS_DEFAULT);
+                DocumentTemplate.DEFAULT);
         textTpl.registerViewTemplate(new ViewTemplate<TextDocument, TextView>(
                 "Text",
                 i -> new TextView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
-                ViewTemplate.IS_DEFAULT));
+                ViewTemplate.DEFAULT));
         textTpl.registerViewTemplate(new ViewTemplate<TextDocument, ThumbnailView<TextDocument>>(
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                ViewTemplate.AUTO_VIEW | ViewTemplate.HIDDEN
                         | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
                         | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
@@ -194,12 +194,12 @@ public class SwingDVApp {
                 "CSV",
                 i -> new CSVView<>(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
-                ViewTemplate.IS_DEFAULT));
+                ViewTemplate.DEFAULT));
         csvTpl.registerViewTemplate(new ViewTemplate<CSVDocument, ThumbnailView<CSVDocument>>(
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                ViewTemplate.AUTO_VIEW | ViewTemplate.HIDDEN
                         | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
                         | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
@@ -211,17 +211,17 @@ public class SwingDVApp {
                 "",
                 "Image Files|*.bmp *.gif *.jpg *.jpeg *.png *.tiff",
                 null,
-                DocumentTemplate.IS_HIDDEN);
+                DocumentTemplate.HIDDEN);
         imageTpl.registerViewTemplate(new ViewTemplate<ImageDocument, ImageView>(
                 "Image",
                 i -> new ImageView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
-                ViewTemplate.IS_DEFAULT));
+                ViewTemplate.DEFAULT));
         imageTpl.registerViewTemplate(new ViewTemplate<ImageDocument, ThumbnailView<ImageDocument>>(
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                ViewTemplate.AUTO_VIEW | ViewTemplate.HIDDEN
                         | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
                         | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
@@ -237,7 +237,7 @@ public class SwingDVApp {
                 "Person Table",
                 i -> new PersonView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
-                ViewTemplate.IS_DEFAULT));
+                ViewTemplate.DEFAULT));
         personTpl.registerViewTemplate(new ViewTemplate<PersonDocument, CSVView<PersonDocument>>(
                 "CSV",
                 i -> new CSVView<>(i, mainWindow.getTabPane()),
@@ -247,7 +247,7 @@ public class SwingDVApp {
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
                 v -> mainWindow.addThumbnailView(v),
-                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN
+                ViewTemplate.AUTO_VIEW | ViewTemplate.HIDDEN
                         | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
                         | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 

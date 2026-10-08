@@ -21,7 +21,7 @@ public class DocumentTemplate<D extends Document> {
      * If this option is set, the template is not shown in the list of available
      * templates for new documents.
      */
-    public static final int IS_HIDDEN = 0x01;
+    public static final int HIDDEN = 0x01;
     /**
      * If this option is set, new documents of this type have their own sequence
      * of new-numbers; otherwise, the sequence is shared with oder document types.
@@ -32,7 +32,7 @@ public class DocumentTemplate<D extends Document> {
      * create a new view except that one of the registered view templates marks
      * a view as mandatory.
      *
-     * @see ViewTemplate#IS_MANDATORY
+     * @see ViewTemplate#MANDATORY
      */
     public static final int NO_AUTO_VIEW = 0x04;
     /**
@@ -47,7 +47,7 @@ public class DocumentTemplate<D extends Document> {
      * <b>NOTE:</b> Only one default view template can be registered by
      * {@link BasicDVManager#registerDocumentTemplate(DocumentTemplate)}.
      */
-    public static final int IS_DEFAULT = 0x10;
+    public static final int DEFAULT = 0x10;
     /**
      * If this option is set, the model will not display numbers for new models.
      */
@@ -96,7 +96,7 @@ public class DocumentTemplate<D extends Document> {
      *        or {@code null} to hide the template in open dialogs.
      * @param defaultExtension The default extension to use for saving documents
      *        if none is specified or {@code null} for no extension.
-     * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
+     * @param options The options to set. This is any combination of {@link #HIDDEN},
      *         {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
      *         and {@link #NO_NEW_NUMBER}.
      *
@@ -125,7 +125,7 @@ public class DocumentTemplate<D extends Document> {
      *        or {@code null} to hide the template in open dialogs.
      * @param defaultExtension The default extension to use for saving documents
      *        if none is specified or {@code null} for no extension.
-     * @param options The options to set. This is any combination of {@link #IS_HIDDEN},
+     * @param options The options to set. This is any combination of {@link #HIDDEN},
      *         {@link #OWN_NEW_NUMBER}, {@link #NO_AUTO_VIEW}, {@link #NO_AUTO_CLOSE}
      *         and {@link #NO_NEW_NUMBER}.
      * @param newNameNumberFormat The format String to use for new documents that
@@ -190,10 +190,10 @@ public class DocumentTemplate<D extends Document> {
      *
      * @return {@code true} if the template is hidden.
      *
-     * @see #IS_HIDDEN
+     * @see #HIDDEN
      */
     public final boolean isHidden() {
-        return (options & IS_HIDDEN) != 0;
+        return (options & HIDDEN) != 0;
     }
 
     /**
@@ -201,10 +201,10 @@ public class DocumentTemplate<D extends Document> {
      *
      * @return {@code true} if the template is the default.
      *
-     * @see #IS_DEFAULT
+     * @see #DEFAULT
      */
     public final boolean isDefault() {
-        return (options & IS_DEFAULT) != 0;
+        return (options & DEFAULT) != 0;
     }
 
     /**
@@ -338,8 +338,8 @@ public class DocumentTemplate<D extends Document> {
      *         {@code template} is default and a default view template is
      *         already registered.
      *
-     * @see ViewTemplate#IS_MANDATORY
-     * @see ViewTemplate#IS_DEFAULT
+     * @see ViewTemplate#MANDATORY
+     * @see ViewTemplate#DEFAULT
      */
     public void registerViewTemplate(ViewTemplate<D, ?> template) {
         Objects.requireNonNull(template, "template must not be null.");
