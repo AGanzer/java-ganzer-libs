@@ -12,12 +12,12 @@ public final class OLSystem implements Comparable<OLSystem> {
     private final int preferredCycles;
     private final Map<Character, String> replacements;
 
-    public OLSystem(String name, String axiom, int angle, List<String> replacements) {
-        this(false, name, axiom, angle, 2, replacements.toArray(new String[0]));
+    public OLSystem(String name, String axiom, int angle, int numCycles, List<String> replacements) {
+        this(false, name, axiom, angle, numCycles, replacements.toArray(new String[0]));
     }
 
-    public OLSystem(String name, String axiom, int angle, String... replacements) {
-        this(false, name, axiom, angle, 2, replacements);
+    public OLSystem(String name, String axiom, int angle, int numCycles, String... replacements) {
+        this(false, name, axiom, angle, numCycles, replacements);
     }
 
     private OLSystem(boolean predefined, String name, String axiom, int angle, int preferredCycles, String... replacements) {
