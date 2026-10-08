@@ -1,30 +1,32 @@
 package com.example.uitests.swingdv;
 
+import com.example.uitests.swingdv.doc.thumbnail.ThumbnailPanel;
+import com.example.uitests.swingdv.doc.thumbnail.ThumbnailView;
 import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.dv.ClosableTabsPaneDVMSupport;
 import de.ganzer.swing.dv.DVManager;
 import org.jdesktop.swingx.JXFrame;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JToolBar;
+import javax.swing.*;
 import java.awt.Component;
 import java.awt.event.WindowEvent;
 
 public class MainWindow extends JXFrame {
     private ClosableTabsPane tabPane;
+    private ThumbnailPanel thumbnails;
 
     public MainWindow() {
         super(SwingDVApp.TITLE, true);
 
-        initMenuBar();
-        initToolBar();
-        initTabPane();
         setSize(800, 600);
         setLocationRelativeTo(null);
 
         LocalSettings.ui.apply(getClass().getSimpleName(), this);
+
+        initMenuBar();
+        initToolBar();
+        initSplitPane();
     }
 
     public ClosableTabsPane getTabPane() {
@@ -35,6 +37,14 @@ public class MainWindow extends JXFrame {
         tabPane.addTab(view.getDocument().getName(), (Component) view);
         tabPane.setClosableAt(tabPane.getTabCount() - 1, view.getTemplate().isClosable());
         tabPane.setSelectedIndex(tabPane.getTabCount() - 1);
+    }
+
+    public void addThumbnailView(ThumbnailView<?> view) {
+        thumbnails.addThumbnail(view);
+    }
+
+    public ThumbnailPanel getThumbnails() {
+        return thumbnails;
     }
 
     @Override
@@ -50,6 +60,25 @@ public class MainWindow extends JXFrame {
         }
 
         super.processWindowEvent(e);
+    }
+
+    private void initSplitPane() {
+        tabPane = new ClosableTabsPane();
+        DVManager.registerSupport(new ClosableTabsPaneDVMSupport(tabPane, getWindowMenu(), getRecentFilesMenu()));
+
+        thumbnails = new ThumbnailPanel();
+        var scroller = new JScrollPane(thumbnails, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        var splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabPane, scroller);
+        splitPane.setDividerLocation(LocalSettings.ui.read(getClass().getSimpleName() + "splitter", getWidth() - 150));
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setResizeWeight(0.5);
+        splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, evt -> {
+//            LocalSettings.ui.write(getClass().getSimpleName() + "splitter", splitPane.getDividerLocation());
+            thumbnails.setWidth(scroller.getViewport().getWidth());
+        });
+
+        getContentPane().add(splitPane);
     }
 
     private void initMenuBar() {
@@ -81,13 +110,6 @@ public class MainWindow extends JXFrame {
         toolBar.addSeparator();
         toolBar.add(DVManager.closeWindowAction.createButton());
         toolBar.add(DVManager.closeAllWindowsAction.createButton());
-    }
-
-    private void initTabPane() {
-        tabPane = new ClosableTabsPane();
-        DVManager.registerSupport(new ClosableTabsPaneDVMSupport(tabPane, getWindowMenu(), getRecentFilesMenu()));
-
-        getContentPane().add(tabPane);
     }
 
     private JMenu getWindowMenu() {

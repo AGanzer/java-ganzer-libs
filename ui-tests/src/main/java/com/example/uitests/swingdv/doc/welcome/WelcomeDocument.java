@@ -11,7 +11,7 @@ public class WelcomeDocument extends Document {
     }
 
     public String getWelcomeText() {
-        return "Welcome to " + SwingDVApp.TITLE;
+        return "Welcome to\n" + SwingDVApp.TITLE;
     }
 
     @Override

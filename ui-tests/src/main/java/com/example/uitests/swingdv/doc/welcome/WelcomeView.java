@@ -12,7 +12,8 @@ public class WelcomeView extends MDISubView<WelcomeDocument> {
     public WelcomeView(ViewCreationInfo<WelcomeDocument, WelcomeView> info, ClosableTabsPane tabPane) {
         super(info, tabPane, false);
 
-        JLabel welcomeLabel = new JLabel(getDocument().getWelcomeText());
+        JLabel welcomeLabel = new JLabel(String.format("<html><body><center>%s</center></body></html>",
+                                                       getDocument().getWelcomeText().replace("\n", "<br>")));
 
         welcomeLabel.setFont(welcomeLabel.getFont().deriveFont(Font.BOLD, 40));
         welcomeLabel.setHorizontalAlignment(JLabel.CENTER);

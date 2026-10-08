@@ -9,6 +9,7 @@ import com.example.uitests.swingdv.doc.text.CSVDocument;
 import com.example.uitests.swingdv.doc.text.CSVView;
 import com.example.uitests.swingdv.doc.text.TextDocument;
 import com.example.uitests.swingdv.doc.text.TextView;
+import com.example.uitests.swingdv.doc.thumbnail.ThumbnailView;
 import com.example.uitests.swingdv.doc.welcome.WelcomeDocument;
 import com.example.uitests.swingdv.doc.welcome.WelcomeView;
 import com.example.uitests.swingdv.services.NavigationService;
@@ -151,6 +152,11 @@ public class SwingDVApp {
                 i -> new WelcomeView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.IS_DEFAULT | ViewTemplate.NOT_CLOSABLE));
+        welcomeTpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, ThumbnailView<WelcomeDocument>>(
+                "Thumbnail",
+                i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
+                v -> mainWindow.addThumbnailView(v),
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
 
         var textTpl = new DocumentTemplate<>(
                 "Text Files",
@@ -166,6 +172,11 @@ public class SwingDVApp {
                 i -> new TextView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.IS_DEFAULT));
+        textTpl.registerViewTemplate(new ViewTemplate<TextDocument, ThumbnailView<TextDocument>>(
+                "Thumbnail",
+                i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
+                v -> mainWindow.addThumbnailView(v),
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
 
         var csvTpl = new DocumentTemplate<>(
                 "CSV Files",
@@ -180,6 +191,11 @@ public class SwingDVApp {
                 i -> new CSVView<>(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.IS_DEFAULT));
+        csvTpl.registerViewTemplate(new ViewTemplate<CSVDocument, ThumbnailView<CSVDocument>>(
+                "Thumbnail",
+                i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
+                v -> mainWindow.addThumbnailView(v),
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
 
         var imageTpl = new DocumentTemplate<>(
                 "Image Files",
@@ -195,6 +211,11 @@ public class SwingDVApp {
                 i -> new ImageView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.IS_DEFAULT));
+        imageTpl.registerViewTemplate(new ViewTemplate<ImageDocument, ThumbnailView<ImageDocument>>(
+                "Thumbnail",
+                i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
+                v -> mainWindow.addThumbnailView(v),
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
 
         var personTpl = new DocumentTemplate<>(
                 "Person Files",
@@ -214,6 +235,11 @@ public class SwingDVApp {
                 i -> new CSVView<>(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.NONE));
+        personTpl.registerViewTemplate(new ViewTemplate<PersonDocument, ThumbnailView<PersonDocument>>(
+                "Thumbnail",
+                i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
+                v -> mainWindow.addThumbnailView(v),
+                ViewTemplate.IS_AUTO_VIEW | ViewTemplate.IS_HIDDEN | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT));
 
         DVManager.registerDocumentTemplate(welcomeTpl);
         DVManager.registerDocumentTemplate(textTpl);
