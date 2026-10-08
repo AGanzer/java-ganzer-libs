@@ -24,10 +24,19 @@ public final class OLSystem {
         Objects.requireNonNull(name, "name must not be null.");
         Objects.requireNonNull(axiom, "axiom must not be null.");
 
+        if (axiom.isEmpty())
+            throw new IllegalArgumentException("axiom must not be empty.");
+
+        if (angle < 1)
+            throw new IllegalArgumentException("angle must not be less than 1.");
+
+        if (preferredCycles < 1)
+            throw new IllegalArgumentException("preferredCycles must not be less than 1.");
+
         this.predefined = predefined;
         this.name = name;
         this.axiom = axiom;
-        this.angle = angle;
+        this.angle = angle % 360;
         this.preferredCycles = preferredCycles;
         this.replacements = toReplacementsMap(replacements);
     }
