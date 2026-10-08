@@ -5,6 +5,8 @@ import com.example.uitests.swingdv.doc.db.PersonDocument;
 import com.example.uitests.swingdv.doc.db.PersonView;
 import com.example.uitests.swingdv.doc.image.ImageDocument;
 import com.example.uitests.swingdv.doc.image.ImageView;
+import com.example.uitests.swingdv.doc.ol.OLDocument;
+import com.example.uitests.swingdv.doc.ol.OLView;
 import com.example.uitests.swingdv.doc.text.CSVDocument;
 import com.example.uitests.swingdv.doc.text.CSVView;
 import com.example.uitests.swingdv.doc.text.TextDocument;
@@ -251,11 +253,33 @@ public class SwingDVApp {
                         | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
                         | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
 
+        var olTpl = new DocumentTemplate<>(
+                "OL-System",
+                s -> s.endsWith(".olsys"),
+                OLDocument::new,
+                "New OL-System",
+                "OL-System Files|*.olsys",
+                "olsys",
+                DocumentTemplate.NONE);
+        olTpl.registerViewTemplate(new ViewTemplate<OLDocument, OLView>(
+                "OL-System",
+                i -> new OLView(i, mainWindow.getTabPane()),
+                v -> mainWindow.addChildView(v),
+                ViewTemplate.DEFAULT));
+        olTpl.registerViewTemplate(new ViewTemplate<OLDocument, ThumbnailView<OLDocument>>(
+                "Thumbnail",
+                i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
+                v -> mainWindow.addThumbnailView(v),
+                ViewTemplate.AUTO_VIEW | ViewTemplate.HIDDEN
+                        | ViewTemplate.NO_TITLE_NUMBER | ViewTemplate.NO_READ_ONLY_HINT
+                        | ViewTemplate.IGNORE_ON_OTHER_VIEW_CLOSED));
+
         DVManager.registerDocumentTemplate(welcomeTpl);
         DVManager.registerDocumentTemplate(textTpl);
         DVManager.registerDocumentTemplate(csvTpl);
         DVManager.registerDocumentTemplate(imageTpl);
         DVManager.registerDocumentTemplate(personTpl);
+        DVManager.registerDocumentTemplate(olTpl);
     }
 
     private static void onIdle() {
