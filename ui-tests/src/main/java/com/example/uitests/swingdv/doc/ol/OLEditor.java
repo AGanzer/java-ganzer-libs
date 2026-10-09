@@ -38,9 +38,9 @@ public class OLEditor extends JPanel {
         latestEditedOLSystem = parentView.getDocument().getOLSystem();
 
         createControls();
-        updateControls();
         setupControls();
         layoutControls();
+        updateControls();
     }
 
     public void setOLName(String olName) {
@@ -121,21 +121,6 @@ public class OLEditor extends JPanel {
         olReplacements = new InputContainer(new JLabel("Replacements:"), new GTextArea(), OLDocument.ChangeContext.REPLACEMENTS);
     }
 
-    private void updateControls() {
-        olName.getTextField().setText(parentView.getDocument().getOLName());
-        olAxiom.getTextField().setText(parentView.getDocument().getOLAxiom());
-        olAngle.getSpinner().setValue(parentView.getDocument().getOLAngle());
-        olCycles.getSpinner().setValue(parentView.getDocument().getOLCycles());
-        olReplacements.getTextArea().setText(parentView.getDocument().getOLReplacements());
-
-        var enable = !parentView.getDocument().getOLSystem().isPredefined();
-
-        olName.setEnabled(enable);
-        olAxiom.setEnabled(enable);
-        olAngle.setEnabled(enable);
-        olReplacements.setEnabled(enable);
-    }
-
     private void setupControls() {
         setupPredefinedSystems();
 
@@ -177,7 +162,6 @@ public class OLEditor extends JPanel {
                 latestEditedOLSystem = parentView.getDocument().getOLSystem();
 
             parentView.getDocument().setOLSystem(system, parentView);
-            updateControls();
         });
     }
 
@@ -213,6 +197,21 @@ public class OLEditor extends JPanel {
         c.gridy++;
         c.insets = new Insets(6, 0, 0, 0);
         add(apply, c);
+    }
+
+    private void updateControls() {
+        olName.getTextField().setText(parentView.getDocument().getOLName());
+        olAxiom.getTextField().setText(parentView.getDocument().getOLAxiom());
+        olAngle.getSpinner().setValue(parentView.getDocument().getOLAngle());
+        olCycles.getSpinner().setValue(parentView.getDocument().getOLCycles());
+        olReplacements.getTextArea().setText(parentView.getDocument().getOLReplacements());
+
+        var enable = !parentView.getDocument().getOLSystem().isPredefined();
+
+        olName.setEnabled(enable);
+        olAxiom.setEnabled(enable);
+        olAngle.setEnabled(enable);
+        olReplacements.setEnabled(enable);
     }
 
     private class InputContainer extends JPanel {

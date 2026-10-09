@@ -1,8 +1,9 @@
 package com.example.uitests.swingdv.doc.ol;
 
+import de.ganzer.core.util.Settings;
 import de.ganzer.dv.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Objects;
 
 public class OLDocument extends Document {
@@ -81,13 +82,41 @@ public class OLDocument extends Document {
 
     @Override
     protected void doLoadData() throws IOException {
-        // TODO: Load data from file
+        var settings = new Settings();
+        var file = new File(getName());
+
+        try (var fis = new FileInputStream(file)) {
+            settings.load(fis);
+        }
+
         doCreateData();
+
+        olSystem.setName(settings.read("name", ""));
+        olSystem.setAxiom(settings.read("axiom", ""));
+        olSystem.setAngle(settings.read("angle", 0));
+        olSystem.setPreferredCycles(settings.read("cycles", 1));
+
+        var repl = settings.read("replacements", "");
+
+        olSystem.setReplacements(repl.isEmpty() ? null : repl.split("\n"));
     }
 
     @Override
     protected void doSaveData() throws IOException {
-        // TODO: save data.
+        //noinspection MismatchedQueryAndUpdateOfCollection
+        var settings = new Settings();
+
+        settings.write("name", olSystem.getName());
+        settings.write("axiom", olSystem.getAxiom());
+        settings.write("angle", olSystem.getAngle());
+        settings.write("cycles", olSystem.getPreferredCycles());
+        settings.write("replacements", String.join("\n", olSystem.getReplacements()));
+
+        var file = new File(getName());
+
+        try (var fos = new FileOutputStream(file)) {
+            settings.store(fos, "OL-System File");
+        }
     }
 
     private static abstract class AbstractUndoableOL implements Undoable {
@@ -173,7 +202,7 @@ public class OLDocument extends Document {
                 case ANGLE -> olSystem.setAngle((int) getOldValue());
                 case CYCLES -> olSystem.setPreferredCycles((int) getOldValue());
                 case REPLACEMENTS -> olSystem.setReplacements(((String) getOldValue()).split("\n"));
-            };
+            }
 
             setModified(true);
             notifyDataChange(null, context);
@@ -186,7 +215,7 @@ public class OLDocument extends Document {
                 case ANGLE -> olSystem.setAngle((int) getNewValue());
                 case CYCLES -> olSystem.setPreferredCycles((int) getNewValue());
                 case REPLACEMENTS -> olSystem.setReplacements(((String) getNewValue()).split("\n"));
-            };
+            }
 
             setModified(true);
             notifyDataChange(originator, context);
