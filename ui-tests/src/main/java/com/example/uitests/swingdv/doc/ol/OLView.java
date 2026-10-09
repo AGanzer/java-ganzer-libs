@@ -1,9 +1,11 @@
 package com.example.uitests.swingdv.doc.ol;
 
+import com.example.uitests.swingdv.LocalSettings;
 import com.example.uitests.swingdv.doc.MDISubView;
 import de.ganzer.dv.ViewCreationInfo;
 import de.ganzer.swing.controls.ClosableTabsPane;
 
+import javax.swing.JSplitPane;
 import java.awt.BorderLayout;
 
 public class OLView extends MDISubView<OLDocument> {
@@ -14,10 +16,14 @@ public class OLView extends MDISubView<OLDocument> {
         super(info, tabPane, true);
 
         editor = new OLEditor(this);
-        add(editor, BorderLayout.WEST);
-
         canvas = new OLCanvas();
-        add(canvas, BorderLayout.CENTER);
+
+        var splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editor, canvas);
+        splitPane.setDividerLocation(LocalSettings.ui.read(getClass().getSimpleName() + "splitter", 200));
+        splitPane.setOneTouchExpandable(false);
+        splitPane.setResizeWeight(0);
+
+        add(splitPane, BorderLayout.CENTER);
     }
 
     public void generate(int numCycles) {
@@ -27,6 +33,8 @@ public class OLView extends MDISubView<OLDocument> {
         var figure = getDocument().getOLSystem().createFigure(numCycles);
         canvas.setTurnAngle(-getDocument().getOLAngle());
         canvas.setMovements(figure);
+
+        getDocument().getViews().stream().filter(v -> v != this).forEach(v -> v.documentDataChanged(null));
     }
 
     @Override

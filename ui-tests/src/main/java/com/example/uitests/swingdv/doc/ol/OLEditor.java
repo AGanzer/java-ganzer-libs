@@ -1,18 +1,24 @@
 package com.example.uitests.swingdv.doc.ol;
 
+import de.ganzer.core.validation.Validator;
+import de.ganzer.core.validation.ValidatorException;
+import de.ganzer.core.validation.ValidatorExceptionRef;
 import de.ganzer.swing.controls.GComboBox;
 import de.ganzer.swing.controls.GTextArea;
 import de.ganzer.swing.controls.GTextField;
+import de.ganzer.swing.validaton.ValidationBehavior;
+import de.ganzer.swing.validaton.ValidationFilter;
+import de.ganzer.swing.validaton.ValidationFilterList;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OLEditor extends JPanel {
+    private final ValidationFilterList validationFilters = new ValidationFilterList();
     private final AtomicBoolean updating = new AtomicBoolean(false);
     private final OLView parentView;
 
@@ -103,16 +109,16 @@ public class OLEditor extends JPanel {
     }
 
     public boolean isInputValid() {
-        return false;
+        return validationFilters.validate(ValidationBehavior.SHOW_MESSAGE_BOX);
     }
 
     private void createControls() {
-        predefinedOLSystem = new InputContainer(new JLabel("Predefined OL-Systems:"), new GComboBox<>());
-        olName = new InputContainer(new JLabel("Name:"), new GTextField());
-        olAxiom = new InputContainer(new JLabel("Axiom:"), new GTextField());
-        olAngle = new InputContainer(new JLabel("Angle:"), new JSpinner());
-        olCycles = new InputContainer(new JLabel("Cycles:"), new JSpinner());
-        olReplacements = new InputContainer(new JLabel("Replacements:"), new GTextArea());
+        predefinedOLSystem = new InputContainer(new JLabel("Predefined OL-Systems:"), new GComboBox<>(), null);
+        olName = new InputContainer(new JLabel("Name:"), new GTextField(), OLDocument.ChangeContext.NAME);
+        olAxiom = new InputContainer(new JLabel("Axiom:"), new GTextField(), OLDocument.ChangeContext.AXIOM);
+        olAngle = new InputContainer(new JLabel("Angle:"), new JSpinner(), null);
+        olCycles = new InputContainer(new JLabel("Cycles:"), new JSpinner(), null);
+        olReplacements = new InputContainer(new JLabel("Replacements:"), new GTextArea(), OLDocument.ChangeContext.REPLACEMENTS);
     }
 
     private void updateControls() {
@@ -136,6 +142,7 @@ public class OLEditor extends JPanel {
         olAngle.getSpinner().setModel(new SpinnerNumberModel(0, 0, 360, 10));
         ((NumberFormatter) ((JSpinner.DefaultEditor) olAngle.getSpinner().getEditor()).getTextField().getFormatter()).setAllowsInvalid(false);
         olAngle.getSpinner().addChangeListener(e -> parentView.getDocument().setOLAngle((int) olAngle.getSpinner().getValue(), parentView));
+        ((JSpinner.DefaultEditor) olAngle.getSpinner().getEditor()).getTextField().addFocusListener(new MyFocusListener(OLDocument.ChangeContext.ANGLE));
 
         olCycles.getSpinner().setModel(new SpinnerNumberModel(1, 1, 12, 1));
         ((NumberFormatter) ((JSpinner.DefaultEditor) olCycles.getSpinner().getEditor()).getTextField().getFormatter()).setAllowsInvalid(false);
@@ -143,6 +150,10 @@ public class OLEditor extends JPanel {
             if (!parentView.getDocument().getOLSystem().isPredefined())
                 parentView.getDocument().setOLCycles((int) olCycles.getSpinner().getValue(), parentView);
         });
+        ((JSpinner.DefaultEditor) olCycles.getSpinner().getEditor()).getTextField().addFocusListener(new MyFocusListener(OLDocument.ChangeContext.CYCLES));
+
+        validationFilters.addFilter(new ValidationFilter(new Validator(), olAxiom.getTextField()));
+        validationFilters.addFilter(new ValidationFilter(new ReplacementsValidator(), olReplacements.getTextArea()));
     }
 
     private void setupPredefinedSystems() {
@@ -178,6 +189,7 @@ public class OLEditor extends JPanel {
         c.insets = new Insets(0, 0, 6, 0);
         c.gridx = 0;
         c.gridy = 0;
+        c.weightx = 1;
         c.fill = GridBagConstraints.BOTH;
         add(predefinedOLSystem, c);
 
@@ -203,11 +215,11 @@ public class OLEditor extends JPanel {
         add(apply, c);
     }
 
-    private static class InputContainer extends JPanel {
+    private class InputContainer extends JPanel {
         private final JLabel label;
         private final JComponent component;
 
-        public InputContainer(JLabel label, JComponent component) {
+        public InputContainer(JLabel label, JComponent component, OLDocument.ChangeContext context) {
             super(new BorderLayout(0, 3));
 
             this.label = label;
@@ -219,6 +231,9 @@ public class OLEditor extends JPanel {
                 add(new JScrollPane(component), BorderLayout.CENTER);
             else
                 add(component, BorderLayout.CENTER);
+
+            if (context != null)
+                component.addFocusListener(new MyFocusListener(context));
         }
 
         public JTextField getTextField() {
@@ -240,6 +255,55 @@ public class OLEditor extends JPanel {
         public void setEnabled(boolean enabled) {
             label.setEnabled(enabled);
             component.setEnabled(enabled);
+        }
+    }
+
+    private static class ReplacementsValidator extends Validator {
+        @Override
+        protected boolean doValidate(String text, ValidatorExceptionRef er) {
+            if (!super.doValidate(text, er))
+                return false;
+
+            if (text.isEmpty())
+                return true;
+
+            for (String replacement : text.split("\n")) {
+                var parts = replacement.split(":");
+
+                if (parts.length != 2 || parts[0].trim().length() != 1 || parts[1].trim().isEmpty()) {
+                    er.setException(new ValidatorException("Invalid replacement format.", ReplacementsValidator.class, this));
+                    return false;
+                }
+
+            }
+
+            return true;
+        }
+    }
+
+    private class MyFocusListener implements FocusListener {
+        private final OLDocument.ChangeContext context;
+
+        private MyFocusListener(OLDocument.ChangeContext context) {
+            this.context = context;
+        }
+
+        @Override
+        public void focusGained(FocusEvent e) {
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (parentView.getDocument().getOLSystem().isPredefined())
+                return;
+
+            switch (context) {
+                case NAME -> parentView.getDocument().setOLName(olName.getTextField().getText(), parentView);
+                case AXIOM -> parentView.getDocument().setOLAxiom(olAxiom.getTextField().getText(), parentView);
+                case ANGLE -> parentView.getDocument().setOLAngle((int) olAngle.getSpinner().getValue(), parentView);
+                case CYCLES -> parentView.getDocument().setOLCycles((int) olCycles.getSpinner().getValue(), parentView);
+                case REPLACEMENTS -> parentView.getDocument().setOLReplacements(olReplacements.getTextArea().getText(), parentView);
+            }
         }
     }
 }
