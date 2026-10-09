@@ -162,6 +162,7 @@ public class OLEditor extends JPanel {
                 latestEditedOLSystem = parentView.getDocument().getOLSystem();
 
             parentView.getDocument().setOLSystem(system, parentView);
+            updateControls();
         });
     }
 
