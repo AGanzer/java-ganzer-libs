@@ -13,7 +13,7 @@ public class OLView extends MDISubView<OLDocument> {
     public OLView(ViewCreationInfo<OLDocument, OLView> info, ClosableTabsPane tabPane) {
         super(info, tabPane, true);
 
-        editor = new OLEditor();
+        editor = new OLEditor(this);
         add(editor, BorderLayout.WEST);
 
         canvas = new OLCanvas();

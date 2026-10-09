@@ -6,11 +6,12 @@ public final class OLSystem implements Comparable<OLSystem> {
     private static final List<OLSystem> predefinedSystems = new ArrayList<>();
 
     private final boolean predefined;
-    private final String name;
-    private final String axiom;
-    private final int angle;
-    private final int preferredCycles;
-    private final Map<Character, String> replacements;
+
+    private String name;
+    private String axiom;
+    private int angle;
+    private int preferredCycles;
+    private Map<Character, String> replacements;
 
     public OLSystem(String name, String axiom, int angle, int numCycles, List<String> replacements) {
         this(false, name, axiom, angle, numCycles, replacements.toArray(new String[0]));
@@ -36,7 +37,7 @@ public final class OLSystem implements Comparable<OLSystem> {
         this.predefined = predefined;
         this.name = name;
         this.axiom = axiom;
-        this.angle = angle % 360;
+        this.angle = angle;
         this.preferredCycles = preferredCycles;
         this.replacements = toReplacementsMap(replacements);
     }
@@ -49,16 +50,54 @@ public final class OLSystem implements Comparable<OLSystem> {
         return name;
     }
 
+    public void setName(String name) {
+        Objects.requireNonNull(name, "name must not be null.");
+
+        if (predefined)
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        this.name = name;
+    }
+
     public String getAxiom() {
         return axiom;
+    }
+
+    public void setAxiom(String axiom) {
+        Objects.requireNonNull(axiom, "axiom must not be null.");
+
+        if (predefined)
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        this.axiom = axiom;
     }
 
     public int getAngle() {
         return angle;
     }
 
+    public void setAngle(int angle) {
+        if (angle < 1)
+            throw new IllegalArgumentException("angle must not be less than 1.");
+
+        if (predefined)
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        this.angle = angle;
+    }
+
     public int getPreferredCycles() {
         return preferredCycles;
+    }
+
+    public void setPreferredCycles(int preferredCycles) {
+        if (preferredCycles < 1)
+            throw new IllegalArgumentException("preferredCycles must not be less than 1.");
+
+        if (predefined)
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        this.preferredCycles = preferredCycles;
     }
 
     public Map<Character, String> getReplacementsMap() {
@@ -72,6 +111,20 @@ public final class OLSystem implements Comparable<OLSystem> {
             list.add(entry.getKey() + ":" + entry.getValue());
 
         return list;
+    }
+
+    public void setReplacements(List<String> replacements) {
+        if (predefined)
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        this.replacements = toReplacementsMap(replacements.toArray(new String[0]));
+    }
+
+    public void setReplacements(String... replacements) {
+        if (predefined)
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        this.replacements = toReplacementsMap(replacements);
     }
 
     public String createFigure(int cycles) {
@@ -121,7 +174,7 @@ public final class OLSystem implements Comparable<OLSystem> {
     public static List<OLSystem> getPredefinedSystems() {
         if (predefinedSystems.isEmpty()) {
             predefinedSystems.add(new OLSystem(true,
-                                               "Koch curve",
+                                               "Koch Curve",
                                                "F",
                                                60,
                                                4,

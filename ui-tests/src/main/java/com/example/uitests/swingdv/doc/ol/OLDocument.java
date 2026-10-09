@@ -3,6 +3,7 @@ package com.example.uitests.swingdv.doc.ol;
 import de.ganzer.dv.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class OLDocument extends Document {
@@ -14,11 +15,7 @@ public class OLDocument extends Document {
         REPLACEMENTS
     }
 
-    private String olName;
-    private String olAxiom;
-    private int olAngle;
-    private int olCycles;
-    private String olReplacements;
+    private OLSystem olSystem;
 
     public OLDocument(DocumentCreationInfo<OLDocument> info) throws DVLoadException {
         super(info);
@@ -30,63 +27,74 @@ public class OLDocument extends Document {
     }
 
     public String getOLName() {
-        return olName;
+        return olSystem.getName();
     }
 
     public void setOLName(String olName, View<?> originator) {
         Objects.requireNonNull(olName, "olName must not be null.");
 
-        if (!this.olName.equals(olName))
-            addUndoable(new UndoableOLContext(ChangeContext.NAME, this.olName, olName, originator));
+        if (olSystem.isPredefined())
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        if (!olSystem.getName().equals(olName))
+            addUndoable(new UndoableOLContext(ChangeContext.NAME, olSystem.getName(), olName, originator));
     }
 
     public String getOLAxiom() {
-        return olAxiom;
+        return olSystem.getAxiom();
     }
 
     public void setOLAxiom(String olAxiom, View<?> originator) {
         Objects.requireNonNull(olAxiom, "olAxiom must not be null.");
 
-        if (!this.olAxiom.equals(olAxiom))
-            addUndoable(new UndoableOLContext(ChangeContext.AXIOM, this.olAxiom, olAxiom, originator));
+        if (olSystem.isPredefined())
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        if (!olSystem.getAxiom().equals(olAxiom))
+            addUndoable(new UndoableOLContext(ChangeContext.AXIOM, olSystem.getAxiom(), olAxiom, originator));
     }
 
     public int getOLAngle() {
-        return olAngle;
+        return olSystem.getAngle();
     }
 
     public void setOLAngle(int olAngle, View<?> originator) {
-        if (this.olAngle != olAngle)
-            addUndoable(new UndoableOLContext(ChangeContext.ANGLE, this.olAngle, olAngle, originator));
+        if (olSystem.isPredefined())
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        if (olSystem.getAngle() != olAngle)
+            addUndoable(new UndoableOLContext(ChangeContext.ANGLE, olSystem.getAngle(), olAngle, originator));
     }
 
     public int getOLCycles() {
-        return olCycles;
+        return olSystem.getPreferredCycles();
     }
 
     public void setOLCycles(int olCycles, View<?> originator) {
-        if (this.olCycles != olCycles)
-            addUndoable(new UndoableOLContext(ChangeContext.CYCLES, this.olCycles, olCycles, originator));
+        if (olSystem.isPredefined())
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        if (olSystem.getPreferredCycles() != olCycles)
+            addUndoable(new UndoableOLContext(ChangeContext.CYCLES, olSystem.getPreferredCycles(), olCycles, originator));
     }
 
     public String getOLReplacements() {
-        return olReplacements;
+        return String.join("\n", olSystem.getReplacementsList());
     }
 
     public void setOLReplacements(String olReplacements, View<?> originator) {
         Objects.requireNonNull(olReplacements, "olReplacements must not be null.");
 
-        if (!this.olReplacements.equals(olReplacements))
-            addUndoable(new UndoableOLContext(ChangeContext.REPLACEMENTS, this.olReplacements, olReplacements, originator));
+        if (olSystem.isPredefined())
+            throw new IllegalStateException("Cannot change predefined OLSystem.");
+
+        if (!getOLReplacements().equals(olReplacements))
+            addUndoable(new UndoableOLContext(ChangeContext.REPLACEMENTS, getOLReplacements(), olReplacements, originator));
     }
 
     @Override
     protected void doCreateData() {
-        olName = "";
-        olAxiom = "";
-        olAngle = 60;
-        olCycles = 2;
-        olReplacements = "";
+        olSystem = new OLSystem("", "F", 0, 1, "F:F+");
     }
 
     @Override
@@ -120,7 +128,7 @@ public class OLDocument extends Document {
 
     private class UndoableOLSystem extends AbstractUndoableOL {
         public UndoableOLSystem(Object newValue, View<?> originator) {
-            super(new OLSystem(olName, olAxiom, olAngle, olCycles, olReplacements), newValue);
+            super(olSystem, newValue);
             execute(originator);
         }
 
@@ -136,29 +144,17 @@ public class OLDocument extends Document {
 
         @Override
         public void undo() {
-            var system = (OLSystem) getOldValue();
+            olSystem = (OLSystem) getOldValue();
 
-            olName = system.getName();
-            olAxiom = system.getAxiom();
-            olAngle = system.getAngle();
-            olCycles = system.getPreferredCycles();
-            olReplacements = String.join("\n", system.getReplacementsList());
-
-            setModified(!system.isPredefined());
-            notifyDataChange(null, system);
+            setModified(!olSystem.isPredefined());
+            notifyDataChange(null, olSystem);
         }
 
         public void execute(View<?> originator) {
-            var system = (OLSystem) getNewValue();
+            olSystem = (OLSystem) getNewValue();
 
-            olName = system.getName();
-            olAxiom = system.getAxiom();
-            olAngle = system.getAngle();
-            olCycles = system.getPreferredCycles();
-            olReplacements = String.join("\n", system.getReplacementsList());
-
-            setModified(!system.isPredefined());
-            notifyDataChange(originator, system);
+            setModified(!olSystem.isPredefined());
+            notifyDataChange(originator, olSystem);
         }
     }
 
@@ -190,11 +186,11 @@ public class OLDocument extends Document {
         @Override
         public void undo() {
             switch (context) {
-                case NAME -> olName = (String) getOldValue();
-                case AXIOM -> olAxiom = (String) getOldValue();
-                case ANGLE -> olAngle = (int) getOldValue();
-                case CYCLES -> olCycles = (int) getOldValue();
-                case REPLACEMENTS -> olReplacements = (String) getOldValue();
+                case NAME -> olSystem.setName((String) getOldValue());
+                case AXIOM -> olSystem.setAxiom((String) getOldValue());
+                case ANGLE -> olSystem.setAngle((int) getOldValue());
+                case CYCLES -> olSystem.setPreferredCycles((int) getOldValue());
+                case REPLACEMENTS -> olSystem.setReplacements(((String) getOldValue()).split("\n"));
             };
 
             setModified(true);
@@ -203,11 +199,11 @@ public class OLDocument extends Document {
 
         public void execute(View<?> originator) {
             switch (context) {
-                case NAME -> olName = (String) getNewValue();
-                case AXIOM -> olAxiom = (String) getNewValue();
-                case ANGLE -> olAngle = (int) getNewValue();
-                case CYCLES -> olCycles = (int) getNewValue();
-                case REPLACEMENTS -> olReplacements = (String) getNewValue();
+                case NAME -> olSystem.setName((String) getNewValue());
+                case AXIOM -> olSystem.setAxiom((String) getNewValue());
+                case ANGLE -> olSystem.setAngle((int) getNewValue());
+                case CYCLES -> olSystem.setPreferredCycles((int) getNewValue());
+                case REPLACEMENTS -> olSystem.setReplacements(((String) getNewValue()).split("\n"));
             };
 
             setModified(true);
