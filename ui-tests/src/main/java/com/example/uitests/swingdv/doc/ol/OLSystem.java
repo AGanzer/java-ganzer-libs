@@ -1,5 +1,7 @@
 package com.example.uitests.swingdv.doc.ol;
 
+import de.ganzer.core.util.Strings;
+
 import java.util.*;
 
 public final class OLSystem implements Comparable<OLSystem> {
@@ -11,35 +13,25 @@ public final class OLSystem implements Comparable<OLSystem> {
     private String axiom;
     private int angle;
     private int preferredCycles;
-    private Map<Character, String> replacements;
-
-    public OLSystem(String name, String axiom, int angle, int numCycles, List<String> replacements) {
-        this(false, name, axiom, angle, numCycles, replacements.toArray(new String[0]));
-    }
+    private List<String> replacements;
 
     public OLSystem(String name, String axiom, int angle, int numCycles, String... replacements) {
         this(false, name, axiom, angle, numCycles, replacements);
     }
 
     private OLSystem(boolean predefined, String name, String axiom, int angle, int preferredCycles, String... replacements) {
-        Objects.requireNonNull(name, "name must not be null.");
-        Objects.requireNonNull(axiom, "axiom must not be null.");
-
-        if (axiom.isEmpty())
-            throw new IllegalArgumentException("axiom must not be empty.");
-
-        if (angle < 1)
-            throw new IllegalArgumentException("angle must not be less than 1.");
+        if (angle < 0)
+            throw new IllegalArgumentException("angle must be greater than or equal to 0.");
 
         if (preferredCycles < 1)
-            throw new IllegalArgumentException("preferredCycles must not be less than 1.");
+            throw new IllegalArgumentException("preferredCycles must be greater than 0.");
 
         this.predefined = predefined;
         this.name = name;
         this.axiom = axiom;
         this.angle = angle;
         this.preferredCycles = preferredCycles;
-        this.replacements = toReplacementsMap(replacements);
+        this.replacements = replacements != null ? List.of(replacements) : List.of();
     }
 
     public boolean isPredefined() {
@@ -51,8 +43,6 @@ public final class OLSystem implements Comparable<OLSystem> {
     }
 
     public void setName(String name) {
-        Objects.requireNonNull(name, "name must not be null.");
-
         if (predefined)
             throw new IllegalStateException("Cannot change predefined OLSystem.");
 
@@ -64,8 +54,6 @@ public final class OLSystem implements Comparable<OLSystem> {
     }
 
     public void setAxiom(String axiom) {
-        Objects.requireNonNull(axiom, "axiom must not be null.");
-
         if (predefined)
             throw new IllegalStateException("Cannot change predefined OLSystem.");
 
@@ -77,9 +65,6 @@ public final class OLSystem implements Comparable<OLSystem> {
     }
 
     public void setAngle(int angle) {
-        if (angle < 1)
-            throw new IllegalArgumentException("angle must not be less than 1.");
-
         if (predefined)
             throw new IllegalStateException("Cannot change predefined OLSystem.");
 
@@ -92,7 +77,7 @@ public final class OLSystem implements Comparable<OLSystem> {
 
     public void setPreferredCycles(int preferredCycles) {
         if (preferredCycles < 1)
-            throw new IllegalArgumentException("preferredCycles must not be less than 1.");
+            throw new IllegalArgumentException("preferredCycles must be greater than 0.");
 
         if (predefined)
             throw new IllegalStateException("Cannot change predefined OLSystem.");
@@ -100,40 +85,29 @@ public final class OLSystem implements Comparable<OLSystem> {
         this.preferredCycles = preferredCycles;
     }
 
-    public Map<Character, String> getReplacementsMap() {
-        return Collections.unmodifiableMap(replacements);
-    }
-
-    public List<String> getReplacementsList() {
-        List<String> list = new ArrayList<>();
-
-        for (var entry : replacements.entrySet())
-            list.add(entry.getKey() + ":" + entry.getValue());
-
-        return list;
-    }
-
-    public void setReplacements(List<String> replacements) {
-        if (predefined)
-            throw new IllegalStateException("Cannot change predefined OLSystem.");
-
-        this.replacements = toReplacementsMap(replacements.toArray(new String[0]));
+    public List<String> getReplacements() {
+        return replacements;
     }
 
     public void setReplacements(String... replacements) {
-        if (predefined)
-            throw new IllegalStateException("Cannot change predefined OLSystem.");
-
-        this.replacements = toReplacementsMap(replacements);
+        this.replacements = replacements != null ? List.of(replacements) : List.of();
     }
 
     public String createFigure(int cycles) {
+        if (cycles < 1)
+            throw new IllegalArgumentException("cycles must be greater than 0.");
+
+        if (Strings.isNullOrEmpty(axiom))
+            throw new IllegalStateException("axiom must not be null or empty.");
+
+        var replacementsMap = getReplacementsMap();
+
         String result = axiom;
         StringBuilder current = new StringBuilder();
 
         for (int i = 0; i < cycles; i++) {
             for (int c = 0; c < result.length(); c++) {
-                var r = replacements.get(result.charAt(c));
+                var r = replacementsMap.get(result.charAt(c));
 
                 if (r != null)
                     current.append(r);
@@ -258,8 +232,9 @@ public final class OLSystem implements Comparable<OLSystem> {
         return predefinedSystems;
     }
 
-    private static Map<Character, String> toReplacementsMap(String... replacements) {
-        Objects.requireNonNull(replacements, "replacements must not be null.");
+    private Map<Character, String> getReplacementsMap() {
+        if (replacements.isEmpty())
+            throw new IllegalStateException("replacements must not be emoty.");
 
         var map = new HashMap<Character, String>();
 

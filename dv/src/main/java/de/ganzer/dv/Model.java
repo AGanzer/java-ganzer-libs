@@ -326,8 +326,6 @@ public abstract class Model {
      * <p>
      * This default implementation invokes {@link #addUndoable(Undoable, boolean)}
      * with the second argument set to {@code false}.
-     * <p>
-     * Implementors should set the modification flag if this is invoked.
      *
      * @param undoable The action to push. This is not executed but only pushed.
      *
@@ -351,7 +349,6 @@ public abstract class Model {
         var oldRedoTitle = undoManager.getRedoTitle();
 
         undoManager.add(undoable, execute);
-        setModified(true);
 
         firePropertyChange(CAN_UNDO_PROPERTY, oldUndo, undoManager.canUndo());
         firePropertyChange(UNDO_TITLE_PROPERTY, oldUndoTitle, undoManager.getUndoTitle());
@@ -369,7 +366,6 @@ public abstract class Model {
         var oldRedoTitle = undoManager.getRedoTitle();
 
         undoManager.undo();
-        setModified(true);
 
         firePropertyChange(CAN_UNDO_PROPERTY, oldUndo, undoManager.canUndo());
         firePropertyChange(UNDO_TITLE_PROPERTY, oldUndoTitle, undoManager.getUndoTitle());
@@ -387,7 +383,6 @@ public abstract class Model {
         var oldRedoTitle = undoManager.getRedoTitle();
 
         undoManager.redo();
-        setModified(true);
 
         firePropertyChange(CAN_UNDO_PROPERTY, oldUndo, undoManager.canUndo());
         firePropertyChange(UNDO_TITLE_PROPERTY, oldUndoTitle, undoManager.getUndoTitle());

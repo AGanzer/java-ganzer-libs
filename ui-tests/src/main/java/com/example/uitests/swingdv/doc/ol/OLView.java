@@ -20,6 +20,15 @@ public class OLView extends MDISubView<OLDocument> {
         add(canvas, BorderLayout.CENTER);
     }
 
+    public void generate(int numCycles) {
+        if (!getDocument().getOLSystem().isPredefined() && !editor.isInputValid())
+            return;
+
+        var figure = getDocument().getOLSystem().createFigure(numCycles);
+        canvas.setTurnAngle(-getDocument().getOLAngle());
+        canvas.setMovements(figure);
+    }
+
     @Override
     public void documentDataChanged(Object context) {
         if (context instanceof OLDocument.ChangeContext ctx) {

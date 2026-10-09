@@ -71,8 +71,8 @@ public class MainWindow extends JXFrame {
 
         var splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabPane, scroller);
         splitPane.setDividerLocation(LocalSettings.ui.read(getClass().getSimpleName() + "splitter", getWidth() - 150));
-        splitPane.setOneTouchExpandable(true);
-        splitPane.setResizeWeight(0.5);
+        splitPane.setOneTouchExpandable(false);
+        splitPane.setResizeWeight(1.0);
         splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, evt -> {
             LocalSettings.ui.write(getClass().getSimpleName() + "splitter", splitPane.getDividerLocation());
             thumbnails.setWidth(scroller.getViewport().getWidth());
