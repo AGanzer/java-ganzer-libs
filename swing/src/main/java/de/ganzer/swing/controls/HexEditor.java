@@ -39,7 +39,6 @@ import java.awt.event.MouseEvent;
  *
  * @since 6.0.0
  */
-@SuppressWarnings("unused")
 public class HexEditor extends JSplitPane {
     private final HexView hexView;
     private final TextView textView;
@@ -73,50 +72,44 @@ public class HexEditor extends JSplitPane {
         super.setFont(defaultFont);
 
         Color defaultFg = UIManager.getColor("TextArea.foreground");
-        if (defaultFg == null) {
-            defaultFg = Color.BLACK;
-        }
-        super.setForeground(defaultFg);
-
         Color defaultBg = UIManager.getColor("TextArea.background");
-        if (defaultBg == null) {
+
+        if (defaultFg == null)
+            defaultFg = Color.BLACK;
+
+        if (defaultBg == null)
             defaultBg = Color.WHITE;
-        }
+
+        super.setForeground(defaultFg);
         super.setBackground(defaultBg);
 
         caretForeground = invertColor(defaultFg);
         caretBackground = invertColor(defaultBg);
 
         hexView = new HexView();
-        textView = new TextView();
-
         hexView.setFont(defaultFont);
         hexView.setForeground(defaultFg);
         hexView.setBackground(defaultBg);
 
+        textView = new TextView();
         textView.setFont(defaultFont);
         textView.setForeground(defaultFg);
         textView.setBackground(defaultBg);
 
-        if (text != null && !text.isEmpty()) {
+        if (text != null && !text.isEmpty())
             setText(text);
-        }
 
         hexScrollPane = new JScrollPane(hexView);
-        hexScrollPane.setHorizontalScrollBarPolicy(
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        hexScrollPane.setVerticalScrollBarPolicy(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        hexScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        hexScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         textScrollPane = new JScrollPane(textView);
-        textScrollPane.setHorizontalScrollBarPolicy(
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        textScrollPane.setVerticalScrollBarPolicy(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        textScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        textScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        // Synchronize vertical scrolling between both scroll panes.
-        textScrollPane.getVerticalScrollBar().setModel(
-                hexScrollPane.getVerticalScrollBar().getModel());
+        // Synchronize vertical scrolling between both scroll panes:
+        //
+        textScrollPane.getVerticalScrollBar().setModel(hexScrollPane.getVerticalScrollBar().getModel());
 
         setLeftComponent(hexScrollPane);
         setRightComponent(textScrollPane);
@@ -135,14 +128,13 @@ public class HexEditor extends JSplitPane {
      * Inverts the RGB components of a given {@link Color}.
      *
      * @param color The color to invert.
+     *
      * @return The inverted color, or {@link Color#BLACK} if {@code null}.
      */
     private static Color invertColor(Color color) {
-        if (color == null) {
-            return Color.BLACK;
-        }
-        return new Color(255 - color.getRed(), 255 - color.getGreen(),
-                255 - color.getBlue());
+        return color == null
+                ? Color.BLACK
+                : new Color(255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue());
     }
 
     /**
@@ -161,9 +153,8 @@ public class HexEditor extends JSplitPane {
      *            empty document.
      */
     public void setDocument(Document doc) {
-        if (textView != null) {
+        if (textView != null)
             textView.setDocument(doc);
-        }
     }
 
     /**
@@ -173,9 +164,10 @@ public class HexEditor extends JSplitPane {
      */
     public String getText() {
         Document doc = getDocument();
-        if (doc == null) {
+
+        if (doc == null)
             return "";
-        }
+
         try {
             return doc.getText(0, doc.getLength());
         } catch (BadLocationException e) {
@@ -190,16 +182,18 @@ public class HexEditor extends JSplitPane {
      */
     public void setText(String text) {
         Document doc = getDocument();
+
         if (doc != null) {
             try {
                 doc.remove(0, doc.getLength());
-                if (text != null && !text.isEmpty()) {
+
+                if (text != null && !text.isEmpty())
                     doc.insertString(0, text, null);
-                }
             } catch (BadLocationException e) {
-                // Ignore exception.
+                // Ignore.
             }
         }
+
         setCaretPosition(0);
         updateViewsLayout();
         repaintViews();
@@ -223,9 +217,10 @@ public class HexEditor extends JSplitPane {
      */
     char charAt(int index) {
         Document doc = getDocument();
-        if (doc == null || index < 0 || index >= doc.getLength()) {
+
+        if (doc == null || index < 0 || index >= doc.getLength())
             return '\0';
-        }
+
         try {
             return doc.getText(index, 1).charAt(0);
         } catch (BadLocationException e) {
@@ -249,8 +244,10 @@ public class HexEditor extends JSplitPane {
      */
     public void setCaretPosition(int position) {
         int maxPos = getDocumentLength();
+
         this.caretPosition = Math.max(0, Math.min(maxPos, position));
         this.hexCaretPosition = this.caretPosition * 5;
+
         scrollToCaret();
         repaintViews();
     }
@@ -262,9 +259,10 @@ public class HexEditor extends JSplitPane {
      */
     void setHexCaretPosition(int hexPosition) {
         int maxPos = getDocumentLength() * 5;
+
         this.hexCaretPosition = Math.max(0, Math.min(maxPos, hexPosition));
-        this.caretPosition = Math.min(getDocumentLength(),
-                hexCaretPosition / 5);
+        this.caretPosition = Math.min(getDocumentLength(), hexCaretPosition / 5);
+
         scrollToCaret();
         repaintViews();
     }
@@ -315,6 +313,7 @@ public class HexEditor extends JSplitPane {
     public void setCaretForeground(Color caretForeground) {
         this.caretForeground = caretForeground;
         this.customCaretForeground = (caretForeground != null);
+
         repaintViews();
     }
 
@@ -337,48 +336,95 @@ public class HexEditor extends JSplitPane {
     public void setCaretBackground(Color caretBackground) {
         this.caretBackground = caretBackground;
         this.customCaretBackground = (caretBackground != null);
+
         repaintViews();
     }
 
+    /**
+     * Returns the foreground color.
+     *
+     * @return The foreground color.
+     */
+    public Color getForeground() {
+        return textView != null ? textView.getForeground() : super.getForeground();
+    }
+    /**
+     * Sets the foreground color used for highlighting the character under
+     * the caret.
+     *
+     * @param fg The desired foreground color.
+     */
     @Override
     public void setForeground(Color fg) {
         super.setForeground(fg);
-        if (!customCaretForeground) {
+
+        if (!customCaretForeground)
             caretForeground = invertColor(fg);
-        }
-        if (hexView != null) {
+
+        if (hexView != null)
             hexView.setForeground(fg);
-        }
-        if (textView != null) {
+
+        if (textView != null)
             textView.setForeground(fg);
-        }
+
         repaintViews();
     }
 
+    /**
+     * Returns the background color.
+     *
+     * @return The background color.
+     */
+    public Color getBackground() {
+        return textView != null ? textView.getBackground() : super.getBackground();
+    }
+
+    /**
+     * Sets the background color used for highlighting the character under
+     * the caret.
+     *
+     * @param bg The desired background color.
+     */
     @Override
     public void setBackground(Color bg) {
         super.setBackground(bg);
-        if (!customCaretBackground) {
+
+        if (!customCaretBackground)
             caretBackground = invertColor(bg);
-        }
-        if (hexView != null) {
+
+        if (hexView != null)
             hexView.setBackground(bg);
-        }
-        if (textView != null) {
+
+        if (textView != null)
             textView.setBackground(bg);
-        }
+
         repaintViews();
     }
 
+    /**
+     * Returns the font used for rendering the text.
+     *
+     * @return The font used for rendering the text.
+     */
+    public Font getFont() {
+        return textView != null ? textView.getFont() : super.getFont();
+    }
+
+    /**
+     * Sets the font used for rendering the text.
+     *
+     * @param font the desired font for this component
+     */
     @Override
     public void setFont(Font font) {
         super.setFont(font);
-        if (hexView != null) {
+
+        if (hexView != null)
             hexView.setFont(font);
-        }
-        if (textView != null) {
+
+        if (textView != null)
             textView.setFont(font);
-        }
+
         updateViewsLayout();
         repaintViews();
     }
@@ -481,45 +527,30 @@ public class HexEditor extends JSplitPane {
         return c;
     }
 
-    /**
-     * Updates the layout and preferred sizes of both views.
-     */
     private void updateViewsLayout() {
-        if (hexView != null) {
+        if (hexView != null)
             hexView.revalidate();
-        }
-        if (textView != null) {
+
+        if (textView != null)
             textView.revalidate();
-        }
     }
 
-    /**
-     * Repaints both the hex and text view components.
-     */
     private void repaintViews() {
-        if (hexView != null) {
+        if (hexView != null)
             hexView.repaint();
-        }
-        if (textView != null) {
+
+        if (textView != null)
             textView.repaint();
-        }
     }
 
-    /**
-     * Ensures that the caret position is visible in both views.
-     */
     private void scrollToCaret() {
-        if (hexView != null) {
+        if (hexView != null)
             hexView.scrollToCaret();
-        }
-        if (textView != null) {
+
+        if (textView != null)
             textView.scrollToCaret();
-        }
     }
 
-    /**
-     * Inner component responsible for displaying and editing hexadecimal data.
-     */
     private class HexView extends JComponent implements Scrollable {
         private boolean caretBlinkVisible = true;
         private final Timer caretTimer;
@@ -528,6 +559,7 @@ public class HexEditor extends JSplitPane {
             setFocusable(true);
             setFocusTraversalKeysEnabled(false);
             setOpaque(true);
+
             caretTimer = new Timer(500, e -> {
                 caretBlinkVisible = !caretBlinkVisible;
                 repaint();
@@ -572,9 +604,10 @@ public class HexEditor extends JSplitPane {
 
         private void handleMouseClick(int mouseX, int mouseY) {
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return;
-            }
+
             FontMetrics fm = getFontMetrics(font);
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
@@ -582,9 +615,9 @@ public class HexEditor extends JSplitPane {
 
             int row = (mouseY - insets.top) / lineHeight;
             int col = (mouseX - insets.left) / charWidth;
-            if (row < 0 || col < 0) {
+
+            if (row < 0 || col < 0)
                 return;
-            }
 
             int cpl = getCharsPerLine();
             int itemInRow = col / 5;
@@ -593,6 +626,7 @@ public class HexEditor extends JSplitPane {
             int targetHexPos = itemIndex * 5 + subPos;
             int maxHexPos = getDocumentLength() * 5;
             int clampedPos = Math.max(0, Math.min(maxHexPos, targetHexPos));
+
             setHexCaretPosition(clampedPos);
         }
 
@@ -606,49 +640,62 @@ public class HexEditor extends JSplitPane {
                     setHexCaretPosition(hexCaretPosition - 1);
                     e.consume();
                 }
+
                 case KeyEvent.VK_RIGHT -> {
                     setHexCaretPosition(hexCaretPosition + 1);
                     e.consume();
                 }
+
                 case KeyEvent.VK_UP -> {
                     setHexCaretPosition(hexCaretPosition - cpl * 5);
                     e.consume();
                 }
+
                 case KeyEvent.VK_DOWN -> {
                     setHexCaretPosition(hexCaretPosition + cpl * 5);
                     e.consume();
                 }
+
                 case KeyEvent.VK_HOME -> {
                     int curItem = hexCaretPosition / 5;
                     int row = curItem / cpl;
+
                     setHexCaretPosition(row * cpl * 5);
                     e.consume();
                 }
+
                 case KeyEvent.VK_END -> {
                     int curItem = hexCaretPosition / 5;
                     int row = curItem / cpl;
                     int lastItemInRow = Math.min(len, (row + 1) * cpl);
+
                     setHexCaretPosition(lastItemInRow * 5);
                     e.consume();
                 }
+
                 case KeyEvent.VK_DELETE -> {
                     if (editable) {
                         int itemIndex = hexCaretPosition / 5;
+
                         if (itemIndex < getDocumentLength()) {
                             try {
                                 getDocument().remove(itemIndex, 1);
                             } catch (BadLocationException ex) {
                                 // Ignore exception.
                             }
+
                             setHexCaretPosition(itemIndex * 5);
                         }
                     }
+
                     e.consume();
                 }
+
                 case KeyEvent.VK_BACK_SPACE -> {
                     if (editable) {
                         int itemIndex = hexCaretPosition / 5;
                         int subPos = hexCaretPosition % 5;
+
                         if (subPos == 0) {
                             if (itemIndex > 0) {
                                 try {
@@ -656,6 +703,7 @@ public class HexEditor extends JSplitPane {
                                 } catch (BadLocationException ex) {
                                     // Ignore exception.
                                 }
+
                                 setHexCaretPosition((itemIndex - 1) * 5);
                             }
                         } else {
@@ -665,18 +713,22 @@ public class HexEditor extends JSplitPane {
                                 } catch (BadLocationException ex) {
                                     // Ignore exception.
                                 }
+
                                 setHexCaretPosition(itemIndex * 5);
                             }
                         }
                     }
+
                     e.consume();
                 }
+
                 case KeyEvent.VK_INSERT -> {
-                    if (editable) {
+                    if (editable)
                         handleInsertNullCharacter();
-                    }
+
                     e.consume();
                 }
+
                 default -> {
                 }
             }
@@ -684,32 +736,28 @@ public class HexEditor extends JSplitPane {
 
         private void handleKeyTyped(KeyEvent e) {
             char c = e.getKeyChar();
-            if (c == KeyEvent.CHAR_UNDEFINED || e.isControlDown()
-                    || e.isMetaDown() || e.isAltDown()) {
-                return;
-            }
 
-            if (!editable) {
+            if (c == KeyEvent.CHAR_UNDEFINED || e.isControlDown() || e.isMetaDown() || e.isAltDown() || !editable)
                 return;
-            }
 
             int subPos = hexCaretPosition % 5;
             int itemIndex = hexCaretPosition / 5;
             int len = getDocumentLength();
 
-            // Insert or space key at word boundaries inserts four null digits.
+            // Insert or space key at word boundaries inserts four null digits:
+            //
             if (c == ' ') {
-                if (subPos == 0 || subPos == 4 || len == 0) {
+                if (subPos == 0 || subPos == 4 || len == 0)
                     handleInsertNullCharacter();
-                }
+
                 e.consume();
+
                 return;
             }
 
-            // Check if char is a valid hex digit (0-9, A-F, a-f).
-            boolean isHexDigit = (c >= '0' && c <= '9')
-                    || (c >= 'a' && c <= 'f')
-                    || (c >= 'A' && c <= 'F');
+            // Check if char is a valid hex digit (0-9, A-F, a-f):
+            //
+            boolean isHexDigit = (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
 
             if (isHexDigit) {
                 if (subPos < 4) {
@@ -720,19 +768,21 @@ public class HexEditor extends JSplitPane {
                             // Ignore exception.
                         }
                     }
+
                     if (itemIndex < getDocumentLength()) {
                         char oldChar = charAt(itemIndex);
                         String hexStr = getHexCode(oldChar);
                         char[] chars = hexStr.toCharArray();
                         chars[subPos] = Character.toUpperCase(c);
                         int newCode = Integer.parseInt(new String(chars), 16);
+
                         try {
                             getDocument().remove(itemIndex, 1);
-                            getDocument().insertString(itemIndex,
-                                    String.valueOf((char) newCode), null);
+                            getDocument().insertString(itemIndex, String.valueOf((char) newCode), null);
                         } catch (BadLocationException ex) {
                             // Ignore exception.
                         }
+
                         setHexCaretPosition(hexCaretPosition + 1);
                     }
                 }
@@ -751,23 +801,27 @@ public class HexEditor extends JSplitPane {
                 } catch (BadLocationException ex) {
                     // Ignore exception.
                 }
+
                 setHexCaretPosition(itemIndex * 5);
             } else if (subPos == 4) {
                 int insertPos = Math.min(len, itemIndex + 1);
+
                 try {
                     getDocument().insertString(insertPos, "\0", null);
                 } catch (BadLocationException ex) {
                     // Ignore exception.
                 }
+
                 setHexCaretPosition(insertPos * 5);
             }
         }
 
         void scrollToCaret() {
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return;
-            }
+
             FontMetrics fm = getFontMetrics(font);
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
@@ -779,15 +833,17 @@ public class HexEditor extends JSplitPane {
             Insets insets = getInsets();
             int x = insets.left + (col * 5 + curSub) * charWidth;
             int y = insets.top + row * lineHeight;
+
             scrollRectToVisible(new Rectangle(x, y, 4 * charWidth, lineHeight));
         }
 
         @Override
         public Dimension getPreferredSize() {
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return new Dimension(200, 100);
-            }
+
             FontMetrics fm = getFontMetrics(font);
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
@@ -797,20 +853,24 @@ public class HexEditor extends JSplitPane {
             Insets insets = getInsets();
             int w = (cpl * 5) * charWidth + insets.left + insets.right;
             int h = totalLines * lineHeight + insets.top + insets.bottom;
+
             return new Dimension(w, h);
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+
             g.setColor(getBackground());
             g.fillRect(0, 0, getWidth(), getHeight());
 
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return;
-            }
+
             g.setFont(font);
+
             FontMetrics fm = g.getFontMetrics();
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
@@ -821,7 +881,8 @@ public class HexEditor extends JSplitPane {
             int totalLines = len == 0 ? 1 : (len + cpl - 1) / cpl;
             Insets insets = getInsets();
 
-            int activeCharIndex = (caretPosition < len) ? caretPosition
+            int activeCharIndex = (caretPosition < len)
+                    ? caretPosition
                     : (len > 0 && caretPosition == len ? len - 1 : -1);
 
             for (int row = 0; row < totalLines; row++) {
@@ -842,11 +903,13 @@ public class HexEditor extends JSplitPane {
                     } else {
                         g.setColor(getForeground());
                     }
+
                     g.drawString(hex, x, baselineY);
                 }
             }
 
-            // Draw cursor caret line if focused.
+            // Draw cursor caret line if focused:
+            //
             if (isFocusOwner() && caretBlinkVisible) {
                 int curItem = hexCaretPosition / 5;
                 int curSub = hexCaretPosition % 5;
@@ -854,8 +917,8 @@ public class HexEditor extends JSplitPane {
                 int curCol = curItem % cpl;
                 int cursorX = insets.left + (curCol * 5 + curSub) * charWidth;
                 int cursorY = insets.top + curRow * lineHeight;
-                g.setColor(getCaretForeground() != null ? getCaretForeground()
-                        : getForeground());
+
+                g.setColor(getCaretForeground() != null ? getCaretForeground() : getForeground());
                 g.drawLine(cursorX, cursorY, cursorX, cursorY + lineHeight - 1);
             }
         }
@@ -866,23 +929,22 @@ public class HexEditor extends JSplitPane {
         }
 
         @Override
-        public int getScrollableUnitIncrement(Rectangle visibleRect,
-                                              int orientation, int direction) {
+        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return 16;
-            }
+
             FontMetrics fm = getFontMetrics(font);
+
             return orientation == SwingConstants.VERTICAL
                     ? Math.max(1, fm.getHeight())
                     : Math.max(1, fm.charWidth('0'));
         }
 
         @Override
-        public int getScrollableBlockIncrement(Rectangle visibleRect,
-                                               int orientation, int direction) {
-            return orientation == SwingConstants.VERTICAL
-                    ? visibleRect.height : visibleRect.width;
+        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+            return orientation == SwingConstants.VERTICAL ? visibleRect.height : visibleRect.width;
         }
 
         @Override
@@ -896,30 +958,27 @@ public class HexEditor extends JSplitPane {
         }
     }
 
-    /**
-     * Inner component responsible for displaying and editing textual data.
-     */
     private class TextView extends JComponent implements Scrollable {
         private boolean caretBlinkVisible = true;
         private final Timer caretTimer;
         private Document document;
-        private final DocumentListener documentListener =
-                new DocumentListener() {
-                    @Override
-                    public void insertUpdate(DocumentEvent e) {
-                        handleDocumentChanged();
-                    }
 
-                    @Override
-                    public void removeUpdate(DocumentEvent e) {
-                        handleDocumentChanged();
-                    }
+        private final DocumentListener documentListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                handleDocumentChanged();
+            }
 
-                    @Override
-                    public void changedUpdate(DocumentEvent e) {
-                        handleDocumentChanged();
-                    }
-                };
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                handleDocumentChanged();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                handleDocumentChanged();
+            }
+        };
 
         TextView() {
             this(new PlainDocument());
@@ -929,6 +988,7 @@ public class HexEditor extends JSplitPane {
             setFocusable(true);
             setFocusTraversalKeysEnabled(false);
             setOpaque(true);
+
             caretTimer = new Timer(500, e -> {
                 caretBlinkVisible = !caretBlinkVisible;
                 repaint();
@@ -973,60 +1033,52 @@ public class HexEditor extends JSplitPane {
             setDocument(doc);
         }
 
-        /**
-         * Returns the {@link Document} backing this text view.
-         *
-         * @return The document model.
-         */
         public Document getDocument() {
             return document;
         }
 
-        /**
-         * Sets the {@link Document} backing this text view.
-         *
-         * @param doc The new document model, or {@code null} to reset to an
-         *            empty document.
-         */
         public void setDocument(Document doc) {
-            if (this.document != null) {
+            if (this.document != null)
                 this.document.removeDocumentListener(documentListener);
-            }
+
             this.document = (doc != null) ? doc : new PlainDocument();
             this.document.addDocumentListener(documentListener);
+
             handleDocumentChanged();
         }
 
         private void handleDocumentChanged() {
             int maxPos = document != null ? document.getLength() : 0;
+
             if (caretPosition > maxPos) {
                 caretPosition = maxPos;
                 hexCaretPosition = caretPosition * 5;
             }
+
             updateViewsLayout();
             repaintViews();
         }
 
         private void handleMouseClick(int mouseX, int mouseY) {
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return;
-            }
+
             FontMetrics fm = getFontMetrics(font);
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
             Insets insets = getInsets();
-
             int row = (mouseY - insets.top) / lineHeight;
             int col = (mouseX - insets.left) / charWidth;
-            if (row < 0 || col < 0) {
+
+            if (row < 0 || col < 0)
                 return;
-            }
 
             int cpl = getCharsPerLine();
             int targetPos = row * cpl + col;
-            int clampedPos = Math.max(0,
-                    Math.min(getDocumentLength(), targetPos));
+            int clampedPos = Math.max(0, Math.min(getDocumentLength(), targetPos));
+
             setCaretPosition(clampedPos);
         }
 
@@ -1040,53 +1092,69 @@ public class HexEditor extends JSplitPane {
                     setCaretPosition(caretPosition - 1);
                     e.consume();
                 }
+
                 case KeyEvent.VK_RIGHT -> {
                     setCaretPosition(caretPosition + 1);
                     e.consume();
                 }
+
                 case KeyEvent.VK_UP -> {
                     setCaretPosition(caretPosition - cpl);
                     e.consume();
                 }
+
                 case KeyEvent.VK_DOWN -> {
                     setCaretPosition(caretPosition + cpl);
                     e.consume();
                 }
+
                 case KeyEvent.VK_HOME -> {
                     int row = caretPosition / cpl;
+
                     setCaretPosition(row * cpl);
                     e.consume();
                 }
+
                 case KeyEvent.VK_END -> {
                     int row = caretPosition / cpl;
                     int lastInRow = Math.min(len, (row + 1) * cpl);
+
                     setCaretPosition(lastInRow);
                     e.consume();
                 }
+
                 case KeyEvent.VK_DELETE -> {
                     if (editable && caretPosition < len) {
                         int targetCaret = caretPosition;
+
                         try {
                             getDocument().remove(targetCaret, 1);
                         } catch (BadLocationException ex) {
                             // Ignore exception.
                         }
+
                         setCaretPosition(targetCaret);
                     }
+
                     e.consume();
                 }
+
                 case KeyEvent.VK_BACK_SPACE -> {
                     if (editable && caretPosition > 0) {
                         int targetCaret = caretPosition - 1;
+
                         try {
                             getDocument().remove(targetCaret, 1);
                         } catch (BadLocationException ex) {
                             // Ignore exception.
                         }
+
                         setCaretPosition(targetCaret);
                     }
+
                     e.consume();
                 }
+
                 default -> {
                 }
             }
@@ -1094,32 +1162,26 @@ public class HexEditor extends JSplitPane {
 
         private void handleKeyTyped(KeyEvent e) {
             char c = e.getKeyChar();
-            if (c == KeyEvent.CHAR_UNDEFINED || e.isControlDown()
-                    || e.isMetaDown() || e.isAltDown()) {
+
+            if (c == KeyEvent.CHAR_UNDEFINED || e.isControlDown() || e.isMetaDown() || e.isAltDown() || !editable || c == '\b' || c == 127)
                 return;
-            }
-            if (!editable) {
-                return;
-            }
-            if (c == '\b' || c == 127) {
-                return;
-            }
 
             try {
-                getDocument().insertString(caretPosition,
-                        String.valueOf(c), null);
+                getDocument().insertString(caretPosition, String.valueOf(c), null);
             } catch (BadLocationException ex) {
                 // Ignore exception.
             }
+
             setCaretPosition(caretPosition + 1);
             e.consume();
         }
 
         void scrollToCaret() {
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return;
-            }
+
             FontMetrics fm = getFontMetrics(font);
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
@@ -1130,15 +1192,17 @@ public class HexEditor extends JSplitPane {
             Insets insets = getInsets();
             int x = insets.left + col * charWidth;
             int y = insets.top + row * lineHeight;
+
             scrollRectToVisible(new Rectangle(x, y, charWidth, lineHeight));
         }
 
         @Override
         public Dimension getPreferredSize() {
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return new Dimension(200, 100);
-            }
+
             FontMetrics fm = getFontMetrics(font);
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
@@ -1148,20 +1212,24 @@ public class HexEditor extends JSplitPane {
             Insets insets = getInsets();
             int w = cpl * charWidth + insets.left + insets.right;
             int h = totalLines * lineHeight + insets.top + insets.bottom;
+
             return new Dimension(w, h);
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+
             g.setColor(getBackground());
             g.fillRect(0, 0, getWidth(), getHeight());
 
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return;
-            }
+
             g.setFont(font);
+
             FontMetrics fm = g.getFontMetrics();
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
@@ -1172,7 +1240,8 @@ public class HexEditor extends JSplitPane {
             int totalLines = len == 0 ? 1 : (len + cpl - 1) / cpl;
             Insets insets = getInsets();
 
-            int activeCharIndex = (caretPosition < len) ? caretPosition
+            int activeCharIndex = (caretPosition < len)
+                    ? caretPosition
                     : (len > 0 && caretPosition == len ? len - 1 : -1);
 
             for (int row = 0; row < totalLines; row++) {
@@ -1193,18 +1262,20 @@ public class HexEditor extends JSplitPane {
                     } else {
                         g.setColor(getForeground());
                     }
+
                     g.drawString(String.valueOf(dispChar), x, baselineY);
                 }
             }
 
-            // Draw cursor caret line if focused.
+            // Draw cursor caret line if focused:
+            //
             if (isFocusOwner() && caretBlinkVisible) {
                 int curRow = caretPosition / cpl;
                 int curCol = caretPosition % cpl;
                 int cursorX = insets.left + curCol * charWidth;
                 int cursorY = insets.top + curRow * lineHeight;
-                g.setColor(getCaretForeground() != null ? getCaretForeground()
-                        : getForeground());
+
+                g.setColor(getCaretForeground() != null ? getCaretForeground() : getForeground());
                 g.drawLine(cursorX, cursorY, cursorX, cursorY + lineHeight - 1);
             }
         }
@@ -1215,23 +1286,22 @@ public class HexEditor extends JSplitPane {
         }
 
         @Override
-        public int getScrollableUnitIncrement(Rectangle visibleRect,
-                                              int orientation, int direction) {
+        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
             Font font = getFont();
-            if (font == null) {
+
+            if (font == null)
                 return 16;
-            }
+
             FontMetrics fm = getFontMetrics(font);
+
             return orientation == SwingConstants.VERTICAL
                     ? Math.max(1, fm.getHeight())
                     : Math.max(1, fm.charWidth('0'));
         }
 
         @Override
-        public int getScrollableBlockIncrement(Rectangle visibleRect,
-                                               int orientation, int direction) {
-            return orientation == SwingConstants.VERTICAL
-                    ? visibleRect.height : visibleRect.width;
+        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+            return orientation == SwingConstants.VERTICAL ? visibleRect.height : visibleRect.width;
         }
 
         @Override
