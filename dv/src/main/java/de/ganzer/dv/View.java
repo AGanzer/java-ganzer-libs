@@ -64,7 +64,7 @@ public interface View<D extends Document> {
      * Invoked by the document to notify the view about changes in its data.
      * <p>
      * <b>NOTE:</b> Implementors should ensure that updating its controls within
-     * the method does not cause a new change of the document to avoid infinite
+     * this method does not cause a new change of the document to avoid infinite
      * update loops.
      *
      * @param context The context of change. This is implementation defined and
