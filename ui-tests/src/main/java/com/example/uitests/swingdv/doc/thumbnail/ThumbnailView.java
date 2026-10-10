@@ -124,8 +124,10 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
                     .orElse(null);
         }
 
-        if (mainView == null)
+        if (mainView == null) {
+            System.err.println("Something went wront with the thumbnail: No main view found for " + document.getName());
             return;
+        }
 
         var borderInsets = thumbnail.getBorder().getBorderInsets(thumbnail);
         var borderWidth = borderInsets.left + borderInsets.right;
