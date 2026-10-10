@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A basic abstract document that is created with template information.
@@ -50,6 +51,11 @@ import java.util.List;
  * @since 6.0.0
  */
 public abstract class Document extends Model {
+    /**
+     * The name of the property that is fired when the views change.
+     */
+    public static final String VIEWS_PROPERTY = "views";
+
     private final DocumentTemplate<? extends Document> template;
     private final Document parent;
     private final List<View<? extends Document>> views = new ArrayList<>();
@@ -144,23 +150,32 @@ public abstract class Document extends Model {
     /**
      * Adds a view to the document.
      * <p>
+     * This fires a property change event with the name {@link #VIEWS_PROPERTY}.
+     * <p>
      * <b>NOTE:</b> This is invoked automatically after a view is created and
      * should never be called by any client code.
      *
      * @param view The view to add.
      *
+     * @throws NullPointerException If {@code view} is {@code null}.
      * @throws IllegalArgumentException If the view is already added to a
      *         document.
      */
     public void addView(View<? extends Document> view) {
+        Objects.requireNonNull(view, "view must not be null.");
+
         if (view.getDocument() != this)
             throw new IllegalArgumentException("View is already added to a document.");
 
         views.add(view);
+        firePropertyChange(VIEWS_PROPERTY, null, null);
     }
 
     /**
      * Removes a view from the document.
+     * <p>
+     * This fires a property change event with the name {@link #VIEWS_PROPERTY}
+     * if the document is not closed automatically.
      * <p>
      * If {@link DocumentTemplate#isAutoClose()} of the document's template is
      * {@code true}, the document will be closed automatically.
@@ -182,6 +197,8 @@ public abstract class Document extends Model {
         if (view.getTemplate().isMandatory()
                 || (getTemplate().isAutoClose() && views.stream().allMatch(v -> v.getTemplate().ignoreOnOtherViewClosed()))) {
             close();
+        } else {
+            firePropertyChange(VIEWS_PROPERTY, null, null);
         }
     }
 

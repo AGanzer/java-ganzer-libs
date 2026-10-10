@@ -54,6 +54,8 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
                     DVManager.activateDocument(document);
             }
         });
+
+        document.addPropertyChangeListener(Document.VIEWS_PROPERTY, e -> updateThumbnail());
     }
 
     @Override
@@ -113,13 +115,29 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
         var mainView = document.getViews().stream()
                 .filter(v -> v.getTemplate().isDefault())
                 .findFirst()
-                .orElse(document.getViews().get(0));
+                .orElse(null);
+
+        if (mainView == null){
+            mainView = document.getViews().stream()
+                    .filter(v -> !(v instanceof ThumbnailView))
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        if (mainView == null)
+            return;
+
         var borderInsets = thumbnail.getBorder().getBorderInsets(thumbnail);
         var borderWidth = borderInsets.left + borderInsets.right;
         var borderHeight = borderInsets.top + borderInsets.bottom;
-        var image = Thumbnail.create((JComponent) mainView,
-                                     thumbnail.getPreferredSize().width - borderWidth,
-                                     thumbnail.getPreferredSize().height - borderHeight);
+        var tnWidth = thumbnail.getPreferredSize().width - borderWidth;
+        var tnHeight = thumbnail.getPreferredSize().height - borderHeight;
+
+        if (tnWidth <= 0 || tnHeight <= 0)
+            return;
+
+        var image = Thumbnail.create((JComponent) mainView, tnWidth, tnHeight);
+
         thumbnail.setIcon(image != null ? new ImageIcon(image) : null);
     }
 
