@@ -1,0 +1,5 @@
+- JavaDoc in US-English.
+- Schlüsselwörter und Parameter in {@code } einfassen, Verweise in {@link }.
+- Kommentare innerhalb des Codes (Nicht-JavaDoc-Kommentare), nicht als Block-, sondern als Zeilenkommentare einfügen.
+- Kommentare und JavaDoc bei der 80. Spalte umbrechen (entsprechend den Stilen der anderen Java-Doc-Kommentare, wie z. B. in `com.example.uitests.swingdv.Thumbnail` gemacht).
+- Folgezeilen in Kommentare zu Parametern, Rückgabewerten und Exceptions einrücken, wie z. B. in `com.example.uitests.swingdv.Thumbnail` gemacht.

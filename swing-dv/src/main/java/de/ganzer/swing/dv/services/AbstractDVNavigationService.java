@@ -98,8 +98,8 @@ public abstract class AbstractDVNavigationService implements DVNavigationService
      * @param name The name of the document that contains unsaved modified data.
      *
      * @return {@code true} if the document can be saved, {@code false} not to
-     *         save and {@code null} if the user wants to cancel to ongoing
-     *         operation.
+     *          save and {@code null} if the user wants to cancel to ongoing
+     *          operation.
      */
     @Override
     public Boolean querySave(String name) {
@@ -191,7 +191,7 @@ public abstract class AbstractDVNavigationService implements DVNavigationService
      * and fills the file chooser with the extracted filters.
      *
      * @param chooser The file chooser where the filters should be set.
-     * @param filters the filters to set or {@code null} if no filter is provided.
+     * @param filters The filters to set or {@code null} if no filter is provided.
      */
     protected void setFilters(JFileChooser chooser, List<String> filters) {
         chooser.setAcceptAllFileFilterUsed(false);
