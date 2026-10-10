@@ -12,8 +12,10 @@ import javax.swing.event.DocumentListener;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TextView extends MDISubView<TextDocument> {
+    private final AtomicBoolean updating = new AtomicBoolean(false);
     private final JTextArea editor;
     private final JPopupMenu popupMenu;
 
@@ -30,17 +32,20 @@ public class TextView extends MDISubView<TextDocument> {
         editor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                getDocument().setText(editor.getText(), TextView.this);
+                if (!updating.get())
+                    getDocument().setText(editor.getText(), TextView.this);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                getDocument().setText(editor.getText(), TextView.this);
+                if (!updating.get())
+                    getDocument().setText(editor.getText(), TextView.this);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                getDocument().setText(editor.getText(), TextView.this);
+                if (!updating.get())
+                    getDocument().setText(editor.getText(), TextView.this);
             }
         });
         editor.addMouseListener(new MouseAdapter() {
@@ -84,12 +89,17 @@ public class TextView extends MDISubView<TextDocument> {
 
     @Override
     public void documentDataChanged(Object context) {
-        var selStart = editor.getSelectionStart();
-        var selEnd = editor.getSelectionEnd();
+        updating.set(true);
 
-        editor.setText(getDocument().getText());
+        try {
+            var selStart = editor.getSelectionStart();
+            var selEnd = editor.getSelectionEnd();
 
-        editor.select(selStart, selEnd);
+            editor.setText(getDocument().getText());
+            editor.select(selStart, selEnd);
+        } finally {
+            updating.set(false);
+        }
     }
 
     @Override
