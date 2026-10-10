@@ -56,6 +56,15 @@ public class TextView extends MDISubView<TextDocument> {
         JScrollPane scrollPane = new JScrollPane(editor);
         add(scrollPane, BorderLayout.CENTER);
 
+        var hexItem = new JMenuItem("Open in Hex-Editor");
+        hexItem.addActionListener(e -> {
+            var tpl = getDocument().getTemplate().getViewTemplates().stream()
+                    .filter(t -> t.getDisplayName().equals("Hex-Editor"))
+                    .findFirst()
+                    .orElse(null);
+            DVManager.createView(getDocument(), tpl);
+        });
+
         popupMenu = new JPopupMenu();
         popupMenu.add(DVManager.undoAction.createMenuItem());
         popupMenu.add(DVManager.redoAction.createMenuItem());
@@ -67,6 +76,8 @@ public class TextView extends MDISubView<TextDocument> {
         popupMenu.add(new JSeparator());
         popupMenu.add(DVManager.saveAction.createMenuItem());
         popupMenu.add(DVManager.saveAsAction.createMenuItem());
+        popupMenu.add(new JSeparator());
+        popupMenu.add(hexItem);
 
         SwingUtilities.invokeLater(editor::requestFocus);
     }

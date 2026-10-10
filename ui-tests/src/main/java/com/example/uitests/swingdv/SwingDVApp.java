@@ -7,10 +7,7 @@ import com.example.uitests.swingdv.doc.image.ImageDocument;
 import com.example.uitests.swingdv.doc.image.ImageView;
 import com.example.uitests.swingdv.doc.ol.OLDocument;
 import com.example.uitests.swingdv.doc.ol.OLView;
-import com.example.uitests.swingdv.doc.text.CSVDocument;
-import com.example.uitests.swingdv.doc.text.CSVView;
-import com.example.uitests.swingdv.doc.text.TextDocument;
-import com.example.uitests.swingdv.doc.text.TextView;
+import com.example.uitests.swingdv.doc.text.*;
 import com.example.uitests.swingdv.doc.thumbnail.ThumbnailView;
 import com.example.uitests.swingdv.doc.welcome.WelcomeDocument;
 import com.example.uitests.swingdv.doc.welcome.WelcomeView;
@@ -176,6 +173,11 @@ public class SwingDVApp {
                 i -> new TextView(i, mainWindow.getTabPane()),
                 v -> mainWindow.addChildView(v),
                 ViewTemplate.DEFAULT));
+        textTpl.registerViewTemplate(new ViewTemplate<TextDocument, HexView>(
+                "Hex-Editor",
+                i -> new HexView(i, mainWindow.getTabPane()),
+                v -> mainWindow.addChildView(v),
+                ViewTemplate.NONE));
         textTpl.registerViewTemplate(new ViewTemplate<TextDocument, ThumbnailView<TextDocument>>(
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
