@@ -125,7 +125,7 @@ public class ThumbnailView<D extends Document> extends JPanel implements View<D>
         }
 
         if (mainView == null) {
-            System.err.println("Something went wront with the thumbnail: No main view found for " + document.getName());
+            System.err.println("Something went wrong with the thumbnail: No main view found for " + document.getName());
             return;
         }
 
