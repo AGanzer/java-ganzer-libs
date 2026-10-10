@@ -16,6 +16,12 @@ import java.util.List;
  * A default implementation for the {@link DVManager} that uses a
  * {@link ClosableTabsPane} to inform the {@link DVManager} about
  * changed views.
+ * <p>
+ * <b>Note:</b> All views that are added to the {@link ClosableTabsPane} that
+ * is  connected to an instance of this class are closed by invoking
+ * {@link View#forceClose()}. For this reason, the views can remove all
+ * listeners they have installed on their document or on the {@link DVManager}
+ * in their {@link View#forceClose()} method.
  *
  * @see DVManager#registerSupport(DVManagerSupport)
  *
@@ -116,12 +122,14 @@ public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
                 if (!v.getTemplate().isClosable() || !v.getDocument().canCloseView(v))
                     return;
 
+                v.forceClose();
                 v.getDocument().removeView(v);
+            } else {
+                tabPane.removeTabAt(index);
             }
-
-            tabPane.removeTabAt(index);
         }
     };
+
     private final ChangeListener tabSelectionListener = new ChangeListener() {
         @Override
         public void stateChanged(ChangeEvent e) {

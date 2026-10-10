@@ -7,9 +7,12 @@ import de.ganzer.dv.ViewTemplate;
 import de.ganzer.swing.controls.ClosableTabsPane;
 
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
 
 public abstract class MDISubView<D extends Document> extends JPanel implements View<D> {
+    private final ChangeListener tabChangeListener = new TabChangeListener();
     private final ViewTemplate<D, ? extends View<D>> template;
     private final D document;
     private final ClosableTabsPane tabPane;
@@ -22,7 +25,7 @@ public abstract class MDISubView<D extends Document> extends JPanel implements V
         this.tabPane = tabPane;
 
         if (forceFocus)
-            tabPane.addChangeListener(e -> focusContent());
+            tabPane.addChangeListener(tabChangeListener);
     }
 
     @Override
@@ -51,9 +54,18 @@ public abstract class MDISubView<D extends Document> extends JPanel implements V
 
     @Override
     public void forceClose() {
+        tabPane.removeChangeListener(tabChangeListener);
         tabPane.remove(this);
     }
 
     protected void focusContent() {
+    }
+
+    private class TabChangeListener implements ChangeListener {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            if (tabPane.getSelectedComponent() == MDISubView.this)
+                focusContent();
+        }
     }
 }
