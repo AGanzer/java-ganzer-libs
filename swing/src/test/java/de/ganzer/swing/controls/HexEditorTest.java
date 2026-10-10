@@ -3,6 +3,8 @@ package de.ganzer.swing.controls;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -281,5 +283,35 @@ class HexEditorTest {
                 System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'X');
         textView.getKeyListeners()[0].keyTyped(textType);
         assertEquals("Test", editor.getText());
+    }
+
+    @Test
+    void testGetAndSetDocument() throws BadLocationException {
+        var editor = new HexEditor("Hello");
+        var doc = editor.getDocument();
+        assertNotNull(doc);
+        assertEquals("Hello", editor.getText());
+
+        // Modify document directly
+        doc.insertString(5, " World", null);
+        assertEquals("Hello World", editor.getText());
+
+        doc.remove(0, 6);
+        assertEquals("World", editor.getText());
+
+        // Set a new document
+        var newDoc = new PlainDocument();
+        newDoc.insertString(0, "Swing", null);
+        editor.setDocument(newDoc);
+
+        assertSame(newDoc, editor.getDocument());
+        assertEquals("Swing", editor.getText());
+        assertEquals(0, editor.getCaretPosition());
+
+        // Set null document resets to empty PlainDocument
+        editor.setDocument(null);
+        assertNotNull(editor.getDocument());
+        assertEquals("", editor.getText());
+        assertEquals(0, editor.getCaretPosition());
     }
 }

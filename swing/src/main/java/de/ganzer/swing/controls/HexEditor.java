@@ -8,6 +8,11 @@ import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -36,7 +41,6 @@ import java.awt.event.MouseEvent;
  */
 @SuppressWarnings("unused")
 public class HexEditor extends JSplitPane {
-    private final StringBuilder content = new StringBuilder();
     private final HexView hexView;
     private final TextView textView;
     private final JScrollPane hexScrollPane;
@@ -64,10 +68,6 @@ public class HexEditor extends JSplitPane {
      */
     public HexEditor(String text) {
         super(JSplitPane.HORIZONTAL_SPLIT);
-
-        if (text != null) {
-            content.append(text);
-        }
 
         Font defaultFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
         super.setFont(defaultFont);
@@ -97,6 +97,10 @@ public class HexEditor extends JSplitPane {
         textView.setFont(defaultFont);
         textView.setForeground(defaultFg);
         textView.setBackground(defaultBg);
+
+        if (text != null && !text.isEmpty()) {
+            setText(text);
+        }
 
         hexScrollPane = new JScrollPane(hexView);
         hexScrollPane.setHorizontalScrollBarPolicy(
@@ -142,12 +146,41 @@ public class HexEditor extends JSplitPane {
     }
 
     /**
+     * Returns the {@link Document} backing the text view.
+     *
+     * @return The document model of the text view.
+     */
+    public Document getDocument() {
+        return textView != null ? textView.getDocument() : null;
+    }
+
+    /**
+     * Sets the {@link Document} backing the text view.
+     *
+     * @param doc The new document model, or {@code null} to reset to an
+     *            empty document.
+     */
+    public void setDocument(Document doc) {
+        if (textView != null) {
+            textView.setDocument(doc);
+        }
+    }
+
+    /**
      * Returns the text currently contained in this editor.
      *
      * @return The content text.
      */
     public String getText() {
-        return content.toString();
+        Document doc = getDocument();
+        if (doc == null) {
+            return "";
+        }
+        try {
+            return doc.getText(0, doc.getLength());
+        } catch (BadLocationException e) {
+            return "";
+        }
     }
 
     /**
@@ -156,13 +189,48 @@ public class HexEditor extends JSplitPane {
      * @param text The new text content, or {@code null} to clear.
      */
     public void setText(String text) {
-        content.setLength(0);
-        if (text != null) {
-            content.append(text);
+        Document doc = getDocument();
+        if (doc != null) {
+            try {
+                doc.remove(0, doc.getLength());
+                if (text != null && !text.isEmpty()) {
+                    doc.insertString(0, text, null);
+                }
+            } catch (BadLocationException e) {
+                // Ignore exception.
+            }
         }
         setCaretPosition(0);
         updateViewsLayout();
         repaintViews();
+    }
+
+    /**
+     * Returns the number of characters in the current document.
+     *
+     * @return The document character length.
+     */
+    int getDocumentLength() {
+        Document doc = getDocument();
+        return doc != null ? doc.getLength() : 0;
+    }
+
+    /**
+     * Returns the character at the specified index in the document.
+     *
+     * @param index The zero-based character index.
+     * @return The character at the given index, or {@code '\0'} if invalid.
+     */
+    char charAt(int index) {
+        Document doc = getDocument();
+        if (doc == null || index < 0 || index >= doc.getLength()) {
+            return '\0';
+        }
+        try {
+            return doc.getText(index, 1).charAt(0);
+        } catch (BadLocationException e) {
+            return '\0';
+        }
     }
 
     /**
@@ -180,7 +248,7 @@ public class HexEditor extends JSplitPane {
      * @param position The zero-based character index.
      */
     public void setCaretPosition(int position) {
-        int maxPos = content.length();
+        int maxPos = getDocumentLength();
         this.caretPosition = Math.max(0, Math.min(maxPos, position));
         this.hexCaretPosition = this.caretPosition * 5;
         scrollToCaret();
@@ -193,9 +261,10 @@ public class HexEditor extends JSplitPane {
      * @param hexPosition The zero-based hex caret position.
      */
     void setHexCaretPosition(int hexPosition) {
-        int maxPos = content.length() * 5;
+        int maxPos = getDocumentLength() * 5;
         this.hexCaretPosition = Math.max(0, Math.min(maxPos, hexPosition));
-        this.caretPosition = Math.min(content.length(), hexCaretPosition / 5);
+        this.caretPosition = Math.min(getDocumentLength(),
+                hexCaretPosition / 5);
         scrollToCaret();
         repaintViews();
     }
@@ -522,13 +591,15 @@ public class HexEditor extends JSplitPane {
             int subPos = Math.min(4, col % 5);
             int itemIndex = row * cpl + itemInRow;
             int targetHexPos = itemIndex * 5 + subPos;
-            setHexCaretPosition(targetHexPos);
+            int maxHexPos = getDocumentLength() * 5;
+            int clampedPos = Math.max(0, Math.min(maxHexPos, targetHexPos));
+            setHexCaretPosition(clampedPos);
         }
 
         private void handleKeyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
             int cpl = getCharsPerLine();
-            int len = content.length();
+            int len = getDocumentLength();
 
             switch (keyCode) {
                 case KeyEvent.VK_LEFT -> {
@@ -563,11 +634,13 @@ public class HexEditor extends JSplitPane {
                 case KeyEvent.VK_DELETE -> {
                     if (editable) {
                         int itemIndex = hexCaretPosition / 5;
-                        if (itemIndex < len) {
-                            content.deleteCharAt(itemIndex);
+                        if (itemIndex < getDocumentLength()) {
+                            try {
+                                getDocument().remove(itemIndex, 1);
+                            } catch (BadLocationException ex) {
+                                // Ignore exception.
+                            }
                             setHexCaretPosition(itemIndex * 5);
-                            updateViewsLayout();
-                            repaintViews();
                         }
                     }
                     e.consume();
@@ -578,17 +651,21 @@ public class HexEditor extends JSplitPane {
                         int subPos = hexCaretPosition % 5;
                         if (subPos == 0) {
                             if (itemIndex > 0) {
-                                content.deleteCharAt(itemIndex - 1);
+                                try {
+                                    getDocument().remove(itemIndex - 1, 1);
+                                } catch (BadLocationException ex) {
+                                    // Ignore exception.
+                                }
                                 setHexCaretPosition((itemIndex - 1) * 5);
-                                updateViewsLayout();
-                                repaintViews();
                             }
                         } else {
-                            if (itemIndex < len) {
-                                content.deleteCharAt(itemIndex);
+                            if (itemIndex < getDocumentLength()) {
+                                try {
+                                    getDocument().remove(itemIndex, 1);
+                                } catch (BadLocationException ex) {
+                                    // Ignore exception.
+                                }
                                 setHexCaretPosition(itemIndex * 5);
-                                updateViewsLayout();
-                                repaintViews();
                             }
                         }
                     }
@@ -618,7 +695,7 @@ public class HexEditor extends JSplitPane {
 
             int subPos = hexCaretPosition % 5;
             int itemIndex = hexCaretPosition / 5;
-            int len = content.length();
+            int len = getDocumentLength();
 
             // Insert or space key at word boundaries inserts four null digits.
             if (c == ' ') {
@@ -637,18 +714,26 @@ public class HexEditor extends JSplitPane {
             if (isHexDigit) {
                 if (subPos < 4) {
                     if (len == 0) {
-                        content.append('\u0000');
+                        try {
+                            getDocument().insertString(0, "\0", null);
+                        } catch (BadLocationException ex) {
+                            // Ignore exception.
+                        }
                     }
-                    if (itemIndex < content.length()) {
-                        char oldChar = content.charAt(itemIndex);
+                    if (itemIndex < getDocumentLength()) {
+                        char oldChar = charAt(itemIndex);
                         String hexStr = getHexCode(oldChar);
                         char[] chars = hexStr.toCharArray();
                         chars[subPos] = Character.toUpperCase(c);
                         int newCode = Integer.parseInt(new String(chars), 16);
-                        content.setCharAt(itemIndex, (char) newCode);
+                        try {
+                            getDocument().remove(itemIndex, 1);
+                            getDocument().insertString(itemIndex,
+                                    String.valueOf((char) newCode), null);
+                        } catch (BadLocationException ex) {
+                            // Ignore exception.
+                        }
                         setHexCaretPosition(hexCaretPosition + 1);
-                        updateViewsLayout();
-                        repaintViews();
                     }
                 }
             }
@@ -658,18 +743,24 @@ public class HexEditor extends JSplitPane {
         private void handleInsertNullCharacter() {
             int subPos = hexCaretPosition % 5;
             int itemIndex = hexCaretPosition / 5;
-            int len = content.length();
+            int len = getDocumentLength();
 
             if (len == 0 || subPos == 0) {
-                content.insert(itemIndex, '\u0000');
+                try {
+                    getDocument().insertString(itemIndex, "\0", null);
+                } catch (BadLocationException ex) {
+                    // Ignore exception.
+                }
                 setHexCaretPosition(itemIndex * 5);
             } else if (subPos == 4) {
                 int insertPos = Math.min(len, itemIndex + 1);
-                content.insert(insertPos, '\u0000');
+                try {
+                    getDocument().insertString(insertPos, "\0", null);
+                } catch (BadLocationException ex) {
+                    // Ignore exception.
+                }
                 setHexCaretPosition(insertPos * 5);
             }
-            updateViewsLayout();
-            repaintViews();
         }
 
         void scrollToCaret() {
@@ -701,7 +792,7 @@ public class HexEditor extends JSplitPane {
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
             int cpl = getCharsPerLine();
-            int len = content.length();
+            int len = getDocumentLength();
             int totalLines = len == 0 ? 1 : (len + cpl - 1) / cpl;
             Insets insets = getInsets();
             int w = (cpl * 5) * charWidth + insets.left + insets.right;
@@ -725,7 +816,8 @@ public class HexEditor extends JSplitPane {
             int charWidth = Math.max(1, fm.charWidth('0'));
             int ascent = fm.getAscent();
             int cpl = getCharsPerLine();
-            int len = content.length();
+            String text = getText();
+            int len = text.length();
             int totalLines = len == 0 ? 1 : (len + cpl - 1) / cpl;
             Insets insets = getInsets();
 
@@ -741,7 +833,7 @@ public class HexEditor extends JSplitPane {
                 for (int i = start; i < end; i++) {
                     int col = i - start;
                     int x = insets.left + col * 5 * charWidth;
-                    String hex = getHexCode(content.charAt(i));
+                    String hex = getHexCode(text.charAt(i));
 
                     if (i == activeCharIndex) {
                         g.setColor(getCaretBackground());
@@ -810,8 +902,30 @@ public class HexEditor extends JSplitPane {
     private class TextView extends JComponent implements Scrollable {
         private boolean caretBlinkVisible = true;
         private final Timer caretTimer;
+        private Document document;
+        private final DocumentListener documentListener =
+                new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        handleDocumentChanged();
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        handleDocumentChanged();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+                        handleDocumentChanged();
+                    }
+                };
 
         TextView() {
+            this(new PlainDocument());
+        }
+
+        TextView(Document doc) {
             setFocusable(true);
             setFocusTraversalKeysEnabled(false);
             setOpaque(true);
@@ -855,6 +969,42 @@ public class HexEditor extends JSplitPane {
                     handleKeyTyped(e);
                 }
             });
+
+            setDocument(doc);
+        }
+
+        /**
+         * Returns the {@link Document} backing this text view.
+         *
+         * @return The document model.
+         */
+        public Document getDocument() {
+            return document;
+        }
+
+        /**
+         * Sets the {@link Document} backing this text view.
+         *
+         * @param doc The new document model, or {@code null} to reset to an
+         *            empty document.
+         */
+        public void setDocument(Document doc) {
+            if (this.document != null) {
+                this.document.removeDocumentListener(documentListener);
+            }
+            this.document = (doc != null) ? doc : new PlainDocument();
+            this.document.addDocumentListener(documentListener);
+            handleDocumentChanged();
+        }
+
+        private void handleDocumentChanged() {
+            int maxPos = document != null ? document.getLength() : 0;
+            if (caretPosition > maxPos) {
+                caretPosition = maxPos;
+                hexCaretPosition = caretPosition * 5;
+            }
+            updateViewsLayout();
+            repaintViews();
         }
 
         private void handleMouseClick(int mouseX, int mouseY) {
@@ -876,14 +1026,14 @@ public class HexEditor extends JSplitPane {
             int cpl = getCharsPerLine();
             int targetPos = row * cpl + col;
             int clampedPos = Math.max(0,
-                    Math.min(content.length(), targetPos));
+                    Math.min(getDocumentLength(), targetPos));
             setCaretPosition(clampedPos);
         }
 
         private void handleKeyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
             int cpl = getCharsPerLine();
-            int len = content.length();
+            int len = getDocumentLength();
 
             switch (keyCode) {
                 case KeyEvent.VK_LEFT -> {
@@ -915,19 +1065,25 @@ public class HexEditor extends JSplitPane {
                 }
                 case KeyEvent.VK_DELETE -> {
                     if (editable && caretPosition < len) {
-                        content.deleteCharAt(caretPosition);
-                        setCaretPosition(caretPosition);
-                        updateViewsLayout();
-                        repaintViews();
+                        int targetCaret = caretPosition;
+                        try {
+                            getDocument().remove(targetCaret, 1);
+                        } catch (BadLocationException ex) {
+                            // Ignore exception.
+                        }
+                        setCaretPosition(targetCaret);
                     }
                     e.consume();
                 }
                 case KeyEvent.VK_BACK_SPACE -> {
                     if (editable && caretPosition > 0) {
-                        content.deleteCharAt(caretPosition - 1);
-                        setCaretPosition(caretPosition - 1);
-                        updateViewsLayout();
-                        repaintViews();
+                        int targetCaret = caretPosition - 1;
+                        try {
+                            getDocument().remove(targetCaret, 1);
+                        } catch (BadLocationException ex) {
+                            // Ignore exception.
+                        }
+                        setCaretPosition(targetCaret);
                     }
                     e.consume();
                 }
@@ -949,10 +1105,13 @@ public class HexEditor extends JSplitPane {
                 return;
             }
 
-            content.insert(caretPosition, c);
+            try {
+                getDocument().insertString(caretPosition,
+                        String.valueOf(c), null);
+            } catch (BadLocationException ex) {
+                // Ignore exception.
+            }
             setCaretPosition(caretPosition + 1);
-            updateViewsLayout();
-            repaintViews();
             e.consume();
         }
 
@@ -984,7 +1143,7 @@ public class HexEditor extends JSplitPane {
             int lineHeight = Math.max(1, fm.getHeight());
             int charWidth = Math.max(1, fm.charWidth('0'));
             int cpl = getCharsPerLine();
-            int len = content.length();
+            int len = getDocumentLength();
             int totalLines = len == 0 ? 1 : (len + cpl - 1) / cpl;
             Insets insets = getInsets();
             int w = cpl * charWidth + insets.left + insets.right;
@@ -1008,7 +1167,8 @@ public class HexEditor extends JSplitPane {
             int charWidth = Math.max(1, fm.charWidth('0'));
             int ascent = fm.getAscent();
             int cpl = getCharsPerLine();
-            int len = content.length();
+            String text = getText();
+            int len = text.length();
             int totalLines = len == 0 ? 1 : (len + cpl - 1) / cpl;
             Insets insets = getInsets();
 
@@ -1024,7 +1184,7 @@ public class HexEditor extends JSplitPane {
                 for (int i = start; i < end; i++) {
                     int col = i - start;
                     int x = insets.left + col * charWidth;
-                    char dispChar = getDisplayChar(content.charAt(i));
+                    char dispChar = getDisplayChar(text.charAt(i));
 
                     if (i == activeCharIndex) {
                         g.setColor(getCaretBackground());
