@@ -1,38 +1,37 @@
 package com.example.uitests.swingdv.doc.text;
 
+import com.example.uitests.swingdv.doc.SwingDocumentUndoable;
 import de.ganzer.core.io.BOMInputStreamReader;
 import de.ganzer.dv.DVLoadException;
 import de.ganzer.dv.Document;
 import de.ganzer.dv.DocumentCreationInfo;
-import de.ganzer.dv.View;
 
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import java.io.*;
 import java.nio.charset.Charset;
 
 public class TextDocument extends Document {
-    private String text;
+
+    private PlainDocument document;
     private String encoding;
 
     public TextDocument(DocumentCreationInfo<TextDocument> info) throws DVLoadException {
         super(info);
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text, View<?> originator) {
-        var old = this.text;
-        this.text = text;
-
-        setModified(true);
-        notifyDataChange(originator, old);
+    public PlainDocument getDocument() {
+        return document;
     }
 
     @Override
     protected void doCreateData() {
         encoding = Charset.defaultCharset().name();
-        text = "";
+        document = new PlainDocument();
+        document.addUndoableEditListener(e -> {
+            addUndoable(new SwingDocumentUndoable(e.getEdit()));
+            setModified(true);
+        });
     }
 
     @Override
@@ -44,7 +43,20 @@ public class TextDocument extends Document {
             var bir = new BOMInputStreamReader(bis);
 
             encoding = bir.getEncoding();
-            text = bir.readAll();
+            String text = bir.readAll();
+
+            document = new PlainDocument();
+
+            try {
+                document.insertString(0, text, null);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+
+            document.addUndoableEditListener(e -> {
+                addUndoable(new SwingDocumentUndoable(e.getEdit()));
+                setModified(true);
+            });
         }
     }
 
@@ -54,7 +66,13 @@ public class TextDocument extends Document {
 
         try (var fos = new FileOutputStream(file)) {
             var bos = new BufferedOutputStream(fos);
-            bos.write(text.getBytes(encoding));
+
+            try {
+                String text = document.getText(0, document.getLength());
+                bos.write(text.getBytes(encoding));
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
 
             bos.flush();
         }
