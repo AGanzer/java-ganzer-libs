@@ -314,4 +314,35 @@ class HexEditorTest {
         assertEquals("", editor.getText());
         assertEquals(0, editor.getCaretPosition());
     }
+
+    @Test
+    void testUndoableEditEvents() {
+        var editor = new HexEditor("A");
+        var doc = new PlainDocument();
+        java.util.List<javax.swing.event.UndoableEditEvent> events =
+                new java.util.ArrayList<>();
+        doc.addUndoableEditListener(events::add);
+
+        editor.setDocument(doc);
+        assertEquals(0, events.size());
+
+        // Type in text view
+        var textView = editor.getTextView();
+        editor.setCaretPosition(0);
+        KeyEvent typeEvent = new KeyEvent(textView, KeyEvent.KEY_TYPED,
+                System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, 'X');
+        textView.getKeyListeners()[0].keyTyped(typeEvent);
+
+        assertEquals("X", editor.getText());
+        assertEquals(1, events.size());
+
+        // Type in hex view
+        var hexView = editor.getHexView();
+        editor.setHexCaretPosition(0);
+        KeyEvent hexTypeEvent = new KeyEvent(hexView, KeyEvent.KEY_TYPED,
+                System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, '4');
+        hexView.getKeyListeners()[0].keyTyped(hexTypeEvent);
+
+        assertTrue(events.size() > 1);
+    }
 }
