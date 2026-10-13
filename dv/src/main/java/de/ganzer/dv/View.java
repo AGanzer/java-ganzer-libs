@@ -30,8 +30,9 @@ public interface View<D extends Document> {
      * Gets the view's title.
      * <p>
      * This implementation builds the title from the given title hints of the
-     * view's template and the title of the view's document. If there are more
-     * than one views in the document, the view's index is appended to the title.
+     * view's template and the title goten by {@link #getViewTitle()}. If there
+     * are more than one views in the document, the view's index is appended to
+     * the title.
      *
      * @return The view's title.
      *
@@ -42,7 +43,7 @@ public interface View<D extends Document> {
         var format = getDocument().isReadOnly()
                 ? getTemplate().showReadOnlyHint() ? getTemplate().getReadOnlyHintFormat() : "%s"
                 : getDocument().isModified() && getTemplate().showModificationHint() ? getTemplate().getModificationHintFormat() : "%s";
-        var title = String.format(format, getDocument().getTitle());
+        var title = String.format(format, getViewTitle());
 
         var views = getDocument().getViews().stream().filter(v -> v.getTemplate().hasTitleNumber()).toList();
         int index = views.size() > 1 ? views.indexOf(this) : -1;
@@ -51,6 +52,18 @@ public interface View<D extends Document> {
             title += ":" + (index + 1);
 
         return title;
+    }
+
+    /**
+     * gets the tittle to use for this view.
+     *
+     * @return the title to use for this view. This implementation does always
+     *          return the title of the view's document.
+     *
+     * @since 6.1.0
+     */
+    default String getViewTitle() {
+        return getDocument().getTitle();
     }
 
     /**
