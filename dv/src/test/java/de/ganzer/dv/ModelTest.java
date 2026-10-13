@@ -65,8 +65,8 @@ class ModelTest {
             setNewData(newData);
         }
 
-        public void exposedResetReadOnly() {
-            resetReadOnly();
+        public void exposedSetReadOnly(boolean readOnly) {
+            setReadOnly(readOnly);
         }
 
         public void exposedFireIndexedPropertyChange(String propertyName, int index, Object oldValue, Object newValue) {
@@ -157,7 +157,7 @@ class ModelTest {
         var readOnlyModel = new MemoryModel("ReadOnlyDoc", true, false);
         assertThrows(UnsupportedOperationException.class, () -> readOnlyModel.setModified(true));
 
-        readOnlyModel.exposedResetReadOnly();
+        readOnlyModel.setReadOnly(false);
         assertFalse(readOnlyModel.isReadOnly());
         readOnlyModel.setModified(true);
         assertTrue(readOnlyModel.isModified());

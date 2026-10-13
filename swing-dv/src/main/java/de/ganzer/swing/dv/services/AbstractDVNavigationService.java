@@ -171,7 +171,7 @@ public abstract class AbstractDVNavigationService implements DVNavigationService
 
         parent = FocusManager.getCurrentManager().getFocusedWindow();
 
-        if (parent == null)
+        if (parent == null || !parent.isVisible())
             parent = (Component) DVManager.getActiveView();
 
         if (parent == null)

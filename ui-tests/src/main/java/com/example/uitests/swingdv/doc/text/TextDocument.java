@@ -12,7 +12,6 @@ import java.io.*;
 import java.nio.charset.Charset;
 
 public class TextDocument extends Document {
-
     private PlainDocument document;
     private String encoding;
 
