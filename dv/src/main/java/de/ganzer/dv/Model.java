@@ -455,7 +455,7 @@ public abstract class Model {
 
         setModified(false);
         setNewData(false);
-        resetReadOnly();
+        setReadOnly(false);
     }
 
     /**
@@ -547,12 +547,31 @@ public abstract class Model {
      * <p>
      * This fires a property change event with the property name set to
      * {@link #READ_ONLY_PROPERTY}.
+     *
+     * @deprecated since 6.1.0. Use {@link #setReadOnly(boolean)} instead.
      */
+    @Deprecated(since = "6.1.0", forRemoval = true)
     protected void resetReadOnly() {
-        var old = isReadOnly();
-        flags &= ~IS_READONLY;
+        setReadOnly(false);
+    }
 
-        firePropertyChange(READ_ONLY_PROPERTY, old, false);
+    /**
+     * Sets the read-only flag.
+     * <p>
+     * This fires a property change event with the property name set to
+     * {@link #READ_ONLY_PROPERTY}.
+     *
+     * @param set {@code true} to set the model to read-only.
+     */
+    protected void setReadOnly(boolean set) {
+        var old = isReadOnly();
+
+        if (set)
+            flags |= IS_READONLY;
+        else
+            flags &= ~IS_READONLY;
+
+        firePropertyChange(READ_ONLY_PROPERTY, old, set);
     }
 
     /**

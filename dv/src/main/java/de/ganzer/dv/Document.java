@@ -267,17 +267,23 @@ public abstract class Document extends Model {
     }
 
     /**
-     * Resets the read-only flag.
+     * Sets the read-only flag.
+     * <p>
+     * This implementation does not remove the read-only flag if the document's
+     * template has {@link DocumentTemplate#READ_ONLY_DOCUMENTS} set.
+     * .
      * <p>
      * This fires a property change event with the property name set to
      * {@link #READ_ONLY_PROPERTY}.
+     *
+     * @param set {@code true} to set the model to read-only.
      */
     @Override
-    protected void resetReadOnly() {
-        if (getTemplate().documentsAreReadOnly())
+    protected void setReadOnly(boolean set) {
+        if (!set && getTemplate().documentsAreReadOnly())
             return;
 
-        super.resetReadOnly();
+        super.setReadOnly(set);
         notifyTitleChange();
     }
 
