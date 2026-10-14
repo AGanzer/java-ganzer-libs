@@ -329,8 +329,8 @@ public abstract class Document extends Model {
 
         setName(saveName);
         setNewData(false);
-        super.saveData();
         setReadOnly(false);
+        super.saveData();
     }
 
     /**
