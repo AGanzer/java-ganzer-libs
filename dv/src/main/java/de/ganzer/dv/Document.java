@@ -295,6 +295,8 @@ public abstract class Document extends Model {
      * This implementation does nothing if the user cancels the operation;
      * otherwise, it sets the new name and invokes {@link #saveData()}.
      * <p>
+     * This resets the modification, the read-only, and the new data flags.
+     * <p>
      * <b>NOTE:</b> An instance of {@link DVNavigationService} has to be registered
      * by {@link Services#register(Class, Object)}.
      *
@@ -328,6 +330,7 @@ public abstract class Document extends Model {
         setName(saveName);
         setNewData(false);
         super.saveData();
+        setReadOnly(false);
     }
 
     /**

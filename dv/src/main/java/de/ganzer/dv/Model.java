@@ -432,11 +432,10 @@ public abstract class Model {
 
         undoManager.clear();
     }
-
     /**
      * Writes the data into a file, a database, or any other target.
      * <p>
-     * This resets the modification, the read-only, and the new data flags.
+     * This resets the modification and the new data flags.
      *
      * @throws DVSaveException on any error.
      *
@@ -455,7 +454,6 @@ public abstract class Model {
 
         setModified(false);
         setNewData(false);
-        setReadOnly(false);
     }
 
     /**
