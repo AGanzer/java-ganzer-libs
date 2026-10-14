@@ -180,10 +180,11 @@ public final class FileNames {
      * Checks whether the specified name is a valid filename for the current
      * operating system.
      * <p>
-     * Note that unter Linux and Mac/OS the jokers ? and * are valid for
+     * Note that under Linux and Mac/OS the jokers ? and * are valid for
      * filenames.
      *
-     * @param name The name to check.
+     * @param name The name to check. If this is empty or blank, {@code false}
+     *        is returned.
      *
      * @return {@code true} if {@code name} is valid; otherwise, {@code false}
      *         is returned.
@@ -200,7 +201,8 @@ public final class FileNames {
      * Checks whether the specified name is a valid filename for masking for
      * the current operating system.
      *
-     * @param name The name to check. This may contain jokers (? and *).
+     * @param name The name to check. This may contain jokers (? and *). If this
+     *        is empty or blank, {@code false} is returned.
      *
      * @return {@code true} if {@code name} is valid; otherwise, {@code false}
      *         is returned.
@@ -538,6 +540,9 @@ public final class FileNames {
     }
 
     private static boolean isValidName(String name, String invalidChars) {
+        if (name.isBlank())
+            return false;
+
         for (int i = 0; i < name.length(); i++) {
             char c = name.charAt(i);
 
