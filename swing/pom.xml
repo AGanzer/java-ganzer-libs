@@ -15,7 +15,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <junit.version>5.10.2</junit.version>
-        <ganzer.version>6.2.1</ganzer.version>
+        <ganzer.version>6.3.0</ganzer.version>
     </properties>
 
     <dependencies>
