@@ -91,10 +91,10 @@ public class FileCopy extends FileErrorProvider {
         /**
          * Gets the path to the file or directory that is currently copied.
          * <p>
-         * If {@link #getStatus()} is {@link CopyProgressStatus#INITIALIZING}, this
-         * is the path to the directory or file that's bytes are going to be
-         * counted. This is an empty string if the progress function is called
-         * first and no directory or file is worked yet.
+         * If {@link #getStatus()} is {@link CopyProgressStatus#INITIALIZING},
+         * this is the path to the directory or file that's bytes are going to
+         * be counted. This is an empty string if the progress function is called
+         * first, and no directory or file is worked yet.
          * <p>
          * If {@link #getStatus()} is {@link CopyProgressStatus#START_DIRECTORY},
          * this is the path to the directory that is going to be copied.
@@ -116,8 +116,9 @@ public class FileCopy extends FileErrorProvider {
          * Gets the path to the destination file or directory that is currently
          * copied.
          * <p>
-         * If {@link #getStatus()} is {@link CopyProgressStatus#START_DIRECTORY}, this is
-         * the path to the directory where the directory to copy shall be written into.
+         * If {@link #getStatus()} is {@link CopyProgressStatus#START_DIRECTORY},
+         * this is the path to the directory where the directory to copy shall
+         * be written into.
          * <p>
          * If {@link #getStatus()} is {@link CopyProgressStatus#START_FILE},
          * {@link CopyProgressStatus#COPYING_FILE} or {@link CopyProgressStatus#FINISHED_FILE},
@@ -133,8 +134,8 @@ public class FileCopy extends FileErrorProvider {
         }
 
         /**
-         * Gets the path to the file or directory that was specified as source
-         * to start copying operation.
+         * Gets the path to the file or directory that was specified as the source
+         * where to start copying operation.
          *
          * @return The path to the original source that is currently worked or an
          * empty string if {@link #getStatus()} is {@link CopyProgressStatus#INITIALIZING}.
