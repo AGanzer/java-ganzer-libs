@@ -145,7 +145,7 @@ public class BasicDVManager {
      *
      * @return {@code true} if the template was removed, {@code false} otherwise.
      */
-    public boolean removeDocumentTemplate(DocumentTemplate<?> template) {
+    public static boolean removeDocumentTemplate(DocumentTemplate<?> template) {
         if (!templates.contains(template))
             return false;
 
