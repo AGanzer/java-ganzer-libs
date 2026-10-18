@@ -584,13 +584,10 @@ public final class DVManager extends BasicDVManager {
             saveAction.setEnabled(docNew != null && docNew.isModified());
             saveAsAction.setEnabled(docNew != null && docNew.isSaveAsSupported());
             saveAllAction.setEnabled(getOpenDocuments().stream().anyMatch(Document::isModified));
-
-            System.out.println("Active document changed: " + (docNew != null ? docNew.getName() : "no active one"));
         });
 
         addPropertyChangeListener(ACTIVE_VIEW_PROPERTY, e -> {
             var view = (e.getNewValue() instanceof View<?> v) ? v : null;
-            System.out.println("Active view changed: " + (view != null ? view.getTitle() : "no active one"));
         });
 
         addPropertyChangeListener(OPEN_DOCUMENTS_PROPERTY, e -> {
@@ -630,18 +627,10 @@ public final class DVManager extends BasicDVManager {
 
             getSupport().updateOpenDocumentsMenu();
 
-            var docOld = (e.getOldValue() instanceof Document d) ? d : null;
             var docNew = (e.getNewValue() instanceof Document d) ? d : null;
 
             if (docNew != null)
                 updateRecentDocumentsActions(docNew);
-
-            if (docOld != null)
-                System.out.println("Document closed: " + docOld.getName());
-            else if (docNew != null)
-                System.out.println("Document opened: " + docNew.getName());
-            else
-                System.err.println("Documents changed but with no document.");
         });
     }
 }
