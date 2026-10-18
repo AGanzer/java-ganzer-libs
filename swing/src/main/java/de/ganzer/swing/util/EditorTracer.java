@@ -195,19 +195,27 @@ public final class EditorTracer {
      *        default component.
      */
     public void setDefaultEditable(Component component) {
+        boolean reset = editableComponent == defaultComponent;
         defaultComponent = (component instanceof EditableComponent ec) ? ec : null;
+
+        if (reset)
+            updateEditable(null);
     }
 
     private EditorTracer() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner", e -> {
-            editableComponent = getEditable(e.getNewValue());
-
-            if (editableComponent == null)
-                editableComponent = getEditable(KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner());
-
-            if (editableComponent == null)
-                editableComponent = defaultComponent;
+            updateEditable(e.getNewValue());
         });
+    }
+
+    private void updateEditable(Object component) {
+        editableComponent = getEditable(component);
+
+        if (editableComponent == null)
+            editableComponent = getEditable(KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner());
+
+        if (editableComponent == null)
+            editableComponent = defaultComponent;
     }
 
     private static EditableComponent getEditable(Object control) {
