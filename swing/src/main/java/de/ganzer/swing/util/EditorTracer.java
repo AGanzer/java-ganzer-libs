@@ -7,6 +7,7 @@ import de.ganzer.swing.controls.GTextField;
 import javax.swing.Action;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
+import java.awt.Component;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -37,6 +38,7 @@ public final class EditorTracer {
     private static final JTextComponentWrapper wrapper = new JTextComponentWrapper();
     private static EditorTracer instance;
 
+    private EditableComponent defaultComponent;
     private EditableComponent editableComponent;
 
     /**
@@ -171,12 +173,29 @@ public final class EditorTracer {
             editableComponent.delete();
     }
 
+    /**
+     * Sets the editable component to use if no editable is currently focused.
+     * <p>
+     * This method can be used to set a component that normally does not get the
+     * keyboard focus itself but does implement {@link EditableComponent}.
+     *
+     * @param component The default component to set or {@code null} to set no
+     *        default component.
+     */
+    public void setDefaultEditable(Component component) {
+        if (component instanceof EditableComponent ec)
+            defaultComponent = ec;
+    }
+
     private EditorTracer() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner", e -> {
             editableComponent = getEditable(e.getNewValue());
 
             if (editableComponent == null)
                 editableComponent = getEditable(KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner());
+
+            if (editableComponent == null)
+                editableComponent = defaultComponent;
         });
     }
 
