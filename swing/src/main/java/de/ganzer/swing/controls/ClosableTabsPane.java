@@ -15,7 +15,12 @@ import java.util.Objects;
 /**
  * Defines a pane with tab headers that contain an optional close button.
  * <p>
- * By default, all tabs are closable. To prevent a tab from closing invoke
+ * This class extends {@link JTabbedPane} further by providing the ability to
+ * change the look and feel of a single tab by settings its foreground or
+ * background color or by changing the font. It also provides the possibility
+ * to disable a single tab to prevent its selection.
+ * <p>
+ * By default, all tabs are closable. To prevent a tab from closing, invoke
  * {@link #setClosableAt(int, boolean)} with the second argument set to
  * {@code false}.
  * <p>
@@ -23,6 +28,11 @@ import java.util.Objects;
  * of the regarding constructors.
  *
  * @see TabCloseListener
+ * @see #setClosableAt(int, boolean)
+ * @see #setFontAt(int, Font)
+ * @see #setBackgroundAt(int, Color)
+ * @see #setForegroundAt(int, Color)
+ * @see #setEnabledAt(int, boolean)
  */
 @SuppressWarnings("unused")
 public class ClosableTabsPane extends JTabbedPane {
@@ -167,7 +177,7 @@ public class ClosableTabsPane extends JTabbedPane {
      *
      * @param index the index to be selected
      *
-     * @throws IndexOutOfBoundsException if index is out of range
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < -1 || index >= tab count)}
      *
      * @see #getSelectedIndex
@@ -175,7 +185,7 @@ public class ClosableTabsPane extends JTabbedPane {
      */
     @Override
     public void setSelectedIndex(int index) {
-        var tab = getTabComponentAt(index);
+        var tab = index >= 0 ? getTabComponentAt(index) : null;
 
         if (tab != null && tab.isEnabled())
             super.setSelectedIndex(index);
@@ -201,17 +211,23 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param index The tab index to query.
      *
      * @return {@code true} if the tab is closable.
+     *
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
+     *         {@code (index < 0 || index >= tab count)}
      */
     public boolean isClosableAt(int index) {
         var tab = getTabComponentAt(index);
         return tab != null && ((TabHeaderPanel) tab).isClosable();
     }
 
-    /**
+     /**
      * Sets whether the tab at the specified index is closable.
      *
      * @param index The index of the tab.
-     * @param closable {@link true} to make the tab closable.
+     * @param closable {@code true} to make the tab closable.
+      *
+      * @throws IndexOutOfBoundsException if {@code index} is out of range
+      *         {@code (index < 0 || index >= tab count)}
      */
     public void setClosableAt(int index, boolean closable) {
         if (!this.closable)
@@ -233,7 +249,8 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param index the tab index where the title should be set
      * @param title the title to be displayed in the tab
      *
-     * @throws IndexOutOfBoundsException if index is out of range
+     *
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < 0 || index >= tab count)}
      *
      * @see #getTitleAt
@@ -263,7 +280,8 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param index the tab index where the icon should be set
      * @param icon the icon to be displayed in the tab
      *
-     * @throws IndexOutOfBoundsException if index is out of range
+     *
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < 0 || index >= tab count)}
      *
      * @see #setDisabledIconAt
@@ -290,7 +308,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param index the tab index where the disabled icon should be set
      * @param disabledIcon the icon to be displayed in the tab when disabled
      *
-     * @throws IndexOutOfBoundsException if index is out of range
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < 0 || index >= tab count)}
      *
      * @see #getDisabledIconAt
@@ -314,7 +332,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param index the tab index where the tooltip text should be set
      * @param toolTipText the tooltip text to be displayed for the tab
      *
-     * @throws IndexOutOfBoundsException if index is out of range
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < 0 || index >= tab count)}
      *
      * @see #getToolTipTextAt
@@ -342,7 +360,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param index the tab index where the background should be set
      * @param background the color to be displayed in the tab's background
      *
-     * @throws IndexOutOfBoundsException if index is out of range
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < 0 || index >= tab count)}
      *
      * @see #getBackgroundAt
@@ -370,7 +388,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param index the tab index where the foreground should be set
      * @param foreground the color to be displayed as the tab's foreground
      *
-     * @throws IndexOutOfBoundsException if index is out of range
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < 0 || index >= tab count)}
      *
      * @see #getForegroundAt
@@ -393,7 +411,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param index the tab index which should be enabled/disabled
      * @param enabled whether the tab should be enabled
      *
-     * @throws IndexOutOfBoundsException if index is out of range
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < 0 || index >= tab count)}
      *
      * @see #isEnabledAt
@@ -433,9 +451,8 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param tabIndex the index of the tab that the mnemonic refers to
      * @param mnemonicIndex index into the <code>String</code> to underline
      *
-     * @throws IndexOutOfBoundsException if <code>tabIndex</code> is
-     *         out of range ({@code tabIndex < 0 || tabIndex >= tab
-     *         count})
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
+     *         {@code (index < 0 || index >= tab count)}
      * @throws IllegalArgumentException will be thrown if
      *         <code>mnemonicIndex</code> is &gt;= length of the tab
      *         title , or &lt; -1
