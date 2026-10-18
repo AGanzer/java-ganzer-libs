@@ -69,10 +69,10 @@ public class FileDelete extends FileErrorProvider {
         /**
          * Gets the path to the file or directory that is currently deleted.
          * <p>
-         * If {@link #getStatus()} is {@link DeleteProgressStatus#INITIALIZING}, this
-         * is the path to the directory or file that is going to be counted. This
-         * is an empty string if the progress function is called first and no
-         * directory or file is counted yet.
+         * If {@link #getStatus()} is {@link DeleteProgressStatus#INITIALIZING},
+         * this is the path to the directory or file that is going to be counted.
+         * This is an empty string if the progress function is called first, and
+         * no directory or file is counted yet.
          * <p>
          * If {@link #getStatus()} is {@link DeleteProgressStatus#DELETE_DIRECTORY},
          * this is the path to the directory that is going to be deleted.
