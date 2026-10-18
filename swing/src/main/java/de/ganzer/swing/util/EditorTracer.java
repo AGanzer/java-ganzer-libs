@@ -174,6 +174,18 @@ public final class EditorTracer {
     }
 
     /**
+     * Returns the editable component to use if no editable is currently focused.
+     *
+     * @return The default editable component or {@code null} if no default
+     *         component is set.
+     *
+     * @see #setDefaultEditable(Component)
+     */
+    public Component getDefaultEditable() {
+        return (Component) defaultComponent;
+    }
+
+    /**
      * Sets the editable component to use if no editable is currently focused.
      * <p>
      * This method can be used to set a component that normally does not get the
