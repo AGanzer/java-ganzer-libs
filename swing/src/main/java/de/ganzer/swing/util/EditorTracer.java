@@ -183,8 +183,7 @@ public final class EditorTracer {
      *        default component.
      */
     public void setDefaultEditable(Component component) {
-        if (component instanceof EditableComponent ec)
-            defaultComponent = ec;
+        defaultComponent = (component instanceof EditableComponent ec) ? ec : null;
     }
 
     private EditorTracer() {
