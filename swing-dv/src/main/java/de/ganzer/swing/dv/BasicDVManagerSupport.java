@@ -80,7 +80,7 @@ public abstract class BasicDVManagerSupport implements DVManagerSupport {
 
     /**
      * Invoked to update the menu items in the "Window" menu with the currently
-     * opened documents.
+     * available actions in {@link DVManager#openDocumentsActions}.
      */
     @Override
     public void updateOpenDocumentsMenu() {
@@ -98,7 +98,7 @@ public abstract class BasicDVManagerSupport implements DVManagerSupport {
 
     /**
      * Invoked to update the menu items in the recent files menu with the
-     * recently opened files.
+     * currently available actions in {@link DVManager#recentFilesActions}.
      */
     @Override
     public void updateRecentFilesMenu() {

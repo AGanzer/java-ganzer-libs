@@ -30,13 +30,13 @@ public interface DVManagerSupport {
 
     /**
      * Invoked to update the menu items in the "Window" menu with the currently
-     * opened documents.
+     * available actions in {@link DVManager#openDocumentsActions}.
      */
     void updateOpenDocumentsMenu();
 
     /**
      * Invoked to update the menu items in the recent files menu with the
-     * recently opened files.
+     * currently available actions in {@link DVManager#recentFilesActions}.
      */
     void updateRecentFilesMenu();
 }

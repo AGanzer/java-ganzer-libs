@@ -69,6 +69,16 @@ public class DocumentTemplate<D extends Document> {
      * documents about changes in the document's data.
      */
     public static final int NOTIFY_CHILD_VIEWS_ON_CHANGE = 0x100;
+    /**
+     * If this option is set, the document should not be displayed in the list
+     * of recently used files.
+     */
+    public static final int NO_RECENT_FILES = 0x200;
+    /**
+     * If this option is set, the document should not be displayed in the list
+     * of open windows.
+     */
+    public static final int NO_OPEN_WINDOWS = 0x400;
 
     private static final Map<DocumentTemplate<?>, Integer> newNumbers = new HashMap<>();
 
@@ -277,6 +287,28 @@ public class DocumentTemplate<D extends Document> {
      */
     public final boolean notifyChildViewsOnChange() {
         return (options & NOTIFY_CHILD_VIEWS_ON_CHANGE) != 0;
+    }
+
+    /**
+     * Indicates whether the document should not be displayed in the list
+     * of recently used files.
+     *
+     * @return {@code true} if the document should not be displayed in the list
+     *         of recently used files.
+     */
+    public final boolean noRecentFiles() {
+        return (options & NO_RECENT_FILES) != 0;
+    }
+
+    /**
+     * Indicates whether the document should not be displayed in the list of
+     * open windows.
+     *
+     * @return {@code true} if the document should not be displayed in the list
+     *         of open windows.
+     */
+    public final boolean noOpenWindows() {
+        return (options & NO_OPEN_WINDOWS) != 0;
     }
 
     /**

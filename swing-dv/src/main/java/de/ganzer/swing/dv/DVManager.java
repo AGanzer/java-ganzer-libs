@@ -510,7 +510,7 @@ public final class DVManager extends BasicDVManager {
     };
 
     private static void updateRecentDocumentsActions(Document document) {
-        if (document.getParent() != null || document.isNewData())
+        if (document.getParent() != null || document.isNewData() || document.getTemplate().noRecentFiles())
             return;
 
         var newText = document.getName();
@@ -597,6 +597,10 @@ public final class DVManager extends BasicDVManager {
 
             while(mi.hasNext() && di.hasNext()) {
                 var doc = di.next();
+
+                if (doc.getTemplate().noRecentFiles())
+                    continue;
+
                 mi.next().name(doc.getName())
                         .selected(doc == getActiveDocument())
                         .tag(doc);
@@ -610,6 +614,10 @@ public final class DVManager extends BasicDVManager {
 
             while (di.hasNext()) {
                 var doc = di.next();
+
+                if (doc.getTemplate().noOpenWindows())
+                    continue;
+
                 var action = new GAction()
                         .name(doc.getName())
                         .selectable(true)
