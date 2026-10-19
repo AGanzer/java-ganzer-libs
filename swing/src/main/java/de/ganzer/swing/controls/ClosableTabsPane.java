@@ -18,7 +18,8 @@ import java.util.Objects;
  * This class extends {@link JTabbedPane} further by providing the ability to
  * change the look and feel of a single tab by settings its foreground or
  * background color or by changing the font. It also provides the possibility
- * to disable a single tab to prevent its selection.
+ * to disable a single tab to prevent its selection. Further, changing a tab
+ * can be prevented by installing a {@link TabChangingListener}.
  * <p>
  * By default, all tabs are closable. To prevent a tab from closing, invoke
  * {@link #setClosableAt(int, boolean)} with the second argument set to
@@ -28,6 +29,9 @@ import java.util.Objects;
  * of the regarding constructors.
  *
  * @see TabCloseListener
+ * @see TabChangingListener
+ * @see #addCloseListener(TabCloseListener)
+ * @see #addTabChangingListener(TabChangingListener)
  * @see #setClosableAt(int, boolean)
  * @see #setFontAt(int, Font)
  * @see #setBackgroundAt(int, Color)
@@ -83,7 +87,7 @@ public class ClosableTabsPane extends JTabbedPane {
      * <code>JTabbedPane.LEFT</code>, or <code>JTabbedPane.RIGHT</code>.
      *
      * @param tabPlacement the placement for the tabs relative to the content
-     * @param closable Sets whether th tabs are generally closable. If this is
+     * @param closable Sets whether the tabs are generally closable. If this is
      *        {@code false}, invoking {@link #setClosableAt} has no effect.
      *
      * @see #addTab
@@ -107,8 +111,8 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param tabLayoutPolicy the policy for laying out tabs when all tabs will
      *        not fit on one run.
      *
-     * @throws IllegalArgumentException if tab placement or tab layout policy are not
-     *         one of the above supported values
+     * @throws IllegalArgumentException if tab placement or tab layout policy are
+     *         not one of the supported values.
      *
      * @see #addTab
      */
@@ -128,11 +132,11 @@ public class ClosableTabsPane extends JTabbedPane {
      * @param tabPlacement the placement for the tabs relative to the content
      * @param tabLayoutPolicy the policy for laying out tabs when all tabs will
      *        not fit on one run.
-     * @param closable Sets whether th tabs are generally closable. If this is
+     * @param closable Sets whether the tabs are generally closable. If this is
      *        {@code false}, invoking {@link #setClosableAt} has no effect.
      *
      * @throws IllegalArgumentException if tab placement or tab layout policy are not
-     *         one of the above supported values
+     *         one of the supported values.
      *
      * @see #addTab
      */
@@ -187,7 +191,13 @@ public class ClosableTabsPane extends JTabbedPane {
     public void setSelectedIndex(int index) {
         var tab = index >= 0 ? getTabComponentAt(index) : null;
 
-        if (tab != null && tab.isEnabled())
+        if (tab != null && !tab.isEnabled())
+            return;
+
+        var evt = new TabChangingEvent(this, getSelectedIndex(), index);
+        fireTabChangingEvent(evt);
+
+        if (!evt.isVetoed())
             super.setSelectedIndex(index);
     }
 
@@ -270,10 +280,10 @@ public class ClosableTabsPane extends JTabbedPane {
      * Sets the icon at <code>index</code> to <code>icon</code> which can be
      * <code>null</code>.
      * <p>
-     * This does not set disabled icon at <code>icon</code>.
-     * If the new Icon is different from the current Icon and disabled icon
-     * is not explicitly set, the LookAndFeel will be asked to generate a disabled
-     * Icon. To explicitly set disabled icon, use <code>setDisableIconAt()</code>.
+     * This does not set the disabled icon at <code>icon</code>. If the new Icon
+     * is different from the current Icon and a disabled icon is not explicitly
+     * set, the LookAndFeel will be asked to generate a disabled Icon. To
+     * explicitly set a disabled icon, use <code>setDisableIconAt()</code>.
      * The icon is not shown if a tab component for this tab was specified.
      * An internal exception is raised if there is no tab at that index.
      *
@@ -354,8 +364,8 @@ public class ClosableTabsPane extends JTabbedPane {
      * <p>
      * An internal exception is raised if there is no tab at that index.
      * <p>
-     * It is up to the look and feel to honor this property, some may
-     * choose to ignore it.
+     * It is up to the look and feel to honor this property; some may choose to
+     * ignore it.
      *
      * @param index the tab index where the background should be set
      * @param background the color to be displayed in the tab's background
@@ -382,8 +392,8 @@ public class ClosableTabsPane extends JTabbedPane {
      * <p>
      * An internal exception is raised if there is no tab at that index.
      * <p>
-     * It is up to the look and feel to honor this property, some may
-     * choose to ignore it.
+     * It is up to the look and feel to honor this property; some may choose to
+     * ignore it.
      *
      * @param index the tab index where the foreground should be set
      * @param foreground the color to be displayed as the tab's foreground
@@ -408,8 +418,8 @@ public class ClosableTabsPane extends JTabbedPane {
      * <p>
      * An internal exception is raised if there is no tab at that index.
      *
-     * @param index the tab index which should be enabled/disabled
-     * @param enabled whether the tab should be enabled
+     * @param index The tab index that should be enabled/disabled.
+     * @param enabled Whether the tab should be enabled.
      *
      * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < 0 || index >= tab count)}
@@ -453,9 +463,8 @@ public class ClosableTabsPane extends JTabbedPane {
      *
      * @throws IndexOutOfBoundsException if {@code index} is out of range
      *         {@code (index < 0 || index >= tab count)}
-     * @throws IllegalArgumentException will be thrown if
-     *         <code>mnemonicIndex</code> is &gt;= length of the tab
-     *         title , or &lt; -1
+     * @throws IllegalArgumentException will be thrown if {@code mnemonicIndex}
+     *         is &gt;= length of the tab title, or &lt; -1
      *
      * @see #setMnemonicAt(int, int)
      * @see #getDisplayedMnemonicIndexAt(int)
@@ -472,7 +481,7 @@ public class ClosableTabsPane extends JTabbedPane {
 
     /**
      * Sets the keyboard mnemonic for accessing the specified tab.
-     * The mnemonic is the key which when combined with the look and feel's
+     * The mnemonic is the key that when combined with the look and feel's
      * mouseless modifier (usually Alt) will activate the specified
      * tab.
      * <p>
@@ -481,15 +490,15 @@ public class ClosableTabsPane extends JTabbedPane {
      * keycodes defined in <code>java.awt.event.KeyEvent</code>
      * or one of the extended keycodes obtained through
      * <code>java.awt.event.KeyEvent.getExtendedKeyCodeForChar</code>.
-     * Mnemonics are case-insensitive, therefore a key event
-     * with the corresponding keycode would cause the button to be
-     * activated whether the Shift modifier was pressed.
+     * Mnemonics are case-insensitive. Therefore, a key event with the
+     * corresponding keycode would cause the button to be activated whether
+     * the Shift modifier was pressed.
      * <p>
      * This will update the displayed mnemonic property for the specified
      * tab.
      *
-     * @param tabIndex the index of the tab that the mnemonic refers to
-     * @param mnemonic the key code which represents the mnemonic
+     * @param tabIndex The index of the tab that the mnemonic refers to.
+     * @param mnemonic The key code that represents the mnemonic.
      *
      * @throws IndexOutOfBoundsException if <code>tabIndex</code> is out
      *         of range ({@code tabIndex < 0 || tabIndex >= tab count})
@@ -539,8 +548,8 @@ public class ClosableTabsPane extends JTabbedPane {
     }
 
     /**
-     * Adds a close listener that is called when a close button of one of the
-     * tab headers is clicked.
+     * Adds a close listener called when a close button of one of the tab
+     * headers is clicked.
      *
      * @param l The listener to install.
      */
@@ -558,6 +567,24 @@ public class ClosableTabsPane extends JTabbedPane {
     }
 
     /**
+     * Adds a tab-changing listener called when a tab is about to change.
+     *
+     * @param l The listener to install.
+     */
+    public synchronized void addTabChangingListener(TabChangingListener l) {
+        listenerList.add(TabChangingListener.class, l);
+    }
+
+    /**
+     * Removes a previously installed tab-changing listener.
+     *
+     * @param l The listener to remove.
+     */
+    public synchronized void removeTabChangingListener(TabChangingListener l) {
+        listenerList.remove(TabChangingListener.class, l);
+    }
+
+    /**
      * Fires the event that indicates that the close button of a tab header is
      * clicked.
      *
@@ -566,8 +593,26 @@ public class ClosableTabsPane extends JTabbedPane {
     protected void fireCloseTabEvent(int tabIndex) {
         var closeListeners = getListeners(TabCloseListener.class);
 
-        for (var closeListener : closeListeners) {
+        for (var closeListener : closeListeners)
             closeListener.closeTabPerformed(tabIndex, getComponentAt(tabIndex));
+    }
+
+    /**
+     * Fires the event that indicates that a tab is about to change.
+     * <p>
+     * All handlers are called in the order they were installed. The loop breaks
+     * when a handler vetoes the event.
+     *
+     * @param e The event object.
+     */
+    protected void fireTabChangingEvent(TabChangingEvent e) {
+        var listeners = getListeners(TabChangingListener.class);
+
+        for (var listener : listeners) {
+            listener.tabChanging(e);
+
+            if (e.isVetoed())
+                break;
         }
     }
 
