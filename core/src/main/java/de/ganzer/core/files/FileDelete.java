@@ -4,6 +4,7 @@ import de.ganzer.core.internals.CoreMessages;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -219,9 +220,34 @@ public class FileDelete extends FileErrorProvider {
      *                     this is {@code true}. Neither {@link FileDelete.ProgressInfo#getEntriesAvail}
      *                     nor {@link FileDelete.ProgressInfo#getPercentage} can be used
      *                     when progress is reported.
+     *
      * @return {@code true} on success; otherwise, {@code false} is returned.
+     *
+     * @throws NullPointerException source is {@code null}.
+     *
+     * @since 6.3.0
+     */
+    public boolean start(Path source, boolean suppressInit) {
+        Objects.requireNonNull(source, "source");
+        return start(Collections.singletonList(source.toString()), suppressInit);
+    }
+
+    /**
+     * Copies the specified file or directory.
+     *
+     * @param source       The absolute or relative path to the file or directory to
+     *                     delete.
+     * @param suppressInit The counting of all entries to delete is suppressed if
+     *                     this is {@code true}. Neither {@link FileDelete.ProgressInfo#getEntriesAvail}
+     *                     nor {@link FileDelete.ProgressInfo#getPercentage} can be used
+     *                     when progress is reported.
+     *
+     * @return {@code true} on success; otherwise, {@code false} is returned.
+     *
+     * @throws NullPointerException source is {@code null}.
      */
     public boolean start(String source, boolean suppressInit) {
+        Objects.requireNonNull(source, "source");
         return start(Collections.singletonList(source), suppressInit);
     }
 
@@ -234,6 +260,7 @@ public class FileDelete extends FileErrorProvider {
      *                     this is {@code true}. Neither {@link FileDelete.ProgressInfo#getEntriesAvail}
      *                     nor {@link FileDelete.ProgressInfo#getPercentage} can be used
      *                     when progress is reported.
+     *
      * @return {@code true} on success; otherwise, {@code false} is returned.
      *
      * @throws NullPointerException sources is {@code null}.

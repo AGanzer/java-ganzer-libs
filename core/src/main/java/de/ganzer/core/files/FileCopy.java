@@ -485,9 +485,38 @@ public class FileCopy extends FileErrorProvider {
      *                     this is {@code true}. Neither {@link ProgressInfo#totalBytesAvail}
      *                     nor {@link ProgressInfo#getTotalPercentage} can be used
      *                     when progress is reported.
+     *
      * @return {@code true} on success; otherwise, {@code false} is returned.
+     *
+     * @throws NullPointerException source or target is {@code null}.
+     *
+     * @since 6.3.0
+     */
+    public boolean start(Path source, Path target, boolean suppressInit) {
+        Objects.requireNonNull(source, "source");
+        Objects.requireNonNull(target, "target");
+
+        return start(Collections.singletonList(source.toString()), target.toString(), suppressInit);
+    }
+
+    /**
+     * Copies the specified file or directory.
+     *
+     * @param source       The absolute or relative path to the file or directory to
+     *                     copy.
+     * @param target       The absolute or relative path to the directory where to
+     *                     copy into.
+     * @param suppressInit The counting of all bytes to copy is suppressed if
+     *                     this is {@code true}. Neither {@link ProgressInfo#totalBytesAvail}
+     *                     nor {@link ProgressInfo#getTotalPercentage} can be used
+     *                     when progress is reported.
+     *
+     * @return {@code true} on success; otherwise, {@code false} is returned.
+     *
+     * @throws NullPointerException source or target is {@code null}.
      */
     public boolean start(String source, String target, boolean suppressInit) {
+        Objects.requireNonNull(source, "source");
         return start(Collections.singletonList(source), target, suppressInit);
     }
 
@@ -502,6 +531,32 @@ public class FileCopy extends FileErrorProvider {
      *                     this is {@code true}. Neither {@link ProgressInfo#totalBytesAvail}
      *                     nor {@link ProgressInfo#getTotalPercentage} can be used
      *                     when progress is reported.
+     *
+     * @return {@code true} on success; otherwise, {@code false} is returned.
+     *
+     * @throws NullPointerException sources or target is {@code null}.
+     *
+     * @since 6.3.0
+     */
+    public boolean start(List<Path> sources, Path target, boolean suppressInit) {
+        Objects.requireNonNull(sources, "sources");
+        Objects.requireNonNull(target, "target");
+
+        return start(sources.stream().map(Path::toString).collect(Collectors.toList()), target.toString(), suppressInit);
+    }
+
+    /**
+     * Copies the specified files or directories.
+     *
+     * @param sources      The absolute or relative paths to the files or directories
+     *                     to copy.
+     * @param target       The absolute or relative path to the directory where to
+     *                     copy into.
+     * @param suppressInit The counting of all bytes to copy is suppressed if
+     *                     this is {@code true}. Neither {@link ProgressInfo#totalBytesAvail}
+     *                     nor {@link ProgressInfo#getTotalPercentage} can be used
+     *                     when progress is reported.
+     *
      * @return {@code true} on success; otherwise, {@code false} is returned.
      *
      * @throws NullPointerException sources or target is {@code null}.
