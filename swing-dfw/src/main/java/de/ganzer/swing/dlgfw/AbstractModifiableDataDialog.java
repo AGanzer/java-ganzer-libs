@@ -635,7 +635,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
         getRootPane().setDefaultButton(okButton);
 
         JButton cancelButton = new JButton(SwingDialogsMessages.get("commons.buttons.cancel"));
-        cancelButton.addActionListener(e -> closeDialog(true));
+        cancelButton.addActionListener(e -> closeDialog(false));
 
         getRootPane().setDefaultButton(okButton);
 
