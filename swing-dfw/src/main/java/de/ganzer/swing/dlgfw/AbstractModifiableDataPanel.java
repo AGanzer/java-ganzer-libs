@@ -22,7 +22,7 @@ public abstract class AbstractModifiableDataPanel<Data> extends AbstractPanel im
      * A document listener that simply sets the modification flag of the
      * owning dialog or frame.
      */
-    protected class SimpleDocumentListener implements DocumentListener {
+    public class SimpleDocumentListener implements DocumentListener {
         @Override
         public void insertUpdate(DocumentEvent e) {
             getOwner().setDataModified(true);
