@@ -13,6 +13,8 @@ import de.ganzer.swing.util.EditorTracer;
 
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import java.awt.Component;
+import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -291,6 +293,9 @@ public final class DVManager extends BasicDVManager {
             .enabled(false)
             .onAction(e -> {
                 var views = getSupport().getAllMDISubViews();
+
+                if (views == null)
+                    return;
 
                 for (var view : views) {
                     if (!view.getTemplate().isClosable())
@@ -639,6 +644,19 @@ public final class DVManager extends BasicDVManager {
 
             if (docNew != null)
                 updateRecentDocumentsActions(docNew);
+        });
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("permanentFocusOwner", e -> {
+            var component = (e.getNewValue() instanceof Component c) ? c : null;
+
+            while (component != null) {
+                if (component instanceof View<?> v) {
+                    setActiveView(v);
+                    break;
+                }
+
+                component = component.getParent();
+            }
         });
     }
 }

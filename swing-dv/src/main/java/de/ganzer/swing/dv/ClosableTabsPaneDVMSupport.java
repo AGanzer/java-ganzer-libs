@@ -145,7 +145,6 @@ public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
 
             DVManager.closeWindowAction.setEnabled(tabPane.getSelectedIndex() >= 0 && tabPane.isClosableAt(tabPane.getSelectedIndex()));
             DVManager.closeAllWindowsAction.setEnabled(enableAll);
-            DVManager.setActiveView(tabPane.getSelectedComponent() instanceof View<?> v ? v : null);
             EditorTracer.getInstance().setDefaultEditable(tabPane.getSelectedComponent());
         }
     };
