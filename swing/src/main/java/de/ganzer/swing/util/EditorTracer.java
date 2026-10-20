@@ -12,6 +12,8 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * A utility class that enables tracing of focusable components to enable
@@ -35,9 +37,25 @@ import java.awt.event.ActionEvent;
  * @since 6.0.0
  */
 public final class EditorTracer {
+    /**
+     * The name of the property that holds the default component.
+     *
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
+     */
+    public static final String DEFAULT_COMPONENT_PROPERTY = "defaultComponent";
+    /**
+     * The name of the property that holds the editable component.
+     *
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
+     */
+    public static final String EDITABLE_COMPONENT_PROPERTY = "editableComponent";
+
     private static final JTextComponentWrapper wrapper = new JTextComponentWrapper();
     private static EditorTracer instance;
 
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
     private EditableComponent defaultComponent;
     private EditableComponent editableComponent;
 
@@ -51,6 +69,59 @@ public final class EditorTracer {
             instance = new EditorTracer();
 
         return instance;
+    }
+
+    /**
+     * Adds a listener for all properties.
+     *
+     * @param listener The listener to install.
+     *
+     * @throws NullPointerException {@code originator} or {@code listener} is
+     *          {@code null}.
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(null, listener);
+    }
+
+    /**
+     * Adds a listener for the specified property.
+     *
+     * @param propertyName The name of the property to add the listener fo or
+     *         {@code null} or an empty string to listen to all properties.
+     * @param listener The listener to install.
+     *
+     * @throws NullPointerException {@code originator} or {@code listener} is
+     *          {@code null}.
+     */
+    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(propertyName, listener);
+    }
+
+    /**
+     * Removes an installed listener.
+     *
+     * @param listener The listener to install.
+     *
+     * @throws NullPointerException {@code originator} or {@code listener} is
+     *          {@code null}.
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(null, listener);
+    }
+
+    /**
+     * Removes an installed listener for the specified property.
+     *
+     * @param propertyName The name of the property to add the listener fo or
+     *         {@code null} or an empty string for listeners that are installed
+     *         for all properties.
+     * @param listener The listener to install.
+     *
+     * @throws NullPointerException {@code originator} or {@code listener} is
+     *          {@code null}.
+     */
+    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(propertyName, listener);
     }
 
     /**
@@ -174,6 +245,16 @@ public final class EditorTracer {
     }
 
     /**
+     * Returns the editable component that is currently focused.
+     *
+     * @return The editable component or {@code null} if no editable component
+     *         is currently focused.
+     */
+    public EditableComponent getEditableComponent() {
+        return editableComponent;
+    }
+
+    /**
      * Returns the editable component to use if no editable is currently focused.
      *
      * @return The default editable component or {@code null} if no default
@@ -195,20 +276,25 @@ public final class EditorTracer {
      *        default component.
      */
     public void setDefaultEditable(Component component) {
-        boolean reset = editableComponent == defaultComponent;
+        var reset = editableComponent == defaultComponent;
+        var old = defaultComponent;
+
         defaultComponent = (component instanceof EditableComponent ec) ? ec : null;
+
+        pcs.firePropertyChange(DEFAULT_COMPONENT_PROPERTY, old, defaultComponent);
 
         if (reset)
             updateEditable(null);
     }
 
     private EditorTracer() {
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner", e -> {
-            updateEditable(e.getNewValue());
-        });
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner",
+                                                                                        e -> updateEditable(e.getNewValue()));
     }
 
     private void updateEditable(Object component) {
+        var old = editableComponent;
+
         editableComponent = getEditable(component);
 
         if (editableComponent == null)
@@ -216,6 +302,8 @@ public final class EditorTracer {
 
         if (editableComponent == null)
             editableComponent = defaultComponent;
+
+        pcs.firePropertyChange(EDITABLE_COMPONENT_PROPERTY, old, editableComponent);
     }
 
     private static EditableComponent getEditable(Object control) {

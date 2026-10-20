@@ -652,6 +652,7 @@ public final class DVManager extends BasicDVManager {
             while (component != null) {
                 if (component instanceof View<?> v) {
                     setActiveView(v);
+                    EditorTracer.getInstance().setDefaultEditable(component);
                     break;
                 }
 

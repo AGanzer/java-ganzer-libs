@@ -4,7 +4,6 @@ import de.ganzer.dv.Document;
 import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TabCloseListener;
-import de.ganzer.swing.util.EditorTracer;
 
 import javax.swing.JMenu;
 import javax.swing.event.ChangeEvent;
@@ -145,7 +144,6 @@ public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
 
             DVManager.closeWindowAction.setEnabled(tabPane.getSelectedIndex() >= 0 && tabPane.isClosableAt(tabPane.getSelectedIndex()));
             DVManager.closeAllWindowsAction.setEnabled(enableAll);
-            EditorTracer.getInstance().setDefaultEditable(tabPane.getSelectedComponent());
         }
     };
 }
