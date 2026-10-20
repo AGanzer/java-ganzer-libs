@@ -16,6 +16,11 @@ import java.util.Objects;
  * If the component given at construction is of type {@link JEditorPane},
  * the messages are formatted to HTML if its content type contains
  * "text/html"; otherwise, the messages are written as plain text.
+ * <p>
+ * <b>NOTE:</b> The levels 0 and 1 are treated as error and warning levels. If
+ * this is not applicable, this class can be used as a base for better level
+ * indication by overriding {@link #isErrorLevel(int)} and
+ * {@link #isWarningLevel(int)}.
  *
  * @see #isFormatHTML()
  * @see #getErrorColor()
@@ -325,7 +330,7 @@ public class TextComponentLogTarget extends FormattedLogTarget {
     /**
      * Called to get the information whether a log level indicates a warning.
      * <p>
-     * Inheritors should override this to implement its own warning level
+     * Inheritors should override this to implement their own warning level
      * detection.
      * <p>
      * This is called only if {@link #isFormatHTML()} returns {@code true} and
@@ -344,7 +349,7 @@ public class TextComponentLogTarget extends FormattedLogTarget {
     /**
      * Called to get the information whether a log level indicates an error.
      * <p>
-     * Inheritors should override this to implement its own error level
+     * Inheritors should override this to implement their own error level
      * detection.
      * <p>
      * This is called only if {@link #isFormatHTML()} returns {@code true} and
