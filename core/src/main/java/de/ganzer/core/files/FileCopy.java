@@ -638,7 +638,7 @@ public class FileCopy extends FileErrorProvider {
         var sourcePath = Path.of(sourceFile.getAbsolutePath());
         var targetPath = Path.of(targetFile.getAbsolutePath());
 
-        if (targetPath.equals(sourcePath) || targetPath.startsWith(sourcePath))
+        if (!targetPath.equals(sourcePath) && targetPath.startsWith(sourcePath))
             throw new ErrorInfo(FileError.CREATE_DIR, String.format(CoreMessages.get("cannotCopyIntoItself"), sourceFile.getAbsolutePath()), true);
     }
 
