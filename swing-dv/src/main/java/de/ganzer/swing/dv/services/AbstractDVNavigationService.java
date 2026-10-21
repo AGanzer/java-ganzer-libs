@@ -65,7 +65,8 @@ public abstract class AbstractDVNavigationService implements DVNavigationService
      * @param filters The filters to filter the possible results or {@code null}
      *         if no filter is provided.
      * @param initialFilter The initial filter to set or {@code null} if no
-     *         initial filter is provided.
+     *         initial filter is provided. This implementation does not support
+     *         setting an initial filter.
      *
      * @return The list of locations to open or {@code null} or an empty list
      *          if the user has canceled.
@@ -83,7 +84,7 @@ public abstract class AbstractDVNavigationService implements DVNavigationService
                 ? Arrays.stream(chooser.getSelectedFiles()).map(File::getAbsolutePath).toList()
                 : null;
 
-        if (files != null)
+        if (files != null && shouldRememberLastOpenDir())
             lastOpenDir = chooser.getCurrentDirectory();
 
         return files;
