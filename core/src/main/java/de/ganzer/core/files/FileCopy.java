@@ -389,10 +389,16 @@ public class FileCopy extends FileErrorProvider {
     }
 
     /**
-     * Sets the default overwrite action for file.
+     * Sets the default overwrite action for a file.
+     * <p>
+     * This is never used if an alternate target path function is provided at
+     * construction and the funktion does really return a unique name.
      *
      * @param defaultFileOverwriteAction The default action to set.
+     *
      * @throws NullPointerException defaultFileOverwriteAction is {@code null}.
+     *
+     * @see AlternativeTargetPathFunction
      */
     public void setDefaultFileOverwriteAction(OverwriteAction defaultFileOverwriteAction) {
         Objects.requireNonNull(defaultFileOverwriteAction, "defaultFileOverwriteAction");
@@ -411,9 +417,15 @@ public class FileCopy extends FileErrorProvider {
 
     /**
      * Sets the default overwrite action for directories.
+     * <p>
+     * This is never used if an alternate target path function is provided at
+     * construction and the funktion does really return a unique name.
      *
      * @param defaultDirOverwriteAction The default action to set.
+     *
      * @throws NullPointerException defaultFileOverwriteAction is {@code null}.
+     *
+     * @see AlternativeTargetPathFunction
      */
     public void setDefaultDirOverwriteAction(OverwriteAction defaultDirOverwriteAction) {
         Objects.requireNonNull(defaultDirOverwriteAction, "defaultDirOverwriteAction");
