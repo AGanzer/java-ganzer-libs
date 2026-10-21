@@ -5,9 +5,7 @@ import de.ganzer.core.internals.CoreMessages;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +42,9 @@ public class FileDelete extends FileErrorProvider {
         private String rootPath;
         private long entriesAvail;
         private long entriesDeleted;
+
+        private boolean ignoreAllErrors;
+        private final Set<FileError> ignoredErrors = new HashSet<>();
 
         private ProgressInfo(FileDelete machine) {
             this.machine = machine;
@@ -323,6 +324,8 @@ public class FileDelete extends FileErrorProvider {
         progress.entriesAvail = 0;
         progress.entriesDeleted = 0;
         progress.path = "";
+        progress.ignoreAllErrors = false;
+        progress.ignoredErrors.clear();
 
         if (suppressInit)
             return;
@@ -374,11 +377,22 @@ public class FileDelete extends FileErrorProvider {
                 if (queryErrorAction == null || info.doNotQuery())
                     throw info;
 
+                if (progress.ignoreAllErrors || progress.ignoredErrors.contains(info.getError()))
+                    return;
+
                 switch (queryErrorAction.query(info.getError(), info.getErrorDescription(), source)) {
                     case RETRY:
                         continue;
 
                     case IGNORE:
+                        return;
+
+                    case IGNORE_ALL_THIS:
+                        progress.ignoredErrors.add(info.getError());
+                        return;
+
+                    case IGNORE_ALL:
+                        progress.ignoreAllErrors = true;
                         return;
 
                     default:
@@ -407,11 +421,22 @@ public class FileDelete extends FileErrorProvider {
                 if (queryErrorAction == null || info.doNotQuery())
                     throw info;
 
+                if (progress.ignoreAllErrors || progress.ignoredErrors.contains(info.getError()))
+                    return;
+
                 switch (queryErrorAction.query(info.getError(), info.getErrorDescription(), source)) {
                     case RETRY:
                         continue;
 
                     case IGNORE:
+                        return;
+
+                    case IGNORE_ALL_THIS:
+                        progress.ignoredErrors.add(info.getError());
+                        return;
+
+                    case IGNORE_ALL:
+                        progress.ignoreAllErrors = true;
                         return;
 
                     default:
