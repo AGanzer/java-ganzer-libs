@@ -798,8 +798,7 @@ public class FileCopy extends FileErrorProvider {
         sourceFiles.forEach(source -> {
             File target = new File(queryDestPath(source, targetFile));
 
-            if (exists(target))
-                verifyNonRecursive(source, target);
+            verifyNonRecursive(source, target);
 
             progress.rootSourcePath = source.getAbsolutePath();
 
