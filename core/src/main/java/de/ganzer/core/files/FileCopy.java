@@ -643,12 +643,15 @@ public class FileCopy extends FileErrorProvider {
     }
 
     private void verifyNonRecursive(List<File> sourceFiles, File targetFile) throws ErrorInfo {
-        sourceFiles.forEach(file -> verifyNonRecursive(file, targetFile));
+        sourceFiles.forEach(file -> verifyNonRecursive(file, targetFile, true));
     }
 
-    private void verifyNonRecursive(File sourceFile, File targetFile) throws ErrorInfo {
+    private void verifyNonRecursive(File sourceFile, File targetFile, boolean equalFails) throws ErrorInfo {
         var sourcePath = Path.of(sourceFile.getAbsolutePath());
         var targetPath = Path.of(targetFile.getAbsolutePath());
+
+        if (equalFails && targetPath.equals(sourcePath))
+            throw new ErrorInfo(FileError.CREATE_DIR, String.format(CoreMessages.get("cannotCopyIntoItself"), sourceFile.getAbsolutePath()), true);
 
         if (!targetPath.equals(sourcePath) && targetPath.startsWith(sourcePath))
             throw new ErrorInfo(FileError.CREATE_DIR, String.format(CoreMessages.get("cannotCopyIntoItself"), sourceFile.getAbsolutePath()), true);
@@ -798,7 +801,7 @@ public class FileCopy extends FileErrorProvider {
         sourceFiles.forEach(source -> {
             File target = new File(queryDestPath(source, targetFile));
 
-            verifyNonRecursive(source, target);
+            verifyNonRecursive(source, target, false);
 
             progress.rootSourcePath = source.getAbsolutePath();
 
