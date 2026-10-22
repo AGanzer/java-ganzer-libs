@@ -13,8 +13,8 @@
         <module name="de-ganzer-dv" />
         <module name="de-ganzer-swing-dv" />
         <module name="swing-dfw" />
-        <module name="ui-tests" />
         <module name="de-ganzer-swing-dlgfw" />
+        <module name="ui-tests" />
         <module name="de-ganzer-core" />
         <module name="de-ganzer-swing" />
       </profile>

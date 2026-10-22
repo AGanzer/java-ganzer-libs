@@ -1,6 +1,7 @@
 open module com.example.uitests {
     requires javafx.controls;
     requires javafx.fxml;
+    requires com.dlsc.fxmlkit;
     requires de.ganzer.core;
     requires de.ganzer.fx;
     requires java.desktop;

@@ -65,6 +65,7 @@
             <artifactId>flatlaf-intellij-themes</artifactId>
             <version>3.5.1</version>
         </dependency>
+
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>svgSalamander</artifactId>
@@ -80,6 +81,7 @@
             <artifactId>batik-svggen</artifactId>
             <version>1.17</version>
         </dependency>
+
         <dependency>
             <groupId>org.swinglabs.swingx</groupId>
             <artifactId>swingx-all</artifactId>
@@ -100,6 +102,11 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>21.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dlsc.fxmlkit</groupId>
+            <artifactId>fxmlkit</artifactId>
+            <version>1.5.1</version>
         </dependency>
 
         <dependency>
