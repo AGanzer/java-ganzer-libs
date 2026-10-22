@@ -8,7 +8,7 @@ import java.util.function.Consumer;
  * Each Controller that is used with {@link GDialog} should implement this
  * interface.
  * <p>
- * The following code shows an example how it may be implemented:
+ * The following code shows an example of how it may be implemented:
  * <p>
  * <pre>{@code
  * public class InputDialogData {
