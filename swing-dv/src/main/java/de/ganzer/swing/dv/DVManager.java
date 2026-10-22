@@ -506,7 +506,9 @@ public class DVManager extends BasicDVManager {
 
         if (doc == evt.getSource()) {
             var format = getSupport().getMainWindowTitleFormat();
-            var title = doc != null && format != null ? String.format(format, view.getTitle(), getSupport().getAppTitle()) : getSupport().getAppTitle();
+            var title = doc != null && format != null
+                    ? String.format(format, getSupport().getViewTitleForMainWindow(view), getSupport().getAppTitle())
+                    : getSupport().getAppTitle();
 
             getSupport().setMainWindowTitle(title);
         }
@@ -525,7 +527,9 @@ public class DVManager extends BasicDVManager {
 
         if (doc == evt.getSource()) {
             var format = getSupport().getMainWindowTitleFormat();
-            var title = doc != null && format != null ? String.format(format, view.getTitle(), getSupport().getAppTitle()) : getSupport().getAppTitle();
+            var title = doc != null && format != null
+                    ? String.format(format, getSupport().getViewTitleForMainWindow(view), getSupport().getAppTitle())
+                    : getSupport().getAppTitle();
 
             getSupport().setMainWindowTitle(title);
         }

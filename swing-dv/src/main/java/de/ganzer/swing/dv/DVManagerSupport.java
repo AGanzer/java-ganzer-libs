@@ -21,6 +21,19 @@ public interface DVManagerSupport {
     String getAppTitle();
 
     /**
+     * Invoked to get the document's name the given view relates to, to set in
+     * the main window's title.
+     *
+     * @param view The view where to get the title from.
+     *
+     * @return The title of the view to use in the main window's title. This
+     *         implementation does return {@code view.getTitle()}.
+     */
+    default String getViewTitleForMainWindow(View<?> view) {
+        return view.getTitle();
+    }
+
+    /**
      * Invoked to set the title of the main window.
      *
      * @param tile The title of the main window.

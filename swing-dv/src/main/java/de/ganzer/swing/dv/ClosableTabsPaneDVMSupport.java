@@ -152,7 +152,9 @@ public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
 
             var view = getActiveMDISubView();
             var format = getMainWindowTitleFormat();
-            var title = view != null && format != null ? String.format(format, view.getTitle(), getAppTitle()) : getAppTitle();
+            var title = view != null && format != null
+                    ? String.format(format, getViewTitleForMainWindow(view), getAppTitle())
+                    : getAppTitle();
 
             setMainWindowTitle(title);
         }
