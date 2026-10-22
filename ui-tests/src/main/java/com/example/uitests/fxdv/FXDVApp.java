@@ -15,7 +15,6 @@ public class FXDVApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         if (OS.isMac()) {
-            System.setProperty("apple.awt.application.name", TITLE);
             Taskbar.getTaskbar().setIconImage(com.example.uitests.swing.SVGProvider.get("multimeter_analog", 64).getImage());
         }
 
