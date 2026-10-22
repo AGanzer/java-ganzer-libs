@@ -151,9 +151,8 @@ public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
             DVManager.closeAllWindowsAction.setEnabled(enableAll);
 
             var view = getActiveMDISubView();
-            var doc = view != null ? view.getDocument() : null;
             var format = getMainWindowTitleFormat();
-            var title = doc != null && format != null ? String.format(format, doc.getName(), getAppTitle()) : getAppTitle();
+            var title = view != null && format != null ? String.format(format, view.getTitle(), getAppTitle()) : getAppTitle();
 
             setMainWindowTitle(title);
         }

@@ -499,7 +499,19 @@ public class DVManager extends BasicDVManager {
         saveAllAction.setEnabled(getOpenDocuments().stream().anyMatch(Document::isModified));
     }
 
-    private static final PropertyChangeListener documentModifiedListener = evt -> updateSaveActions();
+    private static final PropertyChangeListener documentModifiedListener = evt -> {
+        updateSaveActions();
+        var view = getSupport().getActiveMDISubView();
+        var doc = view != null ? view.getDocument() : null;
+
+        if (doc == evt.getSource()) {
+            var format = getSupport().getMainWindowTitleFormat();
+            var title = doc != null && format != null ? String.format(format, view.getTitle(), getSupport().getAppTitle()) : getSupport().getAppTitle();
+
+            getSupport().setMainWindowTitle(title);
+        }
+    };
+
     private static final PropertyChangeListener documentNameListener = evt -> {
         for (GAction action : openDocumentsActions) {
             if (Objects.equals(action.getTag(), evt.getSource())) {
@@ -513,7 +525,7 @@ public class DVManager extends BasicDVManager {
 
         if (doc == evt.getSource()) {
             var format = getSupport().getMainWindowTitleFormat();
-            var title = doc != null && format != null ? String.format(format, doc.getName(), getSupport().getAppTitle()) : getSupport().getAppTitle();
+            var title = doc != null && format != null ? String.format(format, view.getTitle(), getSupport().getAppTitle()) : getSupport().getAppTitle();
 
             getSupport().setMainWindowTitle(title);
         }
@@ -601,9 +613,8 @@ public class DVManager extends BasicDVManager {
             saveAllAction.setEnabled(getOpenDocuments().stream().anyMatch(Document::isModified));
 
             var view = getSupport().getActiveMDISubView();
-            var doc = view != null ? view.getDocument() : null;
             var format = getSupport().getMainWindowTitleFormat();
-            var title = doc != null && format != null ? String.format(format, doc.getName(), getSupport().getAppTitle()) : getSupport().getAppTitle();
+            var title = view != null && format != null ? String.format(format, view.getTitle(), getSupport().getAppTitle()) : getSupport().getAppTitle();
 
             getSupport().setMainWindowTitle(title);
         });
