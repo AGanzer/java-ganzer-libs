@@ -149,11 +149,8 @@ public class SwingDVApp {
         welcomeTpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, WelcomeView>(
                 "Welcome",
                 i -> new WelcomeView(i, mainWindow.getTabPane()),
-                v -> {
-                    mainWindow.addChildView(v);
-                    DVManager.setActiveView(v);
-                },
-                ViewTemplate.DEFAULT | ViewTemplate.NOT_CLOSABLE));
+                v -> mainWindow.addChildView(v),
+                ViewTemplate.DEFAULT/* | ViewTemplate.NOT_CLOSABLE*/));
         welcomeTpl.registerViewTemplate(new ViewTemplate<WelcomeDocument, ThumbnailView<WelcomeDocument>>(
                 "Thumbnail",
                 i -> new ThumbnailView<>(i, mainWindow.getThumbnails()),
