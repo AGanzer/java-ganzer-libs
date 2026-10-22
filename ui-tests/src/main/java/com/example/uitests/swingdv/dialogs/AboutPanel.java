@@ -13,7 +13,7 @@ public class AboutPanel extends AbstractPanel {
     @Override
     protected JComponent createCenterPanel() {
         var text = String.format("<html>" +
-                                         "<b>&nbsp;&nbsp;Version: %s</b><br><br>" +
+                                         "<b>&nbsp;Version: %s</b><br><br>" +
                                          "<table>" +
                                          "  <tr><td>Java Version:</td><td>%s %s, %s</td></tr>" +
                                          "  <tr><td>Java VM Info:</td><td>%s</td></tr>" +
@@ -28,7 +28,7 @@ public class AboutPanel extends AbstractPanel {
                                  Locale.getDefault().getDisplayName());
 
         JLabel label = new JLabel(text);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 7, 10, 10  ));
+        label.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12  ));
 
         return label;
     }
