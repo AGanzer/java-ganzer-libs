@@ -6,7 +6,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.uitests.fx.TestController">
     <top>
-        <MenuBar>
+        <MenuBar fx:id="menuBar">
             <Menu text="_File">
                 <MenuItem text="_Exit"
                           accelerator="Ctrl+Shift+F4"

@@ -22,9 +22,11 @@ public class TestController {
     public TabPane tabs;
     public Tab validatorTab;
     public Tab copyTab;
+    public MenuBar menuBar;
 
     @FXML
     private void initialize() {
+        menuBar.setUseSystemMenuBar(true);
         initializeTab(validatorTab, "validator-test-view.fxml");
         initializeTab(copyTab, "copy-test-view.fxml");
     }
