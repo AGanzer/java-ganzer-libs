@@ -64,7 +64,7 @@ public class MainWindow extends JXFrame {
 
     private void initSplitPane() {
         tabPane = new ClosableTabsPane();
-        DVManager.registerSupport(new ClosableTabsPaneDVMSupport(tabPane, getWindowMenu(), getRecentFilesMenu()));
+        DVManager.registerSupport(new ClosableTabsPaneDVMSupport(this, SwingDVApp.TITLE, tabPane, getWindowMenu(), getRecentFilesMenu()));
 
         thumbnails = new ThumbnailPanel();
         var scroller = new JScrollPane(thumbnails, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

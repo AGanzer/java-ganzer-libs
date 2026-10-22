@@ -160,7 +160,7 @@ import java.util.Objects;
  *
  * @since 6.0.0
  */
-public final class DVManager extends BasicDVManager {
+public class DVManager extends BasicDVManager {
     /**
      * The action where the recently opened documents are inserted into.
      */
@@ -508,6 +508,16 @@ public final class DVManager extends BasicDVManager {
             }
         }
 
+        var view = getSupport().getActiveMDISubView();
+        var doc = view != null ? view.getDocument() : null;
+
+        if (doc == evt.getSource()) {
+            var format = getSupport().getMainWindowTitleFormat();
+            var title = doc != null && format != null ? String.format(format, doc.getName(), getSupport().getAppTitle()) : getSupport().getAppTitle();
+
+            getSupport().setMainWindowTitle(title);
+        }
+
         // Invoke later because the document may be new
         // and this flag ist not removed yet:
         //
@@ -589,6 +599,13 @@ public final class DVManager extends BasicDVManager {
             saveAction.setEnabled(docNew != null && docNew.isModified());
             saveAsAction.setEnabled(docNew != null && docNew.isSaveAsSupported());
             saveAllAction.setEnabled(getOpenDocuments().stream().anyMatch(Document::isModified));
+
+            var view = getSupport().getActiveMDISubView();
+            var doc = view != null ? view.getDocument() : null;
+            var format = getSupport().getMainWindowTitleFormat();
+            var title = doc != null && format != null ? String.format(format, doc.getName(), getSupport().getAppTitle()) : getSupport().getAppTitle();
+
+            getSupport().setMainWindowTitle(title);
         });
 
         addPropertyChangeListener(ACTIVE_VIEW_PROPERTY, e -> {

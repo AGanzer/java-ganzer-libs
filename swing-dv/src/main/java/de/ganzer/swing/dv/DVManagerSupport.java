@@ -13,6 +13,36 @@ import java.util.List;
  */
 public interface DVManagerSupport {
     /**
+     * Invoked to get the title of the application that is displayed in the
+     * main window.
+     *
+     * @return The title of the application.
+     */
+    String getAppTitle();
+
+    /**
+     * Invoked to set the title of the main window.
+     *
+     * @param tile The title of the main window.
+     */
+    void setMainWindowTitle(String tile);
+
+    /**
+     * Invoked to get the format string to format the title of the main window.
+     * <p>
+     * The format string may contain up to 2 placeholders. The first is
+     * replaced with the currently active document (detected by
+     * {@link #getActiveMDISubView()}), the second with the application's
+     * title received by {@link #getAppTitle()}.
+     *
+     * @return The format string to use. This implementation does always return
+     *         "%1$s - %2$s".
+     */
+    default String getMainWindowTitleFormat() {
+        return "%1$s - %2$s";
+    }
+
+    /**
      * Invoked to get the active MDI subview.
      *
      * @return The active MDI subview or {@code null} if there is no active MDI

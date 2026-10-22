@@ -1,5 +1,6 @@
 package de.ganzer.swing.dv;
 
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 
 /**
@@ -11,6 +12,8 @@ import javax.swing.JMenu;
  * @since 6.0.0
  */
 public abstract class BasicDVManagerSupport implements DVManagerSupport {
+    private JFrame mainWindow;
+    private String appTitle;
     private JMenu windowMenu;
     private JMenu recentFilesMenu;
     private int numDefaultItems;
@@ -18,6 +21,10 @@ public abstract class BasicDVManagerSupport implements DVManagerSupport {
     /**
      * Creates a new instance of {@link ClosableTabsPaneDVMSupport}.
      *
+     * @param mainWindow The main window to manage or {@code null} to set it
+     *        later.
+     * @param appTitle The application's title to display in the main window or
+     *        {@code null} to unset the title.
      * @param windowMenu The window menu to manage or {@code null} to set it
      *        later.
      * @param recentFilesMenu The recent files menu to manage or {@code null}
@@ -27,9 +34,50 @@ public abstract class BasicDVManagerSupport implements DVManagerSupport {
      * @see #setRecentFilesMenu(JMenu)
      * @see DVManager#registerSupport(DVManagerSupport)
      */
-    public BasicDVManagerSupport(JMenu windowMenu, JMenu recentFilesMenu) {
+    public BasicDVManagerSupport(JFrame mainWindow, String appTitle, JMenu windowMenu, JMenu recentFilesMenu) {
+        setMainWindow(mainWindow);
+        setAppTitle(appTitle);
         setWindowMenu(windowMenu);
         setRecentFilesMenu(recentFilesMenu);
+    }
+
+    /**
+     * Gets the application's main window that's title shall be updated.
+     *
+     * @return The main window or {@code null} if there is no main window set.
+     */
+    public JFrame getMainWindow() {
+        return mainWindow;
+    }
+
+    /**
+     * Sets the main window that's title shall be updated.
+     *
+     * @param mainWindow The main window or {@code null} to unset the main
+     *        window.
+     */
+    public void setMainWindow(JFrame mainWindow) {
+        this.mainWindow = mainWindow;
+    }
+
+    /**
+     * Gets the application's title to display in the main window.
+     *
+     * @return The application's title or {@code null} if there is no title set.
+     */
+    @Override
+    public String getAppTitle() {
+        return appTitle;
+    }
+
+    /**
+     * Sets the application's title to display in the main window.
+     *
+     * @param appTitle The application's title or {@code null} to unset the
+     *        title.
+     */
+    public void setAppTitle(String appTitle) {
+        this.appTitle = appTitle;
     }
 
     /**
@@ -76,6 +124,17 @@ public abstract class BasicDVManagerSupport implements DVManagerSupport {
      */
     public void setRecentFilesMenu(JMenu recentFilesMenu) {
         this.recentFilesMenu = recentFilesMenu;
+    }
+
+    /**
+     * Invoked to set the title of the main window.
+     *
+     * @param tile The title of the main window.
+     */
+    @Override
+    public void setMainWindowTitle(String tile) {
+        if (mainWindow != null)
+            mainWindow.setTitle(tile);
     }
 
     /**

@@ -5,6 +5,7 @@ import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TabCloseListener;
 
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -33,6 +34,10 @@ public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
     /**
      * Creates a new instance of {@link ClosableTabsPaneDVMSupport}.
      *
+     * @param mainWindow The main window to manage or {@code null} to set it
+     *        later.
+     * @param appTitle The application's title to display in the main window or
+     *        {@code null} to unset the title.
      * @param tabPane The tabbed pane to use or {@code null} to set the tabbed
      *         pane later.
      * @param windowMenu The window menu to manage or {@code null} to set it
@@ -45,8 +50,8 @@ public class ClosableTabsPaneDVMSupport extends BasicDVManagerSupport {
      * @see #setRecentFilesMenu(JMenu)
      * @see DVManager#registerSupport(DVManagerSupport)
      */
-    public ClosableTabsPaneDVMSupport(ClosableTabsPane tabPane, JMenu windowMenu, JMenu recentFilesMenu) {
-        super(windowMenu, recentFilesMenu);
+    public ClosableTabsPaneDVMSupport(JFrame mainWindow, String appTitle, ClosableTabsPane tabPane, JMenu windowMenu, JMenu recentFilesMenu) {
+        super(mainWindow, appTitle, windowMenu, recentFilesMenu);
         setTabPane(tabPane);
     }
 
