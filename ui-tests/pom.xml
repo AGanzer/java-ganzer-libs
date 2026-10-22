@@ -108,6 +108,11 @@
             <artifactId>fxmlkit</artifactId>
             <version>1.5.1</version>
         </dependency>
+        <dependency>
+            <groupId>se.alipsa</groupId>
+            <artifactId>fxsvgimage</artifactId>
+            <version>1.5.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>

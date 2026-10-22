@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TabPane?>
 
-<?import javafx.scene.layout.VBox?>
-
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.uitests.fxdv.MainController">
-
-</VBox>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.uitests.fxdv.MainController">
+    <top>
+        <MenuBar fx:id="menuBar"/>
+    </top>
+    <center>
+        <AnchorPane>
+            <TabPane fx:id="tabPane"/>
+        </AnchorPane>
+    </center>
+</BorderPane>

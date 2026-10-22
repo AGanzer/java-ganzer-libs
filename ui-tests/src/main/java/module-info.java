@@ -15,6 +15,7 @@ open module com.example.uitests {
     requires de.ganzer.dv;
     requires de.ganzer.swing.dv;
     requires de.ganzer.swing.dlgfw;
+    requires org.girod.javafx.svgimage;
     exports com.example.uitests.fx;
     exports com.example.uitests.fx.charts;
     exports com.example.uitests.swing;
