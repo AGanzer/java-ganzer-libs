@@ -62,6 +62,7 @@ public class ValidationFilter extends DocumentFilter {
     private boolean hintsVisible;
     private boolean updating;
     private DocumentListener liveListener;
+    private ValidationHintProvider localHintProvider;
 
     /**
      * Create a new filter from the specified arguments.
@@ -141,6 +142,8 @@ public class ValidationFilter extends DocumentFilter {
      *
      * @param hintProvider The provider to set or {@code null} to use the
      *         default provider (an instance of {@link BorderValidationHint}).
+     *
+     * @see #setLocalHintProvider
      */
     public static void setHintProvider(ValidationHintProvider hintProvider) {
         ValidationFilter.hintProvider = hintProvider == null ? new BorderValidationHint() : hintProvider;
@@ -169,6 +172,33 @@ public class ValidationFilter extends DocumentFilter {
      */
     public static void setErrorConsumer(Consumer<ValidatorException> errorConsumer) {
         ValidationFilter.errorConsumer = errorConsumer;
+    }
+
+    /**
+     * Gets the hint provider that shall only be used by this instance of the
+     * validation filter.
+     *
+     * @return The hint provider or {@code null} if no hint provider is set.
+     *
+     * @since 6.3.0
+     */
+    public ValidationHintProvider getLocalHintProvider() {
+        return localHintProvider;
+    }
+
+    /**
+     * This sets a hint provider that shall only be used by this instance of the
+     * validation filter.
+     *
+     * @param localHintProvider The hint provider to set or {@code null} to use
+     *        the global hint provider.
+     *
+     * @see #setHintProvider
+     *
+     * @since 6.3.0
+     */
+    public void setLocalHintProvider(ValidationHintProvider localHintProvider) {
+        this.localHintProvider = localHintProvider;
     }
 
     /**
@@ -304,7 +334,7 @@ public class ValidationFilter extends DocumentFilter {
         if (!hintsVisible)
             return;
 
-        hintProvider.hideHints(textField);
+        getActiveHintProvider().hideHints(textField);
         hintsVisible = false;
     }
 
@@ -367,6 +397,10 @@ public class ValidationFilter extends DocumentFilter {
                 }
             }
         });
+    }
+
+    private ValidationHintProvider getActiveHintProvider() {
+        return localHintProvider != null ? localHintProvider : hintProvider;
     }
 
     private String doInputValidation(FilterBypass fb, int offset, int length, String text) throws BadLocationException {
@@ -441,9 +475,9 @@ public class ValidationFilter extends DocumentFilter {
 
     private void setVisualHints(ValidatorException e) {
         if (hintsVisible) {
-            hintProvider.updateHints(textField, e);
+            getActiveHintProvider().updateHints(textField, e);
         } else {
-            hintProvider.showHints(textField, e);
+            getActiveHintProvider().showHints(textField, e);
             hintsVisible = true;
         }
     }
