@@ -14,6 +14,7 @@
         <module name="de-ganzer-swing-dv" />
         <module name="swing-dfw" />
         <module name="ui-tests" />
+        <module name="de-ganzer-swing-dlgfw" />
         <module name="de-ganzer-core" />
         <module name="de-ganzer-swing" />
         <module name="de-ganzer-gv" />
@@ -21,7 +22,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="de-ganzer-libs" target="17" />
-      <module name="de-ganzer-swing-dlgfw" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
