@@ -42,6 +42,7 @@ public class DateValidator extends PxPicValidator {
      * allowed value to {@code LocalDate#MAX}.
      */
     public DateValidator() {
+        setMatchErrorMessage(DEFAULT_DATE_ERROR_MESSAGE);
     }
 
     /**
@@ -55,6 +56,7 @@ public class DateValidator extends PxPicValidator {
      */
     public DateValidator(int options) {
         super(options);
+        setMatchErrorMessage(DEFAULT_DATE_ERROR_MESSAGE);
     }
 
     /**
@@ -129,6 +131,7 @@ public class DateValidator extends PxPicValidator {
      */
     public DateValidator(int options, LocalDate minDate, LocalDate maxDate, String patternString) {
         super(options);
+        setMatchErrorMessage(DEFAULT_DATE_ERROR_MESSAGE);
 
         this.minDate = minDate != null ? minDate : LocalDate.MIN;
         this.maxDate = maxDate != null ? maxDate : LocalDate.MAX;
@@ -328,6 +331,8 @@ public class DateValidator extends PxPicValidator {
         this.dateErrorMessage = Strings.isNullOrBlank(numberErrorMessage)
                 ? DEFAULT_DATE_ERROR_MESSAGE
                 : numberErrorMessage;
+
+        setMatchErrorMessage(this.dateErrorMessage);
     }
 
     /**

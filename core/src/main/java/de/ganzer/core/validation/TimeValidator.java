@@ -43,6 +43,7 @@ public class TimeValidator extends PxPicValidator{
      * allowed value to {@code LocalTime#MAX}.
      */
     public TimeValidator() {
+        setMatchErrorMessage(DEFAULT_TIME_ERROR_MESSAGE);
     }
 
     /**
@@ -56,6 +57,7 @@ public class TimeValidator extends PxPicValidator{
      */
     public TimeValidator(int options) {
         super(options);
+        setMatchErrorMessage(DEFAULT_TIME_ERROR_MESSAGE);
     }
 
     /**
@@ -91,6 +93,7 @@ public class TimeValidator extends PxPicValidator{
      */
     public TimeValidator(int options, LocalTime minTime, LocalTime maxTime) {
         super(options);
+        setMatchErrorMessage(DEFAULT_TIME_ERROR_MESSAGE);
 
         this.minTime = minTime != null ? minTime : LocalTime.MIN;
         this.maxTime = maxTime != null ? maxTime : LocalTime.MAX;
@@ -289,6 +292,8 @@ public class TimeValidator extends PxPicValidator{
         this.timeErrorMessage = Strings.isNullOrBlank(numberErrorMessage)
                 ? DEFAULT_TIME_ERROR_MESSAGE
                 : numberErrorMessage;
+
+        setMatchErrorMessage(this.timeErrorMessage);
     }
 
     /**
