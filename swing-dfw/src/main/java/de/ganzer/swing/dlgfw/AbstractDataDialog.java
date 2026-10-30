@@ -13,6 +13,8 @@ import java.awt.*;
  * {@link Initializer<Data>}.
  *
  * @param <Data> The type of the accepted data.
+ *
+ * @since 6.0.0
  */
 public abstract class AbstractDataDialog<Data> extends AbstractDialog implements DataSupport<Data>, Initializer<Data> {
     private Data data;

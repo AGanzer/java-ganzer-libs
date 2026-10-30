@@ -1,0 +1,78 @@
+package com.example.uitests.swingdv.doc.text;
+
+import com.example.uitests.swingdv.doc.MDISubView;
+import de.ganzer.dv.ViewCreationInfo;
+import de.ganzer.swing.controls.ClosableTabsPane;
+import de.ganzer.swing.dv.DVManager;
+
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class TextView extends MDISubView<TextDocument> {
+    private final JTextArea editor;
+    private final JPopupMenu popupMenu;
+
+    public TextView(ViewCreationInfo<TextDocument, TextView> info, ClosableTabsPane tabPane) {
+        super(info, tabPane, true);
+
+        editor = new JTextArea();
+        editor.setWrapStyleWord(true);
+        editor.setLineWrap(true);
+        editor.setDocument(getDocument().getDocument());
+        editor.setEditable(!getDocument().isReadOnly());
+        editor.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3 || e.isPopupTrigger())
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                else
+                    super.mouseClicked(e);
+            }
+        });
+
+        JScrollPane scrollPane = new JScrollPane(editor);
+        add(scrollPane, BorderLayout.CENTER);
+
+        var hexItem = new JMenuItem("Open in Hex-Editor");
+        hexItem.addActionListener(e -> {
+            var tpl = getDocument().getTemplate().getViewTemplates().stream()
+                    .filter(t -> t.getDisplayName().equals("Hex-Editor"))
+                    .findFirst()
+                    .orElse(null);
+            DVManager.createView(getDocument(), tpl);
+        });
+
+        popupMenu = new JPopupMenu();
+        popupMenu.add(DVManager.undoAction.createMenuItem());
+        popupMenu.add(DVManager.redoAction.createMenuItem());
+        popupMenu.add(new JSeparator());
+        popupMenu.add(DVManager.cutAction.createMenuItem());
+        popupMenu.add(DVManager.copyAction.createMenuItem());
+        popupMenu.add(DVManager.pasteAction.createMenuItem());
+        popupMenu.add(DVManager.deleteAction.createMenuItem());
+        popupMenu.add(new JSeparator());
+        popupMenu.add(DVManager.saveAction.createMenuItem());
+        popupMenu.add(DVManager.saveAsAction.createMenuItem());
+        popupMenu.add(new JSeparator());
+        popupMenu.add(hexItem);
+
+        SwingUtilities.invokeLater(editor::requestFocus);
+    }
+
+    @Override
+    public void documentDataChanged(Object context) {
+    }
+
+    @Override
+    public void updateTitle() {
+        super.updateTitle();
+        editor.setEditable(!getDocument().isReadOnly());
+    }
+
+    @Override
+    protected void focusContent() {
+        SwingUtilities.invokeLater(editor::requestFocusInWindow);
+    }
+}

@@ -1,4 +1,4 @@
-module de.ganzer.fx {
+open module de.ganzer.fx {
     requires javafx.controls;
     requires javafx.fxml;
     requires de.ganzer.core;

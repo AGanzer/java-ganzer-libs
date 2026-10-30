@@ -24,7 +24,7 @@ public class RegularExpressionValidator extends CharCountValidator {
     /**
      * Creates a new instance of the validator where every input is valid.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      */
     public RegularExpressionValidator() {
     }
@@ -42,7 +42,7 @@ public class RegularExpressionValidator extends CharCountValidator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
      * @param pattern The pattern to use for validation. If this is {@code null},
      *                every input is valid.

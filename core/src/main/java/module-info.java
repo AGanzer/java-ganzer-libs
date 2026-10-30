@@ -1,4 +1,4 @@
-module de.ganzer.core {
+open module de.ganzer.core {
     exports de.ganzer.core;
     exports de.ganzer.core.csv;
     exports de.ganzer.core.files;

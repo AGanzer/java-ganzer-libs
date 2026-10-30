@@ -17,12 +17,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * @since 5.4.0
  */
 public abstract class LogTarget implements AutoCloseable {
-    private final int level;
     private final LogFilter filter;
     private final int messageWaitTimeout;
     private final List<LogInfo> pendingMessages = new ArrayList<>();
     private final AtomicBoolean closed = new AtomicBoolean(false);
 
+    private int level;
     private Logger owner;
     private int messageNumber;
     private ReentrantLock writeLock;
@@ -30,7 +30,7 @@ public abstract class LogTarget implements AutoCloseable {
     private MessageWorker messageWorker;
     private MessageWakeup messageWakeup;
 
-    /**
+     /**
      * Creates a new instance from the specified argument with a filter of an
      * instance of {@link DefaultLogFilter} and a message wait timeout of 0.
      *
@@ -111,6 +111,17 @@ public abstract class LogTarget implements AutoCloseable {
      */
     public int getLevel() {
         return level;
+    }
+
+    /**
+     * Sets the level of this target.
+     *
+     * @param level The level of the log messages to write.
+     *
+     * @since 6.3.0
+     */
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     /**

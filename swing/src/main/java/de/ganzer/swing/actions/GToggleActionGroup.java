@@ -4,10 +4,7 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Groups actions that are exclusively selectable.
@@ -110,6 +107,13 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     /**
+     * Removes all actions from this group.
+     */
+    public void clear() {
+        actions.clear();
+    }
+
+    /**
      * Disables all actions of this group.
      *
      * @param disabled {@code true} to disable all contained actions.
@@ -180,7 +184,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     /**
-     * Creates the menu items that visualizes this toggle group and inserts them
+     * Creates the menu items that visualize this toggle group and inserts them
      * into the specified target.
      *
      * @param target The menu where to insert the menu items.
@@ -194,7 +198,7 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     /**
-     * Creates the buttons that visualizes this toggle group and inserts them
+     * Creates the buttons that visualize this toggle group and inserts them
      * into the specified target.
      *
      * @param target The toolbar where to insert the buttons.
@@ -210,11 +214,54 @@ public class GToggleActionGroup implements GActionItemBuilder, Iterable<GAction>
     }
 
     /**
-     * {@inheritDoc}
+     * Gets a forward iterator for iterating the contained items.
+     *
+     * @return A forward iterator for iterating the contained items.
+     *
+     * @see #backIterator()
      */
     @Override
     public Iterator<GAction> iterator() {
         return actions.iterator();
+    }
+
+    /**
+     * Gets a backward iterator for iterating the contained items.
+     *
+     * @return A backward iterator for iterating the contained items.
+     *
+     * @see #iterator()
+     *
+     * @since 6.0.0
+     */
+    public ListIterator<GAction> backIterator() {
+        return actions.listIterator(actions.size());
+    }
+
+    /**
+     * Gets the number of items in this group.
+     *
+     * @return The number of items in this group.
+     *
+     * @since 6.0.0
+     */
+    public int getItemCount() {
+        return actions.size();
+    }
+
+    /**
+     * Gets the item at the specified index.
+     *
+     * @param index The index of the item to retrieve.
+     *
+     * @return The item at the specified index.
+     *
+     * @throws IndexOutOfBoundsException If the index is out of range.
+     *
+     * @since 6.0.0
+     */
+    public GAction getItemAt(int index) {
+        return actions.get(index);
     }
 
     private boolean hasNoSelection() {

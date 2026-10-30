@@ -12,10 +12,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-        <junit.version>5.8.2</junit.version>
-        <ganzer.version>5.6.0</ganzer.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <junit.version>5.10.2</junit.version>
+        <ganzer.version>6.3.0</ganzer.version>
     </properties>
 
     <dependencies>
@@ -25,6 +25,11 @@
             <version>${ganzer.version}</version>
        </dependency>
         <dependency>
+            <groupId>de.ganzer.dv</groupId>
+            <artifactId>de-ganzer-dv</artifactId>
+            <version>${ganzer.version}</version>
+        </dependency>
+        <dependency>
             <groupId>de.ganzer.fx</groupId>
             <artifactId>de-ganzer-fx</artifactId>
             <version>${ganzer.version}</version>
@@ -32,6 +37,11 @@
         <dependency>
             <groupId>de.ganzer.swing</groupId>
             <artifactId>de-ganzer-swing</artifactId>
+            <version>${ganzer.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.ganzer.swing.dv</groupId>
+            <artifactId>de-ganzer-swing-dv</artifactId>
             <version>${ganzer.version}</version>
         </dependency>
         <dependency>
@@ -55,6 +65,7 @@
             <artifactId>flatlaf-intellij-themes</artifactId>
             <version>3.5.1</version>
         </dependency>
+
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>svgSalamander</artifactId>
@@ -70,6 +81,7 @@
             <artifactId>batik-svggen</artifactId>
             <version>1.17</version>
         </dependency>
+
         <dependency>
             <groupId>org.swinglabs.swingx</groupId>
             <artifactId>swingx-all</artifactId>
@@ -90,6 +102,16 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>21.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dlsc.fxmlkit</groupId>
+            <artifactId>fxmlkit</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>se.alipsa</groupId>
+            <artifactId>fxsvgimage</artifactId>
+            <version>1.5.1</version>
         </dependency>
 
         <dependency>
@@ -115,6 +137,14 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
                 </configuration>
             </plugin>
             <plugin>

@@ -5,6 +5,8 @@ import de.ganzer.swing.util.UISettings;
 /**
  * An interface that can be implemented by frames and dialogs that supports
  * restorable settings.
+ *
+ * @since 6.0.0
  */
 public interface UISettingsSupport {
     /**

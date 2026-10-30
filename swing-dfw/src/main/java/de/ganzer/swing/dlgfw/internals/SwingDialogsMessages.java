@@ -4,7 +4,7 @@ import java.util.ResourceBundle;
 
 public class SwingDialogsMessages {
     public static ResourceBundle getBundle() {
-        return ResourceBundle.getBundle("de.ganzer.swing.dlgfw");
+        return ResourceBundle.getBundle("de.ganzer.swing.dlgfw.messages");
     }
 
     public static String get(String key) {

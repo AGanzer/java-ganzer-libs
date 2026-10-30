@@ -11,6 +11,8 @@ import java.util.Objects;
  * data.
  *
  * @param <Data> The type of the data to work with.
+ *
+ * @since 6.0.0
  */
 @SuppressWarnings("unused")
 public abstract class AbstractModifiableDataPanel<Data> extends AbstractPanel implements ModifiableDataPanel<Data> {
@@ -85,6 +87,6 @@ public abstract class AbstractModifiableDataPanel<Data> extends AbstractPanel im
      *         owner's data is.
      */
     public Data getData() {
-        return owner.getData();
+        return owner != null ? owner.getData() : null;
     }
 }

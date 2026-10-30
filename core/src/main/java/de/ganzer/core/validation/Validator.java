@@ -34,7 +34,7 @@ public class Validator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      */
     public Validator() {
         options = ValidatorOptions.NEEDS_INPUT;
@@ -340,7 +340,7 @@ public class Validator {
     }
 
     /**
-     * Called to reformats the specified text.
+     * Called to reformat the specified text.
      * <p>
      * This implementation does nothing and returns text. Inheritors should overwrite
      * this to reformat the text.

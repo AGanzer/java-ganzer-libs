@@ -24,7 +24,7 @@ public class ListValidator extends Validator {
     /**
      * Creates a new instance of the validator where all inputs are valid.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      */
     public ListValidator() {
     }
@@ -42,7 +42,7 @@ public class ListValidator extends Validator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
      * @param validInputs The list with the valid inputs or {@code null} or an
      *        empty list to make all inputs valid.
@@ -67,7 +67,7 @@ public class ListValidator extends Validator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
      * @param validInputs The list with the valid inputs or {@code null} or an
      *        empty list to make all inputs valid.

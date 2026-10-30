@@ -14,6 +14,7 @@ public interface TabCloseListener extends EventListener {
      * Invoked when the close button of a closeable tab page is pressed.
      *
      * @param index The zero-based index of the page that's button was clicked.
+     * @param component The component of the page that's button was clicked.
      */
     void closeTabPerformed(int index, Component component);
 }

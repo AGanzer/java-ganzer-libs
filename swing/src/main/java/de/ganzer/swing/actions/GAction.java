@@ -773,6 +773,9 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
     public void actionPerformed(ActionEvent event) {
         Objects.requireNonNull(event);
 
+        if (!isEnabled())
+            return;
+
         Object[] listeners = actionListeners.getListenerList();
         ActionEvent ae = null;
 

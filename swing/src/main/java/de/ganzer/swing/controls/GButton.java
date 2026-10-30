@@ -38,7 +38,50 @@ public class GButton extends JButton {
     }
 
     /**
-     * {@inheritDoc}
+     * Creates a new GButton with the given action with a small image and a
+     * long name and a shown image if available.
+     *
+     * @param a The action.
+     *
+     * @since 6.3.0
+     */
+    public GButton(Action a) {
+        this(a, false, true, false);
+    }
+
+    /**
+     * Creates a new GButton with the given action with a small image and a
+     * long name.
+     *
+     * @param a The action.
+     * @param hideImage Indicates whether the image should be hidden.
+     *
+     * @since 6.3.0
+     */
+    public GButton(Action a, boolean hideImage) {
+        this(a, hideImage, true, false);
+    }
+
+    /**
+     * Creates a new GButton with the given action and a long name.
+     *
+     * @param a The action.
+     * @param hideImage Indicates whether the image should be hidden.
+     * @param useSmallImage Indicates whether the small image should be used.
+     *
+     * @since 6.3.0
+     */
+    public GButton(Action a, boolean hideImage, boolean useSmallImage) {
+        this(a, hideImage, useSmallImage, false);
+    }
+
+    /**
+     * Creates a new GButton with the given action.
+     *
+     * @param a The action.
+     * @param hideImage Indicates whether the image should be hidden.
+     * @param useSmallImage Indicates whether the small image should be used.
+     * @param useShortName Indicates whether the short name should be used.
      */
     public GButton(Action a, boolean hideImage, boolean useSmallImage, boolean useShortName) {
         super(a);

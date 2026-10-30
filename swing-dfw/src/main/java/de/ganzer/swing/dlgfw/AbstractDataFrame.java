@@ -16,6 +16,8 @@ import java.awt.HeadlessException;
  * {@link Initializer<Data>}.
  *
  * @param <Data> The type of the accepted data.
+ *
+ * @since 6.0.0
  */
 public abstract class AbstractDataFrame<Data> extends AbstractFrame implements DataSupport<Data>, Initializer<Data> {
     private Data data;

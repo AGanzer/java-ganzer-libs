@@ -27,7 +27,7 @@ public class UISettings extends UserSettings {
      * @param appName The name of the application where the name of the settings
      *         file is build from.
      * @param appVersion The version of the application where the name of the
-     *         settings sub folder is build from. If this is {@code null}, no
+     *         settings subfolder is build from. If this is {@code null}, no
      *         version folder is created.
      *
      * @throws IllegalArgumentException {@code appName} or {@code appVersion} is
@@ -45,7 +45,7 @@ public class UISettings extends UserSettings {
      * @param appName The name of the application where the name of the settings
      *         file is build from.
      * @param appVersion The version of the application where the name of the
-     *         settings sub folder is build from. If this is {@code null}, no
+     *         settings subfolder is build from. If this is {@code null}, no
      *         version folder is created.
      * @param asXml Indicates whether the settings file shall be written in XML.
      *

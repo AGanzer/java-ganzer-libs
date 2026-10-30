@@ -5,6 +5,8 @@ package de.ganzer.swing.dlgfw;
  * controls.
  *
  * @param <Data> The type of the data to support.
+ *
+ * @since 6.0.0
  */
 public interface Initializer<Data> {
     /**

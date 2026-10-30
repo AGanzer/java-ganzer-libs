@@ -45,36 +45,6 @@ public class ValidationTextFormatterList implements Iterable<ValidationTextForma
     }
 
     /**
-     * Adds the specified formatter to this collection.
-     *
-     * @param formatter The formatter to add.
-     *
-     * @throws NullPointerException {@code formatter} is {@code null}.
-     *
-     * @deprecated Use {@link #addFormatter(ValidationTextFormatter)} instead.
-     */
-    @Deprecated
-    public void addFilter(ValidationTextFormatter formatter) {
-        Objects.requireNonNull(formatter, "formatter must not be null.");
-        formatters.add(formatter);
-    }
-
-    /**
-     * Removes the specified formatter from this collection.
-     *
-     * @param formatter The formatter to remove.
-     *
-     * @throws NullPointerException {@code formatter} is {@code null}.
-     *
-     * @deprecated Use {@link #removeFormatter(ValidationTextFormatter)} instead.
-     */
-    @Deprecated
-    public void removeFilter(ValidationTextFormatter formatter) {
-        Objects.requireNonNull(formatter, "formatter must not be null.");
-        formatters.remove(formatter);
-    }
-
-    /**
      * Invokes {@link ValidationTextFormatter#validate(ValidationBehavior)} for each
      * contained filter.
      * <p>

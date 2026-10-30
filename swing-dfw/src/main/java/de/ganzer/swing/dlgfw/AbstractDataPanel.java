@@ -9,6 +9,8 @@ import java.util.Objects;
  * The base class for all center panels that accepts external data.
  *
  * @param <Data> The type of the data to work with.
+ *
+ * @since 6.0.0
  */
 @SuppressWarnings("unused")
 public abstract  class AbstractDataPanel<Data> extends AbstractPanel implements Initializer<Data> {

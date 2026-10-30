@@ -11,22 +11,6 @@ public class ValidatorException extends RuntimeException {
     private final Validator source;
 
     /**
-     * {@inheritDoc}
-     */
-    @Deprecated(forRemoval = true, since = "5.4.0")
-    public ValidatorException() {
-        this(null, null, null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Deprecated(forRemoval = true, since = "5.4.0")
-    public ValidatorException(String message) {
-        this(message, null, null);
-    }
-
-    /**
      * Creates a new instance.
      *
      * @param message The message to set.

@@ -1,10 +1,10 @@
 package de.ganzer.swing.dlgfw;
 
-import de.ganzer.swing.dlgfw.services.ServiceProvider;
+import de.ganzer.core.Services;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
-import de.ganzer.swing.dlgfw.services.ApplicationService;
-import de.ganzer.swing.dlgfw.services.NavigationService;
+import de.ganzer.swing.dlgfw.services.DFWApplicationService;
+import de.ganzer.swing.dlgfw.services.DFWNavigationService;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -18,6 +18,8 @@ import java.util.function.Consumer;
  * The basic dialog for all modal dialogs that modifies external data.
  *
  * @param <Data> The type of the accepted data.
+ *
+ * @since 6.0.0
  */
 @SuppressWarnings("unused")
 public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDialog<Data> implements ModifiableDataSupport<Data> {
@@ -596,7 +598,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
     }
 
     /**
-     * Gets a value the indicates whether the data is modified by the user.
+     * Gets a value that indicates whether the data is modified by the user.
      *
      * @return {@code true} if the data is modified; otherwise, {@code false}.
      */
@@ -629,11 +631,11 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
     protected AbstractButton[] createWindowButtons() {
         okButton = new JButton(getMainButtonText());
         okButton.setEnabled(false);
-        okButton.addActionListener(e -> closeDialog(false));
+        okButton.addActionListener(e -> closeDialog(true));
         getRootPane().setDefaultButton(okButton);
 
         JButton cancelButton = new JButton(SwingDialogsMessages.get("commons.buttons.cancel"));
-        cancelButton.addActionListener(e -> closeDialog(true));
+        cancelButton.addActionListener(e -> closeDialog(false));
 
         getRootPane().setDefaultButton(okButton);
 
@@ -641,17 +643,17 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
     }
 
     /**
-     * Called to get the text of the dialogs main button.
+     * Called to get the text of the dialog's main button.
      * <p>
-     * This method can be overridden if no additional buttons should be shown
-     * but the text "Save" is not applicable.
+     * This method can be overridden if no additional buttons should be shown,
+     * but the text "OK" is not applicable.
      *
      * @return The text to use for the main button. This implementation does
-     *         always return "Save".
+     *         always return "OK".
      */
     @Override
     protected String getMainButtonText() {
-        return SwingDialogsMessages.get("commons.buttons.save");
+        return SwingDialogsMessages.get("commons.buttons.ok");
     }
 
     /**
@@ -761,14 +763,14 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      * Called within {@link #processWindowEvent(WindowEvent)} when the window
      * is closed but has modified data to query the user what to do.
      * <p>
-     * This implementation uses {@link NavigationService#getConfirmation} if
-     * a {@code NavigationService} is available; otherwise {@link JOptionPane}
+     * This implementation uses {@link DFWNavigationService#getConfirmation} if
+     * a {@code DFWNavigationService} is available; otherwise {@link JOptionPane}
      * is used to show a question whether the data shall be saved and Yes, No
      * and Cancel buttons.
      * <p>
      * The title to show in the confirmation dialog is gotten from
-     * {@link ApplicationService#getAppDisplayName()} if available; otherwise,
-     * {@code null} is used as title.
+     * {@link DFWApplicationService#getAppDisplayName()} if available;
+     * otherwise, {@code null} is used as a title.
      *
      * @return The result of the user's choice. {@code true} to accept,
      *         {@code false} to deny or {@code null} to cancel.
@@ -777,13 +779,13 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
     protected Boolean queryUserToSave() {
         String appName = null;
 
-        if (ServiceProvider.has(ApplicationService.class)) {
-            ApplicationService appService = ServiceProvider.get(ApplicationService.class);
+        if (Services.has(DFWApplicationService.class)) {
+            DFWApplicationService appService = Services.get(DFWApplicationService.class);
             appName = appService.getAppDisplayName();
         }
 
-        if (ServiceProvider.has(NavigationService.class)) {
-            NavigationService service = ServiceProvider.get(NavigationService.class);
+        if (Services.has(DFWNavigationService.class)) {
+            DFWNavigationService service = Services.get(DFWNavigationService.class);
             return service.getConfirmation(this, SwingDialogsMessages.get("data.query.save"), appName);
         }
 

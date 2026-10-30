@@ -6,10 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Groups several actions to enable the creation of menus and menu items.
@@ -53,6 +50,13 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
         }
 
         return this;
+    }
+
+    /**
+     * Removes all actions from this group.
+     */
+    public void clear() {
+        actions.clear();
     }
 
     /**
@@ -202,7 +206,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
-     * Creates the menus that visualizes this action group and inserts them into
+     * Creates the menus that visualize this action group and inserts them into
      * the specified target.
      * <p>
      * This implementation does only create menus for items that are implementing
@@ -225,7 +229,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
-     * Creates the menu items that visualizes this action group and inserts them
+     * Creates the menu items that visualize this action group and inserts them
      * into the specified target.
      * <p>
      * This implementation calls {@link #createMenu()} for all items that are
@@ -249,7 +253,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
-     * Creates the menu items that visualizes this action group and inserts them
+     * Creates the menu items that visualize this action group and inserts them
      * into the specified target.
      * <p>
      * This implementation calls {@link #createMenu()} for all items that are
@@ -300,7 +304,7 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
     }
 
     /**
-     * Creates the buttons that visualizes this action group and inserts them
+     * Creates the buttons that visualize this action group and inserts them
      * into the specified target.
      * <p>
      * For each item of type {@link GActionGroup} a button with a popup menu is
@@ -324,15 +328,61 @@ public class GActionGroup extends GAction implements Iterable<GActionItemBuilder
         }
     }
 
+    /**
+     * Gets a forward iterator for iterating the contained items.
+     *
+     * @return A forward iterator for iterating the contained items.
+     *
+     * @see #backIterator()
+     */
+    @Override
+    public Iterator<GActionItemBuilder> iterator() {
+        return actions.iterator();
+    }
+
+    /**
+     * Gets the number of items in this group.
+     *
+     * @return The number of items in this group.
+     *
+     * @since 6.0.0
+     */
+    public int getItemCount() {
+        return actions.size();
+    }
+
+    /**
+     * Gets the item at the specified index.
+     *
+     * @param index The index of the item to retrieve.
+     *
+     * @return The item at the specified index.
+     *
+     * @throws IndexOutOfBoundsException If the index is out of range.
+     *
+     * @since 6.0.0
+     */
+    public GActionItemBuilder getItemAt(int index) {
+        return actions.get(index);
+    }
+
+    /**
+     * Gets a backward iterator for iterating the contained items.
+     *
+     * @return A backward iterator for iterating the contained items.
+     *
+     * @see #iterator()
+     *
+     * @since 6.0.0
+     */
+    public ListIterator<GActionItemBuilder> backIterator() {
+        return actions.listIterator(actions.size());
+    }
+
     private JPopupMenu createPopupMenu() {
         var menu = new JPopupMenu();
         addMenuItems(menu);
 
         return menu;
-    }
-
-    @Override
-    public Iterator<GActionItemBuilder> iterator() {
-        return actions.iterator();
     }
 }

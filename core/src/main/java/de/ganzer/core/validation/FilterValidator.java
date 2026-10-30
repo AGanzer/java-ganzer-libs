@@ -47,7 +47,7 @@ public class FilterValidator extends CharCountValidator {
     /**
      * Creates a new instance of the validator where all characters are valid.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      */
     public FilterValidator() {
     }
@@ -65,7 +65,7 @@ public class FilterValidator extends CharCountValidator {
     /**
      * Creates a new instance of the validator where all characters are valid.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
      * @param validMask The mask that specifies the valid characters. If this
      *                  is empty, all characters are valid. See {@link FilterValidator}
@@ -97,7 +97,7 @@ public class FilterValidator extends CharCountValidator {
     /**
      * Creates a new instance of the validator where all characters are valid.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
      * @param validMask   The mask that specifies the valid characters. If this
      *                    is empty, all characters are valid. See {@link FilterValidator}

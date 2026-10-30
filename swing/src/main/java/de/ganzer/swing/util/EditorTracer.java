@@ -1,0 +1,411 @@
+package de.ganzer.swing.util;
+
+import de.ganzer.core.OS;
+import de.ganzer.swing.controls.GTextArea;
+import de.ganzer.swing.controls.GTextField;
+
+import javax.swing.Action;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.JTextComponent;
+import java.awt.Component;
+import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
+/**
+ * A utility class that enables tracing of focusable components to enable
+ * actions of editable components globally.
+ *
+ * <pre>{@code
+ * void installListeners() {
+ *     cutAction.addActionListener(e -> EditorTracer.getInstance().cut());
+ *     copyAction.addActionListener(e -> EditorTracer.getInstance().copy());
+ *     pasteAction.addActionListener(e -> EditorTracer.getInstance().paste());
+ * }
+ *
+ * // This is frequently invoked:
+ * void updateActions() {
+ *     cutAction.setEnabled(EditorTracer.getInstance().canCut());
+ *     copyAction.setEnabled(EditorTracer.getInstance().canCopy());
+ *     pasteAction.setEnabled(EditorTracer.getInstance().canPaste());
+ * }
+ * }</pre>
+ *
+ * @since 6.0.0
+ */
+public final class EditorTracer {
+    /**
+     * The name of the property that holds the default component.
+     *
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
+     */
+    public static final String DEFAULT_COMPONENT_PROPERTY = "defaultComponent";
+    /**
+     * The name of the property that holds the editable component.
+     *
+     * @see #addPropertyChangeListener(PropertyChangeListener)
+     * @see #addPropertyChangeListener(String, PropertyChangeListener)
+     */
+    public static final String EDITABLE_COMPONENT_PROPERTY = "editableComponent";
+
+    private static final JTextComponentWrapper wrapper = new JTextComponentWrapper();
+    private static EditorTracer instance;
+
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+    private EditableComponent defaultComponent;
+    private EditableComponent editableComponent;
+
+    /**
+     * Gets the single instance of the tracer.
+     *
+     * @return The single instance of the tracer.
+     */
+    public static EditorTracer getInstance() {
+        if (instance == null)
+            instance = new EditorTracer();
+
+        return instance;
+    }
+
+    /**
+     * Adds a listener for all properties.
+     *
+     * @param listener The listener to install.
+     *
+     * @throws NullPointerException {@code originator} or {@code listener} is
+     *          {@code null}.
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(null, listener);
+    }
+
+    /**
+     * Adds a listener for the specified property.
+     *
+     * @param propertyName The name of the property to add the listener fo or
+     *         {@code null} or an empty string to listen to all properties.
+     * @param listener The listener to install.
+     *
+     * @throws NullPointerException {@code originator} or {@code listener} is
+     *          {@code null}.
+     */
+    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(propertyName, listener);
+    }
+
+    /**
+     * Removes an installed listener.
+     *
+     * @param listener The listener to install.
+     *
+     * @throws NullPointerException {@code originator} or {@code listener} is
+     *          {@code null}.
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(null, listener);
+    }
+
+    /**
+     * Removes an installed listener for the specified property.
+     *
+     * @param propertyName The name of the property to add the listener fo or
+     *         {@code null} or an empty string for listeners that are installed
+     *         for all properties.
+     * @param listener The listener to install.
+     *
+     * @throws NullPointerException {@code originator} or {@code listener} is
+     *          {@code null}.
+     */
+    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(propertyName, listener);
+    }
+
+    /**
+     * Gets a value that indicates whether the current editor is able to undo
+     * the last undoable action.
+     * <p>
+     * <b>NOTE:</b> This works only for controls that have an undo manager
+     * installed, like {@link GTextField} and {@link GTextArea}. By default,
+     * Java Swing does not provide this with {@link JTextComponent} derivations.
+     *
+     * @return {@code true} if an action can be undone.
+     */
+    public boolean canUndo() {
+        return editableComponent != null && editableComponent.canUndo();
+    }
+
+    /**
+     * Undoes the last undoable action.
+     * <p>
+     * <b>NOTE:</b> This works only for controls that have an undo manager
+     * installed, like {@link GTextField} and {@link GTextArea}. By default,
+     * Java Swing does not provide this with {@link JTextComponent} derivations.
+     */
+    public void undo() {
+        if (canUndo())
+            editableComponent.undo();
+    }
+
+    /**
+     * Gets a value that indicates whether the current editor is able to redo an
+     * undone action.
+     * <p>
+     * <b>NOTE:</b> This works only for controls that have an undo manager
+     * installed, like {@link GTextField} and {@link GTextArea}. By default,
+     * Java Swing does not provide this with {@link JTextComponent} derivations.
+     *
+     * @return {@code true} if an action can be redone.
+     */
+    public boolean canRedo() {
+        return editableComponent != null && editableComponent.canRedo();
+    }
+
+    /**
+     * Redoes the last undone action.
+     * <p>
+     * <b>NOTE:</b> This works only for controls that have an undo manager
+     * installed, like {@link GTextField} and {@link GTextArea}. By default,
+     * Java Swing does not provide this with {@link JTextComponent} derivations.
+     */
+    public void redo() {
+        if (canRedo())
+            editableComponent.redo();
+    }
+
+    /**
+     * Indicates whether a "Cut" action is currently supported.
+     *
+     * @return {@code true} if the action is currently supported.
+     */
+    public boolean canCut() {
+        return editableComponent != null && editableComponent.canCut();
+    }
+
+    /**
+     * Performs a "Cut" action.
+     */
+    public void cut() {
+        if (canCut())
+            editableComponent.cut();
+    }
+
+    /**
+     * Indicates whether a "Copy" action is currently supported.
+     *
+     * @return {@code true} if the action is currently supported.
+     */
+    public boolean canCopy() {
+        return editableComponent != null && editableComponent.canCopy();
+    }
+
+    /**
+     * Performs a "Copy" action.
+     */
+    public void copy() {
+        if (canCopy())
+            editableComponent.copy();
+    }
+
+    /**
+     * Indicates whether a "Paste" action is currently supported.
+     *
+     * @return {@code true} if the action is currently supported.
+     */
+    public boolean canPaste() {
+        return editableComponent != null && editableComponent.canPaste();
+    }
+
+    /**
+     * Performs a "Paste" action.
+     */
+    public void paste() {
+        if (canPaste())
+            editableComponent.paste();
+    }
+
+    /**
+     * Indicates whether a "Delete" action is currently supported.
+     *
+     * @return {@code true} if the action is currently supported.
+     */
+    public boolean canDelete() {
+        return editableComponent != null && editableComponent.canDelete();
+    }
+
+    /**
+     * Performs a "Delete" action.
+     */
+    public void delete() {
+        if (canDelete())
+            editableComponent.delete();
+    }
+
+    /**
+     * Returns the editable component that is currently focused.
+     *
+     * @return The editable component or {@code null} if no editable component
+     *         is currently focused.
+     */
+    public EditableComponent getEditableComponent() {
+        return editableComponent;
+    }
+
+    /**
+     * Returns the editable component to use if no editable is currently focused.
+     *
+     * @return The default editable component or {@code null} if no default
+     *         component is set.
+     *
+     * @see #setDefaultEditable(Component)
+     */
+    public Component getDefaultEditable() {
+        return (Component) defaultComponent;
+    }
+
+    /**
+     * Sets the editable component to use if no editable is currently focused.
+     * <p>
+     * This method can be used to set a component that normally does not get the
+     * keyboard focus itself but does implement {@link EditableComponent}.
+     *
+     * @param component The default component to set or {@code null} to set no
+     *        default component.
+     */
+    public void setDefaultEditable(Component component) {
+        var reset = editableComponent == defaultComponent;
+        var old = defaultComponent;
+
+        defaultComponent = (component instanceof EditableComponent ec) ? ec : null;
+
+        pcs.firePropertyChange(DEFAULT_COMPONENT_PROPERTY, old, defaultComponent);
+
+        if (reset)
+            updateEditable(null);
+    }
+
+    private EditorTracer() {
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener("focusOwner",
+                                                                                        e -> updateEditable(e.getNewValue()));
+    }
+
+    private void updateEditable(Object component) {
+        var old = editableComponent;
+
+        editableComponent = getEditable(component);
+
+        if (editableComponent == null)
+            editableComponent = getEditable(KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner());
+
+        if (editableComponent == null)
+            editableComponent = defaultComponent;
+
+        pcs.firePropertyChange(EDITABLE_COMPONENT_PROPERTY, old, editableComponent);
+    }
+
+    private static EditableComponent getEditable(Object control) {
+        if (control instanceof EditableComponent e)
+            return e;
+
+        if (control instanceof JTextComponent c) {
+            wrapper.setComponent(c);
+            return wrapper;
+        }
+
+        return null;
+    }
+
+    private static class JTextComponentWrapper implements EditableComponent {
+        private JTextComponent component;
+
+        public void setComponent(JTextComponent component) {
+            this.component = component;
+        }
+
+        @Override
+        public boolean canUndo() {
+            Action undo = component.getActionMap().get("Undo");
+            return undo != null && undo.isEnabled();
+        }
+
+        @Override
+        public void undo() {
+            Action undo = component.getActionMap().get("Undo");
+            undo.actionPerformed(new ActionEvent(component, ActionEvent.ACTION_PERFORMED, null));
+        }
+
+        @Override
+        public boolean canRedo() {
+            Action redo = component. getActionMap().get("Redo");
+            return redo != null && redo.isEnabled();
+        }
+
+        @Override
+        public void redo() {
+            Action redo = component.getActionMap().get("Redo");
+            redo.actionPerformed(new ActionEvent(component, ActionEvent.ACTION_PERFORMED, null));
+        }
+
+        @Override
+        public boolean canCut() {
+            return component.isEditable() && component.getSelectedText() != null;
+        }
+
+        @Override
+        public void cut() {
+            component.cut();
+        }
+
+        @Override
+        public boolean canCopy() {
+            return component.getSelectedText() != null;
+        }
+
+        @Override
+        public void copy() {
+            component.copy();
+        }
+
+        @Override
+        public boolean canPaste() {
+            if (!component.isEditable())
+                return false;
+
+            try {
+                var cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+                return cb.isDataFlavorAvailable(DataFlavor.stringFlavor);
+            } catch (IllegalStateException ex) {
+                return false;
+            }
+        }
+
+        @Override
+        public void paste() {
+            component.paste();
+        }
+
+        @Override
+        public boolean canDelete() {
+            if (OS.isMac()) {
+                return component.isEditable()
+                        && (component.getSelectedText() != null || component.getSelectionStart() > 0);
+            } else {
+                return component.isEditable()
+                        && (component.getSelectedText() != null || component.getSelectionStart() < component.getText().length());
+            }
+        }
+
+        @Override
+        public void delete() {
+            Action deleteAction = OS.isMac()
+                    ? component.getActionMap().get(DefaultEditorKit.deletePrevCharAction)
+                    : component.getActionMap().get(DefaultEditorKit.deleteNextCharAction);
+
+            if (deleteAction != null && deleteAction.isEnabled())
+                deleteAction.actionPerformed(new ActionEvent(component, ActionEvent.ACTION_PERFORMED, null));
+        }
+    }
+}

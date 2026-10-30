@@ -1,6 +1,7 @@
-module com.example.uitests {
+open module com.example.uitests {
     requires javafx.controls;
     requires javafx.fxml;
+    requires com.dlsc.fxmlkit;
     requires de.ganzer.core;
     requires de.ganzer.fx;
     requires java.desktop;
@@ -10,8 +11,11 @@ module com.example.uitests {
     requires com.kitfox.svg;
     requires batik.dom;
     requires batik.svggen;
-    opens com.example.uitests.fx to javafx.fxml;
-    opens com.example.uitests.fx.charts to javafx.fxml;
+    requires swingx.all;
+    requires de.ganzer.dv;
+    requires de.ganzer.swing.dv;
+    requires de.ganzer.swing.dlgfw;
+    requires org.girod.javafx.svgimage;
     exports com.example.uitests.fx;
     exports com.example.uitests.fx.charts;
     exports com.example.uitests.swing;

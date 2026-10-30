@@ -17,12 +17,13 @@ import java.util.Objects;
  * a factory method that fills all layout positions that are predefined for all
  * frames and dialogs. This contains the following sub panels in the
  * order they are queried and created:
- *
  * <ul>
- *     <li>{@link BorderLayout#CENTER}: The mandatory main content of the frame
- *         or dialog.</li>
- *     <li>{@link BorderLayout#NORTH}: The mandatory title panel that contains
- *         the name of the dialog or frame.</li>
+ *     <li>{@link BorderLayout#CENTER}: The mandatory main content of the panel.
+ *         </li>
+ *     <li>{@link BorderLayout#NORTH}: The optional title panel that contains
+ *         the name of the dialog or frame. if no title panel is wanted,
+ *         inheritors should override {@link #createTitlePanel()} and return
+ *         {@code null}.</li>
  *     <li>{@link BorderLayout#SOUTH}: An optional panel for additional controls.
  *         </li>
  *     <li>{@link BorderLayout#EAST}: An optional panel for additional controls.
@@ -30,7 +31,6 @@ import java.util.Objects;
  *     <li>{@link BorderLayout#WEST}: An optional panel for additional controls.
  *         </li>
  * </ul>
- *
  * All these panels are created in the derived classes, except the title panel.
  * This is created by {@code AbstractVPContentPane} itself and the only methods
  * that have to be overridden are {@link #createTitleLabel()} and optionally
@@ -38,9 +38,40 @@ import java.util.Objects;
  * optional image that is displayed in front of the title. If the title shall be
  * filled with further controls, {@link #createCenteredTitleExtension()} and
  * {@link #createRightTitleExtension()} should be overridden.
+ * <p>
+ * If no title is wanted, inheritors should override {@link #createTitlePanel()}
+ * and return {@code null}. In all other cases at least {@link #createTitleLabel()}
+ * should be overridden to provide a caption.
+ *
+ * @since 6.0.0
  */
 public abstract class AbstractPanel extends JPanel implements Disposable {
-    private static Color titleBackground = Color.WHITE;
+    /**
+     * The default size of a title icon.
+     */
+    protected static final int DEFAULT_TITLE_ICON_SIZE = 32;
+    /**
+     * The default height of a title.
+     */
+    protected static final Color DEFAULT_TITLE_BACKGROUND = Color.WHITE;
+    /**
+     * The default height of a title.
+     */
+    protected static final Color DEFAULT_TITLE_FOREGROUND = Color.BLACK;
+    /**
+     * The default height of a title.
+     */
+    protected static final int DEFAULT_TITLE_HEIGHT = 50;
+    /**
+     * The default font to use for titles. This does only affect the title text,
+     * not the buttons or any other controls within the title.
+     */
+    protected static final Font DEFAULT_TITLE_FONT = new Font("Arial", Font.BOLD, 18);
+
+    private static Color titleBackground = DEFAULT_TITLE_BACKGROUND;
+    private static Color titleForeground = DEFAULT_TITLE_FOREGROUND;
+    private static int preferredTitleHeight = DEFAULT_TITLE_HEIGHT;
+    private static Font titleFont = DEFAULT_TITLE_FONT;
 
     private final GAction queryCloseAction = new GAction();
 
@@ -87,6 +118,71 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     public static void setTitleBackground(Color color) {
         Objects.requireNonNull(color, "color cannot be null.");
         titleBackground = color;
+    }
+
+    /**
+     * Gets the color to use as foreground-color for titles.
+     *
+     * @return The color. The default is {@link Color#BLACK}.
+     */
+    public static Color getTitleForeground() {
+        return titleForeground;
+    }
+
+    /**
+     * Sets the color to use as foreground-color for titles.
+     *
+     * @param color The color to set.
+     *
+     * @throws NullPointerException {@code color} is {@code null}.
+     */
+    public static void setTitleForeground(Color color) {
+        Objects.requireNonNull(color, "color cannot be null.");
+        titleForeground = color;
+    }
+
+    /**
+     * Gets the preferred height to use for titles.
+     *
+     * @return The preferred height. The default is {@link #DEFAULT_TITLE_HEIGHT}.
+     */
+    public static int getPreferredTitleHeight() {
+        return preferredTitleHeight;
+    }
+
+    /**
+     * Sets the preferred height to use for titles.
+     *
+     * @param height The preferred height to set.
+     *
+     * @throws IllegalArgumentException {@code height} is less than 20.
+     */
+    public static void setPreferredTitleHeight(int height) {
+        if (height < 20)
+            throw new IllegalArgumentException("titleHeight must be at least 20.");
+
+        preferredTitleHeight = height;
+    }
+
+    /**
+     * Gets the font to use for titles.
+     *
+     * @return The font. The default is {@link #DEFAULT_TITLE_FONT}.
+     */
+    public static Font getTitleFont() {
+        return titleFont;
+    }
+
+    /**
+     * Sets the font to use for titles.
+     *
+     * @param font The font to set.
+     *
+     * @throws NullPointerException {@code font} is {@code null}.
+     */
+    public static void setTitleFont(Font font) {
+        Objects.requireNonNull(font, "font must not be null.");
+        titleFont = font;
     }
 
     /**
@@ -152,7 +248,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * Called to create the panel with the main controls of the frame or dialog.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      *
      * @return The panel that shall be inserted into the center of the frame or
      *         dialog. This must not be {@code null}.
@@ -163,29 +259,40 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * Called to create the caption for the title of the dialog or frame.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
+     * <p>
+     * This implementation does always return {@code null}.
      *
      * @return The title to set or {@code null} if no caption shall be displayed.
      */
-    protected abstract JComponent createTitleLabel();
+    protected JComponent createTitleLabel() {
+        return null;
+    }
 
     /**
      * Called to create the image icon of the dialog or frame.
      * <p>
+     * The preferred size of the icon should be {@link #DEFAULT_TITLE_ICON_SIZE}
+     * x {@link #DEFAULT_TITLE_ICON_SIZE}.
+     * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
+     * <p>
+     * This implementation does always return {@code null}.
      *
      * @return The image icon to display or {@code null} if no image shall be
      *         displayed.
      */
-    protected abstract JComponent createTitleIcon();
+    protected JComponent createTitleIcon() {
+        return null;
+    }
 
     /**
      * Called to create a component that contains further controls that shall be
      * displayed in the center of the title panel.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -201,7 +308,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * displayed on the right side of the title panel.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -217,7 +324,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * displayed the south of the frame or dialog.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -233,7 +340,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * displayed the east of the frame or dialog.
      * <p>
      * Note that this is called during construction. Therefore, derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -249,7 +356,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * displayed the west of the frame or dialog.
      * <p>
      * Note that this is called during construction. Therefor derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      * <p>
      * This implementation does always return {@code null}.
      *
@@ -278,7 +385,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * }</pre>
      * <p>
      * Note that this is called during construction. Therefor derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      *
      * @return The created panel. Inheritors may return {@code null} if no title
      *          panel is wanted.
@@ -288,9 +395,10 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
         title.setLayout(new BoxLayout(title, BoxLayout.X_AXIS));
         title.setBackground(titleBackground);
         title.setOpaque(true);
-        title.setPreferredSize(new Dimension(100, 50));
 
         fillTitlePanel(title);
+
+        title.setPreferredSize(new Dimension(title.getPreferredSize().width, preferredTitleHeight));
 
         return title;
     }
@@ -300,7 +408,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * controls.
      * <p>
      * Note that this is called during construction. Therefor derived classes
-     * my not been fully initialized when this is invoked.
+     * may not have been fully initialized when this is invoked.
      *
      * @param titlePanel The panel to fill.
      */
@@ -316,8 +424,8 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
         }
 
         if (text != null) {
-            text.setFont(new Font("Arial", Font.BOLD, 18));
-            text.setForeground(Color.BLACK);
+            text.setFont(titleFont);
+            text.setForeground(titleForeground);
 
             titlePanel.add(text);
         }
@@ -333,11 +441,10 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
 
         further = createRightTitleExtension();
 
-        if (further != null) {
+        if (further != null)
             titlePanel.add(further);
-            titlePanel.add(Box.createHorizontalStrut(10));
-        }
 
+        titlePanel.add(Box.createHorizontalStrut(10));
     }
 
     private void setup() {

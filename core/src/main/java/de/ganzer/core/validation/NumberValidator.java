@@ -7,6 +7,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.time.format.DecimalStyle;
+import java.util.Locale;
 
 /**
  * The NumberValidator class defines a validator that validates the correct
@@ -40,14 +41,15 @@ public class NumberValidator extends Validator {
     private int numDecimals = 0;
     private String displayFormat;
     private String editFormat;
+    private Locale locale;
 
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT},
-     * the {@link #getMinValue smallest} allowed value to {@code Long.MIN_VALUE} and
-     * the {@link #getMaxValue greatest} allowed value to {@code Long.MAX_VALUE}.
-     * Input of {@link #getNumDecimals post decimal digits} is forbidden.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT},
+     * the smallest allowed value to {@link Long#MIN_VALUE} and the greatest
+     * allowed value to {@link Long#MAX_VALUE}. Input of post-decimal digits
+     * is prohibited.
      */
     public NumberValidator() {
     }
@@ -69,7 +71,7 @@ public class NumberValidator extends Validator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      * Input of {@link #getNumDecimals post decimal digits} is forbidden.
      *
      * @param minValue The smallest allowed value.
@@ -100,7 +102,7 @@ public class NumberValidator extends Validator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      * Input of {@link #getNumDecimals post decimal digits} is forbidden.
      *
      * @param minValue The smallest allowed value.
@@ -122,7 +124,7 @@ public class NumberValidator extends Validator {
      *                 {@link ValidatorOptions} constants.
      * @param minValue The smallest allowed value.
      * @param maxValue The greatest allowed value.
-     * @param numDecimals The number of post decimal digits to allow.
+     * @param numDecimals The number of post-decimal digits to allow.
      *
      * @throws IllegalArgumentException minValue is greater than maxValue.
      */
@@ -138,7 +140,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Gets the message that is shown if the input is out of the allowed range.
+     * Gets the message shown if the input is out of the allowed range.
      *
      * @return The error message to use. The default is
      *         {@link #DEFAULT_RANGE_ERROR_MESSAGE}.
@@ -150,7 +152,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Sets the message that is shown if the input is out of the allowed range.
+     * Sets the message shown if the input is out of the allowed range.
      * <p>
      * <b>NOTE:</b> The message to set must contain 2 placeholders in the form
      * {@code %1$s} (for the minimum allowed number) and {@code %2$s} (for the
@@ -169,7 +171,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Gets the message that is shown if the input is not a number.
+     * Gets the message shown if the input is not a number.
      *
      * @return The error message to use. The default is
      *         {@link #DEFAULT_NUMBER_ERROR_MESSAGE}.
@@ -181,7 +183,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Sets the message that is shown if the input is not a number.
+     * Sets the message shown if the input is not a number.
      *
      * @param numberErrorMessage The message to use. If this is
      *        {@code null}, empty or does contain white spaces only,
@@ -324,7 +326,7 @@ public class NumberValidator extends Validator {
      *
      * @param minValue The smallest allowed value.
      * @param maxValue The greatest allowed value.
-     * @param numDecimals The number of post decimal digits to allow.
+     * @param numDecimals The number of post-decimal digits to allow.
      *
      * @throws IllegalArgumentException If minValue is greater than maxValue.
      */
@@ -394,6 +396,34 @@ public class NumberValidator extends Validator {
     }
 
     /**
+     * Gets the locale to use to format numbers.
+     *
+     * @return The locale to use to format numbers or {@code null} if the
+     *         default locale is used.
+     *
+     * @see Locale#getDefault()
+     *
+     * @since 6.0.0
+     */
+    public Locale getLocale() {
+        return locale;
+    }
+
+    /**
+     * Sets the locale to use to format numbers.
+     *
+     * @param locale The locale to use to format numbers or {@code null} to use
+     *               the default locale.
+     *
+     * @see Locale#getDefault()
+     *
+     * @since 6.0.0
+     */
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
+    /**
      * This implementation calls {@link Validator#doInputValidation} and checks
      * whether the input is a valid number in the range from {@link #getMinValue()}
      * to {@link #getMaxValue()}.
@@ -412,8 +442,9 @@ public class NumberValidator extends Validator {
         if (text.isEmpty())
             return true;
 
+        var loc = locale != null ? locale : Locale.getDefault();
         var t = text.toString();
-        var d = DecimalStyle.ofDefaultLocale();
+        var d = DecimalStyle.of(loc);
 
         if (numDecimals == 0 && t.indexOf(d.getDecimalSeparator()) != -1)
             return false;
@@ -424,13 +455,13 @@ public class NumberValidator extends Validator {
         }
 
         var pos = new ParsePosition(0);
-        var res = NumberFormat.getInstance().parse(t, pos);
+        var res = NumberFormat.getInstance(loc).parse(t, pos);
 
         return res != null && pos.getErrorIndex() < 0 && pos.getIndex() == text.length();
     }
 
     /**
-     * This implementation calls the {@link Validator#doInputValidation} and checks
+     * This implementation calls the {@link Validator#doValidate} and checks
      * whether the input is a valid number in the range from {@link #getMinValue()}
      * to {@link #getMaxValue()}.
      *
@@ -451,7 +482,8 @@ public class NumberValidator extends Validator {
         if (text.isEmpty())
             return true;
 
-        var d = DecimalStyle.ofDefaultLocale();
+        var loc = locale != null ? locale : Locale.getDefault();
+        var d = DecimalStyle.of(loc);
 
         if (numDecimals == 0 && text.indexOf(d.getDecimalSeparator()) != -1) {
             er.setException(new ValidatorException(getErrorMessage() != null ?
@@ -463,7 +495,7 @@ public class NumberValidator extends Validator {
         }
 
         var pos = new ParsePosition(0);
-        var res = NumberFormat.getInstance().parse(text, pos);
+        var res = NumberFormat.getInstance(loc).parse(text, pos);
 
         if (res == null || pos.getErrorIndex() >= 0 || pos.getIndex() < text.length()) {
             er.setException(new ValidatorException(getErrorMessage() != null
@@ -488,7 +520,7 @@ public class NumberValidator extends Validator {
             String mask2 = String.format("%%2$,.%df", numDecimals);
             String format = String.format(getRangeErrorMessage(), mask1, mask2);
 
-            er.setException(new ValidatorException(String.format(format, minValue, maxValue),
+            er.setException(new ValidatorException(String.format(loc, format, minValue, maxValue),
                                                    NumberValidator.class,
                                                    this));
         }
@@ -497,7 +529,7 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Called to reformats the specified text.
+     * Called to reformat the specified text.
      *
      * @param text The text to reformat. This is never {@code null}
      * @param how  How to format the text. Must be one of the {@link TextFormat}
@@ -510,7 +542,8 @@ public class NumberValidator extends Validator {
     @Override
     protected String doFormatText(String text, TextFormat how) {
         try {
-            double value = NumberFormat.getInstance().parse(text).doubleValue();
+            Locale loc = locale != null ? locale : Locale.getDefault();
+            double value = NumberFormat.getInstance(loc).parse(text).doubleValue();
             String eFormat = editFormat == null
                     ? numDecimals > 0 && value != (int)value ? String.format("%%.%df", numDecimals) : "%.0f"
                     : editFormat;

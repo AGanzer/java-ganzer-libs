@@ -4,9 +4,8 @@ import de.ganzer.core.internals.CoreMessages;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +43,9 @@ public class FileDelete extends FileErrorProvider {
         private long entriesAvail;
         private long entriesDeleted;
 
+        private boolean ignoreAllErrors;
+        private final Set<FileError> ignoredErrors = new HashSet<>();
+
         private ProgressInfo(FileDelete machine) {
             this.machine = machine;
         }
@@ -69,10 +71,10 @@ public class FileDelete extends FileErrorProvider {
         /**
          * Gets the path to the file or directory that is currently deleted.
          * <p>
-         * If {@link #getStatus()} is {@link DeleteProgressStatus#INITIALIZING}, this
-         * is the path to the directory or file that is going to be counted. This
-         * is an empty string if the progress function is called first and no
-         * directory or file is counted yet.
+         * If {@link #getStatus()} is {@link DeleteProgressStatus#INITIALIZING},
+         * this is the path to the directory or file that is going to be counted.
+         * This is an empty string if the progress function is called first, and
+         * no directory or file is counted yet.
          * <p>
          * If {@link #getStatus()} is {@link DeleteProgressStatus#DELETE_DIRECTORY},
          * this is the path to the directory that is going to be deleted.
@@ -219,9 +221,34 @@ public class FileDelete extends FileErrorProvider {
      *                     this is {@code true}. Neither {@link FileDelete.ProgressInfo#getEntriesAvail}
      *                     nor {@link FileDelete.ProgressInfo#getPercentage} can be used
      *                     when progress is reported.
+     *
      * @return {@code true} on success; otherwise, {@code false} is returned.
+     *
+     * @throws NullPointerException source is {@code null}.
+     *
+     * @since 6.3.0
+     */
+    public boolean start(Path source, boolean suppressInit) {
+        Objects.requireNonNull(source, "source");
+        return start(Collections.singletonList(source.toString()), suppressInit);
+    }
+
+    /**
+     * Copies the specified file or directory.
+     *
+     * @param source       The absolute or relative path to the file or directory to
+     *                     delete.
+     * @param suppressInit The counting of all entries to delete is suppressed if
+     *                     this is {@code true}. Neither {@link FileDelete.ProgressInfo#getEntriesAvail}
+     *                     nor {@link FileDelete.ProgressInfo#getPercentage} can be used
+     *                     when progress is reported.
+     *
+     * @return {@code true} on success; otherwise, {@code false} is returned.
+     *
+     * @throws NullPointerException source is {@code null}.
      */
     public boolean start(String source, boolean suppressInit) {
+        Objects.requireNonNull(source, "source");
         return start(Collections.singletonList(source), suppressInit);
     }
 
@@ -234,6 +261,7 @@ public class FileDelete extends FileErrorProvider {
      *                     this is {@code true}. Neither {@link FileDelete.ProgressInfo#getEntriesAvail}
      *                     nor {@link FileDelete.ProgressInfo#getPercentage} can be used
      *                     when progress is reported.
+     *
      * @return {@code true} on success; otherwise, {@code false} is returned.
      *
      * @throws NullPointerException sources is {@code null}.
@@ -296,6 +324,8 @@ public class FileDelete extends FileErrorProvider {
         progress.entriesAvail = 0;
         progress.entriesDeleted = 0;
         progress.path = "";
+        progress.ignoreAllErrors = false;
+        progress.ignoredErrors.clear();
 
         if (suppressInit)
             return;
@@ -347,11 +377,22 @@ public class FileDelete extends FileErrorProvider {
                 if (queryErrorAction == null || info.doNotQuery())
                     throw info;
 
+                if (progress.ignoreAllErrors || progress.ignoredErrors.contains(info.getError()))
+                    return;
+
                 switch (queryErrorAction.query(info.getError(), info.getErrorDescription(), source)) {
                     case RETRY:
                         continue;
 
                     case IGNORE:
+                        return;
+
+                    case IGNORE_ALL_THIS:
+                        progress.ignoredErrors.add(info.getError());
+                        return;
+
+                    case IGNORE_ALL:
+                        progress.ignoreAllErrors = true;
                         return;
 
                     default:
@@ -380,11 +421,22 @@ public class FileDelete extends FileErrorProvider {
                 if (queryErrorAction == null || info.doNotQuery())
                     throw info;
 
+                if (progress.ignoreAllErrors || progress.ignoredErrors.contains(info.getError()))
+                    return;
+
                 switch (queryErrorAction.query(info.getError(), info.getErrorDescription(), source)) {
                     case RETRY:
                         continue;
 
                     case IGNORE:
+                        return;
+
+                    case IGNORE_ALL_THIS:
+                        progress.ignoredErrors.add(info.getError());
+                        return;
+
+                    case IGNORE_ALL:
+                        progress.ignoreAllErrors = true;
                         return;
 
                     default:

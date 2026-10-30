@@ -117,11 +117,61 @@ public class ToggleActionGroup implements ActionItemBuilder, Iterable<Action> {
     }
 
     /**
-     * {@inheritDoc}
+     * Removes all actions from this group.
+     */
+    public void clear() {
+        actions.clear();
+    }
+
+    /**
+     * Gets a forward iterator for iterating the contained items.
+     *
+     * @return A forward iterator for iterating the contained items.
+     *
+     * @see #backIterator()
      */
     @Override
     public Iterator<Action> iterator() {
         return actions.iterator();
+    }
+
+    /**
+     * Gets a backward iterator for iterating the contained items.
+     *
+     * @return A backward iterator for iterating the contained items.
+     *
+     * @since 6.0.0
+     *
+     * @see #iterator()
+     */
+    public ListIterator<Action> backIterator() {
+        return actions.listIterator(actions.size());
+    }
+
+    /**
+     * Gets the number of items in this group.
+     *
+     * @return The number of items in this group.
+     *
+     * @since 6.0.0
+     */
+    public int getItemCount() {
+        return actions.size();
+    }
+
+    /**
+     * Gets the item at the specified index.
+     *
+     * @param index The index of the item to retrieve.
+     *
+     * @return The item at the specified index.
+     *
+     * @throws IndexOutOfBoundsException If the index is out of range.
+     *
+     * @since 6.0.0
+     */
+    public Action getItemAt(int index) {
+        return actions.get(index);
     }
 
     /**

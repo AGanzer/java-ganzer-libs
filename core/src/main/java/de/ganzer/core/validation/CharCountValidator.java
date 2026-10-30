@@ -29,7 +29,7 @@ public class CharCountValidator extends Validator {
     /**
      * Creates a new instance of the validator where no length is checked.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      */
     public CharCountValidator() {
     }
@@ -48,7 +48,7 @@ public class CharCountValidator extends Validator {
     /**
      * Creates a new instance of the validator.
      * <p>
-     * This sets the {@link #getOptions options} to {@link ValidatorOptions#NEEDS_INPUT}.
+     * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
      * @param minLength The minimum allowed length of the input.
      * @param maxLength The maximum allowed length of the input.
