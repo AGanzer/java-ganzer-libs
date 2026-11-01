@@ -157,6 +157,8 @@ public class MainFrame extends JFrame {
                                         .onAction(this::onQuestionMsgBox),
                                 new GAction("Other Message Box")
                                         .onAction(this::onOtherMsgBox),
+                                new GAction("Untitled Message Box")
+                                        .onAction(this::onUntitledMsgBox),
                                 new GSeparatorAction(),
                                 new GAction("New Tab")
                                         .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK))
@@ -201,6 +203,20 @@ public class MainFrame extends JFrame {
                 )
 
         );
+    }
+
+    private void onUntitledMsgBox(ActionEvent e) {
+        var data = new MessageDialogData((String) null,
+                                         "This is an information message.",
+                                         (Icon) null,
+                                         (MessageDialogData.DefaultButtons) null,
+                                         (String) null,
+                                         (MessageDialogData.Type) null);
+        var dialog = new MessageDialog(this, data);
+
+        dialog.setVisible(true);
+
+        System.out.println("Message box closed with result: " + data.result);
     }
 
     private void onInformationMsgBox(ActionEvent e) {
