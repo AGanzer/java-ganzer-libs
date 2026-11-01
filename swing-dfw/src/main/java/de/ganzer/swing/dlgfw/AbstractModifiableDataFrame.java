@@ -213,6 +213,210 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
     }
 
     /**
+     * Constructs a new frame that is initially invisible.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws HeadlessException if GraphicsEnvironment.isHeadless()
+     *         returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see Component#setSize
+     * @see Component#setVisible
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractModifiableDataFrame(boolean suppressSetup) throws HeadlessException {
+        super(suppressSetup);
+    }
+
+    /**
+     * Creates a <code>Frame</code> in the specified
+     * <code>GraphicsConfiguration</code> of
+     * a screen device and a blank title.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param gc the <code>GraphicsConfiguration</code> that is used
+     *         to construct the new <code>Frame</code>;
+     *         if <code>gc</code> is <code>null</code>, the system
+     *         default <code>GraphicsConfiguration</code> is assumed
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws IllegalArgumentException if <code>gc</code> is not from
+     *         a screen device.  This exception is always thrown when
+     *         GraphicsEnvironment.isHeadless() returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractModifiableDataFrame(GraphicsConfiguration gc, boolean suppressSetup) {
+        super(gc, suppressSetup);
+    }
+
+    /**
+     * Creates a new, initially invisible <code>Frame</code> with the
+     * specified title.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param title the title for the frame
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws HeadlessException if GraphicsEnvironment.isHeadless()
+     *         returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see Component#setSize
+     * @see Component#setVisible
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractModifiableDataFrame(String title, boolean suppressSetup) throws HeadlessException {
+        super(title, suppressSetup);
+    }
+
+    /**
+     * Creates a <code>JFrame</code> with the specified title and the
+     * specified <code>GraphicsConfiguration</code> of a screen device.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param title the title to be displayed in the
+     *         frame's border. A <code>null</code> value is treated as
+     *         an empty string, "".
+     * @param gc the <code>GraphicsConfiguration</code> that is used
+     *         to construct the new <code>JFrame</code> with;
+     *         if <code>gc</code> is <code>null</code>, the system
+     *         default <code>GraphicsConfiguration</code> is assumed
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws IllegalArgumentException if <code>gc</code> is not from
+     *         a screen device.  This exception is always thrown when
+     *         GraphicsEnvironment.isHeadless() returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractModifiableDataFrame(String title, GraphicsConfiguration gc, boolean suppressSetup) {
+        super(title, gc, suppressSetup);
+    }
+
+    /**
+     * Constructs a new frame that is initially invisible.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     * @param data The data to set. This may be null if the controls shall
+     *         be initialized by a later call to {@link #initControls}.
+     *
+     * @throws HeadlessException if GraphicsEnvironment.isHeadless()
+     *         returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see Component#setSize
+     * @see Component#setVisible
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractModifiableDataFrame(boolean suppressSetup, Data data) throws HeadlessException {
+        super(suppressSetup, data);
+    }
+
+    /**
+     * Creates a <code>Frame</code> in the specified
+     * <code>GraphicsConfiguration</code> of
+     * a screen device and a blank title.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param gc the <code>GraphicsConfiguration</code> that is used
+     *         to construct the new <code>Frame</code>;
+     *         if <code>gc</code> is <code>null</code>, the system
+     *         default <code>GraphicsConfiguration</code> is assumed
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     * @param data The data to set. This may be null if the controls shall
+     *         be initialized by a later call to {@link #initControls}.
+     *
+     * @throws IllegalArgumentException if <code>gc</code> is not from
+     *         a screen device.  This exception is always thrown when
+     *         GraphicsEnvironment.isHeadless() returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractModifiableDataFrame(GraphicsConfiguration gc, boolean suppressSetup, Data data) {
+        super(gc, suppressSetup, data);
+    }
+
+    /**
+     * Creates a new, initially invisible <code>Frame</code> with the
+     * specified title.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param title the title for the frame
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     * @param data The data to set. This may be null if the controls shall
+     *         be initialized by a later call to {@link #initControls}.
+     *
+     * @throws HeadlessException if GraphicsEnvironment.isHeadless()
+     *         returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see Component#setSize
+     * @see Component#setVisible
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractModifiableDataFrame(String title, boolean suppressSetup, Data data) throws HeadlessException {
+        super(title, suppressSetup, data);
+    }
+
+    /**
+     * Creates a <code>JFrame</code> with the specified title and the
+     * specified <code>GraphicsConfiguration</code> of a screen device.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param title the title to be displayed in the
+     *         frame's border. A <code>null</code> value is treated as
+     *         an empty string, "".
+     * @param gc the <code>GraphicsConfiguration</code> that is used
+     *         to construct the new <code>JFrame</code> with;
+     *         if <code>gc</code> is <code>null</code>, the system
+     *         default <code>GraphicsConfiguration</code> is assumed
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     * @param data The data to set. This may be null if the controls shall
+     *         be initialized by a later call to {@link #initControls}.
+     *
+     * @throws IllegalArgumentException if <code>gc</code> is not from
+     *         a screen device.  This exception is always thrown when
+     *         GraphicsEnvironment.isHeadless() returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractModifiableDataFrame(String title, GraphicsConfiguration gc, boolean suppressSetup, Data data) {
+        super(title, gc, suppressSetup, data);
+    }
+
+    /**
      * Invokes the set data consumer if the data is valid and modified.
      * <p>
      * This implementation firstly calls {@link #validateModifiedData()}. If the

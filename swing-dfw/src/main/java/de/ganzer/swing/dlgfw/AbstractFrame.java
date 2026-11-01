@@ -115,6 +115,114 @@ public abstract class AbstractFrame extends JFrame {
     }
 
     /**
+     * Constructs a new frame that is initially invisible.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws HeadlessException if GraphicsEnvironment.isHeadless()
+     *         returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see Component#setSize
+     * @see Component#setVisible
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractFrame(boolean suppressSetup) throws HeadlessException {
+        if (!suppressSetup)
+            setup();
+    }
+
+    /**
+     * Creates a <code>Frame</code> in the specified
+     * <code>GraphicsConfiguration</code> of
+     * a screen device and a blank title.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param gc the <code>GraphicsConfiguration</code> that is used
+     *         to construct the new <code>Frame</code>;
+     *         if <code>gc</code> is <code>null</code>, the system
+     *         default <code>GraphicsConfiguration</code> is assumed
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws IllegalArgumentException if <code>gc</code> is not from
+     *         a screen device.  This exception is always thrown when
+     *         GraphicsEnvironment.isHeadless() returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractFrame(GraphicsConfiguration gc, boolean suppressSetup) {
+        super(gc);
+
+        if (!suppressSetup)
+            setup();
+    }
+
+    /**
+     * Creates an initially invisible <code>Frame</code> with the specified
+     * title.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param title the title for the frame
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws HeadlessException if GraphicsEnvironment.isHeadless()
+     *         returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see Component#setSize
+     * @see Component#setVisible
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractFrame(String title, boolean suppressSetup) throws HeadlessException {
+        super(title);
+
+        if (!suppressSetup)
+            setup();
+    }
+
+    /**
+     * Creates a <code>JFrame</code> with the specified title and the
+     * specified <code>GraphicsConfiguration</code> of a screen device.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by <code>JComponent.getDefaultLocale</code>.
+     *
+     * @param title the title to be displayed in the
+     *         frame's border. A <code>null</code> value is treated as
+     *         an empty string, "".
+     * @param gc the <code>GraphicsConfiguration</code> that is used
+     *         to construct the new <code>JFrame</code> with;
+     *         if <code>gc</code> is <code>null</code>, the system
+     *         default <code>GraphicsConfiguration</code> is assumed
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws IllegalArgumentException if <code>gc</code> is not from
+     *         a screen device.  This exception is always thrown when
+     *         GraphicsEnvironment.isHeadless() returns true.
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractFrame(String title, GraphicsConfiguration gc, boolean suppressSetup) {
+        super(title, gc);
+
+        if (!suppressSetup)
+            setup();
+    }
+
+    /**
      * Gets the center panel of this dialog.
      *
      * @return The center panel.
@@ -130,6 +238,61 @@ public abstract class AbstractFrame extends JFrame {
      */
     public JPanel getButtonPanel() {
         return buttonPanel;
+    }
+
+    /**
+     * Shows or hides this {@code Dialog} depending on the value of parameter
+     * {@code set}.
+     * <p>
+     * This implementation invokes {@link #setup()} if this is not already done
+     * and {@code set} is {@code true}.
+     *
+     * @param set if {@code true}, makes the {@code Dialog} visible, otherwise
+     *         hides the {@code Dialog}.
+     *
+     * @see Window#setVisible
+     * @see Window#dispose
+     * @see Component#isDisplayable
+     * @see Component#validate
+     * @see Dialog#isModal
+     */
+    @Override
+    public void setVisible(boolean set) {
+        if (set && centerPanel == null)
+            setup();
+
+        super.setVisible(set);
+    }
+
+    /**
+     * Releases all of the native screen resources used by this
+     * {@code Window}, its subcomponents, and all of its owned
+     * children. That is, the resources for these {@code Component}s
+     * will be destroyed, any memory they consume will be returned to the
+     * OS, and they will be marked as undisplayable.
+     * <p>
+     * The {@code Window} and its subcomponents can be made displayable
+     * again by rebuilding the native resources with a subsequent call to
+     * {@code pack} or {@code show}. The states of the recreated
+     * {@code Window} and its subcomponents will be identical to the
+     * states of these objects at the point where the {@code Window}
+     * was disposed (not accounting for additional modifications between
+     * those actions).
+     * <p>
+     * <b>Note</b>: When the last displayable window
+     * within the Java virtual machine (VM) is disposed of, the VM may
+     * terminate.  See <a href="doc-files/AWTThreadIssues.html#Autoshutdown">
+     * AWT Threading Issues</a> for more information.
+     */
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        if (centerPanel instanceof Disposable)
+            ((Disposable) centerPanel).dispose();
+
+        if (buttonPanel instanceof Disposable)
+            ((Disposable) buttonPanel).dispose();
     }
 
     /**
@@ -261,37 +424,17 @@ public abstract class AbstractFrame extends JFrame {
     }
 
     /**
-     * Releases all of the native screen resources used by this
-     * {@code Window}, its subcomponents, and all of its owned
-     * children. That is, the resources for these {@code Component}s
-     * will be destroyed, any memory they consume will be returned to the
-     * OS, and they will be marked as undisplayable.
+     * Sets up the controls of the frame.
      * <p>
-     * The {@code Window} and its subcomponents can be made displayable
-     * again by rebuilding the native resources with a subsequent call to
-     * {@code pack} or {@code show}. The states of the recreated
-     * {@code Window} and its subcomponents will be identical to the
-     * states of these objects at the point where the {@code Window}
-     * was disposed (not accounting for additional modifications between
-     * those actions).
-     * <p>
-     * <b>Note</b>: When the last displayable window
-     * within the Java virtual machine (VM) is disposed of, the VM may
-     * terminate.  See <a href="doc-files/AWTThreadIssues.html#Autoshutdown">
-     * AWT Threading Issues</a> for more information.
+     * Inheritors must call the base method to ensure that all controls are
+     * created.
+     *
+     * @throws IllegalStateException If {@code setup()} was already invoked.
      */
-    @Override
-    public void dispose() {
-        super.dispose();
+    protected void setup() {
+        if (centerPanel != null)
+            throw new IllegalStateException("Controls are already created.");
 
-        if (centerPanel instanceof Disposable)
-            ((Disposable) centerPanel).dispose();
-
-        if (buttonPanel instanceof Disposable)
-            ((Disposable) buttonPanel).dispose();
-    }
-
-    private void setup() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         getContentPane().setLayout(new BorderLayout());
