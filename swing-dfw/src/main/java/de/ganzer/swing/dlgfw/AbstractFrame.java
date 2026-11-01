@@ -19,6 +19,8 @@ import java.awt.event.WindowEvent;
  * @since 6.0.0
  */
 public abstract class AbstractFrame extends JFrame {
+    private final boolean lazySetup;
+
     private JPanel centerPanel;
     private JPanel buttonPanel;
 
@@ -37,6 +39,7 @@ public abstract class AbstractFrame extends JFrame {
      * @see JComponent#getDefaultLocale
      */
     public AbstractFrame() throws HeadlessException {
+        lazySetup = false;
         setup();
     }
 
@@ -62,6 +65,7 @@ public abstract class AbstractFrame extends JFrame {
      */
     public AbstractFrame(GraphicsConfiguration gc) {
         super(gc);
+        lazySetup = false;
         setup();
     }
 
@@ -84,6 +88,7 @@ public abstract class AbstractFrame extends JFrame {
      */
     public AbstractFrame(String title) throws HeadlessException {
         super(title);
+        lazySetup = false;
         setup();
     }
 
@@ -111,6 +116,7 @@ public abstract class AbstractFrame extends JFrame {
      */
     public AbstractFrame(String title, GraphicsConfiguration gc) {
         super(title, gc);
+        lazySetup = false;
         setup();
     }
 
@@ -132,6 +138,8 @@ public abstract class AbstractFrame extends JFrame {
      * @see JComponent#getDefaultLocale
      */
     public AbstractFrame(boolean suppressSetup) throws HeadlessException {
+        lazySetup = suppressSetup;
+
         if (!suppressSetup)
             setup();
     }
@@ -161,6 +169,8 @@ public abstract class AbstractFrame extends JFrame {
     public AbstractFrame(GraphicsConfiguration gc, boolean suppressSetup) {
         super(gc);
 
+        lazySetup = suppressSetup;
+
         if (!suppressSetup)
             setup();
     }
@@ -186,6 +196,8 @@ public abstract class AbstractFrame extends JFrame {
      */
     public AbstractFrame(String title, boolean suppressSetup) throws HeadlessException {
         super(title);
+
+        lazySetup = suppressSetup;
 
         if (!suppressSetup)
             setup();
@@ -217,6 +229,8 @@ public abstract class AbstractFrame extends JFrame {
      */
     public AbstractFrame(String title, GraphicsConfiguration gc, boolean suppressSetup) {
         super(title, gc);
+
+        lazySetup = suppressSetup;
 
         if (!suppressSetup)
             setup();
@@ -293,6 +307,19 @@ public abstract class AbstractFrame extends JFrame {
 
         if (buttonPanel instanceof Disposable)
             ((Disposable) buttonPanel).dispose();
+    }
+
+    /**
+     * Indicates whether the dialog was constructed with lazy setup.
+     *
+     * @return {@code true} if the dialog was constructed with lazy setup.
+     *
+     * @see #AbstractFrame(boolean)
+     * @see #AbstractFrame(String, boolean)
+     * @see #AbstractFrame(String, GraphicsConfiguration, boolean)
+     */
+    protected boolean isLazySetup() {
+        return lazySetup;
     }
 
     /**

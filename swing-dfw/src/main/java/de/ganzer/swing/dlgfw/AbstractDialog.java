@@ -29,6 +29,8 @@ import java.awt.event.WindowEvent;
  * @since 6.0.0
  */
 public abstract class AbstractDialog extends JDialog {
+    private final boolean lazySetup;
+
     private boolean accepted = true;
     private JPanel centerPanel;
     private JPanel buttonPanel;
@@ -55,6 +57,7 @@ public abstract class AbstractDialog extends JDialog {
      */
     public AbstractDialog(Window owner) {
         super(owner, DEFAULT_MODALITY_TYPE);
+        lazySetup = false;
         setup();
     }
 
@@ -82,6 +85,7 @@ public abstract class AbstractDialog extends JDialog {
      */
     public AbstractDialog(Window owner, String title) {
         super(owner, title, DEFAULT_MODALITY_TYPE);
+        lazySetup = false;
         setup();
     }
 
@@ -116,6 +120,7 @@ public abstract class AbstractDialog extends JDialog {
      */
     public AbstractDialog(Window owner, String title, GraphicsConfiguration gc) {
         super(owner, title, DEFAULT_MODALITY_TYPE, gc);
+        lazySetup = false;
         setup();
     }
 
@@ -143,6 +148,8 @@ public abstract class AbstractDialog extends JDialog {
      */
     public AbstractDialog(Window owner, boolean suppressSetup) {
         super(owner, DEFAULT_MODALITY_TYPE);
+
+        lazySetup = suppressSetup;
 
         if (!suppressSetup)
             setup();
@@ -174,6 +181,8 @@ public abstract class AbstractDialog extends JDialog {
      */
     public AbstractDialog(Window owner, String title, boolean suppressSetup) {
         super(owner, title, DEFAULT_MODALITY_TYPE);
+
+        lazySetup = suppressSetup;
 
         if (!suppressSetup)
             setup();
@@ -212,6 +221,8 @@ public abstract class AbstractDialog extends JDialog {
      */
     public AbstractDialog(Window owner, String title, GraphicsConfiguration gc, boolean suppressSetup) {
         super(owner, title, DEFAULT_MODALITY_TYPE, gc);
+
+        lazySetup = suppressSetup;
 
         if (!suppressSetup)
             setup();
@@ -310,6 +321,19 @@ public abstract class AbstractDialog extends JDialog {
 
         if (buttonPanel instanceof Disposable)
             ((Disposable) buttonPanel).dispose();
+    }
+
+    /**
+     * Indicates whether the dialog was constructed with lazy setup.
+     *
+     * @return {@code true} if the dialog was constructed with lazy setup.
+     *
+     * @see #AbstractDialog(Window, boolean)
+     * @see #AbstractDialog(Window, String, boolean)
+     * @see #AbstractDialog(Window, String, GraphicsConfiguration, boolean)
+     */
+    protected boolean isLazySetup() {
+        return lazySetup;
     }
 
     /**
