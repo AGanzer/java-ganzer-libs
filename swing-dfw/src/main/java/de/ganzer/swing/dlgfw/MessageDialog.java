@@ -1,9 +1,6 @@
 package de.ganzer.swing.dlgfw;
 
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 
@@ -36,10 +33,22 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
      * @see JComponent#getDefaultLocale
      */
     public MessageDialog(Window owner, MessageDialogData data) {
-        super(owner, data);
+        super(owner, true, data);
+    }
 
+    /**
+     * Sets up the controls of the dialog.
+     * <p>
+     * Inheritors must call the base method to ensure that all controls are
+     * created.
+     *
+     * @throws IllegalStateException If {@code setup()} was already invoked.
+     */
+    @Override
+    protected void setup() {
+        super.setup();
         pack();
-        setLocationRelativeTo(owner);
+        setLocationRelativeTo(getOwner());
     }
 
     /**
@@ -66,7 +75,7 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
     @Override
     protected AbstractButton[] createWindowButtons() {
         AbstractButton[] buttons = new AbstractButton[getData().buttons.length];
-        JButton defButton = (JButton) buttons[0];
+        JButton defButton = null;
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new JButton(getData().buttons[i]);
@@ -80,7 +89,12 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
                 defButton = (JButton) buttons[i];
         }
 
+        if (defButton == null)
+            defButton = (JButton) buttons[0];
+
         getRootPane().setDefaultButton(defButton);
+
+        SwingUtilities.invokeLater(defButton::requestFocusInWindow);
 
         return buttons;
     }
@@ -139,6 +153,8 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
     @Override
     protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            setDataModified(true);
+
             if (result == null) {
                 if (getData().buttons.length == 1) {
                     result = getData().buttons[0];
