@@ -207,7 +207,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      *         {@code null} if this dialog has no owner
      *
      * @throws IllegalArgumentException if the {@code owner} is not an instance
-     *         of {@link Dialog Dialog} or {@link Frame Frame}
+     *         of {@link Dialog} or {@link Frame}
      * @throws IllegalArgumentException if the {@code owner}'s
      *         {@code GraphicsConfiguration} is not from a screen device
      * @throws HeadlessException when {@code GraphicsEnvironment.isHeadless()}
@@ -233,7 +233,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      *         title bar or {@code null} if the dialog has no title
      *
      * @throws IllegalArgumentException if the {@code owner} is not an instance
-     *         of {@link Dialog Dialog} or {@link Frame Frame}
+     *         of {@link Dialog} or {@link Frame}
      * @throws IllegalArgumentException if the {@code owner}'s
      *         {@code GraphicsConfiguration} is not from a screen device
      * @throws HeadlessException when {@code GraphicsEnvironment.isHeadless()}
@@ -266,7 +266,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      *         is assumed
      *
      * @throws IllegalArgumentException if the {@code owner} is not an instance
-     *         of {@link Dialog Dialog} or {@link Frame Frame}
+     *         of {@link Dialog} or {@link Frame}
      * @throws IllegalArgumentException if the {@code owner}'s
      *         {@code GraphicsConfiguration} is not from a screen device
      * @throws HeadlessException when {@code GraphicsEnvironment.isHeadless()}
@@ -473,7 +473,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      *         be initialized by a later call to {@link #initControls}.
      *
      * @throws IllegalArgumentException if the {@code owner} is not an instance
-     *         of {@link Dialog Dialog} or {@link Frame Frame}
+     *         of {@link Dialog} or {@link Frame}
      * @throws IllegalArgumentException if the {@code owner}'s
      *         {@code GraphicsConfiguration} is not from a screen device
      * @throws HeadlessException when {@code GraphicsEnvironment.isHeadless()}
@@ -501,7 +501,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      *         be initialized by a later call to {@link #initControls}.
      *
      * @throws IllegalArgumentException if the {@code owner} is not an instance
-     *         of {@link Dialog Dialog} or {@link Frame Frame}
+     *         of {@link Dialog} or {@link Frame}
      * @throws IllegalArgumentException if the {@code owner}'s
      *         {@code GraphicsConfiguration} is not from a screen device
      * @throws HeadlessException when {@code GraphicsEnvironment.isHeadless()}
@@ -536,7 +536,7 @@ public abstract class AbstractModifiableDataDialog<Data> extends AbstractDataDia
      *         be initialized by a later call to {@link #initControls}.
      *
      * @throws IllegalArgumentException if the {@code owner} is not an instance
-     *         of {@link Dialog Dialog} or {@link Frame Frame}
+     *         of {@link Dialog} or {@link Frame}
      * @throws IllegalArgumentException if the {@code owner}'s
      *         {@code GraphicsConfiguration} is not from a screen device
      * @throws HeadlessException when {@code GraphicsEnvironment.isHeadless()}
