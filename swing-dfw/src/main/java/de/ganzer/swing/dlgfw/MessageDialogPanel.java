@@ -2,6 +2,7 @@ package de.ganzer.swing.dlgfw;
 
 import de.ganzer.swing.dialogs.DataSupport;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
@@ -36,7 +37,10 @@ public class MessageDialogPanel extends AbstractDataPanel<MessageDialogData> {
      */
     @Override
     protected JComponent createCenterPanel() {
-        return messageLabel = new JLabel();
+        messageLabel = new JLabel();
+        messageLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        return messageLabel;
     }
 
     /**
@@ -76,11 +80,20 @@ public class MessageDialogPanel extends AbstractDataPanel<MessageDialogData> {
     /**
      * Called to initialize the controls from the specified data.
      *
-     * @param messageDialogData The data where to initialize the controls with. This may be
+     * @param data The data where to initialize the controls with. This may be
      *         {@code null} if the controls shall be reset.
      */
     @Override
-    public void initControls(MessageDialogData messageDialogData) {
+    public void initControls(MessageDialogData data) {
+        titleLabel.setText(data.title);
+        titleIcon.setIcon(data.icon);
 
+        if (data.message.startsWith("<html>"))
+            messageLabel.setText(data.message);
+        else
+            messageLabel.setText("<html>" + data.message.replace("\n", "<br>") + "<html>");
+
+        if (data.title == null && data.icon == null)
+            remove(getTitlePanel());
     }
 }

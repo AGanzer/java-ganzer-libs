@@ -8,6 +8,8 @@ import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TogglePanel;
+import de.ganzer.swing.dlgfw.MessageDialog;
+import de.ganzer.swing.dlgfw.MessageDialogData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -145,6 +147,17 @@ public class MainFrame extends JFrame {
                                 new GAction("Login Dialog Test")
                                         .onAction(this::onLoginTest),
                                 new GSeparatorAction(),
+                                new GAction("Information Message Box")
+                                        .onAction(this::onInformationMsgBox),
+                                new GAction("Error Message Box")
+                                        .onAction(this::onErrorMsgBox),
+                                new GAction("Warning Message Box")
+                                        .onAction(this::onWarningMsgBox),
+                                new GAction("Question Message Box")
+                                        .onAction(this::onQuestionMsgBox),
+                                new GAction("Other Message Box")
+                                        .onAction(this::onOtherMsgBox),
+                                new GSeparatorAction(),
                                 new GAction("New Tab")
                                         .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK))
                                         .onAction(this::onNewTab),
@@ -188,6 +201,54 @@ public class MainFrame extends JFrame {
                 )
 
         );
+    }
+
+    private void onInformationMsgBox(ActionEvent e) {
+        var data = new MessageDialogData("This is an information message.");
+        var dialog = new MessageDialog(this, data);
+
+        dialog.setVisible(true);
+
+        System.out.println("Message box closed with result: " + data.result);
+    }
+
+    private void onErrorMsgBox(ActionEvent e) {
+        var data = new MessageDialogData("This is an error message.", MessageDialogData.Type.ERROR);
+        var dialog = new MessageDialog(this, data);
+
+        dialog.setVisible(true);
+
+        System.out.println("Message box closed with result: " + data.result);
+    }
+
+    private void onWarningMsgBox(ActionEvent e) {
+        var data = new MessageDialogData("This is a warning message.", MessageDialogData.Type.WARNING);
+        var dialog = new MessageDialog(this, data);
+
+        dialog.setVisible(true);
+
+        System.out.println("Message box closed with result: " + data.result);
+    }
+
+    private void onQuestionMsgBox(ActionEvent e) {
+        var data = new MessageDialogData("This is a question message.\nDo you like it?", MessageDialogData.Type.QUESTION);
+        var dialog = new MessageDialog(this, data);
+
+        dialog.setVisible(true);
+
+        System.out.println("Message box closed with result: " + data.result);
+    }
+
+    private void onOtherMsgBox(ActionEvent e) {
+        var data = new MessageDialogData("This is a multiple answer message.\nDo you like it?",
+                                         MessageDialogData.DefaultButtons.ABORT_RETRY_IGNORE_ALL,
+                                         MessageDialogData.RETRY_BUTTON_TEXT,
+                                         MessageDialogData.Type.ERROR);
+        var dialog = new MessageDialog(this, data);
+
+        dialog.setVisible(true);
+
+        System.out.println("Message box closed with result: " + data.result);
     }
 
     private void initMenu() {
