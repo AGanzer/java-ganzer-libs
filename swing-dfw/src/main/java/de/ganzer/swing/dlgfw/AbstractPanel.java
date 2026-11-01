@@ -75,6 +75,12 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
 
     private final GAction queryCloseAction = new GAction();
 
+    private JComponent centerPanel;
+    private JComponent titlePanel;
+    private JComponent southPanel;
+    private JComponent eastPanel;
+    private JComponent westPanel;
+
     /**
      * Creates a new <code>JPanel</code> with a double buffer
      * and a flow layout.
@@ -200,6 +206,59 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      */
     public GAction getQueryCloseAction() {
         return queryCloseAction;
+    }
+
+    /**
+     * Gets the center panel.
+     *
+     * @return The panel that was created by {@link #createCenterPanel()}.
+     */
+    public JComponent getCenterPanel() {
+        return centerPanel;
+    }
+
+    /**
+     * Gets the title panel.
+     *
+     * @return The panel that was created by {@link #createTitlePanel()} or
+     *         {@code null} if {@link #createTitlePanel()} did not create a
+     *         panel.
+     */
+    public JComponent getTitlePanel() {
+        return titlePanel;
+    }
+
+    /**
+     * Gets the south panel.
+     *
+     * @return The panel that was created by {@link #createSouthPanel()} or
+     *         {@code null} if {@link #createSouthPanel()} did not create a
+     *         panel.
+     */
+    public JComponent getSouthPanel() {
+        return southPanel;
+    }
+
+    /**
+     * Gets the east panel.
+     *
+     * @return The panel that was created by {@link #createEastPanel()} or
+     *         {@code null} if {@link #createSouthPanel()} did not create a
+     *         panel.
+     */
+    public JComponent getEastPanel() {
+        return eastPanel;
+    }
+
+    /**
+     * Gets the west panel.
+     *
+     * @return The panel that was created by {@link #createWestPanel()} or
+     *         {@code null} if {@link #createWestPanel()} did not create a
+     *         panel.
+     */
+    public JComponent getWestPanel() {
+        return westPanel;
     }
 
     /**
@@ -448,19 +507,19 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     }
 
     private void setup() {
-        JComponent center = createCenterPanel();
-        JComponent title = createTitlePanel();
-        JComponent south = createSouthPanel();
-        JComponent eastPanel = createEastPanel();
-        JComponent westPanel = createWestPanel();
+        centerPanel = createCenterPanel();
+        titlePanel = createTitlePanel();
+        southPanel = createSouthPanel();
+        eastPanel = createEastPanel();
+        westPanel = createWestPanel();
 
-        add(center, BorderLayout.CENTER);
+        add(centerPanel, BorderLayout.CENTER);
 
-        if (title != null)
-            add(title, BorderLayout.NORTH);
+        if (titlePanel != null)
+            add(titlePanel, BorderLayout.NORTH);
 
-        if (south != null)
-            add(south, BorderLayout.SOUTH);
+        if (southPanel != null)
+            add(southPanel, BorderLayout.SOUTH);
 
         if (eastPanel != null)
             add(eastPanel, BorderLayout.EAST);
