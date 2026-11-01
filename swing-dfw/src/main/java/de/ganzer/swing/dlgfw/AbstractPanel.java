@@ -45,6 +45,7 @@ import java.util.Objects;
  *
  * @since 6.0.0
  */
+@SuppressWarnings("unused")
 public abstract class AbstractPanel extends JPanel implements Disposable {
     /**
      * The default size of a title icon.
