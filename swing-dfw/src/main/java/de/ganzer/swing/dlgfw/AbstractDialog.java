@@ -34,182 +34,6 @@ public abstract class AbstractDialog extends JDialog {
     private JPanel buttonPanel;
 
     /**
-     * Creates a modal dialog with the specified {@code Frame}
-     * as its owner and an empty title. If {@code owner}
-     * is {@code null}, a shared, hidden frame will be set as the
-     * owner of the dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by {@code JComponent.getDefaultLocale}.
-     * <p>
-     * NOTE: This constructor does not allow you to create an unowned
-     * {@code JDialog}. To create an unowned {@code JDialog}
-     * you must use either the {@code JDialog(Window)} or
-     * {@code JDialog(Dialog)} constructor with an argument of
-     * {@code null}.
-     *
-     * @param owner the {@code Frame} from which the dialog is displayed
-     *
-     * @throws HeadlessException if {@code GraphicsEnvironment.isHeadless()}
-     *         returns {@code true}.
-     *
-     * @see GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public AbstractDialog(Frame owner) {
-        super(owner, true);
-        setup();
-    }
-
-    /**
-     * Creates a modal dialog with the specified title and
-     * with the specified owner frame.
-     * If {@code owner} is {@code null}, a shared, hidden frame will be set as
-     * the owner of the dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by {@code JComponent.getDefaultLocale}.
-     * <p>
-     * NOTE: This constructor does not allow you to create an unowned
-     * {@code JDialog}. To create an unowned {@code JDialog}
-     * you must use either the {@code JDialog(Window)} or
-     * {@code JDialog(Dialog)} constructor with an argument of
-     * {@code null}.
-     *
-     * @param owner the {@code Frame} from which the dialog is displayed
-     * @param title the {@code String} to display in the dialog's
-     *         title bar
-     *
-     * @throws HeadlessException if {@code GraphicsEnvironment.isHeadless()}
-     *         returns {@code true}.
-     *
-     * @see GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public AbstractDialog(Frame owner, String title) {
-        super(owner, title, true);
-        setup();
-    }
-
-    /**
-     * Creates a modal dialog with the specified title, owner {@code Frame},
-     * and {@code GraphicsConfiguration}.
-     * If {@code owner} is {@code null},
-     * a shared, hidden frame will be set as the owner of this dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by {@code JComponent.getDefaultLocale}.
-     * <p>
-     * NOTE: Any popup components ({@code JComboBox},
-     * {@code JPopupMenu}, {@code JMenuBar})
-     * created within a modal dialog will be forced to be lightweight.
-     * <p>
-     * NOTE: This constructor does not allow you to create an unowned
-     * {@code JDialog}. To create an unowned {@code JDialog}
-     * you must use either the {@code JDialog(Window)} or
-     * {@code JDialog(Dialog)} constructor with an argument of
-     * {@code null}.
-     *
-     * @param owner the {@code Frame} from which the dialog is displayed
-     * @param title the {@code String} to display in the dialog's
-     *         title bar
-     * @param gc the {@code GraphicsConfiguration} of the target screen device;
-     *         if {@code null}, the default system {@code GraphicsConfiguration}
-     *         is assumed
-     *
-     * @throws HeadlessException if {@code GraphicsEnvironment.isHeadless()}
-     *         returns {@code true}.
-     *
-     * @see ModalityType
-     * @see ModalityType#MODELESS
-     * @see Dialog#DEFAULT_MODALITY_TYPE
-     * @see Dialog#setModal
-     * @see Dialog#setModalityType
-     * @see GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     * @since 1.4
-     */
-    public AbstractDialog(Frame owner, String title, GraphicsConfiguration gc) {
-        super(owner, title, true, gc);
-        setup();
-    }
-
-    /**
-     * Creates a modal dialog with the specified {@code Dialog}
-     * as its owner and an empty title.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by {@code JComponent.getDefaultLocale}.
-     *
-     * @param owner the owner {@code Dialog} from which the dialog is displayed
-     *         or {@code null} if this dialog has no owner
-     *
-     * @throws HeadlessException {@code if GraphicsEnvironment.isHeadless()}
-     *         returns {@code true}.
-     *
-     * @see GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public AbstractDialog(Dialog owner) {
-        super(owner, true);
-        setup();
-    }
-
-    /**
-     * Creates a modal dialog with the specified title and
-     * with the specified owner dialog.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by {@code JComponent.getDefaultLocale}.
-     *
-     * @param owner the owner {@code Dialog} from which the dialog is displayed
-     *         or {@code null} if this dialog has no owner
-     * @param title the {@code String} to display in the dialog's
-     *         title bar
-     *
-     * @throws HeadlessException if {@code GraphicsEnvironment.isHeadless()}
-     *         returns {@code true}.
-     *
-     * @see GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public AbstractDialog(Dialog owner, String title) {
-        super(owner, title, true);
-        setup();
-    }
-
-    /**
-     * Creates a modal dialog with the specified title, owner {@code Dialog}
-     * and {@code GraphicsConfiguration}.
-     *
-     * <p>
-     * NOTE: Any popup components ({@code JComboBox},
-     * {@code JPopupMenu}, {@code JMenuBar})
-     * created within a modal dialog will be forced to be lightweight.
-     * <p>
-     * This constructor sets the component's locale property to the value
-     * returned by {@code JComponent.getDefaultLocale}.
-     *
-     * @param owner the owner {@code Dialog} from which the dialog is displayed
-     *         or {@code null} if this dialog has no owner
-     * @param title the {@code String} to display in the dialog's
-     *         title bar
-     * @param gc the {@code GraphicsConfiguration} of the target screen device;
-     *         if {@code null}, the default system {@code GraphicsConfiguration}
-     *         is assumed
-     *
-     * @throws HeadlessException if {@code GraphicsEnvironment.isHeadless()}
-     *         returns {@code true}.
-     *
-     * @see GraphicsEnvironment#isHeadless
-     * @see JComponent#getDefaultLocale
-     */
-    public AbstractDialog(Dialog owner, String title, GraphicsConfiguration gc) {
-        super(owner, title, true, gc);
-        setup();
-    }
-
-    /**
      * Creates a modal dialog with the specified {@code Window}
      * as its owner and an empty title.
      * <p>
@@ -296,6 +120,104 @@ public abstract class AbstractDialog extends JDialog {
     }
 
     /**
+     * Creates a modal dialog with the specified {@code Window}
+     * as its owner and an empty title.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by {@code JComponent.getDefaultLocale}.
+     *
+     * @param owner the {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws IllegalArgumentException if the {@code owner} is not an instance
+     *         of {@link Dialog} or {@link Frame}
+     * @throws IllegalArgumentException if the {@code owner}'s
+     *         {@code GraphicsConfiguration} is not from a screen device
+     * @throws HeadlessException when {@code GraphicsEnvironment.isHeadless()}
+     *         returns {@code true}
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractDialog(Window owner, boolean suppressSetup) {
+        super(owner, DEFAULT_MODALITY_TYPE);
+
+        if (!suppressSetup)
+            setup();
+    }
+
+    /**
+     * Creates a modal dialog with the specified title and owner
+     * {@code Window}.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by {@code JComponent.getDefaultLocale}.
+     *
+     * @param owner the {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner
+     * @param title the {@code String} to display in the dialog's
+     *         title bar or {@code null} if the dialog has no title
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws IllegalArgumentException if the {@code owner} is not an instance
+     *         of {@link Dialog} or {@link Frame}
+     * @throws IllegalArgumentException if the {@code owner}'s
+     *         {@code GraphicsConfiguration} is not from a screen device
+     * @throws HeadlessException when {@code GraphicsEnvironment.isHeadless()}
+     *         returns {@code true}
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractDialog(Window owner, String title, boolean suppressSetup) {
+        super(owner, title, DEFAULT_MODALITY_TYPE);
+
+        if (!suppressSetup)
+            setup();
+    }
+
+    /**
+     * Creates a modal dialog with the specified title, owner {@code Window}
+     * and {@code GraphicsConfiguration}.
+     * <p>
+     * NOTE: Any popup components ({@code JComboBox},
+     * {@code JPopupMenu}, {@code JMenuBar})
+     * created within a modal dialog will be forced to be lightweight.
+     * <p>
+     * This constructor sets the component's locale property to the value
+     * returned by {@code JComponent.getDefaultLocale}.
+     *
+     * @param owner the {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner
+     * @param title the {@code String} to display in the dialog's
+     *         title bar or {@code null} if the dialog has no title
+     * @param gc the {@code GraphicsConfiguration} of the target screen device;
+     *         if {@code null}, the default system {@code GraphicsConfiguration}
+     *         is assumed
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     *
+     * @throws IllegalArgumentException if the {@code owner} is not an instance
+     *         of {@link Dialog} or {@link Frame}
+     * @throws IllegalArgumentException if the {@code owner}'s
+     *         {@code GraphicsConfiguration} is not from a screen device
+     * @throws HeadlessException when {@code GraphicsEnvironment.isHeadless()}
+     *         returns {@code true}
+     *
+     * @see GraphicsEnvironment#isHeadless
+     * @see JComponent#getDefaultLocale
+     */
+    public AbstractDialog(Window owner, String title, GraphicsConfiguration gc, boolean suppressSetup) {
+        super(owner, title, DEFAULT_MODALITY_TYPE, gc);
+
+        if (!suppressSetup)
+            setup();
+    }
+
+    /**
      * Gets the center panel of this dialog.
      *
      * @return The center panel.
@@ -336,6 +258,61 @@ public abstract class AbstractDialog extends JDialog {
     }
 
     /**
+     * Shows or hides this {@code Dialog} depending on the value of parameter
+     * {@code set}.
+     * <p>
+     * This implementation invokes {@link #setup()} if this is not already done
+     * and {@code set} is {@code true}.
+     *
+     * @param set if {@code true}, makes the {@code Dialog} visible, otherwise
+     *         hides the {@code Dialog}.
+     *
+     * @see Window#setVisible
+     * @see Window#dispose
+     * @see Component#isDisplayable
+     * @see Component#validate
+     * @see Dialog#isModal
+     */
+    @Override
+    public void setVisible(boolean set) {
+        if (set && centerPanel == null)
+            setup();
+
+        super.setVisible(set);
+    }
+
+    /**
+     * Releases all of the native screen resources used by this
+     * {@code Window}, its subcomponents, and all of its owned
+     * children. That is, the resources for these {@code Component}s
+     * will be destroyed, any memory they consume will be returned to the
+     * OS, and they will be marked as undisplayable.
+     * <p>
+     * The {@code Window} and its subcomponents can be made displayable
+     * again by rebuilding the native resources with a subsequent call to
+     * {@code pack} or {@code show}. The states of the recreated
+     * {@code Window} and its subcomponents will be identical to the
+     * states of these objects at the point where the {@code Window}
+     * was disposed (not accounting for additional modifications between
+     * those actions).
+     * <p>
+     * <b>Note</b>: When the last displayable window
+     * within the Java virtual machine (VM) is disposed of, the VM may
+     * terminate.  See <a href="doc-files/AWTThreadIssues.html#Autoshutdown">
+     * AWT Threading Issues</a> for more information.
+     */
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        if (centerPanel instanceof Disposable)
+            ((Disposable) centerPanel).dispose();
+
+        if (buttonPanel instanceof Disposable)
+            ((Disposable) buttonPanel).dispose();
+    }
+
+    /**
      * Resets the accepted flag to its origin value.
      * <p>
      * Inheritors can use this to reset the flag when a dialog cannot be closed
@@ -347,7 +324,7 @@ public abstract class AbstractDialog extends JDialog {
         accepted = false;
     }
 
-    private static final String ACTION_MAP_KEY = "EscKeyClick-de.velocom.veloport.dialog";
+    private static final String ACTION_MAP_KEY = "EscKeyClick-de.ganzer.dialog";
 
     /**
      * Calls {@link JDialog#createRootPane()} and adds an Esc key to the action
@@ -505,37 +482,17 @@ public abstract class AbstractDialog extends JDialog {
     }
 
     /**
-     * Releases all of the native screen resources used by this
-     * {@code Window}, its subcomponents, and all of its owned
-     * children. That is, the resources for these {@code Component}s
-     * will be destroyed, any memory they consume will be returned to the
-     * OS, and they will be marked as undisplayable.
+     * Sets up the controls of the dialog.
      * <p>
-     * The {@code Window} and its subcomponents can be made displayable
-     * again by rebuilding the native resources with a subsequent call to
-     * {@code pack} or {@code show}. The states of the recreated
-     * {@code Window} and its subcomponents will be identical to the
-     * states of these objects at the point where the {@code Window}
-     * was disposed (not accounting for additional modifications between
-     * those actions).
-     * <p>
-     * <b>Note</b>: When the last displayable window
-     * within the Java virtual machine (VM) is disposed of, the VM may
-     * terminate.  See <a href="doc-files/AWTThreadIssues.html#Autoshutdown">
-     * AWT Threading Issues</a> for more information.
+     * Inheritors must call the base method to ensure that all controls are
+     * created.
+     *
+     * @throws IllegalStateException If {@code setup()} was already invoked.
      */
-    @Override
-    public void dispose() {
-        super.dispose();
+    protected void setup() {
+        if (centerPanel != null)
+            throw new IllegalStateException("Controls are already created.");
 
-        if (centerPanel instanceof Disposable)
-            ((Disposable) centerPanel).dispose();
-
-        if (buttonPanel instanceof Disposable)
-            ((Disposable) buttonPanel).dispose();
-    }
-
-    private void setup() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
 
