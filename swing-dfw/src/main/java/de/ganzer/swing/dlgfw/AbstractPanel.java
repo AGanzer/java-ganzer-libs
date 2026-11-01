@@ -117,6 +117,8 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      *         updates
      * @param suppressSetup If {@code true}, the dialog's controls will not be
      *         created at construction but later if it is shown.
+     *
+     * @since 6.3.0
      */
     public AbstractPanel(boolean isDoubleBuffered, boolean suppressSetup) {
         super(new BorderLayout(), isDoubleBuffered);
@@ -232,6 +234,8 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * Gets the center panel.
      *
      * @return The panel that was created by {@link #createCenterPanel()}.
+     *
+     * @since 6.3.0
      */
     public JComponent getCenterPanel() {
         return centerPanel;
@@ -243,6 +247,8 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * @return The panel that was created by {@link #createTitlePanel()} or
      *         {@code null} if {@link #createTitlePanel()} did not create a
      *         panel.
+     *
+     * @since 6.3.0
      */
     public JPanel getTitlePanel() {
         return titlePanel;
@@ -254,6 +260,8 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * @return The panel that was created by {@link #createSouthPanel()} or
      *         {@code null} if {@link #createSouthPanel()} did not create a
      *         panel.
+     *
+     * @since 6.3.0
      */
     public JComponent getSouthPanel() {
         return southPanel;
@@ -265,6 +273,8 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * @return The panel that was created by {@link #createEastPanel()} or
      *         {@code null} if {@link #createSouthPanel()} did not create a
      *         panel.
+     *
+     * @since 6.3.0
      */
     public JComponent getEastPanel() {
         return eastPanel;
@@ -276,6 +286,8 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      * @return The panel that was created by {@link #createWestPanel()} or
      *         {@code null} if {@link #createWestPanel()} did not create a
      *         panel.
+     *
+     * @since 6.3.0
      */
     public JComponent getWestPanel() {
         return westPanel;

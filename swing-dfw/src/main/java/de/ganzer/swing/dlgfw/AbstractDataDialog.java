@@ -192,6 +192,8 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataDialog(Window owner, String title, GraphicsConfiguration gc, Data data) {
         super(owner, title, gc);
@@ -221,6 +223,8 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataDialog(Window owner, boolean suppressSetup) {
         super(owner, suppressSetup);
@@ -249,6 +253,8 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataDialog(Window owner, String title, boolean suppressSetup) {
         super(owner, title, suppressSetup);
@@ -284,6 +290,8 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataDialog(Window owner, String title, GraphicsConfiguration gc, boolean suppressSetup) {
         super(owner, title, gc, suppressSetup);
@@ -312,6 +320,8 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataDialog(Window owner, boolean suppressSetup, Data data) {
         super(owner, suppressSetup);
@@ -345,6 +355,8 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataDialog(Window owner, String title, boolean suppressSetup, Data data) {
         super(owner, title, suppressSetup);
@@ -385,6 +397,8 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataDialog(Window owner, String title, GraphicsConfiguration gc, boolean suppressSetup, Data data) {
         super(owner, title, gc, suppressSetup);

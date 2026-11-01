@@ -234,6 +234,8 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataFrame(boolean suppressSetup) throws HeadlessException {
         super(suppressSetup);
@@ -260,6 +262,8 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataFrame(GraphicsConfiguration gc, boolean suppressSetup) {
         super(gc, suppressSetup);
@@ -283,6 +287,8 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataFrame(String title, boolean suppressSetup) throws HeadlessException {
         super(title, suppressSetup);
@@ -311,6 +317,8 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataFrame(String title, GraphicsConfiguration gc, boolean suppressSetup) {
         super(title, gc, suppressSetup);
@@ -334,6 +342,8 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataFrame(boolean suppressSetup, Data data) throws HeadlessException {
         super(suppressSetup);
@@ -365,6 +375,8 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataFrame(GraphicsConfiguration gc, boolean suppressSetup, Data data) {
         super(gc, suppressSetup);
@@ -393,6 +405,8 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataFrame(String title, boolean suppressSetup, Data data) throws HeadlessException {
         super(title, suppressSetup);
@@ -426,6 +440,8 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDataFrame(String title, GraphicsConfiguration gc, boolean suppressSetup, Data data) {
         super(title, gc, suppressSetup);

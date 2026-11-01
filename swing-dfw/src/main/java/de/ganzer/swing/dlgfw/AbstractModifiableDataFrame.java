@@ -228,6 +228,8 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractModifiableDataFrame(boolean suppressSetup) throws HeadlessException {
         super(suppressSetup);
@@ -254,6 +256,8 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractModifiableDataFrame(GraphicsConfiguration gc, boolean suppressSetup) {
         super(gc, suppressSetup);
@@ -277,6 +281,8 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractModifiableDataFrame(String title, boolean suppressSetup) throws HeadlessException {
         super(title, suppressSetup);
@@ -305,6 +311,8 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractModifiableDataFrame(String title, GraphicsConfiguration gc, boolean suppressSetup) {
         super(title, gc, suppressSetup);
@@ -328,6 +336,8 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractModifiableDataFrame(boolean suppressSetup, Data data) throws HeadlessException {
         super(suppressSetup, data);
@@ -356,6 +366,8 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractModifiableDataFrame(GraphicsConfiguration gc, boolean suppressSetup, Data data) {
         super(gc, suppressSetup, data);
@@ -381,6 +393,8 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractModifiableDataFrame(String title, boolean suppressSetup, Data data) throws HeadlessException {
         super(title, suppressSetup, data);
@@ -411,6 +425,8 @@ public abstract class AbstractModifiableDataFrame<Data> extends AbstractDataFram
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractModifiableDataFrame(String title, GraphicsConfiguration gc, boolean suppressSetup, Data data) {
         super(title, gc, suppressSetup, data);

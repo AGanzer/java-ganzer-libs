@@ -1,6 +1,5 @@
 package de.ganzer.swing.dlgfw;
 
-import de.ganzer.swing.dialogs.DataSupport;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 
 import javax.swing.event.DocumentEvent;
@@ -86,6 +85,8 @@ public abstract class AbstractModifiableDataPanel<Data> extends AbstractPanel im
      * @param owner The owner window that supports data.
      *
      * @throws NullPointerException {@code owner} is {@code null}.
+     *
+     * @since 6.3.0
      */
     public AbstractModifiableDataPanel(boolean isDoubleBuffered, boolean suppressSetup, ModifiableDataSupport<Data> owner) {
         super(isDoubleBuffered, suppressSetup);

@@ -136,6 +136,8 @@ public abstract class AbstractFrame extends JFrame {
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractFrame(boolean suppressSetup) throws HeadlessException {
         lazySetup = suppressSetup;
@@ -165,6 +167,8 @@ public abstract class AbstractFrame extends JFrame {
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractFrame(GraphicsConfiguration gc, boolean suppressSetup) {
         super(gc);
@@ -193,6 +197,8 @@ public abstract class AbstractFrame extends JFrame {
      * @see Component#setSize
      * @see Component#setVisible
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractFrame(String title, boolean suppressSetup) throws HeadlessException {
         super(title);
@@ -226,6 +232,8 @@ public abstract class AbstractFrame extends JFrame {
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractFrame(String title, GraphicsConfiguration gc, boolean suppressSetup) {
         super(title, gc);
@@ -317,6 +325,8 @@ public abstract class AbstractFrame extends JFrame {
      * @see #AbstractFrame(boolean)
      * @see #AbstractFrame(String, boolean)
      * @see #AbstractFrame(String, GraphicsConfiguration, boolean)
+     *
+     * @since 6.3.0
      */
     protected boolean isLazySetup() {
         return lazySetup;

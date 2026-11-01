@@ -145,6 +145,8 @@ public abstract class AbstractDialog extends JDialog {
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDialog(Window owner, boolean suppressSetup) {
         super(owner, DEFAULT_MODALITY_TYPE);
@@ -178,6 +180,8 @@ public abstract class AbstractDialog extends JDialog {
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDialog(Window owner, String title, boolean suppressSetup) {
         super(owner, title, DEFAULT_MODALITY_TYPE);
@@ -218,6 +222,8 @@ public abstract class AbstractDialog extends JDialog {
      *
      * @see GraphicsEnvironment#isHeadless
      * @see JComponent#getDefaultLocale
+     *
+     * @since 6.3.0
      */
     public AbstractDialog(Window owner, String title, GraphicsConfiguration gc, boolean suppressSetup) {
         super(owner, title, DEFAULT_MODALITY_TYPE, gc);
@@ -331,6 +337,8 @@ public abstract class AbstractDialog extends JDialog {
      * @see #AbstractDialog(Window, boolean)
      * @see #AbstractDialog(Window, String, boolean)
      * @see #AbstractDialog(Window, String, GraphicsConfiguration, boolean)
+     *
+     * @since 6.3.0
      */
     protected boolean isLazySetup() {
         return lazySetup;
