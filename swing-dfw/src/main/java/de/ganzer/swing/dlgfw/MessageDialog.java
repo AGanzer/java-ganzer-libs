@@ -6,6 +6,8 @@ import java.awt.event.WindowEvent;
 
 /**
  * A dialog that displays a message.
+ *
+ * @since 6.3.0
  */
 public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogData> {
     private String result;

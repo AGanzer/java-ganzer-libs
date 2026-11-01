@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 
 /**
  * The panel used together with a {@link MessageDialog}.
+ *
+ * @since 6.3.0
  */
 public class MessageDialogPanel extends AbstractDataPanel<MessageDialogData> {
     private JLabel titleLabel;

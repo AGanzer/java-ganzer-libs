@@ -9,6 +9,8 @@ import java.awt.BorderLayout;
 
 /**
  * The data used with the {@link MessageDialog}.
+ *
+ * @since 6.3.0
  */
 public class MessageDialogData {
     /**
