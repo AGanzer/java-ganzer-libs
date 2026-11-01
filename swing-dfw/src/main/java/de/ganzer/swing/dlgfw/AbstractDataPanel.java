@@ -42,8 +42,29 @@ public abstract  class AbstractDataPanel<Data> extends AbstractPanel implements 
      *
      * @throws NullPointerException {@code owner} is {@code null}.
      */
-    public AbstractDataPanel(boolean isDoubleBuffered, ModifiableDataSupport<Data> owner) {
+    public AbstractDataPanel(boolean isDoubleBuffered, DataSupport<Data> owner) {
         super(isDoubleBuffered);
+        Objects.requireNonNull(owner, "owner must not be null.");
+        this.owner = owner;
+    }
+
+    /**
+     * Creates a new <code>JPanel</code> with <code>FlowLayout</code>
+     * and the specified buffering strategy.
+     * If <code>isDoubleBuffered</code> is true, the <code>JPanel</code>
+     * will use a double buffer.
+     *
+     * @param isDoubleBuffered a boolean, true for double-buffering, which
+     *         uses additional memory space to achieve fast, flicker-free
+     *         updates
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     * @param owner The owner window that supports data.
+     *
+     * @throws NullPointerException {@code owner} is {@code null}.
+     */
+    public AbstractDataPanel(boolean isDoubleBuffered, boolean suppressSetup, DataSupport<Data> owner) {
+        super(isDoubleBuffered, suppressSetup);
         Objects.requireNonNull(owner, "owner must not be null.");
         this.owner = owner;
     }

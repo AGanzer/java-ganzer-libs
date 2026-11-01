@@ -1,5 +1,6 @@
 package de.ganzer.swing.dlgfw;
 
+import de.ganzer.swing.dialogs.DataSupport;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 
 import javax.swing.event.DocumentEvent;
@@ -67,6 +68,27 @@ public abstract class AbstractModifiableDataPanel<Data> extends AbstractPanel im
      */
     public AbstractModifiableDataPanel(boolean isDoubleBuffered, ModifiableDataSupport<Data> owner) {
         super(isDoubleBuffered);
+        Objects.requireNonNull(owner, "owner must not be null.");
+        this.owner = owner;
+    }
+
+    /**
+     * Creates a new <code>JPanel</code> with <code>FlowLayout</code>
+     * and the specified buffering strategy.
+     * If <code>isDoubleBuffered</code> is true, the <code>JPanel</code>
+     * will use a double buffer.
+     *
+     * @param isDoubleBuffered a boolean, true for double-buffering, which
+     *         uses additional memory space to achieve fast, flicker-free
+     *         updates
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     * @param owner The owner window that supports data.
+     *
+     * @throws NullPointerException {@code owner} is {@code null}.
+     */
+    public AbstractModifiableDataPanel(boolean isDoubleBuffered, boolean suppressSetup, ModifiableDataSupport<Data> owner) {
+        super(isDoubleBuffered, suppressSetup);
         Objects.requireNonNull(owner, "owner must not be null.");
         this.owner = owner;
     }

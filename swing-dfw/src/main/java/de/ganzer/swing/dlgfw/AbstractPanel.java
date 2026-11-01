@@ -106,6 +106,25 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     }
 
     /**
+     * Creates a new <code>JPanel</code> with <code>FlowLayout</code>
+     * and the specified buffering strategy.
+     * If <code>isDoubleBuffered</code> is true, the <code>JPanel</code>
+     * will use a double buffer.
+     *
+     * @param isDoubleBuffered a boolean, true for double-buffering, which
+     *         uses additional memory space to achieve fast, flicker-free
+     *         updates
+     * @param suppressSetup If {@code true}, the dialog's controls will not be
+     *         created at construction but later if it is shown.
+     */
+    public AbstractPanel(boolean isDoubleBuffered, boolean suppressSetup) {
+        super(new BorderLayout(), isDoubleBuffered);
+
+        if (!suppressSetup)
+            setup();
+    }
+
+    /**
      * Gets the color to use as background-color for titles.
      *
      * @return The color. The default is {@link Color#WHITE}.
@@ -259,6 +278,39 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      */
     public JComponent getWestPanel() {
         return westPanel;
+    }
+
+    /**
+     * Sets up the controls of the panel.
+     * <p>
+     * Inheritors must call the base method to ensure that all controls are
+     * created.
+     *
+     * @throws IllegalStateException If {@code setup()} was already invoked.
+     */
+    public void setup() {
+        if (centerPanel != null)
+            throw new IllegalStateException("Controls are already created.");
+
+        centerPanel = createCenterPanel();
+        titlePanel = createTitlePanel();
+        southPanel = createSouthPanel();
+        eastPanel = createEastPanel();
+        westPanel = createWestPanel();
+
+        add(centerPanel, BorderLayout.CENTER);
+
+        if (titlePanel != null)
+            add(titlePanel, BorderLayout.NORTH);
+
+        if (southPanel != null)
+            add(southPanel, BorderLayout.SOUTH);
+
+        if (eastPanel != null)
+            add(eastPanel, BorderLayout.EAST);
+
+        if (westPanel != null)
+            add(westPanel, BorderLayout.WEST);
     }
 
     /**
@@ -504,27 +556,5 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
             titlePanel.add(further);
 
         titlePanel.add(Box.createHorizontalStrut(10));
-    }
-
-    private void setup() {
-        centerPanel = createCenterPanel();
-        titlePanel = createTitlePanel();
-        southPanel = createSouthPanel();
-        eastPanel = createEastPanel();
-        westPanel = createWestPanel();
-
-        add(centerPanel, BorderLayout.CENTER);
-
-        if (titlePanel != null)
-            add(titlePanel, BorderLayout.NORTH);
-
-        if (southPanel != null)
-            add(southPanel, BorderLayout.SOUTH);
-
-        if (eastPanel != null)
-            add(eastPanel, BorderLayout.EAST);
-
-        if (westPanel != null)
-            add(westPanel, BorderLayout.WEST);
     }
 }
