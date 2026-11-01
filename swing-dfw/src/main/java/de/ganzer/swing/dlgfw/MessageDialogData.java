@@ -12,6 +12,7 @@ import java.awt.BorderLayout;
  *
  * @since 6.3.0
  */
+@SuppressWarnings("unused")
 public class MessageDialogData {
     /**
      * The type of the default title and default icon to display.
@@ -318,7 +319,7 @@ public class MessageDialogData {
      *        shown if {@code title} and {@code icon} are both {@code null}.
      */
     public MessageDialogData(String title, String message, Icon icon, String buttonLocation, String[] buttons, String defaultButton, Type type) {
-        this.title = title = Strings.isNullOrBlank(title) ? getTitle(type) : title;
+        this.title = Strings.isNullOrBlank(title) ? getTitle(type) : title;
         this.message = message;
         this.icon = icon == null ? getIcon(type) : icon;
         this.buttonLocation = Strings.isNullOrBlank(buttonLocation) ? BorderLayout.SOUTH : buttonLocation;
