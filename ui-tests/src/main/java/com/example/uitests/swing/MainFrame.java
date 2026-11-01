@@ -265,6 +265,7 @@ public class MainFrame extends JFrame {
         dialog.setVisible(true);
 
         System.out.println("Message box closed with result: " + data.result);
+        System.out.println("Message box closed with index:  " + data.getResultIndex());
     }
 
     private void initMenu() {
