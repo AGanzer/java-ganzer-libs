@@ -76,7 +76,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
     private final GAction queryCloseAction = new GAction();
 
     private JComponent centerPanel;
-    private JComponent titlePanel;
+    private JPanel titlePanel;
     private JComponent southPanel;
     private JComponent eastPanel;
     private JComponent westPanel;
@@ -224,7 +224,7 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
      *         {@code null} if {@link #createTitlePanel()} did not create a
      *         panel.
      */
-    public JComponent getTitlePanel() {
+    public JPanel getTitlePanel() {
         return titlePanel;
     }
 
