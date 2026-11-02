@@ -13,6 +13,160 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
     private String result;
 
     /**
+     * Shows the dialog with the given data.
+     *
+     * @param owner The {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner.
+     * @param data The data to use.
+     *
+     * @return {@code data.getResultIndex()}.
+     */
+    public static int show(Window owner, MessageDialogData data) {
+        new MessageDialog(owner, data).setVisible(true);
+        return data.getResultIndex();
+    }
+
+    /**
+     * Shows the dialog with an information title and icon and an "OK" button.
+     *
+     * @param owner The {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner.
+     * @param message The message to display. This may be an HTML message with
+     *        special formatting or a plain message with default '\n' line breaks.
+     */
+    public static void show(Window owner, String message) {
+        show(owner, new MessageDialogData(message));
+    }
+
+    /**
+     * Shows the dialog with a default title and icon.
+     *
+     * @param owner The {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner.
+     * @param title The title of the dialog or {@code null}, empty or blank to
+     *        use the default title for {@code type}.
+     * @param message The message to display. This may be an HTML message with
+     *        special formatting or a plain message with default '\n' line breaks.
+     */
+    public static void show(Window owner, String title, String message) {
+        show(owner, new MessageDialogData(title, message));
+    }
+
+    /**
+     * Shows the dialog with a default title and icon.
+     * <p>
+     * This shown buttons depends on {@code type}. If this is {@link MessageDialogData.Type#QUESTION},
+     * a "YES" and "NO" button is shown. In all other cases a single "OK" button.
+     *
+     * @param owner The {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner.
+     * @param message The message to display. This may be an HTML message with
+     *        special formatting or a plain message with default '\n' line breaks.
+     * @param type The type of the dialog. If this is {@code null}, no title is
+     *        shown.
+     */
+    public static void show(Window owner, String message, MessageDialogData.Type type) {
+        show(owner, new MessageDialogData(message, type));
+    }
+
+    /**
+     * Shows the dialog with a default title and icon.
+     * <p>
+     * This shown buttons depends on {@code type}. If this is {@link MessageDialogData.Type#QUESTION},
+     * a "YES" and "NO" button is shown. In all other cases a single "OK" button.
+     *
+     * @param owner The {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner.
+     * @param title The title of the dialog or {@code null}, empty or blank to
+     *        use the default title for {@code type}.
+     * @param message The message to display. This may be an HTML message with
+     *        special formatting or a plain message with default '\n' line breaks.
+     * @param type The type of the dialog. If this is {@code null}, no title is
+     *        shown.
+     */
+    public static void show(Window owner, String title, String message, MessageDialogData.Type type) {
+        show(owner, new MessageDialogData(title, message, type));
+    }
+
+    /**
+     * Shows the dialog with a question icon and "Yes" and "No" buttons.
+     *
+     * @param owner The {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner.
+     * @param message The message to display. This may be an HTML message with
+     *        special formatting or a plain message with default '\n' line breaks.
+     *
+     * @return {@code true} if the user clicked "Yes", {@code false} otherwise.
+     */
+    public static boolean queryYesNo(Window owner, String message) {
+        return queryYesNo(owner, null, message);
+    }
+
+    /**
+     * Shows the dialog with a question icon and "Yes" and "No" buttons.
+     *
+     * @param owner The {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner.
+     * @param title The title of the dialog or {@code null}, empty or blank to
+     *        use the default title for {@code type}.
+     * @param message The message to display. This may be an HTML message with
+     *        special formatting or a plain message with default '\n' line breaks.
+     *
+     * @return {@code true} if the user clicked "Yes", {@code false} otherwise.
+     */
+    public static boolean queryYesNo(Window owner, String title, String message) {
+        var data = new MessageDialogData(title, message, MessageDialogData.Type.QUESTION);
+        show(owner, data);
+
+        return MessageDialogData.YES_BUTTON_TEXT.equals(data.result);
+    }
+
+    /**
+     * Shows the dialog with a question icon and "Yes", "No" and "Cancel" buttons.
+     *
+     * @param owner The {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner.
+     * @param message The message to display. This may be an HTML message with
+     *        special formatting or a plain message with default '\n' line breaks.
+     *
+     * @return {@code true} if the user clicked "Yes", {@code false} if the user
+     *          clicked "No", or {@code null} if the user clicked "Cancel".
+     */
+    public static Boolean queryYesNoCancel(Window owner, String message) {
+        return queryYesNoCancel(owner, null, message);
+    }
+
+    /**
+     * Shows the dialog with a question icon and "Yes", "No" and "Cancel" buttons.
+     *
+     * @param owner The {@code Window} from which the dialog is displayed or
+     *         {@code null} if this dialog has no owner.
+     * @param title The title of the dialog or {@code null}, empty or blank to
+     *        use the default title for {@code type}.
+     * @param message The message to display. This may be an HTML message with
+     *        special formatting or a plain message with default '\n' line breaks.
+     *
+     * @return {@code true} if the user clicked "Yes", {@code false} if the user
+     *          clicked "No", or {@code null} if the user clicked "Cancel".
+     */
+    public static Boolean queryYesNoCancel(Window owner, String title, String message) {
+        var data = new MessageDialogData(title,
+                                         message,
+                                         MessageDialogData.DefaultButtons.YES_NO_CANCEL,
+                                         null,
+                                         MessageDialogData.Type.QUESTION);
+        show(owner, data);
+
+        if (MessageDialogData.YES_BUTTON_TEXT.equals(data.result))
+            return true;
+
+        if (MessageDialogData.NO_BUTTON_TEXT.equals(data.result))
+            return false;
+
+        return null;
+    }
+
+    /**
      * Creates a modal dialog with the specified {@code Window}
      * as its owner and an empty title.
      * <p>

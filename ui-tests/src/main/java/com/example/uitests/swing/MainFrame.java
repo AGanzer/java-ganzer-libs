@@ -206,12 +206,13 @@ public class MainFrame extends JFrame {
     }
 
     private void onUntitledMsgBox(ActionEvent e) {
-        var data = new MessageDialogData((String) null,
-                                         "This is an information message.",
-                                         (Icon) null,
-                                         (MessageDialogData.DefaultButtons) null,
-                                         (String) null,
-                                         (MessageDialogData.Type) null);
+        MessageDialogData data;
+        data = new MessageDialogData(null,
+                                     "This is an information message.",
+                                     null,
+                                     (MessageDialogData.DefaultButtons) null,
+                                     null,
+                                     null);
         var dialog = new MessageDialog(this, data);
 
         dialog.setVisible(true);
@@ -220,39 +221,20 @@ public class MainFrame extends JFrame {
     }
 
     private void onInformationMsgBox(ActionEvent e) {
-        var data = new MessageDialogData("This is an information message.");
-        var dialog = new MessageDialog(this, data);
-
-        dialog.setVisible(true);
-
-        System.out.println("Message box closed with result: " + data.result);
+        MessageDialog.show(this, "This is an information message.");
     }
 
     private void onErrorMsgBox(ActionEvent e) {
-        var data = new MessageDialogData("This is an error message.", MessageDialogData.Type.ERROR);
-        var dialog = new MessageDialog(this, data);
-
-        dialog.setVisible(true);
-
-        System.out.println("Message box closed with result: " + data.result);
+        MessageDialog.show(this, "This is an error message.", MessageDialogData.Type.ERROR);
     }
 
     private void onWarningMsgBox(ActionEvent e) {
-        var data = new MessageDialogData("This is a warning message.", MessageDialogData.Type.WARNING);
-        var dialog = new MessageDialog(this, data);
-
-        dialog.setVisible(true);
-
-        System.out.println("Message box closed with result: " + data.result);
+        MessageDialog.show(this, "This is a warning message.", MessageDialogData.Type.WARNING);
     }
 
     private void onQuestionMsgBox(ActionEvent e) {
-        var data = new MessageDialogData("This is a question message.\nDo you like it?", MessageDialogData.Type.QUESTION);
-        var dialog = new MessageDialog(this, data);
-
-        dialog.setVisible(true);
-
-        System.out.println("Message box closed with result: " + data.result);
+        var yes = MessageDialog.queryYesNo(this, "This is a question message.\nDo you like it?");
+        System.out.println("Message box closed with result: " + (yes ? "Yes" : "No"));
     }
 
     private void onOtherMsgBox(ActionEvent e) {
@@ -260,9 +242,7 @@ public class MainFrame extends JFrame {
                                          MessageDialogData.DefaultButtons.ABORT_RETRY_IGNORE_ALL,
                                          MessageDialogData.RETRY_BUTTON_TEXT,
                                          MessageDialogData.Type.ERROR);
-        var dialog = new MessageDialog(this, data);
-
-        dialog.setVisible(true);
+        MessageDialog.show(this, data);
 
         System.out.println("Message box closed with result: " + data.result);
         System.out.println("Message box closed with index:  " + data.getResultIndex());
