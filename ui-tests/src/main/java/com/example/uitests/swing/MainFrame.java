@@ -8,7 +8,7 @@ import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TogglePanel;
-import de.ganzer.swing.dlgfw.*;
+import de.ganzer.swing.dlgfw.messages.*;
 
 import javax.swing.*;
 import java.awt.*;

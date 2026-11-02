@@ -1,4 +1,4 @@
-package de.ganzer.swing.dlgfw;
+package de.ganzer.swing.dlgfw.messages;
 
 /**
  * The type of the default title and default icon to display within a

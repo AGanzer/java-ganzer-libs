@@ -4,4 +4,5 @@ open module de.ganzer.swing.dlgfw {
     requires de.ganzer.swing;
     exports de.ganzer.swing.dlgfw;
     exports de.ganzer.swing.dlgfw.services;
+    exports de.ganzer.swing.dlgfw.messages;
 }

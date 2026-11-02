@@ -1,4 +1,4 @@
-package de.ganzer.swing.dlgfw;
+package de.ganzer.swing.dlgfw.messages;
 
 /**
  * The default buttons that con be used within a {@link MessageDialog}.

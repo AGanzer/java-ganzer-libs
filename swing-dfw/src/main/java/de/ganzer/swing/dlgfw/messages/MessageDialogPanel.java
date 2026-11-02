@@ -1,6 +1,7 @@
-package de.ganzer.swing.dlgfw;
+package de.ganzer.swing.dlgfw.messages;
 
 import de.ganzer.swing.dialogs.DataSupport;
+import de.ganzer.swing.dlgfw.AbstractDataPanel;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;

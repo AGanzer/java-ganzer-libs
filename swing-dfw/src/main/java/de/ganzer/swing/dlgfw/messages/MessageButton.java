@@ -1,4 +1,4 @@
-package de.ganzer.swing.dlgfw;
+package de.ganzer.swing.dlgfw.messages;
 
 import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
 
