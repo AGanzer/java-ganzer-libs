@@ -55,7 +55,7 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
     /**
      * Shows the dialog with a default title and icon.
      * <p>
-     * This shown buttons depends on {@code type}. If this is {@link MessageDialogData.Type#QUESTION},
+     * This shown buttons depends on {@code type}. If this is {@link MessageType#QUESTION},
      * a "YES" and "NO" button is shown. In all other cases a single "OK" button.
      *
      * @param owner The {@code Window} from which the dialog is displayed or
@@ -65,14 +65,14 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown.
      */
-    public static void show(Window owner, String message, MessageDialogData.Type type) {
+    public static void show(Window owner, String message, MessageType type) {
         show(owner, new MessageDialogData(message, type));
     }
 
     /**
      * Shows the dialog with a default title and icon.
      * <p>
-     * This shown buttons depends on {@code type}. If this is {@link MessageDialogData.Type#QUESTION},
+     * This shown buttons depends on {@code type}. If this is {@link MessageType#QUESTION},
      * a "YES" and "NO" button is shown. In all other cases a single "OK" button.
      *
      * @param owner The {@code Window} from which the dialog is displayed or
@@ -84,7 +84,7 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown.
      */
-    public static void show(Window owner, String title, String message, MessageDialogData.Type type) {
+    public static void show(Window owner, String title, String message, MessageType type) {
         show(owner, new MessageDialogData(title, message, type));
     }
 
@@ -115,10 +115,10 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
      * @return {@code true} if the user clicked "Yes", {@code false} otherwise.
      */
     public static boolean queryYesNo(Window owner, String title, String message) {
-        var data = new MessageDialogData(title, message, MessageDialogData.Type.QUESTION);
+        var data = new MessageDialogData(title, message, MessageType.QUESTION);
         show(owner, data);
 
-        return MessageDialogData.YES_BUTTON_TEXT.equals(data.result);
+        return MessageButton.YES.equals(data.result);
     }
 
     /**
@@ -152,15 +152,15 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
     public static Boolean queryYesNoCancel(Window owner, String title, String message) {
         var data = new MessageDialogData(title,
                                          message,
-                                         MessageDialogData.DefaultButtons.YES_NO_CANCEL,
+                                         MessageButtons.YES_NO_CANCEL,
                                          null,
-                                         MessageDialogData.Type.QUESTION);
+                                         MessageType.QUESTION);
         show(owner, data);
 
-        if (MessageDialogData.YES_BUTTON_TEXT.equals(data.result))
+        if (MessageButton.YES.equals(data.result))
             return true;
 
-        if (MessageDialogData.NO_BUTTON_TEXT.equals(data.result))
+        if (MessageButton.NO.equals(data.result))
             return false;
 
         return null;
@@ -316,8 +316,8 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
                     result = getData().buttons[0];
                 } else {
                     for (int i = 0; i < getData().buttons.length; i++) {
-                        if (getData().buttons[i].equals(MessageDialogData.CANCEL_BUTTON_TEXT)) {
-                            result = MessageDialogData.CANCEL_BUTTON_TEXT;
+                        if (getData().buttons[i].equals(MessageButton.CANCEL)) {
+                            result = MessageButton.CANCEL;
                             break;
                         }
                     }

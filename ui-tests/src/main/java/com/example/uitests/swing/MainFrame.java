@@ -8,8 +8,7 @@ import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TogglePanel;
-import de.ganzer.swing.dlgfw.MessageDialog;
-import de.ganzer.swing.dlgfw.MessageDialogData;
+import de.ganzer.swing.dlgfw.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -210,7 +209,7 @@ public class MainFrame extends JFrame {
         data = new MessageDialogData(null,
                                      "This is an information message.",
                                      null,
-                                     (MessageDialogData.DefaultButtons) null,
+                                     (MessageButtons) null,
                                      null,
                                      null);
         var dialog = new MessageDialog(this, data);
@@ -225,11 +224,11 @@ public class MainFrame extends JFrame {
     }
 
     private void onErrorMsgBox(ActionEvent e) {
-        MessageDialog.show(this, "This is an error message.", MessageDialogData.Type.ERROR);
+        MessageDialog.show(this, "This is an error message.", MessageType.ERROR);
     }
 
     private void onWarningMsgBox(ActionEvent e) {
-        MessageDialog.show(this, "This is a warning message.", MessageDialogData.Type.WARNING);
+        MessageDialog.show(this, "This is a warning message.", MessageType.WARNING);
     }
 
     private void onQuestionMsgBox(ActionEvent e) {
@@ -239,9 +238,9 @@ public class MainFrame extends JFrame {
 
     private void onOtherMsgBox(ActionEvent e) {
         var data = new MessageDialogData("This is a multiple answer message.\nDo you like it?",
-                                         MessageDialogData.DefaultButtons.ABORT_RETRY_IGNORE_ALL,
-                                         MessageDialogData.RETRY_BUTTON_TEXT,
-                                         MessageDialogData.Type.ERROR);
+                                         MessageButtons.ABORT_RETRY_IGNORE_ALL,
+                                         MessageButton.RETRY,
+                                         MessageType.ERROR);
         MessageDialog.show(this, data);
 
         System.out.println("Message box closed with result: " + data.result);

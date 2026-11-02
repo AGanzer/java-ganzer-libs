@@ -15,103 +15,6 @@ import java.awt.BorderLayout;
 @SuppressWarnings("unused")
 public class MessageDialogData {
     /**
-     * The type of the default title and default icon to display.
-     */
-    public enum Type {
-        /**
-         * An information message.
-         */
-        INFORMATION,
-        /**
-         * A warning message.
-         */
-        WARNING,
-        /**
-         * An error message.
-         */
-        ERROR,
-        /**
-         * A question message.
-         */
-        QUESTION
-    }
-
-    /**
-     * The default buttons that con be used.
-     */
-    public enum DefaultButtons {
-        /**
-         * The "OK" button.
-         */
-        OK,
-        /**
-         * The buttons "OK" and "Cancel".
-         */
-        OK_CANCEL,
-        /**
-         * The buttons "Yes" and "No".
-         */
-        YES_NO,
-        /**
-         * The buttons "Yes", "No" and "Cancel".
-         */
-        YES_NO_CANCEL,
-        /**
-         * The buttons "Yes", "Yes to all", "No", "No to all" and "Cancel".
-         */
-        YES_NO_CANCEL_ALL,
-        /**
-         * The buttons "Abort", "Retry" and "Ignore".
-         */
-        ABORT_RETRY_IGNORE,
-        /**
-         * The buttons "Abort", "Retry", "Ignore" and "Ignore all".
-         */
-        ABORT_RETRY_IGNORE_ALL
-    }
-
-    /**
-     * The text of the "OK" button.
-     */
-    public static final String OK_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.ok");
-    /**
-     * The text of the "Yes" button.
-     */
-    public static final String YES_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.yes");
-    /**
-     * The text of the "Yes to all" button.
-     */
-    public static final String YES_TO_ALL_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.yesToAll");
-    /**
-     * The text of the "No" button.
-     */
-    public static final String NO_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.no");
-    /**
-     * The text of the "No to all" button.
-     */
-    public static final String NO_TO_ALL_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.noToAll");
-    /**
-     * The text of the "Cancel" button.
-     */
-    public static final String CANCEL_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.cancel");
-    /**
-     * The text of the "Abort" button.
-     */
-    public static final String ABORT_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.abort");
-    /**
-     * The text of the "Retry" button.
-     */
-    public static final String RETRY_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.retry");
-    /**
-     * The text of the "Ignore" button.
-     */
-    public static final String IGNORE_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.ignore");
-    /**
-     * The text of the "Ignore all" button.
-     */
-    public static final String IGNORE_ALL_BUTTON_TEXT = SwingDialogsMessages.get("commons.buttons.ignoreAll");
-
-    /**
      * The title of the dialog or {@code null} to show no title.
      */
     public final String title;
@@ -151,7 +54,7 @@ public class MessageDialogData {
      *        special formatting or a plain message with default '\n' line breaks.
      */
     public MessageDialogData(String message) {
-        this(null, message, null, null, DefaultButtons.OK, null, Type.INFORMATION);
+        this(null, message, null, null, MessageButtons.OK, null, MessageType.INFORMATION);
     }
 
     /**
@@ -163,13 +66,13 @@ public class MessageDialogData {
      *        special formatting or a plain message with default '\n' line breaks.
      */
     public MessageDialogData(String title, String message) {
-        this(title, message, null, null, DefaultButtons.OK, null, Type.INFORMATION);
+        this(title, message, null, null, MessageButtons.OK, null, MessageType.INFORMATION);
     }
 
     /**
      * Creates a new instance with a default title and icon.
      * <p>
-     * This shown buttons depends on {@code type}. If this is {@link Type#QUESTION},
+     * This shown buttons depends on {@code type}. If this is {@link MessageType#QUESTION},
      * a "YES" and "NO" button is shown. In all other cases a single "OK" button.
      *
      * @param message The message to display. This may be an HTML message with
@@ -177,14 +80,14 @@ public class MessageDialogData {
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown.
      */
-    public MessageDialogData(String message, Type type) {
+    public MessageDialogData(String message, MessageType type) {
         this(null, message, null, null, getButtons(type), null, type);
     }
 
     /**
      * Creates a new instance with a default title and icon.
      * <p>
-     * This shown buttons depends on {@code type}. If this is {@link Type#QUESTION},
+     * This shown buttons depends on {@code type}. If this is {@link MessageType#QUESTION},
      * a "YES" and "NO" button is shown. In all other cases a single "OK" button.
      *
      * @param title The title of the dialog or {@code null}, empty or blank to
@@ -194,7 +97,7 @@ public class MessageDialogData {
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown.
      */
-    public MessageDialogData(String title, String message, Type type) {
+    public MessageDialogData(String title, String message, MessageType type) {
         this(title, message, null, null, getButtons(type), null, type);
     }
 
@@ -204,13 +107,13 @@ public class MessageDialogData {
      * @param message The message to display. This may be an HTML message with
      *        special formatting or a plain message with default '\n' line breaks.
      * @param buttons The buttons to display. If this is {@code null},
-     *        {@link DefaultButtons#OK} is used.
+     *        {@link MessageButtons#OK} is used.
      * @param defaultButton The button that is pressed by the "Enter" key or
      *        {@code null} to make the first button the default.
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown.
      */
-    public MessageDialogData(String message, DefaultButtons buttons, String defaultButton, Type type) {
+    public MessageDialogData(String message, MessageButtons buttons, String defaultButton, MessageType type) {
         this(null, message, null, null, getButtons(buttons), defaultButton, type);
     }
 
@@ -224,13 +127,13 @@ public class MessageDialogData {
      *        is {@code null}, empty or blank, {@link BorderLayout#SOUTH} is
      *        used.
      * @param buttons The buttons to display. If this is {@code null},
-     *        {@link DefaultButtons#OK} is used.
+     *        {@link MessageButtons#OK} is used.
      * @param defaultButton The button that is pressed by the "Enter" key or
      *        {@code null} to make the first button the default.
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown.
      */
-    public MessageDialogData(String message, String buttonLocation, DefaultButtons buttons, String defaultButton, Type type) {
+    public MessageDialogData(String message, String buttonLocation, MessageButtons buttons, String defaultButton, MessageType type) {
         this(null, message, null, buttonLocation, getButtons(buttons), defaultButton, type);
     }
 
@@ -244,13 +147,13 @@ public class MessageDialogData {
      * @param icon The icon to display or {@code null} to use the default icon
      *        for {@code type}.
      * @param buttons The buttons to display. If this is {@code null},
-     *        {@link DefaultButtons#OK} is used.
+     *        {@link MessageButtons#OK} is used.
      * @param defaultButton The button that is pressed by the "Enter" key or
      *        {@code null} to make the first button the default.
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown if {@code title} and {@code icon} are both {@code null}.
      */
-    public MessageDialogData(String title, String message, Icon icon, DefaultButtons buttons, String defaultButton, Type type) {
+    public MessageDialogData(String title, String message, Icon icon, MessageButtons buttons, String defaultButton, MessageType type) {
         this(title, message, icon, null, getButtons(buttons), defaultButton, type);
     }
 
@@ -268,13 +171,13 @@ public class MessageDialogData {
      *        is {@code null}, empty or blank, {@link BorderLayout#SOUTH} is
      *        used.
      * @param buttons The buttons to display. If this is {@code null},
-     *        {@link DefaultButtons#OK} is used.
+     *        {@link MessageButtons#OK} is used.
      * @param defaultButton The button that is pressed by the "Enter" key or
      *        {@code null} to make the first button the default.
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown if {@code title} and {@code icon} are both {@code null}.
      */
-    public MessageDialogData(String title, String message, Icon icon, String buttonLocation, DefaultButtons buttons, String defaultButton, Type type) {
+    public MessageDialogData(String title, String message, Icon icon, String buttonLocation, MessageButtons buttons, String defaultButton, MessageType type) {
         this(title, message, icon, buttonLocation, getButtons(buttons), defaultButton, type);
     }
 
@@ -294,7 +197,7 @@ public class MessageDialogData {
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown if {@code title} and {@code icon} are both {@code null}.
      */
-    public MessageDialogData(String title, String message, Icon icon, String[] buttons, String defaultButton, Type type) {
+    public MessageDialogData(String title, String message, Icon icon, String[] buttons, String defaultButton, MessageType type) {
         this(title, message, icon, null, buttons, defaultButton, type);
     }
 
@@ -318,7 +221,7 @@ public class MessageDialogData {
      * @param type The type of the dialog. If this is {@code null}, no title is
      *        shown if {@code title} and {@code icon} are both {@code null}.
      */
-    public MessageDialogData(String title, String message, Icon icon, String buttonLocation, String[] buttons, String defaultButton, Type type) {
+    public MessageDialogData(String title, String message, Icon icon, String buttonLocation, String[] buttons, String defaultButton, MessageType type) {
         this.title = Strings.isNullOrBlank(title) ? getTitle(type) : title;
         this.message = message;
         this.icon = icon == null ? getIcon(type) : icon;
@@ -345,13 +248,13 @@ public class MessageDialogData {
         return -1;
     }
 
-    private static DefaultButtons getButtons(Type type) {
-        return type == Type.QUESTION
-                ? DefaultButtons.YES_NO
-                : DefaultButtons.OK;
+    private static MessageButtons getButtons(MessageType type) {
+        return type == MessageType.QUESTION
+                ? MessageButtons.YES_NO
+                : MessageButtons.OK;
     }
 
-    private static String[] getButtons(DefaultButtons buttons) {
+    private static String[] getButtons(MessageButtons buttons) {
         return buttons == null ? null : switch (buttons) {
             case OK -> new String[] {
                     SwingDialogsMessages.get("commons.buttons.ok")};
@@ -383,7 +286,7 @@ public class MessageDialogData {
         };
     }
 
-    private static String getTitle(Type type) {
+    private static String getTitle(MessageType type) {
         return type == null ? null : switch (type) {
             case ERROR -> SwingDialogsMessages.get("dialogs.title.error");
             case WARNING -> SwingDialogsMessages.get("dialogs.title.warning");
@@ -392,7 +295,7 @@ public class MessageDialogData {
         };
     }
 
-    private static Icon getIcon(Type type) {
+    private static Icon getIcon(MessageType type) {
         return type == null ? null : switch (type) {
             case ERROR -> UIManager.getIcon("OptionPane.errorIcon");
             case WARNING -> UIManager.getIcon("OptionPane.warningIcon");
