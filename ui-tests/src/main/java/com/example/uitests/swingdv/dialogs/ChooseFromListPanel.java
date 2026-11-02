@@ -22,6 +22,15 @@ public class ChooseFromListPanel<E> extends AbstractModifiableDataPanel<ChooseFr
         list = new JList<>();
         JScrollPane scrollPane = new JScrollPane(list);
 
+        list.addListSelectionListener(e -> getOwner().setDataModified(true));
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2)
+                    fireQueryClose(true);
+            }
+        });
+
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0  ));
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -47,14 +56,6 @@ public class ChooseFromListPanel<E> extends AbstractModifiableDataPanel<ChooseFr
         data.items.forEach(model::addElement);
 
         list.setModel(model);
-        list.addListSelectionListener(e -> getOwner().setDataModified(true));
-        list.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2)
-                    fireQueryClose(true);
-            }
-        });
     }
 
     @Override
