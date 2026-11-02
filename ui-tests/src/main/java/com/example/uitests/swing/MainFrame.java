@@ -238,6 +238,7 @@ public class MainFrame extends JFrame {
 
     private void onOtherMsgBox(ActionEvent e) {
         var data = new MessageDialogData("This is a multiple answer message.\nDo you like it?",
+                                         BorderLayout.EAST,
                                          MessageButtons.ABORT_RETRY_IGNORE_ALL,
                                          MessageButton.RETRY,
                                          MessageType.ERROR);

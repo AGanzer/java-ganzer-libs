@@ -12,8 +12,6 @@ import javax.swing.JLabel;
  * @since 6.3.0
  */
 public class MessageDialogPanel extends AbstractDataPanel<MessageDialogData> {
-    private JLabel titleLabel;
-    private JLabel titleIcon;
     private JLabel messageLabel;
 
     /**
@@ -45,38 +43,9 @@ public class MessageDialogPanel extends AbstractDataPanel<MessageDialogData> {
         return messageLabel;
     }
 
-    /**
-     * Called to create the caption for the title of the dialog or frame.
-     * <p>
-     * Note that this is called during construction. Therefore, derived classes
-     * may not have been fully initialized when this is invoked.
-     * <p>
-     * This implementation does always return {@code null}.
-     *
-     * @return The title to set or {@code null} if no caption shall be displayed.
-     */
     @Override
-    protected JComponent createTitleLabel() {
-        return titleLabel = new JLabel();
-    }
-
-    /**
-     * Called to create the image icon of the dialog or frame.
-     * <p>
-     * The preferred size of the icon should be {@link #DEFAULT_TITLE_ICON_SIZE}
-     * x {@link #DEFAULT_TITLE_ICON_SIZE}.
-     * <p>
-     * Note that this is called during construction. Therefore, derived classes
-     * may not have been fully initialized when this is invoked.
-     * <p>
-     * This implementation does always return {@code null}.
-     *
-     * @return The image icon to display or {@code null} if no image shall be
-     *         displayed.
-     */
-    @Override
-    protected JComponent createTitleIcon() {
-        return titleIcon = new JLabel();
+    protected JComponent createTitlePanel() {
+        return null;
     }
 
     /**
@@ -87,9 +56,6 @@ public class MessageDialogPanel extends AbstractDataPanel<MessageDialogData> {
      */
     @Override
     public void initControls(MessageDialogData data) {
-        titleLabel.setText(data.title);
-        titleIcon.setIcon(data.icon);
-
         if (data.message.startsWith("<html>"))
             messageLabel.setText(data.message);
         else

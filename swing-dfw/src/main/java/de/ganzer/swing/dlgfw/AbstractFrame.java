@@ -21,6 +21,7 @@ import java.awt.event.WindowEvent;
 public abstract class AbstractFrame extends JFrame {
     private final boolean lazySetup;
 
+    private JPanel titlePanel;
     private JPanel centerPanel;
     private JPanel buttonPanel;
 
@@ -245,6 +246,21 @@ public abstract class AbstractFrame extends JFrame {
     }
 
     /**
+     * Gets the title panel.
+     *
+     * @return The panel that was created by {@link #createTitlePanel()} or
+     *         {@code null} if {@link #createTitlePanel()} did not create a
+     *         panel.
+     *
+     * @see #shouldCreateTitle()
+     *
+     * @since 6.3.0
+     */
+    public JComponent getTitlePanel() {
+        return titlePanel;
+    }
+
+    /**
      * Gets the center panel of this dialog.
      *
      * @return The center panel.
@@ -342,6 +358,176 @@ public abstract class AbstractFrame extends JFrame {
      *         dialog. This must not be {@code null}.
      */
     protected abstract JPanel createCenterPanel();
+
+    /**
+     * Indicates whether a title panel shall be created.
+     * <p>
+     * inheritors can override this to create a title panel within the window
+     * instead of within the center panel.
+     *
+     * @return {@code true} if a title shall be created. This implementation
+     *         returns always {@code false}.
+     *
+     * @since 6.3.0
+     */
+    protected boolean shouldCreateTitle() {
+        return false;
+    }
+
+    /**
+     * Called to create the caption for the title of the dialog or frame.
+     * <p>
+     * Note that this is called during construction. Therefore, derived classes
+     * may not have been fully initialized when this is invoked.
+     * <p>
+     * This implementation does always return {@code null}.
+     *
+     * @return The title to set or {@code null} if no caption shall be displayed.
+     *
+     * @since 6.3.0
+     */
+    protected JComponent createTitleLabel() {
+        return null;
+    }
+
+    /**
+     * Called to create the image icon of the dialog or frame.
+     * <p>
+     * The preferred size of the icon should be {@link AbstractPanel#DEFAULT_TITLE_ICON_SIZE}
+     * x {@link AbstractPanel#DEFAULT_TITLE_ICON_SIZE}.
+     * <p>
+     * Note that this is called during construction. Therefore, derived classes
+     * may not have been fully initialized when this is invoked.
+     * <p>
+     * This implementation does always return {@code null}.
+     *
+     * @return The image icon to display or {@code null} if no image shall be
+     *         displayed.
+     *
+     * @since 6.3.0
+     */
+    protected JComponent createTitleIcon() {
+        return null;
+    }
+
+    /**
+     * Called to create a component that contains further controls that shall be
+     * displayed in the center of the title panel.
+     * <p>
+     * Note that this is called during construction. Therefore, derived classes
+     * may not have been fully initialized when this is invoked.
+     * <p>
+     * This implementation does always return {@code null}.
+     *
+     * @return The panel with further controls to display in the title or
+     *         {@code null} if no further controls shall be inserted.
+     *
+     * @since 6.3.0
+     */
+    protected JComponent createCenteredTitleExtension() {
+        return null;
+    }
+
+    /**
+     * Called to create a component that contains further controls that shall be
+     * displayed on the right side of the title panel.
+     * <p>
+     * Note that this is called during construction. Therefore, derived classes
+     * may not have been fully initialized when this is invoked.
+     * <p>
+     * This implementation does always return {@code null}.
+     *
+     * @return The panel with further controls to display in the title or
+     *         {@code null} if no further controls shall be inserted.
+     *
+     * @since 6.3.0
+     */
+    protected JComponent createRightTitleExtension() {
+        return null;
+    }
+
+    /**
+     * Called to create the panel that shall be inserted into the north.
+     * <p>
+     * Inheritors may override this if they want a more complex north panel,
+     * maybe a toolbar above or below the title. For example:
+     * <p>
+     * <pre>{@code
+     * @Override
+     * protected JPanel createTitlePanel() {
+     *     var northPanel = new JPanel(new BorderLayout());
+     *     northPanel.add(super.createTitlePanel(), BorderLayout.CENTER);
+     *     northPanel.add(createToolBar(), BorderLayout.SOUTH);
+     *
+     *     return northPanel;
+     * }
+     * }</pre>
+     * <p>
+     * Note that this is called only if {@link #shouldCreateTitle()} returns
+     * {@code true}.
+     *
+     * @return The created panel.
+     *
+     * @since 6.3.0
+     */
+    protected JPanel createTitlePanel() {
+        JPanel title = new JPanel(null);
+        title.setLayout(new BoxLayout(title, BoxLayout.X_AXIS));
+        title.setBackground(AbstractPanel.getTitleBackground());
+        title.setOpaque(true);
+
+        fillTitlePanel(title);
+
+        title.setPreferredSize(new Dimension(title.getPreferredSize().width, AbstractPanel.getPreferredTitleHeight()));
+
+        return title;
+    }
+
+    /**
+     * Called by {@link #createTitlePanel()} to fill the panel with the required
+     * controls.
+     * <p>
+     * Note that this is called during construction. Therefor derived classes
+     * may not have been fully initialized when this is invoked.
+     *
+     * @param titlePanel The panel to fill.
+     *
+     * @since 6.3.0
+     */
+    protected void fillTitlePanel(JPanel titlePanel) {
+        JComponent icon = createTitleIcon();
+        JComponent text = createTitleLabel();
+
+        titlePanel.add(Box.createHorizontalStrut(10));
+
+        if (icon != null) {
+            titlePanel.add(icon);
+            titlePanel.add(Box.createHorizontalStrut(10));
+        }
+
+        if (text != null) {
+            text.setFont(AbstractPanel.getTitleFont());
+            text.setForeground(AbstractPanel.getTitleForeground());
+
+            titlePanel.add(text);
+        }
+
+        titlePanel.add(Box.createHorizontalGlue());
+
+        JComponent further = createCenteredTitleExtension();
+
+        if (further != null) {
+            titlePanel.add(further);
+            titlePanel.add(Box.createHorizontalGlue());
+        }
+
+        further = createRightTitleExtension();
+
+        if (further != null)
+            titlePanel.add(further);
+
+        titlePanel.add(Box.createHorizontalStrut(10));
+    }
 
     /**
      * Called to create the panel that contains the main buttons of the window.
@@ -476,8 +662,12 @@ public abstract class AbstractFrame extends JFrame {
 
         getContentPane().setLayout(new BorderLayout());
 
+        titlePanel = shouldCreateTitle() ? createTitlePanel() : null;
         centerPanel = createCenterPanel();
         buttonPanel = createButtonPanel();
+
+        if (titlePanel != null)
+            getContentPane().add(titlePanel, BorderLayout.NORTH);
 
         getContentPane().add(centerPanel, BorderLayout.CENTER);
 

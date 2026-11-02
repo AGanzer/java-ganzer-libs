@@ -10,6 +10,8 @@ import java.awt.event.WindowEvent;
  * @since 6.3.0
  */
 public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogData> {
+    private JLabel titleLabel;
+    private JLabel titleIcon;
     private String result;
 
     /**
@@ -221,6 +223,31 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
         return new MessageDialogPanel(this);
     }
 
+    @Override
+    protected boolean shouldCreateTitle() {
+        return true;
+    }
+
+    /**
+     * Called to create the caption for the title of the dialog or frame.
+     *
+     * @return The title to set.
+     */
+    @Override
+    protected JComponent createTitleLabel() {
+        return titleLabel = new JLabel();
+    }
+
+    /**
+     * Called to create the image icon of the dialog or frame.
+     *
+     * @return The image icon to display.
+     */
+    @Override
+    protected JComponent createTitleIcon() {
+        return titleIcon = new JLabel();
+    }
+
     /**
      * Called to create the buttons that shall be inserted as the window's main
      * buttons.
@@ -266,6 +293,22 @@ public class MessageDialog extends AbstractModifiableDataDialog<MessageDialogDat
     @Override
     protected String getButtonPanelLocation() {
         return getData().buttonLocation;
+    }
+
+    /**
+     * Called to initialize the controls from the specified data.
+     *
+     * @param data The data where to initialize the controls with. This may be
+     *         {@code null} if the controls shall be reset.
+     */
+    @Override
+    public void initControls(MessageDialogData data) {
+        super.initControls(data);
+
+        if (titleLabel != null) {
+            titleLabel.setText(data.title);
+            titleIcon.setIcon(data.icon);
+        }
     }
 
     /**
