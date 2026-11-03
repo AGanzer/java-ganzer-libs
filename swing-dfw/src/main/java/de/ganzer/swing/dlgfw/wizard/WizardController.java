@@ -3,13 +3,15 @@ package de.ganzer.swing.dlgfw.wizard;
 import de.ganzer.swing.actions.GAction;
 
 public class WizardController {
+    private final WizardModel model;
     private final GAction nextAction ;
     private final GAction prevAction;
     private final GAction finishAction;
     private final GAction cancelAction;
     private final GAction helpAction;
 
-    public WizardController() {
+    public WizardController(WizardModel model) {
+        this.model = model;
         nextAction = new GAction();
         prevAction = new GAction();
         finishAction = new GAction();
