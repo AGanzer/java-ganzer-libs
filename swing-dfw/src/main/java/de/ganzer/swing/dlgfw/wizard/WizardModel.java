@@ -9,11 +9,11 @@ public class WizardModel {
 
     private WizardPanelDescriptor currentDescriptor;
 
-    public void registerPanel(WizardPanelDescriptor descriptor) {
+    public void registerDescriptor(WizardPanelDescriptor descriptor) {
         Objects.requireNonNull(descriptor, "descriptor must not be null.");
 
         if (panelDescriptors.contains(descriptor))
-            throw new IllegalArgumentException("Panel descriptor already registered.");
+            throw new IllegalArgumentException("descriptor is already registered.");
 
         panelDescriptors.add(descriptor);
 
@@ -29,7 +29,7 @@ public class WizardModel {
         Objects.requireNonNull(descriptor, "descriptor must not be null.");
 
         if (!panelDescriptors.contains(descriptor))
-            throw new IllegalArgumentException("Panel descriptor not registered.");
+            throw new IllegalArgumentException("descriptor is not registered.");
 
         this.currentDescriptor = descriptor;
     }
