@@ -1,7 +1,9 @@
 package de.ganzer.swing.dlgfw.wizard;
 
+import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.dlgfw.AbstractModifiableDataDialog;
 
+import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.awt.*;
@@ -113,6 +115,22 @@ public class WizardDialog<Data> extends AbstractModifiableDataDialog<Data> {
         super(owner, title, suppressSetup, data);
     }
 
+    public GAction getNextAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getController().getNextAction();
+    }
+
+    public GAction getPrevAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getController().getPrevAction();
+    }
+
+    public GAction getCancelAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getController().getCancelAction();
+    }
+
+    public GAction getHelpAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getController().getHelpAction();
+    }
+
     /**
      * Called to create the panel with the main controls of the frame or dialog.
      * <p>
@@ -125,5 +143,17 @@ public class WizardDialog<Data> extends AbstractModifiableDataDialog<Data> {
     @Override
     protected JPanel createCenterPanel() {
         return new WizardPanel<>(false, isLazySetup(), this);
+    }
+
+    /**
+     * Called to create the buttons that shall be inserted as the window's main
+     * buttons.
+     *
+     * @return The buttons to insert or {@code null} to insert no buttons. This
+     *         implementation returns the buttons OK and Cancel.
+     */
+    @Override
+    protected AbstractButton[] createWindowButtons() {
+        return super.createWindowButtons();
     }
 }

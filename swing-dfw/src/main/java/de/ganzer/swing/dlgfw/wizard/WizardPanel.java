@@ -6,6 +6,8 @@ import de.ganzer.swing.dlgfw.AbstractModifiableDataPanel;
 import javax.swing.JComponent;
 
 public class WizardPanel<Data> extends AbstractModifiableDataPanel<Data> {
+    private final WizardController<Data> controller;
+
     /**
      * Creates a new <code>JPanel</code> with <code>FlowLayout</code>
      * and the specified buffering strategy.
@@ -24,6 +26,19 @@ public class WizardPanel<Data> extends AbstractModifiableDataPanel<Data> {
      */
     public WizardPanel(boolean isDoubleBuffered, boolean suppressSetup, ModifiableDataSupport<Data> owner) {
         super(isDoubleBuffered, suppressSetup, owner);
+        controller = new WizardController<>(new DefaultWizardModel<>(), null);
+    }
+
+    public WizardModel<Data> getModel() {
+        return controller.getModel();
+    }
+
+    public void setModel(WizardModel<Data> model) {
+        controller.setModel(model);
+    }
+
+    WizardController<Data> getController() {
+        return controller;
     }
 
     /**
@@ -47,7 +62,7 @@ public class WizardPanel<Data> extends AbstractModifiableDataPanel<Data> {
      */
     @Override
     public boolean validateInput() {
-        return false;
+        return true;
     }
 
     /**
@@ -57,7 +72,6 @@ public class WizardPanel<Data> extends AbstractModifiableDataPanel<Data> {
      */
     @Override
     public void updateData(Data data) {
-
     }
 
     /**
@@ -68,6 +82,6 @@ public class WizardPanel<Data> extends AbstractModifiableDataPanel<Data> {
      */
     @Override
     public void initControls(Data data) {
-
+        controller.setData(data);
     }
 }

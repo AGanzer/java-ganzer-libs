@@ -7,8 +7,9 @@ import java.util.Stack;
 
 class WizardController<Data> {
     private final Stack<WizardPage<Data>> prevPages = new Stack<>();
-    private final WizardModel<Data> model;
-    private final Data data;
+
+    private WizardModel<Data> model;
+    private Data data;
 
     private final GAction nextAction ;
     private final GAction prevAction;
@@ -25,6 +26,29 @@ class WizardController<Data> {
                 .onAction(e -> prevPage());
         cancelAction = new GAction(SwingDialogsMessages.get("wizard.button.cancel"));
         helpAction = new GAction(SwingDialogsMessages.get("wizard.button.help"));
+    }
+
+    public WizardModel<Data> getModel() {
+        return model;
+    }
+
+    public void setModel(WizardModel<Data> model) {
+        this.model = model;
+
+        model.getCurrentPage().initControls(data);
+
+        prevPages.clear();
+        prevAction.setEnabled(false);
+        nextAction.setName(SwingDialogsMessages.get("wizard.button.next"));
+    }
+
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
+        model.getCurrentPage().initControls(data);
     }
 
     private void nextPage() {
