@@ -338,6 +338,9 @@ public abstract class AbstractDialog extends JDialog {
     public void dispose() {
         super.dispose();
 
+        if (titlePanel instanceof Disposable)
+            ((Disposable) titlePanel).dispose();
+
         if (centerPanel instanceof Disposable)
             ((Disposable) centerPanel).dispose();
 
