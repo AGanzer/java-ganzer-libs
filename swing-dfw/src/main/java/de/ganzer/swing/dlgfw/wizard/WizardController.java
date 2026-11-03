@@ -36,11 +36,14 @@ class WizardController<Data> {
         if (!currPage.validateInput())
             return;
 
+        currPage.updateData(data);
+
         var nextPage = currPage.getNextPage(data);
 
         if (!model.setCurrentPage(nextPage))
             return;
 
+        nextPage.initControls(data);
         prevPages.push(currPage);
 
         prevAction.setEnabled(true);
