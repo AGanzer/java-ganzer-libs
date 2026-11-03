@@ -4,6 +4,7 @@ import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.dlgfw.AbstractModifiableDataDialog;
 
 import javax.swing.AbstractButton;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.awt.*;
@@ -115,20 +116,20 @@ public class WizardDialog<Data> extends AbstractModifiableDataDialog<Data> {
         super(owner, title, suppressSetup, data);
     }
 
-    public GAction getNextAction() {
-        return ((WizardPanel<?>) getCenterPanel()).getController().getNextAction();
+    protected GAction getNextAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getNextAction();
     }
 
-    public GAction getPrevAction() {
-        return ((WizardPanel<?>) getCenterPanel()).getController().getPrevAction();
+    protected GAction getPrevAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getPrevAction();
     }
 
-    public GAction getCancelAction() {
-        return ((WizardPanel<?>) getCenterPanel()).getController().getCancelAction();
+    protected GAction getCancelAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getCancelAction();
     }
 
-    public GAction getHelpAction() {
-        return ((WizardPanel<?>) getCenterPanel()).getController().getHelpAction();
+    protected GAction getHelpAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getHelpAction();
     }
 
     /**
@@ -154,6 +155,30 @@ public class WizardDialog<Data> extends AbstractModifiableDataDialog<Data> {
      */
     @Override
     protected AbstractButton[] createWindowButtons() {
+        var buttons = new AbstractButton[] {
+                getPrevAction().createButton(),
+                getNextAction().createButton(),
+                getCancelAction().createButton()
+        };
+
+        getRootPane().setDefaultButton((JButton) buttons[1]);
+
         return super.createWindowButtons();
+    }
+
+    /**
+     * Called to get the justifications of the buttons within the window.
+     * <p>
+     * This is not called when {@link #getButtonPanelLocation()} returns
+     * {@link BorderLayout#EAST} or {@link BorderLayout#WEST}. In these cases,
+     * the buttons are always justified at the top edge of the window.
+     *
+     * @return {@code true} to center the buttons, {@code false} to justify it
+     *         at the right edge of the window. This implementation does
+     *         always return {@code false}.
+     */
+    @Override
+    protected boolean shouldCenterButtons() {
+        return false;
     }
 }

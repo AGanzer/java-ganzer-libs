@@ -1,5 +1,6 @@
 package de.ganzer.swing.dlgfw.wizard;
 
+import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.AbstractModifiableDataPanel;
 
@@ -39,6 +40,22 @@ public class WizardPanel<Data> extends AbstractModifiableDataPanel<Data> {
 
     WizardController<Data> getController() {
         return controller;
+    }
+
+    public GAction getNextAction() {
+        return getController().getNextAction();
+    }
+
+    public GAction getPrevAction() {
+        return getController().getPrevAction();
+    }
+
+    public GAction getCancelAction() {
+        return getController().getCancelAction();
+    }
+
+    public GAction getHelpAction() {
+        return getController().getHelpAction();
     }
 
     /**
