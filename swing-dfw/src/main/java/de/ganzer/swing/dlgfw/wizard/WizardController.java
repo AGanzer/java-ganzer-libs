@@ -1,24 +1,64 @@
 package de.ganzer.swing.dlgfw.wizard;
 
 import de.ganzer.swing.actions.GAction;
+import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
 
-public class WizardController<Data> {
+import java.util.Stack;
+
+class WizardController<Data> {
+    private final Stack<WizardPage<Data>> prevPages = new Stack<>();
     private final WizardModel<Data> model;
+    private final Data data;
+
     private final GAction nextAction ;
     private final GAction prevAction;
-    private final GAction finishAction;
     private final GAction cancelAction;
     private final GAction helpAction;
 
-    private WizardPage<Data> previousPage;
-
-    public WizardController(WizardModel<Data> model) {
+    public WizardController(WizardModel<Data> model, Data data) {
         this.model = model;
-        nextAction = new GAction();
-        prevAction = new GAction();
-        finishAction = new GAction();
-        cancelAction = new GAction();
-        helpAction = new GAction();
+        this.data = data;
+
+        nextAction = new GAction(SwingDialogsMessages.get("wizard.button.next"))
+                .onAction(e -> nextPage());
+        prevAction = new GAction(SwingDialogsMessages.get("wizard.button.prev"))
+                .onAction(e -> prevPage());
+        cancelAction = new GAction(SwingDialogsMessages.get("wizard.button.cancel"));
+        helpAction = new GAction(SwingDialogsMessages.get("wizard.button.help"));
+    }
+
+    private void nextPage() {
+        if (model.getCurrentPage() == null)
+            throw new IllegalStateException("No current page available");
+
+        var currPage = model.getCurrentPage();
+
+        if (!currPage.validateInput())
+            return;
+
+        var nextPage = currPage.getNextPage(data);
+
+        if (!model.setCurrentPage(nextPage))
+            return;
+
+        prevPages.push(currPage);
+
+        prevAction.setEnabled(true);
+        nextAction.setName(model.getCurrentPage().getNextPage(data) != null
+                                   ? SwingDialogsMessages.get("wizard.button.next")
+                                   : SwingDialogsMessages.get("wizard.button.finish"));
+    }
+
+    private void prevPage() {
+        if (prevPages.isEmpty())
+            return;
+
+        if (!model.setCurrentPage(prevPages.peek()))
+            return;
+
+        prevPages.pop();
+        prevAction.setEnabled(!prevPages.isEmpty());
+        nextAction.setName(SwingDialogsMessages.get("wizard.button.next"));
     }
 
     public GAction getNextAction() {
@@ -27,10 +67,6 @@ public class WizardController<Data> {
 
     public GAction getPrevAction() {
         return prevAction;
-    }
-
-    public GAction getFinishAction() {
-        return finishAction;
     }
 
     public GAction getCancelAction() {
