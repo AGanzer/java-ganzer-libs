@@ -161,6 +161,7 @@ public class WizardDialog<Data> extends AbstractModifiableDataDialog<Data> {
                 getCancelAction().createButton()
         };
 
+        getCancelAction().addActionListener(e -> closeDialog(false));
         getRootPane().setDefaultButton((JButton) buttons[1]);
 
         return super.createWindowButtons();
