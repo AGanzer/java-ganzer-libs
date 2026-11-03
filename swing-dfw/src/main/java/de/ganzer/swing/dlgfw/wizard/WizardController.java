@@ -2,15 +2,17 @@ package de.ganzer.swing.dlgfw.wizard;
 
 import de.ganzer.swing.actions.GAction;
 
-public class WizardController {
-    private final WizardModel model;
+public class WizardController<Data> {
+    private final WizardModel<Data> model;
     private final GAction nextAction ;
     private final GAction prevAction;
     private final GAction finishAction;
     private final GAction cancelAction;
     private final GAction helpAction;
 
-    public WizardController(WizardModel model) {
+    private WizardPage<Data> previousPage;
+
+    public WizardController(WizardModel<Data> model) {
         this.model = model;
         nextAction = new GAction();
         prevAction = new GAction();

@@ -1,36 +1,65 @@
 package de.ganzer.swing.dlgfw.wizard;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.beans.*;
+import java.util.*;
 
-public class WizardModel {
-    private final List<WizardPanelDescriptor> panelDescriptors = new ArrayList<>();
+public class WizardModel<Data> {
+    private final Map<Object, WizardPage<Data>> wizardPages = new HashMap<>();
+    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
+    private final VetoableChangeSupport vetoes = new VetoableChangeSupport(this);
 
-    private WizardPanelDescriptor currentDescriptor;
+    private WizardPage<Data> currentPage;
 
-    public void registerDescriptor(WizardPanelDescriptor descriptor) {
-        Objects.requireNonNull(descriptor, "descriptor must not be null.");
+    public void addPage(WizardPage<Data> page) {
+        Objects.requireNonNull(page, "page must not be null.");
 
-        if (panelDescriptors.contains(descriptor))
-            throw new IllegalArgumentException("descriptor is already registered.");
+        if (wizardPages.containsKey(page.getPageId()))
+            throw new IllegalArgumentException("page is already registered.");
 
-        panelDescriptors.add(descriptor);
+        wizardPages.put(page.getPageId(), page);
 
-        if (panelDescriptors.size() == 1)
-            currentDescriptor = descriptor;
+        if (wizardPages.size() == 1)
+            currentPage = page;
     }
 
-    public WizardPanelDescriptor getCurrentDescriptor() {
-        return currentDescriptor;
+    public WizardPage<Data> getCurrentPage() {
+        return currentPage;
     }
 
-    public void setCurrentDescriptor(WizardPanelDescriptor descriptor) {
-        Objects.requireNonNull(descriptor, "descriptor must not be null.");
+    public void setCurrentPage(WizardPage<Data> page) {
+        Objects.requireNonNull(page, "page must not be null.");
 
-        if (!panelDescriptors.contains(descriptor))
-            throw new IllegalArgumentException("descriptor is not registered.");
+        if (!wizardPages.containsKey(page.getPageId()))
+            throw new IllegalArgumentException("page is not registered.");
 
-        this.currentDescriptor = descriptor;
+        if (currentPage == page)
+            return;
+
+        try {
+            vetoes.fireVetoableChange("activePage", currentPage, page);
+        } catch (PropertyVetoException e) {
+            return;
+        }
+
+        var oldPage = currentPage;
+        currentPage = page;
+
+        changes.firePropertyChange("activePage", oldPage, currentPage);
+    }
+
+    public void addPageChangingListener(VetoableChangeListener listener) {
+        vetoes.addVetoableChangeListener("activePage", listener);
+    }
+
+    public void removePageChangingListener(VetoableChangeListener listener) {
+        vetoes.removeVetoableChangeListener("activePage", listener);
+    }
+
+    public void addPageChangedListener(PropertyChangeListener listener) {
+        changes.addPropertyChangeListener("activePage", listener);
+    }
+
+    public void removePageChangedListener(PropertyChangeListener listener) {
+        changes.removePropertyChangeListener("activePage", listener);
     }
 }
