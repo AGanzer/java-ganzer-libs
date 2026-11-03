@@ -480,6 +480,9 @@ public abstract class AbstractDataFrame<Data> extends AbstractFrame implements D
         if (getCenterPanel() == null)
             return;
 
+        if (getTitlePanel() instanceof Initializer)
+            ((Initializer<Data>) getTitlePanel()).initControls(data);
+
         if (getCenterPanel() instanceof Initializer)
             ((Initializer<Data>) getCenterPanel()).initControls(data);
 

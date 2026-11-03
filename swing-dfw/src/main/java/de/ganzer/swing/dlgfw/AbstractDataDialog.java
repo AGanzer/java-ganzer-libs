@@ -439,6 +439,9 @@ public abstract class AbstractDataDialog<Data> extends AbstractDialog implements
         if (getCenterPanel() == null)
             return;
 
+        if (getTitlePanel() instanceof Initializer)
+            ((Initializer<Data>) getTitlePanel()).initControls(data);
+
         if (getCenterPanel() instanceof Initializer)
             ((Initializer<Data>) getCenterPanel()).initControls(data);
 
