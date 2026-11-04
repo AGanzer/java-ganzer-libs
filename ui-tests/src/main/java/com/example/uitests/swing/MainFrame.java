@@ -10,7 +10,6 @@ import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TogglePanel;
 import de.ganzer.swing.dlgfw.messages.*;
-import de.ganzer.swing.dlgfw.wizard.WizardDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -209,10 +208,7 @@ public class MainFrame extends JFrame {
     }
 
     private void onWizardTest(ActionEvent e) {
-        WizardDialog<WizardData> dialog = new WizardDialog<>(this, new WizardData());
-        dialog.setVisible(true);
-
-        System.out.println(dialog.isAccepted() ? "Accepted" : "Rejected");
+        // TODO: open wizard
     }
 
     private void onUntitledMsgBox(ActionEvent e) {

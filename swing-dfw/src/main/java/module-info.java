@@ -5,5 +5,4 @@ open module de.ganzer.swing.dlgfw {
     exports de.ganzer.swing.dlgfw;
     exports de.ganzer.swing.dlgfw.services;
     exports de.ganzer.swing.dlgfw.messages;
-    exports de.ganzer.swing.dlgfw.wizard;
 }
