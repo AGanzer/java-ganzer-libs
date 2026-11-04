@@ -17,16 +17,17 @@ public class WizardPane extends JPanel {
             e ->add(e.getComponent(), e.getPageId().toString());
 
     /**
-     * Creates a new wizard pane with no data.
+     * Creates a new wizard pane with an instance of {@link DefaultWizardModel}.
      */
     public WizardPane() {
         this(null);
     }
 
     /**
-     * Creates a new wizard pane with the given data and model.
+     * Creates a new wizard pane with the given model.
      *
-     * @param model The model to set.
+     * @param model The model to set or {@code null} to set an instance of
+     *        {@link DefaultWizardModel}.
      */
     public WizardPane(WizardModel model) {
         super(new CardLayout());
@@ -71,15 +72,16 @@ public class WizardPane extends JPanel {
     /**
      * Sets the model that is used by this component.
      *
-     * @param model The model that is used by this component.
+     * @param model The model to set or {@code null} to set an instance of
+     *        {@link DefaultWizardModel}.
      */
     public void setModel(WizardModel model) {
         var currentModel = getModel();
 
-        if (currentModel != null) {
-            if (currentModel == model)
-                return;
+        if (currentModel == model)
+            return;
 
+        if (currentModel != null) {
             for (var page : currentModel.getPages())
                 remove(currentModel.getComponent(page));
 
