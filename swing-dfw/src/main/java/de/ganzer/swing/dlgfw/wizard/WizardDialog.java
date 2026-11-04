@@ -2,6 +2,7 @@ package de.ganzer.swing.dlgfw.wizard;
 
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.dlgfw.AbstractModifiableDataDialog;
+import de.ganzer.swing.dlgfw.internals.SwingDialogsMessages;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -116,22 +117,6 @@ public class WizardDialog<Data> extends AbstractModifiableDataDialog<Data> {
         super(owner, title, suppressSetup, data);
     }
 
-    protected GAction getNextAction() {
-        return ((WizardPanel<?>) getCenterPanel()).getNextAction();
-    }
-
-    protected GAction getPrevAction() {
-        return ((WizardPanel<?>) getCenterPanel()).getPrevAction();
-    }
-
-    protected GAction getCancelAction() {
-        return ((WizardPanel<?>) getCenterPanel()).getCancelAction();
-    }
-
-    protected GAction getHelpAction() {
-        return ((WizardPanel<?>) getCenterPanel()).getHelpAction();
-    }
-
     /**
      * Called to create the panel with the main controls of the frame or dialog.
      * <p>
@@ -158,10 +143,10 @@ public class WizardDialog<Data> extends AbstractModifiableDataDialog<Data> {
         var buttons = new AbstractButton[] {
                 getPrevAction().createButton(),
                 getNextAction().createButton(),
-                getCancelAction().createButton()
+                new JButton(SwingDialogsMessages.get("commons.buttons.cancel"))
         };
 
-        getCancelAction().addActionListener(e -> closeDialog(false));
+        buttons[2].addActionListener(e -> closeDialog(false));
         getRootPane().setDefaultButton((JButton) buttons[1]);
 
         return super.createWindowButtons();
@@ -181,5 +166,13 @@ public class WizardDialog<Data> extends AbstractModifiableDataDialog<Data> {
     @Override
     protected boolean shouldCenterButtons() {
         return false;
+    }
+
+    private GAction getNextAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getNextAction();
+    }
+
+    private GAction getPrevAction() {
+        return ((WizardPanel<?>) getCenterPanel()).getPrevAction();
     }
 }

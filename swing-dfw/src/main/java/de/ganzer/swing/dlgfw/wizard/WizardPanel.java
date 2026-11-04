@@ -5,9 +5,10 @@ import de.ganzer.swing.dialogs.ModifiableDataSupport;
 import de.ganzer.swing.dlgfw.AbstractModifiableDataPanel;
 
 import javax.swing.JComponent;
+import java.awt.BorderLayout;
 
 public class WizardPanel<Data> extends AbstractModifiableDataPanel<Data> {
-    private final WizardController<Data> controller;
+    private WizardPane<Data> wizardPane;
 
     /**
      * Creates a new <code>JPanel</code> with <code>FlowLayout</code>
@@ -27,35 +28,25 @@ public class WizardPanel<Data> extends AbstractModifiableDataPanel<Data> {
      */
     public WizardPanel(boolean isDoubleBuffered, boolean suppressSetup, ModifiableDataSupport<Data> owner) {
         super(isDoubleBuffered, suppressSetup, owner);
-        controller = new WizardController<>(new DefaultWizardModel<>(), null);
+        wizardPane = new WizardPane<>(owner.getData());
+
+        add(wizardPane, BorderLayout.CENTER);
     }
 
     public WizardModel<Data> getModel() {
-        return controller.getModel();
+        return wizardPane.getModel();
     }
 
     public void setModel(WizardModel<Data> model) {
-        controller.setModel(model);
-    }
-
-    WizardController<Data> getController() {
-        return controller;
+        wizardPane.setModel(model);
     }
 
     public GAction getNextAction() {
-        return getController().getNextAction();
+        return wizardPane.getNextAction();
     }
 
     public GAction getPrevAction() {
-        return getController().getPrevAction();
-    }
-
-    public GAction getCancelAction() {
-        return getController().getCancelAction();
-    }
-
-    public GAction getHelpAction() {
-        return getController().getHelpAction();
+        return wizardPane.getPrevAction();
     }
 
     /**
@@ -99,6 +90,6 @@ public class WizardPanel<Data> extends AbstractModifiableDataPanel<Data> {
      */
     @Override
     public void initControls(Data data) {
-        controller.setData(data);
+        wizardPane.setData(data);
     }
 }

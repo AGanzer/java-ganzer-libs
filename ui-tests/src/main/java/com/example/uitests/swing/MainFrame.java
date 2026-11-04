@@ -4,11 +4,13 @@ import com.example.uitests.swing.tests.LoginDialog;
 import com.example.uitests.swing.tests.InputTestDialog;
 import com.example.uitests.swing.tests.TextAreaLogPanel;
 import com.example.uitests.swing.tests.TextPaneLogPanel;
+import com.example.uitests.swing.tests.wizard.WizardData;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TogglePanel;
 import de.ganzer.swing.dlgfw.messages.*;
+import de.ganzer.swing.dlgfw.wizard.WizardDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -145,6 +147,8 @@ public class MainFrame extends JFrame {
                                         .onAction(this::onInputTest),
                                 new GAction("Login Dialog Test")
                                         .onAction(this::onLoginTest),
+                                new GAction("Wizard Test")
+                                        .onAction(this::onWizardTest),
                                 new GSeparatorAction(),
                                 new GAction("Information Message Box")
                                         .onAction(this::onInformationMsgBox),
@@ -202,6 +206,13 @@ public class MainFrame extends JFrame {
                 )
 
         );
+    }
+
+    private void onWizardTest(ActionEvent e) {
+        WizardDialog<WizardData> dialog = new WizardDialog<>(this, new WizardData());
+        dialog.setVisible(true);
+
+        System.out.println(dialog.isAccepted() ? "Accepted" : "Rejected");
     }
 
     private void onUntitledMsgBox(ActionEvent e) {
