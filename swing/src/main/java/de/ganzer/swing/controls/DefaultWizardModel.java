@@ -16,14 +16,13 @@ public class DefaultWizardModel extends AbstractWizardModel {
     /**
      * Adds a page to the available pages.
      *
-     * @param page The page of type {@link WizardPage} to add. If this is the
-     *        first added page, it is set as the currently active page.
+     * @param page The identifier of the page to add. If this is the first added
+     *        page, it is set as the currently active page.
      * @param component The component that represents the page.
      *
      * @throws NullPointerException if {@code page} or {@code component} is
      *         {@code null}.
-     * @throws IllegalArgumentException if {@code page} is already registered or
-     *         if {@code page} is not an instance of {@link WizardPage}.
+     * @throws IllegalArgumentException if {@code page} is already registered.
      */
     @Override
     public void addPage(Object page, Component component) {
