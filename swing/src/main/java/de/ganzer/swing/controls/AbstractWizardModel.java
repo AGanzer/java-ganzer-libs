@@ -83,7 +83,7 @@ public abstract class AbstractWizardModel implements WizardModel {
             return false;
 
         try {
-            vetoes.fireVetoableChange("activePage", currentPage, page);
+            firePageChanging(currentPage, page);
         } catch (PropertyVetoException e) {
             return false;
         }
@@ -91,7 +91,7 @@ public abstract class AbstractWizardModel implements WizardModel {
         var oldPage = currentPage;
         currentPage = page;
 
-        changes.firePropertyChange("activePage", oldPage, currentPage);
+        firePageChanged(oldPage, currentPage);
 
         return true;
     }
