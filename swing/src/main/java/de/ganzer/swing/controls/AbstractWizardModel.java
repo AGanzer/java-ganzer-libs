@@ -1,5 +1,6 @@
 package de.ganzer.swing.controls;
 
+import javax.swing.event.EventListenerList;
 import java.awt.Component;
 import java.beans.*;
 import java.util.*;
@@ -13,6 +14,7 @@ public abstract class AbstractWizardModel implements WizardModel {
     private final Collection<Object> unmodifiableWizardPages = Collections.unmodifiableSet(wizardPages.keySet());
     private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
     private final VetoableChangeSupport vetoes = new VetoableChangeSupport(this);
+    private final EventListenerList events = new EventListenerList();
 
     private Object currentPage;
 
@@ -38,6 +40,8 @@ public abstract class AbstractWizardModel implements WizardModel {
 
         if (wizardPages.size() == 1)
             setCurrentPage(page);
+
+        firePageAdded(page, component);
     }
 
     /**
@@ -170,25 +174,66 @@ public abstract class AbstractWizardModel implements WizardModel {
         return changes.getPropertyChangeListeners("activePage");
     }
 
-//    /**
-//     * Fires the page changing event.
-//     *
-//     * @param oldPage The old page.
-//     * @param newPage The new page.
-//     *
-//     * @throws PropertyVetoException if the change is vetoed.
-//     */
-//    protected void firePageChanging(Object oldPage, Object newPage) throws PropertyVetoException {
-//        vetoes.fireVetoableChange("activePage", oldPage, newPage);
-//    }
-//
-//    /**
-//     * Fires the page changed event.
-//     *
-//     * @param oldPage The old page.
-//     * @param newPage The new page.
-//     */
-//    protected void firePageChanged(Object oldPage, Object newPage) {
-//        changes.firePropertyChange("activePage", oldPage, newPage);
-//    }
+    /**
+     * Adds a listener of page added events.
+     *
+     * @param listener The listener to add.
+     */
+    public void addPageAddedListener(WizardPageAddedListener listener) {
+        events.add(WizardPageAddedListener.class, listener);
+    }
+
+    /**
+     * Removes a listener of page added events.
+     *
+     * @param listener The listener to remove.
+     */
+    public void removePageAddedListener(WizardPageAddedListener listener) {
+        events.remove(WizardPageAddedListener.class, listener);
+    }
+
+    /**
+     * Returns the listeners of page added events.
+     *
+     * @return The listeners of page added events.
+     */
+    public WizardPageAddedListener[] getPageAddedListeners() {
+        return events.getListeners(WizardPageAddedListener.class);
+    }
+
+    /**
+     * Fires the page changing event.
+     *
+     * @param oldPage The old page.
+     * @param newPage The new page.
+     *
+     * @throws PropertyVetoException if the change is vetoed.
+     */
+    protected void firePageChanging(Object oldPage, Object newPage) throws PropertyVetoException {
+        vetoes.fireVetoableChange("activePage", oldPage, newPage);
+    }
+
+    /**
+     * Fires the page changed event.
+     *
+     * @param oldPage The old page.
+     * @param newPage The new page.
+     */
+    protected void firePageChanged(Object oldPage, Object newPage) {
+        changes.firePropertyChange("activePage", oldPage, newPage);
+    }
+
+    /**
+     * Fires the page added event.
+     *
+     * @param pageId The added page identifier.
+     * @param component The added component.
+     */
+    protected void firePageAdded(Object pageId, Component component) {
+        var listeners = getPageAddedListeners();
+        var evt = new WizardPageAddedEvent(this, pageId, component);
+
+        for (WizardPageAddedListener listener : listeners)
+            listener.onPageAdded(evt);
+    }
 }

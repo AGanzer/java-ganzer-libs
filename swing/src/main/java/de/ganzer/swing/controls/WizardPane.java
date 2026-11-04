@@ -11,9 +11,10 @@ import java.beans.PropertyChangeListener;
  */
 public class WizardPane extends JPanel {
     private final WizardController controller;
-    private final PropertyChangeListener pageChangedListener = e -> {
-        ((CardLayout) getLayout()).show(this, e.getNewValue().toString());
-    };
+    private final PropertyChangeListener pageChangedListener =
+            e -> ((CardLayout) getLayout()).show(this, e.getNewValue().toString());
+    private final WizardPageAddedListener pageAddedListener =
+            e ->add(e.getComponent(), e.getPageId().toString());
 
     /**
      * Creates a new wizard pane with no data.
@@ -30,51 +31,8 @@ public class WizardPane extends JPanel {
     public WizardPane(WizardModel model) {
         super(new CardLayout());
 
-        controller = new WizardController(model != null ? model : new DefaultWizardModel());
-
-        model = controller.getModel();
-
-        for (var page : model.getPages())
-            add(model.getComponent(page), page.toString());
-
-        if (model.getCurrentPage() != null)
-            ((CardLayout) getLayout()).show(this, model.getCurrentPage().toString());
-
-        model.addPageChangedListener(pageChangedListener);
-    }
-
-    /**
-     * Gets the model that is used by this component.
-     *
-     * @return The model that is used by this component.
-     */
-    public WizardModel getModel() {
-        return controller.getModel();
-    }
-
-    /**
-     * Sets the model that is used by this component.
-     *
-     * @param model The model that is used by this component.
-     */
-    public void setModel(WizardModel model) {
-        if (getModel() == model)
-            return;
-
-        for (var page : getModel().getPages())
-            remove(model.getComponent(page));
-
-        getModel().removePageChangedListener(pageChangedListener);
-        controller.setModel(model != null ? model : new DefaultWizardModel());
-
-        model = controller.getModel();
-        model.addPageChangedListener(pageChangedListener);
-
-        for (var page : model.getPages())
-            add(model.getComponent(page), page.toString());
-
-        if (model.getCurrentPage() != null)
-            ((CardLayout) getLayout()).show(this, model.getCurrentPage().toString());
+        controller = new WizardController();
+        setModel(model);
     }
 
     /**
@@ -99,5 +57,50 @@ public class WizardPane extends JPanel {
      */
     public GAction getPrevAction() {
         return controller.getPrevAction();
+    }
+
+    /**
+     * Gets the model that is used by this component.
+     *
+     * @return The model that is used by this component.
+     */
+    public WizardModel getModel() {
+        return controller.getModel();
+    }
+
+    /**
+     * Sets the model that is used by this component.
+     *
+     * @param model The model that is used by this component.
+     */
+    public void setModel(WizardModel model) {
+        var currentModel = getModel();
+
+        if (currentModel != null) {
+            if (currentModel == model)
+                return;
+
+            for (var page : currentModel.getPages())
+                remove(currentModel.getComponent(page));
+
+            currentModel.removePageChangedListener(pageChangedListener);
+
+            if (currentModel instanceof AbstractWizardModel am)
+                am.removePageAddedListener(pageAddedListener);
+        }
+
+        controller.setModel(model != null ? model : new DefaultWizardModel());
+
+        currentModel = controller.getModel();
+        currentModel.addPageChangedListener(pageChangedListener);
+
+        if (currentModel instanceof AbstractWizardModel am)
+            am.addPageAddedListener(pageAddedListener);
+
+        for (var page : currentModel.getPages())
+            add(currentModel.getComponent(page), page.toString());
+
+        if (currentModel.getCurrentPage() != null)
+            ((CardLayout) getLayout()).show(this, currentModel.getCurrentPage().toString());
     }
 }
