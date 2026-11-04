@@ -1,4 +1,6 @@
 package com.example.uitests.swing.tests.wizard;
 
-public class WelcomePage {
+import javax.swing.JPanel;
+
+public class WelcomePage extends JPanel {
 }
