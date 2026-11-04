@@ -7,10 +7,13 @@ import java.util.Collection;
 
 /**
  * The model that is used by a {@link WizardPane}.
+ * <p>
+ * This model works with objects that identifies a wizard page. The concrete
+ * component behind the page is implementation defined.
  */
 public interface WizardModel {
     /**
-     * Returns all pages.
+     * Returns the identifiers of all pages.
      *
      * @return A collection of all added pages. The order of the pages in the
      *         returned collection is not necessarily the order the pages where
@@ -19,7 +22,7 @@ public interface WizardModel {
     Collection<Object> getPages();
 
     /**
-     * Gets the next page to show after the current page.
+     * Gets the identifier of the next page to show after the current page.
      *
      * @return The next page to show or {@code null} if no further page is
      *         available If {@link #getCurrentPage()} returns {@code null},
@@ -28,7 +31,7 @@ public interface WizardModel {
     Object getNextPage();
 
     /**
-     * Returns the current page.
+     * Returns the identifier of the current page.
      *
      * @return The current page or {@code null} of no page is currently set.
      */
@@ -37,7 +40,7 @@ public interface WizardModel {
     /**
      * Sets the currently active page.
      *
-     * @param page The page to set as current page.
+     * @param page The identifier of the page to set as current page.
      *
      * @return {@code true} if the page was set successfully, {@code false}
      *         otherwise.
@@ -47,7 +50,7 @@ public interface WizardModel {
     /**
      * Returns the Swing component for the given page.
      *
-     * @param page The page where to get the component for.
+     * @param page The identifier of the page where to get the component for.
      *
      * @return The Swing component for the given page. This should not return
      *         {@code null}.
