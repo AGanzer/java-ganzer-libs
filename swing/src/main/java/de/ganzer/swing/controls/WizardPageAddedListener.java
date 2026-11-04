@@ -4,6 +4,8 @@ import java.util.EventListener;
 
 /**
  * The listener that listens to page added events of an {@link AbstractWizardModel}.
+ *
+ * @since 6.3.0
  */
 public interface WizardPageAddedListener extends EventListener {
     /**

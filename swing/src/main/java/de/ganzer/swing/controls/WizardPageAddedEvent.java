@@ -6,6 +6,8 @@ import java.util.EventObject;
 /**
  * the event that is fired by {@link AbstractWizardModel} when a new page is
  * added.
+ *
+ * @since 6.3.0
  */
 public class WizardPageAddedEvent extends EventObject {
     private final Object pageId;

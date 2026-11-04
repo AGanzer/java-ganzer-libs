@@ -6,6 +6,14 @@ import de.ganzer.swing.internals.SwingMessages;
 import java.util.Objects;
 import java.util.Stack;
 
+/**
+ * The controller used by {@link WizardPane}.
+ * <p>
+ * This controller manages the navigation between pages of a wizard and can also
+ * be used in custom wizard implementations.
+ *
+ * @since 6.3.0
+ */
 public class WizardController {
     private final Stack<Object> prevPages = new Stack<>();
     private final GAction nextAction ;

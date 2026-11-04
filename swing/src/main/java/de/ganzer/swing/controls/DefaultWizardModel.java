@@ -9,6 +9,8 @@ import java.util.List;
  * page in the order they were added.
  *
  * @see #getNextPage()
+ *
+ * @since 6.3.0
  */
 public class DefaultWizardModel extends AbstractWizardModel {
     private final List<Object> wizardPages = new ArrayList<>();

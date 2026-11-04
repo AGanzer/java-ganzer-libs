@@ -10,6 +10,8 @@ import java.util.Collection;
  * <p>
  * This model works with objects that identifies a wizard page. The concrete
  * component behind the page is implementation defined.
+ *
+ * @since 6.3.0
  */
 public interface WizardModel {
     /**

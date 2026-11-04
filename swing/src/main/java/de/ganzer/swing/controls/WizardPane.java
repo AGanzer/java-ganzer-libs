@@ -8,6 +8,8 @@ import java.beans.PropertyChangeListener;
 
 /**
  * A pane that displays several pages like a wizard.
+ *
+ * @since 6.3.0
  */
 public class WizardPane extends JPanel {
     private final WizardController controller;

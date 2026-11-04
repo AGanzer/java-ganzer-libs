@@ -8,6 +8,8 @@ import java.util.*;
 /**
  * An abstract implementation of {@link WizardModel} that provides property
  * change events and a basic page management.
+ *
+ * @since 6.3.0
  */
 public abstract class AbstractWizardModel implements WizardModel {
     private final Map<Object, Component> wizardPages = new HashMap<>();
