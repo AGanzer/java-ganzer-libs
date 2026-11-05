@@ -8,7 +8,7 @@ import java.awt.Component;
  *
  * @since 6.3.0
  */
-public interface DefaultWizardModelPage {
+public interface WizardPage {
     /**
      * Gets the component that is used to display the page.
      *
