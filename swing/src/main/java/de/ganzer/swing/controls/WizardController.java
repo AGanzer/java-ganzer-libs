@@ -1,0 +1,180 @@
+package de.ganzer.swing.controls;
+
+import de.ganzer.swing.actions.GAction;
+import de.ganzer.swing.internals.SwingMessages;
+
+import java.awt.event.ActionEvent;
+import java.util.Objects;
+import java.util.Stack;
+
+/**
+ * The controller used by {@link WizardPane}.
+ * <p>
+ * This controller manages the navigation between pages of a wizard and can also
+ * be used in custom wizard implementations.
+ *
+ * @since 6.3.0
+ */
+public class WizardController {
+    private static final String NEXT_COMMAND = "next";
+    private static final String FINISH_COMMAND = "finish";
+
+    private final Stack<Object> prevPages = new Stack<>();
+    private final GAction nextAction ;
+    private final GAction finishAction ;
+    private final GAction prevAction;
+
+    private WizardModel model;
+
+    /**
+     * Creates a new instance.
+     *
+     * @see #WizardController(WizardModel)
+     * @see #setModel(WizardModel)
+     */
+    public WizardController() {
+        this(null);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param model The model to set or {@code null} to set it later.
+     *
+     * @see #setModel(WizardModel)
+     */
+    public WizardController(WizardModel model) {
+        this.model = model;
+
+        nextAction = new GAction(SwingMessages.get("wizard.button.next"))
+                .command(NEXT_COMMAND)
+                .onAction(this::nextPage);
+        finishAction = new GAction(SwingMessages.get("wizard.button.finish"))
+                .command(FINISH_COMMAND)
+                .visible(false)
+                .onAction(this::nextPage);
+        prevAction = new GAction(SwingMessages.get("wizard.button.prev"))
+                .onAction(e -> prevPage());
+    }
+
+    /**
+     * Gets the action that is fired when the "Next" button is pressed.
+     * <p>
+     * The action is handled and managed by this controller itself. It is
+     * provided to create a button or menu item.
+     *
+     * @return The action that is fired when the "Next" button is pressed.
+     */
+    public GAction getNextAction() {
+        return nextAction;
+    }
+
+    /**
+     * Gets the action that is fired when the "Previous" button is pressed.
+     * <p>
+     * The action is handled and managed by this controller itself. It is
+     * provided to create a button or menu item.
+     *
+     * @return The action that is fired when the "Previous" button is pressed.
+     */
+    public GAction getPrevAction() {
+        return prevAction;
+    }
+
+    /**
+     * Gets the action that is fired when the "Finish" button is pressed.
+     * <p>
+     * The action is handled and managed by this controller itself. It is
+     * provided to create a button or menu item.
+     *
+     * @return The action that is fired when the "Finish" button is pressed.
+     */
+    public GAction getFinishAction() {
+        return finishAction;
+    }
+
+    /**
+     * Gets the model that is used by this component.
+     *
+     * @return The model that is used by this component.
+     */
+    public WizardModel getModel() {
+        return model;
+    }
+
+    /**
+     * Sets the model that is used by this component.
+     * <p>
+     * Changing the model does reset the actions and the current page.
+     *
+     * @param model The model that is used by this component.
+     *
+     * @throws NullPointerException if {@code model} is {@code null}.
+     */
+    public void setModel(WizardModel model) {
+        Objects.requireNonNull(model, "model must not be null.");
+
+        if (this.model == model)
+            return;
+
+        this.model = model;
+
+        prevPages.clear();
+        prevAction.setEnabled(false);
+        nextAction.setName(SwingMessages.get("wizard.button.next"));
+    }
+
+    private void nextPage(ActionEvent e) {
+        if (model == null || model.getCurrentPage() == null)
+            throw new IllegalStateException("there is no model set or the model has no current page.");
+
+        if (FINISH_COMMAND.equals(e.getActionCommand()))
+            return;
+
+        var currPage = model.getCurrentPage();
+
+        if (!model.validatePage(currPage))
+            return;
+
+        model.pageLeaving(currPage);
+
+        var nextPage = model.getNextPage(currPage);
+
+        if (nextPage == null) {
+            finishAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, FINISH_COMMAND));
+            return;
+        }
+
+        if (!model.setCurrentPage(nextPage))
+            return;
+
+        prevPages.push(currPage);
+        prevAction.setEnabled(true);
+
+        model.pageEntered(nextPage);
+
+        if (model.getNextPage(nextPage) != null) {
+            nextAction.setVisible(true);
+            finishAction.setVisible(false);
+        } else {
+            nextAction.setVisible(false);
+            finishAction.setVisible(true);
+        }
+    }
+
+    private void prevPage() {
+        if (model == null)
+            throw new IllegalStateException("there is no model set.");
+
+        if (prevPages.isEmpty())
+            return;
+
+        if (!model.setCurrentPage(prevPages.peek()))
+            return;
+
+        prevPages.pop();
+        prevAction.setEnabled(!prevPages.isEmpty());
+        nextAction.setVisible(true);
+        finishAction.setVisible(false);
+    }
+}
