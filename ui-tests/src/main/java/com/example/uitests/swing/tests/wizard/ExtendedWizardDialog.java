@@ -23,7 +23,7 @@ public class ExtendedWizardDialog extends JDialog {
     }
 
     public ExtendedWizardDialog(Window owner, WizardData data) {
-        super(owner, "Default Wizard Test", ModalityType.APPLICATION_MODAL);
+        super(owner, "Extended Wizard Test", ModalityType.APPLICATION_MODAL);
 
         var wizard = new WizardPane(new Model(data));
         wizard.setBorder(new EmptyBorder(10, 10, 10, 10));
