@@ -1,10 +1,12 @@
 package com.example.uitests.swing.tests.wizard;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class WizardData {
-    public String foreName;
-    public String surName;
+    public String forename;
+    public String surname;
+    public LocalDate birthday;
     public Role role;
     public String privatePhone;
     public String privateEmail;
