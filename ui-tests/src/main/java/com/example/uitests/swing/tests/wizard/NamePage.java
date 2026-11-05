@@ -26,7 +26,7 @@ public class NamePage extends JPanel implements WizardPage {
         super(new GridBagLayout());
 
         this.data = data;
-        this.role = new GComboBox<>();
+        this.role = new GComboBox<>(new Role[] {Role.PRIVATE, Role.EMPLOYEE});
         this.forename = new GTextField(20);
         this.surname = new GTextField(20);
 

@@ -36,7 +36,7 @@ public class WizardPane extends JPanel {
         pageChangedListener = e -> ((CardLayout) getLayout()).show(this, e.getNewValue().toString());
         pageAddedListener = e ->add(controller.getModel().getComponent(e.getPageId()), e.getPageId().toString());
 
-        setModel(model);
+        setModel(model != null ? model : new DefaultWizardModel());
     }
 
     /**

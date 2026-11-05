@@ -4,6 +4,7 @@ import com.example.uitests.swing.tests.LoginDialog;
 import com.example.uitests.swing.tests.InputTestDialog;
 import com.example.uitests.swing.tests.TextAreaLogPanel;
 import com.example.uitests.swing.tests.TextPaneLogPanel;
+import com.example.uitests.swing.tests.wizard.DefaultWizardDialog;
 import com.example.uitests.swing.tests.wizard.WizardData;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
@@ -146,8 +147,11 @@ public class MainFrame extends JFrame {
                                         .onAction(this::onInputTest),
                                 new GAction("Login Dialog Test")
                                         .onAction(this::onLoginTest),
-                                new GAction("Wizard Test")
-                                        .onAction(this::onWizardTest),
+                                new GSeparatorAction(),
+                                new GAction("Default Wizard Test")
+                                        .onAction(this::onDefaultWizardTest),
+                                new GAction("Extended Wizard Test")
+                                        .onAction(this::onExtendedWizardTest),
                                 new GSeparatorAction(),
                                 new GAction("Information Message Box")
                                         .onAction(this::onInformationMsgBox),
@@ -207,8 +211,15 @@ public class MainFrame extends JFrame {
         );
     }
 
-    private void onWizardTest(ActionEvent e) {
+    private void onExtendedWizardTest(ActionEvent e) {
         // TODO: open wizard
+    }
+
+    private void onDefaultWizardTest(ActionEvent e) {
+        if (DefaultWizardDialog.showModel(this, new WizardData()))
+            System.out.println("Wizard finished.");
+        else
+            System.out.println("Wizard canceled.");
     }
 
     private void onUntitledMsgBox(ActionEvent e) {
