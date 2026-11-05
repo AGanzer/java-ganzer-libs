@@ -47,7 +47,9 @@ public class EmployeePage extends JPanel implements WizardPage {
 
         phone.setText(data.companyPhone);
         email.setText(data.companyEmail);
-        salary.setText(formatter.format(data.salary));
+
+        if (data.salary != null)
+            salary.setText(formatter.format(data.salary.doubleValue()));
     }
 
     @Override
@@ -96,6 +98,7 @@ public class EmployeePage extends JPanel implements WizardPage {
         c.gridx = 0;
         c.gridy++;
         c.weightx = 0;
+        c.weighty = 1;
         c.fill = GridBagConstraints.NONE;
         add(new JLabel("Salary:"), c);
 

@@ -16,22 +16,12 @@ import java.util.Stack;
  * @since 6.3.0
  */
 public class WizardController {
-    /**
-     * The "Next" and "Finish" actions are both fired by the action gotten by
-     * {@link #getNextAction()}. This is the action's command if the next page
-     * shall be shown. This is handled by the controller itself.
-     */
-    public static final String NEXT_COMMAND = "next";
-    /**
-     * The "Next" and "Finish" actions are both fired by the action gotten by
-     * {@link #getNextAction()}. This is the action's command if the last page
-     * is shown and die wizard shall be closed. This should be handled by the
-     * controller itself.
-     */
-    public static final String FINISH_COMMAND = "finish";
+    private static final String NEXT_COMMAND = "next";
+    private static final String FINISH_COMMAND = "finish";
 
     private final Stack<Object> prevPages = new Stack<>();
     private final GAction nextAction ;
+    private final GAction finishAction ;
     private final GAction prevAction;
 
     private WizardModel model;
@@ -59,6 +49,10 @@ public class WizardController {
         nextAction = new GAction(SwingMessages.get("wizard.button.next"))
                 .command(NEXT_COMMAND)
                 .onAction(this::nextPage);
+        finishAction = new GAction(SwingMessages.get("wizard.button.finish"))
+                .command(FINISH_COMMAND)
+                .visible(false)
+                .onAction(this::nextPage);
         prevAction = new GAction(SwingMessages.get("wizard.button.prev"))
                 .onAction(e -> prevPage());
     }
@@ -66,8 +60,8 @@ public class WizardController {
     /**
      * Gets the action that is fired when the "Next" button is pressed.
      * <p>
-     * The action itself is handled and managed by this controller itself. It
-     * is provided to create a button or menu item.
+     * The action is handled and managed by this controller itself. It is
+     * provided to create a button or menu item.
      *
      * @return The action that is fired when the "Next" button is pressed.
      */
@@ -78,13 +72,25 @@ public class WizardController {
     /**
      * Gets the action that is fired when the "Previous" button is pressed.
      * <p>
-     * The action itself is handled and managed by this controller itself. It
-     * is provided to create a button or menu item.
+     * The action is handled and managed by this controller itself. It is
+     * provided to create a button or menu item.
      *
      * @return The action that is fired when the "Previous" button is pressed.
      */
     public GAction getPrevAction() {
         return prevAction;
+    }
+
+    /**
+     * Gets the action that is fired when the "Finish" button is pressed.
+     * <p>
+     * The action is handled and managed by this controller itself. It is
+     * provided to create a button or menu item.
+     *
+     * @return The action that is fired when the "Finish" button is pressed.
+     */
+    public GAction getFinishAction() {
+        return finishAction;
     }
 
     /**
@@ -135,7 +141,7 @@ public class WizardController {
         var nextPage = model.getNextPage(currPage);
 
         if (nextPage == null) {
-            nextAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, FINISH_COMMAND));
+            finishAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, FINISH_COMMAND));
             return;
         }
 
@@ -145,12 +151,15 @@ public class WizardController {
         prevPages.push(currPage);
         prevAction.setEnabled(true);
 
-        model.pageEntered(currPage);
+        model.pageEntered(nextPage);
 
-        if (model.getNextPage(currPage) != null)
-            nextAction.setName(SwingMessages.get("wizard.button.next"));
-        else
-            nextAction.setName(SwingMessages.get("wizard.button.finish"));
+        if (model.getNextPage(nextPage) != null) {
+            nextAction.setVisible(true);
+            finishAction.setVisible(false);
+        } else {
+            nextAction.setVisible(false);
+            finishAction.setVisible(true);
+        }
     }
 
     private void prevPage() {
@@ -165,6 +174,7 @@ public class WizardController {
 
         prevPages.pop();
         prevAction.setEnabled(!prevPages.isEmpty());
-        nextAction.setName(SwingMessages.get("wizard.button.next"));
+        nextAction.setVisible(true);
+        finishAction.setVisible(false);
     }
 }

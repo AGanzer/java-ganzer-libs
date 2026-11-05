@@ -1,7 +1,6 @@
 package com.example.uitests.swing.tests.wizard;
 
 import de.ganzer.swing.controls.WizardPage;
-import de.ganzer.swing.dlgfw.Initializer;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +16,8 @@ public class SummaryPage extends JPanel implements WizardPage {
         super(new BorderLayout());
         this.data = data;
         this.summaryLabel = new JLabel();
+        add(summaryLabel, BorderLayout.CENTER);
+        updatePageControls();
     }
 
     @Override

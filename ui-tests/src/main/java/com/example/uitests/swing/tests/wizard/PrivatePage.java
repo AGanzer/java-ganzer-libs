@@ -63,6 +63,7 @@ public class PrivatePage extends JPanel implements WizardPage {
         c.gridx = 0;
         c.gridy++;
         c.weightx = 0;
+        c.weighty = 1;
         c.fill = GridBagConstraints.NONE;
         add(new JLabel("Private Email:"), c);
 

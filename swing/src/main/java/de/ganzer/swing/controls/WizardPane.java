@@ -42,8 +42,8 @@ public class WizardPane extends JPanel {
     /**
      * Gets the action that is fired when the "Next" button is pressed.
      * <p>
-     * The action itself is handled and managed by this component itself. It
-     * is provided to create a button or menu item.
+     * The action is handled and managed by this component itself. It is
+     * provided to create a button or menu item.
      *
      * @return The action that is fired when the "Next" button is pressed.
      */
@@ -54,13 +54,25 @@ public class WizardPane extends JPanel {
     /**
      * Gets the action that is fired when the "Previous" button is pressed.
      * <p>
-     * The action itself is handled and managed by this component itself. It
-     * is provided to create a button or menu item.
+     * The action is handled and managed by this component itself. It is
+     * provided to create a button or menu item.
      *
      * @return The action that is fired when the "Previous" button is pressed.
      */
     public GAction getPrevAction() {
         return controller.getPrevAction();
+    }
+
+    /**
+     * Gets the action that is fired when the "Finish" button is pressed.
+     * <p>
+     * The action is handled and managed by this controller itself. It is
+     * provided to create a button or menu item.
+     *
+     * @return The action that is fired when the "Finish" button is pressed.
+     */
+    public GAction getFinishAction() {
+        return controller.getFinishAction();
     }
 
     /**

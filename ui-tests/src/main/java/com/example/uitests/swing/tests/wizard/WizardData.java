@@ -7,10 +7,10 @@ public class WizardData {
     public String forename;
     public String surname;
     public LocalDate birthday;
-    public Role role;
+    public Role role = Role.EMPLOYEE;
     public String privatePhone;
     public String privateEmail;
     public String companyPhone;
     public String companyEmail;
-    public BigDecimal salary;
+    public BigDecimal salary = BigDecimal.TEN;
 }

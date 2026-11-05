@@ -2,10 +2,8 @@ package com.example.uitests.swing.tests.wizard;
 
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.controls.DefaultWizardModel;
-import de.ganzer.swing.controls.WizardController;
 import de.ganzer.swing.controls.WizardPane;
 
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -38,11 +36,10 @@ public class DefaultWizardDialog extends JDialog {
         model.addPage(new SummaryPage(data));
 
         var prevButton = wizard.getPrevAction().createButton();
-        var nextButton = wizard.getNextAction().onAction(e -> {
-            if (WizardController.FINISH_COMMAND.equals(e.getActionCommand())) {
-                finished = true;
-                setVisible(false);
-            }
+        var nextButton = wizard.getNextAction().createButton();
+        var finishButton = wizard.getFinishAction().onAction(e -> {
+            finished = true;
+            setVisible(false);
         }).createButton();
         var cancelButton = new GAction("Cancel").onAction(e -> setVisible(false)).createButton();
 
@@ -50,6 +47,7 @@ public class DefaultWizardDialog extends JDialog {
         buttonPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
         buttonPanel.add(prevButton);
         buttonPanel.add(nextButton);
+        buttonPanel.add(finishButton);
         buttonPanel.add(cancelButton);
 
         getContentPane().setLayout(new BorderLayout());
