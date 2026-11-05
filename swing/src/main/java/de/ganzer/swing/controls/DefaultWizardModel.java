@@ -7,6 +7,12 @@ import java.awt.Component;
  * page in the order they were added.
  * <p>
  * This class works with pages that implement {@link DefaultWizardModelPage}.
+ * If it is necessary to sip pages in some cases, an implementor may derive
+ * from this class and overload or overide  {@link #addPage(DefaultWizardModelPage)}
+ * to put its own identifiers to {@link #addPage(Object, DefaultWizardModelPage)}.
+ * In that case it is most important to override {@link #getNextPage(Object)}
+ * too, to work with the correct identifiers and to return the correct identifier
+ * for the next page.
  *
  * @see #addPage(DefaultWizardModelPage)
  * @see #getNextPage(Object)
