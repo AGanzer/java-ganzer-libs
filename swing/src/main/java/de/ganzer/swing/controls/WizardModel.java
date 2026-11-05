@@ -6,10 +6,13 @@ import java.beans.VetoableChangeListener;
 import java.util.Collection;
 
 /**
- * The model that is used by a {@link WizardPane}.
+ * The model that is used by a {@link WizardPane} and {@link WizardController}.
  * <p>
  * This model works with objects that identifies a wizard page. The concrete
  * component behind the page is implementation defined.
+ *
+ * @see AbstractWizardModel
+ * @see DefaultWizardModel
  *
  * @since 6.3.0
  */

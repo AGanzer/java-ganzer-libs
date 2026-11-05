@@ -11,6 +11,7 @@ import java.util.*;
  * @param <P> The page object that is associated with a given page identifier.
  *
  * @see #addPage(Object, P)
+ * @see DefaultWizardModel
  *
  * @since 6.3.0
  */
