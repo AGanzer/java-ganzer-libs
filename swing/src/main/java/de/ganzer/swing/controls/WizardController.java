@@ -3,6 +3,7 @@ package de.ganzer.swing.controls;
 import de.ganzer.swing.actions.GAction;
 import de.ganzer.swing.internals.SwingMessages;
 
+import java.awt.event.ActionEvent;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -15,6 +16,20 @@ import java.util.Stack;
  * @since 6.3.0
  */
 public class WizardController {
+    /**
+     * The "Next" and "Finish" actions are both fired by the action gotten by
+     * {@link #getNextAction()}. This is the action's command if the next page
+     * shall be shown. This is handled by the controller itself.
+     */
+    public static final String NEXT_COMMAND = "next";
+    /**
+     * The "Next" and "Finish" actions are both fired by the action gotten by
+     * {@link #getNextAction()}. This is the action's command if the last page
+     * is shown and die wizard shall be closed. This should be handled by the
+     * controller itself.
+     */
+    public static final String FINISH_COMMAND = "finish";
+
     private final Stack<Object> prevPages = new Stack<>();
     private final GAction nextAction ;
     private final GAction prevAction;
@@ -42,30 +57,31 @@ public class WizardController {
         this.model = model;
 
         nextAction = new GAction(SwingMessages.get("wizard.button.next"))
-                .onAction(e -> nextPage());
+                .command(NEXT_COMMAND)
+                .onAction(this::nextPage);
         prevAction = new GAction(SwingMessages.get("wizard.button.prev"))
                 .onAction(e -> prevPage());
     }
 
     /**
-     * Gets the action that is fired when the next button is pressed.
+     * Gets the action that is fired when the "Next" button is pressed.
      * <p>
      * The action itself is handled and managed by this controller itself. It
      * is provided to create a button or menu item.
      *
-     * @return The action that is fired when the next button is pressed.
+     * @return The action that is fired when the "Next" button is pressed.
      */
     public GAction getNextAction() {
         return nextAction;
     }
 
     /**
-     * Gets the action that is fired when the previous button is pressed.
+     * Gets the action that is fired when the "Previous" button is pressed.
      * <p>
      * The action itself is handled and managed by this controller itself. It
      * is provided to create a button or menu item.
      *
-     * @return The action that is fired when the previous button is pressed.
+     * @return The action that is fired when the "Previous" button is pressed.
      */
     public GAction getPrevAction() {
         return prevAction;
@@ -102,23 +118,39 @@ public class WizardController {
         nextAction.setName(SwingMessages.get("wizard.button.next"));
     }
 
-    private void nextPage() {
-        if (model == null)
-            throw new IllegalStateException("there is no model set.");
+    private void nextPage(ActionEvent e) {
+        if (model == null || model.getCurrentPage() == null)
+            throw new IllegalStateException("there is no model set or the model has no current page.");
+
+        if (FINISH_COMMAND.equals(e.getActionCommand()))
+            return;
 
         var currPage = model.getCurrentPage();
 
-        var nextPage = model.getNextPage();
+        if (!model.validatePage(currPage))
+            return;
+
+        model.pageLeaving(currPage);
+
+        var nextPage = model.getNextPage(currPage);
+
+        if (nextPage == null) {
+            nextAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, FINISH_COMMAND));
+            return;
+        }
 
         if (!model.setCurrentPage(nextPage))
             return;
 
         prevPages.push(currPage);
-
         prevAction.setEnabled(true);
-        nextAction.setName(model.getNextPage() != null
-                                   ? SwingMessages.get("wizard.button.next")
-                                   : SwingMessages.get("wizard.button.finish"));
+
+        model.pageEntered(currPage);
+
+        if (model.getNextPage(currPage) != null)
+            nextAction.setName(SwingMessages.get("wizard.button.next"));
+        else
+            nextAction.setName(SwingMessages.get("wizard.button.finish"));
     }
 
     private void prevPage() {

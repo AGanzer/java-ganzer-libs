@@ -1,55 +1,97 @@
 package de.ganzer.swing.controls;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A default implementation of {@link AbstractWizardModel} that selects the next
  * page in the order they were added.
+ * <p>
+ * This class works with pages that implement {@link DefaultWizardModelPage}.
  *
- * @see #getNextPage()
+ * @see #addPage(DefaultWizardModelPage)
+ * @see #getNextPage(Object)
  *
  * @since 6.3.0
  */
-public class DefaultWizardModel extends AbstractWizardModel {
-    private final List<Object> wizardPages = new ArrayList<>();
-
+public class DefaultWizardModel extends AbstractWizardModel<DefaultWizardModelPage> {
     /**
      * Adds a page to the available pages.
+     * <p>
+     * If the given page is the first added page, it is set as the currently
+     * active page.
      *
-     * @param page The identifier of the page to add. If this is the first added
-     *        page, it is set as the currently active page.
-     * @param component The component that represents the page.
+     * @param page The page that represents the page.
      *
-     * @throws NullPointerException if {@code page} or {@code component} is
-     *         {@code null}.
+     * @throws NullPointerException if {@code page} is {@code null}.
      * @throws IllegalArgumentException if {@code page} is already registered.
      */
-    @Override
-    public void addPage(Object page, Component component) {
-        super.addPage(page, component);
-        wizardPages.add(page);
+    public void addPage(DefaultWizardModelPage page) {
+        super.addPage(getPages().size(), page);
     }
 
     /**
-     * Gets the identifier of the next page to show after the current page.
+     * Gets the identifier of the next page to show after the given page.
      * <p>
      * This implementation does simply return the next Page identifier of the
-     * current page in the order they were added.
+     * given page in the order they were added.
+     *
+     * @param pageId The identifier of the page to get the next page for.
      *
      * @return The next page to show or {@code null} if no further page is
-     *         available If {@link #getCurrentPage()} returns {@code null},
-     *         the first available page is returned.
+     *         available.
      */
     @Override
-    public Object getNextPage() {
-        for (int i = 0; i < wizardPages.size(); i++) {
-            if (wizardPages.get(i).equals(getCurrentPage())) {
-                return i + 1 < wizardPages.size() ? wizardPages.get(i + 1) : null;
-            }
-        }
+    public Object getNextPage(Object pageId) {
+        int next = Integer.parseInt(pageId.toString()) + 1;
+        return next < getPages().size() ? next : null;
+    }
 
-        return null;
+    /**
+     * Invoked to validate the data the user input into the given page.
+     *
+     * @param pageId The page to validate.
+     *
+     * @return {@code true} if the page is valid, {@code false} otherwise.
+     */
+    @Override
+    public boolean validatePage(Object pageId) {
+        return getPage(pageId).validateInput();
+    }
+
+    /**
+     * Invoked when the given page is going to be left.
+     * <p>
+     * Implementors should update the wizard's data with the user's input.
+     *
+     * @param pageId The page to leave.
+     */
+    @Override
+    public void pageLeaving(Object pageId) {
+        getPage(pageId).updateWizardData();
+    }
+
+    /**
+     * Invoked when the given page is entered.
+     * <p>
+     * Implementors should update the page's controls with the wizard's data.
+     *
+     * @param pageId The page to enter.
+     */
+    @Override
+    public void pageEntered(Object pageId) {
+        getPage(pageId).updatePageControls();
+    }
+
+    /**
+     * Returns the Swing component for the given page.
+     *
+     * @param pageId The identifier of the page where to get the component for.
+     *
+     * @return The Swing component for the given page. This should not return
+     *         {@code null}.
+     */
+    @Override
+    public Component getComponent(Object pageId) {
+        return getPage(pageId).getComponent();
     }
 }

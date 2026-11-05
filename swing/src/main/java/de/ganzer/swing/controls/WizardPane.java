@@ -13,10 +13,8 @@ import java.beans.PropertyChangeListener;
  */
 public class WizardPane extends JPanel {
     private final WizardController controller;
-    private final PropertyChangeListener pageChangedListener =
-            e -> ((CardLayout) getLayout()).show(this, e.getNewValue().toString());
-    private final WizardPageAddedListener pageAddedListener =
-            e ->add(e.getComponent(), e.getPageId().toString());
+    private final PropertyChangeListener pageChangedListener;
+    private final WizardPageAddedListener pageAddedListener;
 
     /**
      * Creates a new wizard pane with an instance of {@link DefaultWizardModel}.
@@ -35,28 +33,31 @@ public class WizardPane extends JPanel {
         super(new CardLayout());
 
         controller = new WizardController();
+        pageChangedListener = e -> ((CardLayout) getLayout()).show(this, e.getNewValue().toString());
+        pageAddedListener = e ->add(controller.getModel().getComponent(e.getPageId()), e.getPageId().toString());
+
         setModel(model);
     }
 
     /**
-     * Gets the action that is fired when the next button is pressed.
+     * Gets the action that is fired when the "Next" button is pressed.
      * <p>
      * The action itself is handled and managed by this component itself. It
      * is provided to create a button or menu item.
      *
-     * @return The action that is fired when the next button is pressed.
+     * @return The action that is fired when the "Next" button is pressed.
      */
     public GAction getNextAction() {
         return controller.getNextAction();
     }
 
     /**
-     * Gets the action that is fired when the previous button is pressed.
+     * Gets the action that is fired when the "Previous" button is pressed.
      * <p>
      * The action itself is handled and managed by this component itself. It
      * is provided to create a button or menu item.
      *
-     * @return The action that is fired when the previous button is pressed.
+     * @return The action that is fired when the "Previous" button is pressed.
      */
     public GAction getPrevAction() {
         return controller.getPrevAction();
@@ -88,18 +89,14 @@ public class WizardPane extends JPanel {
                 remove(currentModel.getComponent(page));
 
             currentModel.removePageChangedListener(pageChangedListener);
-
-            if (currentModel instanceof AbstractWizardModel am)
-                am.removePageAddedListener(pageAddedListener);
+            currentModel.removePageAddedListener(pageAddedListener);
         }
 
         controller.setModel(model != null ? model : new DefaultWizardModel());
 
         currentModel = controller.getModel();
         currentModel.addPageChangedListener(pageChangedListener);
-
-        if (currentModel instanceof AbstractWizardModel am)
-            am.addPageAddedListener(pageAddedListener);
+        currentModel.addPageAddedListener(pageAddedListener);
 
         for (var page : currentModel.getPages())
             add(currentModel.getComponent(page), page.toString());

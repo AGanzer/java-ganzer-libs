@@ -1,7 +1,6 @@
 package de.ganzer.swing.controls;
 
 import javax.swing.event.EventListenerList;
-import java.awt.Component;
 import java.beans.*;
 import java.util.*;
 
@@ -9,42 +8,20 @@ import java.util.*;
  * An abstract implementation of {@link WizardModel} that provides property
  * change events and a basic page management.
  *
+ * @param <P> The page object that is associated with a given page identifier.
+ *
+ * @see #addPage(Object, P)
+ *
  * @since 6.3.0
  */
-public abstract class AbstractWizardModel implements WizardModel {
-    private final Map<Object, Component> wizardPages = new HashMap<>();
+public abstract class AbstractWizardModel<P> implements WizardModel {
+    private final Map<Object, P> wizardPages = new HashMap<>();
     private final Collection<Object> unmodifiableWizardPages = Collections.unmodifiableSet(wizardPages.keySet());
     private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
     private final VetoableChangeSupport vetoes = new VetoableChangeSupport(this);
     private final EventListenerList events = new EventListenerList();
 
     private Object currentPage;
-
-    /**
-     * Adds a page to the available pages.
-     *
-     * @param page The identifier of the page to add. If this is the first added
-     *        page, it is set as the currently active page.
-     * @param component The component that represents the page.
-     *
-     * @throws NullPointerException if {@code page} or {@code component} is
-     *         {@code null}.
-     * @throws IllegalArgumentException if {@code page} is already registered.
-     */
-    public void addPage(Object page, Component component) {
-        Objects.requireNonNull(page, "page must not be null.");
-        Objects.requireNonNull(component, "component must not be null.");
-
-        if (wizardPages.containsKey(page))
-            throw new IllegalArgumentException("page is already registered.");
-
-        wizardPages.put(page, component);
-
-        if (wizardPages.size() == 1)
-            setCurrentPage(page);
-
-        firePageAdded(page, component);
-    }
 
     /**
      * Returns the identifiers of all pages.
@@ -61,7 +38,7 @@ public abstract class AbstractWizardModel implements WizardModel {
     /**
      * Returns the identifier of the current page.
      *
-     * @return The current page or {@code null} of no page is currently set.
+     * @return The current page. This should not return {@code null}.
      */
     @Override
     public Object getCurrentPage() {
@@ -71,44 +48,31 @@ public abstract class AbstractWizardModel implements WizardModel {
     /**
      * Sets the currently active page.
      *
-     * @param page The identifier of the page to set as current page.
+     * @param pageId The identifier of the page to set as current page.
      *
      * @return {@code true} if the page was set successfully, {@code false}
      *         otherwise.
      */
     @Override
-    public boolean setCurrentPage(Object page) {
-        if (!wizardPages.containsKey(page))
+    public boolean setCurrentPage(Object pageId) {
+        if (!wizardPages.containsKey(pageId))
             throw new IllegalArgumentException("page is not registered.");
 
-        if (currentPage == page)
+        if (currentPage == pageId)
             return false;
 
         try {
-            firePageChanging(currentPage, page);
+            firePageChanging(currentPage, pageId);
         } catch (PropertyVetoException e) {
             return false;
         }
 
         var oldPage = currentPage;
-        currentPage = page;
+        currentPage = pageId;
 
         firePageChanged(oldPage, currentPage);
 
         return true;
-    }
-
-    /**
-     * Returns the Swing component for the given page.
-     *
-     * @param page The identifier of the page where to get the component for.
-     *
-     * @return The Swing component for the given page. This should not return
-     *         {@code null}.
-     */
-    @Override
-    public Component getComponent(Object page) {
-        return wizardPages.get(page);
     }
 
     /**
@@ -181,6 +145,7 @@ public abstract class AbstractWizardModel implements WizardModel {
      *
      * @param listener The listener to add.
      */
+    @Override
     public void addPageAddedListener(WizardPageAddedListener listener) {
         events.add(WizardPageAddedListener.class, listener);
     }
@@ -190,6 +155,7 @@ public abstract class AbstractWizardModel implements WizardModel {
      *
      * @param listener The listener to remove.
      */
+    @Override
     public void removePageAddedListener(WizardPageAddedListener listener) {
         events.remove(WizardPageAddedListener.class, listener);
     }
@@ -199,8 +165,49 @@ public abstract class AbstractWizardModel implements WizardModel {
      *
      * @return The listeners of page added events.
      */
+    @Override
     public WizardPageAddedListener[] getPageAddedListeners() {
         return events.getListeners(WizardPageAddedListener.class);
+    }
+
+    /**
+     * Adds a page to the available pages.
+     * <p>
+     * If the given page is the first added page, it is set as the currently
+     * active page.
+     *
+     * @param pageId The identifier of the page to add.
+     * @param page The page that represents the page.
+     *
+     * @throws NullPointerException if {@code pageId} is {@code null}.
+     * @throws IllegalArgumentException if {@code page} is already registered.
+     */
+    protected void addPage(Object pageId, P page) {
+        Objects.requireNonNull(pageId, "pageId must not be null.");
+        Objects.requireNonNull(page, "page must not be null.");
+
+        if (wizardPages.containsKey(pageId))
+            throw new IllegalArgumentException("page is already registered.");
+
+        wizardPages.put(pageId, page);
+
+        if (wizardPages.size() == 1)
+            setCurrentPage(pageId);
+
+        firePageAdded(pageId);
+    }
+
+    /**
+     * Gets the page that is associated with the given page identifier.
+     *
+     * @param pageId The identifier of the page to get.
+     *
+     * @return The page that is associated with the given page identifier.
+     *
+     * @see #addPage(Object, P)
+     */
+    protected P getPage(Object pageId) {
+        return wizardPages.get(pageId);
     }
 
     /**
@@ -229,11 +236,10 @@ public abstract class AbstractWizardModel implements WizardModel {
      * Fires the page added event.
      *
      * @param pageId The added page identifier.
-     * @param component The added component.
      */
-    protected void firePageAdded(Object pageId, Component component) {
+    protected void firePageAdded(Object pageId) {
         var listeners = getPageAddedListeners();
-        var evt = new WizardPageAddedEvent(this, pageId, component);
+        var evt = new WizardPageAddedEvent(this, pageId);
 
         for (WizardPageAddedListener listener : listeners)
             listener.onPageAdded(evt);
