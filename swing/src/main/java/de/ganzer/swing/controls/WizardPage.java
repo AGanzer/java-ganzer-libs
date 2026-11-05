@@ -3,7 +3,7 @@ package de.ganzer.swing.controls;
 import java.awt.Component;
 
 /**
- * The interface to wizard pages taht are used with instances of the
+ * The interface to wizard pages that are used with instances of the
  * {@link DefaultWizardModel}.
  *
  * @since 6.3.0
