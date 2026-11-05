@@ -8,6 +8,8 @@ import java.beans.PropertyChangeListener;
 
 /**
  * A pane that displays several pages like a wizard.
+ * <p>
+ * For an example of how to use this component, see {@link DefaultWizardModel}.
  *
  * @since 6.3.0
  */

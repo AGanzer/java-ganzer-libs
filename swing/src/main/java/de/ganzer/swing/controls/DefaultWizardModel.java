@@ -14,6 +14,138 @@ import java.awt.Component;
  * identifiers to {@link #addPage(Object, WizardPage)}. It is then most
  * important to override {@link #getNextPage(Object)} too, to work with the
  * correct identifiers and to return the right identifier for the next page.
+ * <p>
+ * An example of how the deafult model can be used to show each page in order
+ * they were inserted is in the following, where each page dos implement the
+ * {@link WizardPage} interface:
+ *
+ * <pre>{@code
+ * public class DefaultWizardDialog extends JDialog {
+ *     private boolean finished;
+ *
+ *     public static boolean showModel(Window owner, WizardData data) {
+ *         var dialog = new DefaultWizardDialog(owner, data);
+ *         dialog.setVisible(true);
+ *
+ *         return dialog.finished;
+ *     }
+ *
+ *     public DefaultWizardDialog(Window owner, WizardData data) {
+ *         super(owner, "Default Wizard Test", Dialog.ModalityType.APPLICATION_MODAL);
+ *
+ *         var wizard = new WizardPane();
+ *         wizard.setBorder(new EmptyBorder(10, 10, 10, 10));
+ *
+ *         var model = (DefaultWizardModel) wizard.getModel();
+ *         model.addPage(new WelcomePage());
+ *         model.addPage(new NamePage(data));
+ *         model.addPage(new PrivatePage(data));
+ *         model.addPage(new SummaryPage(data));
+ *
+ *         var prevButton = wizard.getPrevAction().createButton();
+ *         var nextButton = wizard.getNextAction().createButton();
+ *         var finishButton = wizard.getFinishAction().onAction(e -> {
+ *             finished = true;
+ *             setVisible(false);
+ *         }).createButton();
+ *         var cancelButton = new GAction("Cancel").onAction(e -> setVisible(false)).createButton();
+ *
+ *         var buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+ *         buttonPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
+ *         buttonPanel.add(prevButton);
+ *         buttonPanel.add(nextButton);
+ *         buttonPanel.add(finishButton);
+ *         buttonPanel.add(cancelButton);
+ *
+ *         getContentPane().setLayout(new BorderLayout());
+ *         getContentPane().add(wizard, BorderLayout.CENTER);
+ *         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+ *
+ *         pack();
+ *         setLocationRelativeTo(owner);
+ *     }
+ * }
+ * }</pre>
+ *
+ * In the following is the same example, but with an extended model to dismiss
+ * a page that does currently not fit the users input:
+ *
+ * <pre>{@code
+ * public class ExtendedWizardDialog extends JDialog {
+ *     private boolean finished;
+ *
+ *     public static boolean showModel(Window owner, WizardData data) {
+ *         var dialog = new ExtendedWizardDialog(owner, data);
+ *         dialog.setVisible(true);
+ *
+ *         return dialog.finished;
+ *     }
+ *
+ *     public ExtendedWizardDialog(Window owner, WizardData data) {
+ *         super(owner, "Extended Wizard Test", ModalityType.APPLICATION_MODAL);
+ *
+ *         var wizard = new WizardPane(new Model(data));
+ *         wizard.setBorder(new EmptyBorder(10, 10, 10, 10));
+ *
+ *         var model = (Model) wizard.getModel();
+ *         model.addPage(Model.WELCOME, new WelcomePage());
+ *         model.addPage(Model.NAME, new NamePage(data));
+ *         model.addPage(Model.PRIVATE, new PrivatePage(data));
+ *         model.addPage(Model.EMPLOYEE, new EmployeePage(data));
+ *         model.addPage(Model.SUMMARY, new SummaryPage(data));
+ *
+ *         var prevButton = wizard.getPrevAction().createButton();
+ *         var nextButton = wizard.getNextAction().createButton();
+ *         var finishButton = wizard.getFinishAction().onAction(e -> {
+ *             finished = true;
+ *             setVisible(false);
+ *         }).createButton();
+ *         var cancelButton = new GAction("Cancel").onAction(e -> setVisible(false)).createButton();
+ *
+ *         var buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+ *         buttonPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
+ *         buttonPanel.add(prevButton);
+ *         buttonPanel.add(nextButton);
+ *         buttonPanel.add(finishButton);
+ *         buttonPanel.add(cancelButton);
+ *
+ *         getContentPane().setLayout(new BorderLayout());
+ *         getContentPane().add(wizard, BorderLayout.CENTER);
+ *         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+ *
+ *         pack();
+ *         setLocationRelativeTo(owner);
+ *     }
+ *
+ *     private static class Model extends DefaultWizardModel {
+ *         public static final int WELCOME = 0;
+ *         public static final int NAME = 1;
+ *         public static final int PRIVATE = 2;
+ *         public static final int EMPLOYEE = 3;
+ *         public static final int SUMMARY = 4;
+ *
+ *         private final WizardData data;
+ *
+ *         private Model(WizardData data) {
+ *             this.data = data;
+ *         }
+ *
+ *         public void addPage(Object pageId, WizardPage page) {
+ *             super.addPage(pageId, page);
+ *         }
+ *
+ *         @Override
+ *         public Object getNextPage(Object pageId) {
+ *             return switch (Integer.parseInt(pageId.toString())) {
+ *                 case WELCOME -> NAME;
+ *                 case NAME -> data.role == Role.PRIVATE ? PRIVATE : EMPLOYEE;
+ *                 case PRIVATE, EMPLOYEE -> SUMMARY;
+ *                 default -> null;
+ *             };
+ *         }
+ *     }
+ * }
+ * }</pre>
  *
  * @see #addPage(WizardPage)
  * @see #addPage(Object, WizardPage)
