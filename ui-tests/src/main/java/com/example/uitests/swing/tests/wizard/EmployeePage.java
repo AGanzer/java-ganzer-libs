@@ -75,7 +75,7 @@ public class EmployeePage extends JPanel implements WizardPage {
         c.gridy = 0;
         c.anchor = GridBagConstraints.BASELINE_LEADING;
         c.insets = new Insets(3, 3, 3, 3);
-        add(new JLabel("Phone:"), c);
+        add(new JLabel("Company Phone:"), c);
 
         c.gridx++;
         c.weightx = 1;
@@ -86,7 +86,7 @@ public class EmployeePage extends JPanel implements WizardPage {
         c.gridy++;
         c.weightx = 0;
         c.fill = GridBagConstraints.NONE;
-        add(new JLabel("Email:"), c);
+        add(new JLabel("Company Email:"), c);
 
         c.gridx++;
         c.weightx = 1;

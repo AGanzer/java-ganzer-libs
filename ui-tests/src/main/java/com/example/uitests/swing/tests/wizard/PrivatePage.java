@@ -53,7 +53,7 @@ public class PrivatePage extends JPanel implements WizardPage {
         c.gridy = 0;
         c.anchor = GridBagConstraints.BASELINE_LEADING;
         c.insets = new Insets(3, 3, 3, 3);
-        add(new JLabel("Phone:"), c);
+        add(new JLabel("Private Phone:"), c);
 
         c.gridx++;
         c.weightx = 1;
@@ -64,7 +64,7 @@ public class PrivatePage extends JPanel implements WizardPage {
         c.gridy++;
         c.weightx = 0;
         c.fill = GridBagConstraints.NONE;
-        add(new JLabel("Email:"), c);
+        add(new JLabel("Private Email:"), c);
 
         c.gridx++;
         c.weightx = 1;
