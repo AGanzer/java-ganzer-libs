@@ -4,6 +4,7 @@ import de.ganzer.swing.controls.WizardPage;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.text.NumberFormat;
@@ -14,10 +15,23 @@ public class SummaryPage extends JPanel implements WizardPage {
 
     public SummaryPage(WizardData data) {
         super(new BorderLayout());
+
         this.data = data;
         this.summaryLabel = new JLabel();
+        this.summaryLabel.setVerticalAlignment(SwingConstants.TOP);
+        this.summaryLabel.setText("<html>" +
+                                          "<table>" +
+                                          "<tr><td>Forename:</td><td></td></tr><tr>" +
+                                          "<td>Surname:</td><td></td></tr>" +
+                                          "<tr><td>Birthday:</td><td></td></tr>" +
+                                          "<tr><td>Role:</td><td></td></tr>" +
+                                          "<tr><td>Phone:</td><td></td></tr><tr>" +
+                                          "<td>Email:</td><td></td></tr>" +
+                                          "<tr><td>Salary:</td><td></td></tr>" +
+                                          "</table>" +
+                                          "</html>");
+
         add(summaryLabel, BorderLayout.CENTER);
-        updatePageControls();
     }
 
     @Override

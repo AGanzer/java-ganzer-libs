@@ -5,6 +5,7 @@ import com.example.uitests.swing.tests.InputTestDialog;
 import com.example.uitests.swing.tests.TextAreaLogPanel;
 import com.example.uitests.swing.tests.TextPaneLogPanel;
 import com.example.uitests.swing.tests.wizard.DefaultWizardDialog;
+import com.example.uitests.swing.tests.wizard.ExtendedWizardDialog;
 import com.example.uitests.swing.tests.wizard.WizardData;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
@@ -212,7 +213,10 @@ public class MainFrame extends JFrame {
     }
 
     private void onExtendedWizardTest(ActionEvent e) {
-        // TODO: open wizard
+        if (ExtendedWizardDialog.showModel(this, new WizardData()))
+            System.out.println("Wizard finished.");
+        else
+            System.out.println("Wizard canceled.");
     }
 
     private void onDefaultWizardTest(ActionEvent e) {
