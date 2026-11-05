@@ -1,10 +1,16 @@
 package de.ganzer.swing.dv.internals;
 
+import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class SwingDVMessages {
     public static ResourceBundle getBundle() {
         return ResourceBundle.getBundle("de.ganzer.swing.dv.messages");
+    }
+
+    public static ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle("de.ganzer.swing.dv.messages", locale);
     }
 
     public static String get(String key) {
@@ -16,10 +22,12 @@ public class SwingDVMessages {
     }
 
     private static SwingDVMessages instance;
+    private final Locale locale;
     private final ResourceBundle bundle;
 
-    private SwingDVMessages() {
-        this.bundle = getBundle();
+    private SwingDVMessages(Locale locale) {
+        this.locale = locale;
+        this.bundle = getBundle(locale);
     }
 
     private String getMessage(String id) {
@@ -27,8 +35,10 @@ public class SwingDVMessages {
     }
 
     private static SwingDVMessages getInstance() {
-        if (instance == null)
-            instance = new SwingDVMessages();
+        Locale current = Locale.getDefault();
+
+        if (instance == null || !Objects.equals(current, instance.locale))
+            instance = new SwingDVMessages(current);
 
         return instance;
     }

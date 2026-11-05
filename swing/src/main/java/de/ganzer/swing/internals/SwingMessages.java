@@ -1,10 +1,16 @@
 package de.ganzer.swing.internals;
 
+import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class SwingMessages {
     public static ResourceBundle getBundle() {
         return ResourceBundle.getBundle("de.ganzer.swing.messages");
+    }
+
+    public static ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle("de.ganzer.swing.messages", locale);
     }
 
     public static String get(String key) {
@@ -16,10 +22,12 @@ public class SwingMessages {
     }
 
     private static SwingMessages instance;
+    private final Locale locale;
     private final ResourceBundle bundle;
 
-    private SwingMessages() {
-        this.bundle = getBundle();
+    private SwingMessages(Locale locale) {
+        this.locale = locale;
+        this.bundle = getBundle(locale);
     }
 
     private String getMessage(String id) {
@@ -27,8 +35,10 @@ public class SwingMessages {
     }
 
     private static SwingMessages getInstance() {
-        if (instance == null)
-            instance = new SwingMessages();
+        Locale current = Locale.getDefault();
+
+        if (instance == null || !Objects.equals(current, instance.locale))
+            instance = new SwingMessages(current);
 
         return instance;
     }

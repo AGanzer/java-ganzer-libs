@@ -1,10 +1,16 @@
 package de.ganzer.fx.internals;
 
+import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class FXMessages {
     public static ResourceBundle getBundle() {
         return ResourceBundle.getBundle("de.ganzer.fx.messages");
+    }
+
+    public static ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle("de.ganzer.fx.messages", locale);
     }
 
     public static String get(String key) {
@@ -16,10 +22,12 @@ public class FXMessages {
     }
 
     private static FXMessages instance;
+    private final Locale locale;
     private final ResourceBundle bundle;
 
-    private FXMessages() {
-        this.bundle = getBundle();
+    private FXMessages(Locale locale) {
+        this.locale = locale;
+        this.bundle = getBundle(locale);
     }
 
     private String getMessage(String id) {
@@ -27,8 +35,10 @@ public class FXMessages {
     }
 
     private static FXMessages getInstance() {
-        if (instance == null)
-            instance = new FXMessages();
+        Locale current = Locale.getDefault();
+
+        if (instance == null || !Objects.equals(current, instance.locale))
+            instance = new FXMessages(current);
 
         return instance;
     }

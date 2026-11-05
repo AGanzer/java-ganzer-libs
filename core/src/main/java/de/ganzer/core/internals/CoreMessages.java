@@ -1,10 +1,16 @@
 package de.ganzer.core.internals;
 
+import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class CoreMessages {
     public static ResourceBundle getBundle() {
         return ResourceBundle.getBundle("de.ganzer.core.messages");
+    }
+
+    public static ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle("de.ganzer.core.messages", locale);
     }
 
     public static String get(String key) {
@@ -16,10 +22,12 @@ public class CoreMessages {
     }
 
     private static CoreMessages instance;
+    private final Locale locale;
     private final ResourceBundle bundle;
 
-    private CoreMessages() {
-        this.bundle = getBundle();
+    private CoreMessages(Locale locale) {
+        this.locale = locale;
+        this.bundle = getBundle(locale);
     }
 
     private String getMessage(String id) {
@@ -27,8 +35,10 @@ public class CoreMessages {
     }
 
     private static CoreMessages getInstance() {
-        if (instance == null)
-            instance = new CoreMessages();
+        Locale current = Locale.getDefault();
+
+        if (instance == null || !Objects.equals(current, instance.locale))
+            instance = new CoreMessages(current);
 
         return instance;
     }

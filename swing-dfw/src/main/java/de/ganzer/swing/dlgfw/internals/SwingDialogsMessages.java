@@ -1,10 +1,16 @@
 package de.ganzer.swing.dlgfw.internals;
 
+import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class SwingDialogsMessages {
     public static ResourceBundle getBundle() {
         return ResourceBundle.getBundle("de.ganzer.swing.dlgfw.messages");
+    }
+
+    public static ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle("de.ganzer.swing.dlgfw.messages", locale);
     }
 
     public static String get(String key) {
@@ -16,10 +22,12 @@ public class SwingDialogsMessages {
     }
 
     private static SwingDialogsMessages instance;
+    private final Locale locale;
     private final ResourceBundle bundle;
 
-    private SwingDialogsMessages() {
-        this.bundle = getBundle();
+    private SwingDialogsMessages(Locale locale) {
+        this.locale = locale;
+        this.bundle = getBundle(locale);
     }
 
     private String getMessage(String id) {
@@ -27,8 +35,10 @@ public class SwingDialogsMessages {
     }
 
     private static SwingDialogsMessages getInstance() {
-        if (instance == null)
-            instance = new SwingDialogsMessages();
+        Locale current = Locale.getDefault();
+
+        if (instance == null || !Objects.equals(current, instance.locale))
+            instance = new SwingDialogsMessages(current);
 
         return instance;
     }
