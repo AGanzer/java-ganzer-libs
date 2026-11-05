@@ -34,7 +34,7 @@ public class DefaultWizardModel extends AbstractWizardModel<DefaultWizardModelPa
      * @throws IllegalArgumentException if {@code page} is already registered.
      */
     public void addPage(DefaultWizardModelPage page) {
-        super.addPage(getPages().size(), page);
+        addPage(getPages().size(), page);
     }
 
     /**
