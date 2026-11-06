@@ -227,13 +227,12 @@ public class MainFrame extends JFrame {
     }
 
     private void onUntitledMsgBox(ActionEvent e) {
-        MessageDialogData data;
-        data = new MessageDialogData(null,
-                                     "This is an information message.",
-                                     null,
-                                     (MessageButtons) null,
-                                     null,
-                                     null);
+        var data = new MessageDialogData(null,
+                                         "This is an information message.",
+                                         null,
+                                         (MessageButtons) null,
+                                         null,
+                                         null);
         var dialog = new MessageDialog(this, data);
 
         dialog.setVisible(true);
