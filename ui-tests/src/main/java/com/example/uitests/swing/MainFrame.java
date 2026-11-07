@@ -4,6 +4,7 @@ import com.example.uitests.swing.tests.LoginDialog;
 import com.example.uitests.swing.tests.InputTestDialog;
 import com.example.uitests.swing.tests.TextAreaLogPanel;
 import com.example.uitests.swing.tests.TextPaneLogPanel;
+import com.example.uitests.swing.tests.validation.ValidatorTestDialog;
 import com.example.uitests.swing.tests.wizard.DefaultWizardDialog;
 import com.example.uitests.swing.tests.wizard.ExtendedWizardDialog;
 import com.example.uitests.swing.tests.wizard.WizardData;
@@ -148,6 +149,8 @@ public class MainFrame extends JFrame {
                                         .onAction(this::onInputTest),
                                 new GAction("Login Dialog Test")
                                         .onAction(this::onLoginTest),
+                                new GAction("Validator Test")
+                                        .onAction(this::onValidatorTest),
                                 new GSeparatorAction(),
                                 new GAction("Default Wizard Test")
                                         .onAction(this::onDefaultWizardTest),
@@ -210,6 +213,10 @@ public class MainFrame extends JFrame {
                 )
 
         );
+    }
+
+    private void onValidatorTest(ActionEvent e) {
+        ValidatorTestDialog.showModel(this);
     }
 
     private void onExtendedWizardTest(ActionEvent e) {
