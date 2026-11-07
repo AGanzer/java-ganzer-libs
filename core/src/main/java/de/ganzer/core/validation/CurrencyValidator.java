@@ -407,7 +407,7 @@ public class CurrencyValidator extends Validator {
      * @since 6.4.0
      */
     public double asDouble(String text) throws ParseException {
-        return hasCurrency(text)
+        return hasCurrencyOrSeparator(text)
                 ? displayFormatter.parse(text).doubleValue()
                 : editFormatter.parse(text).doubleValue();
     }
@@ -461,7 +461,7 @@ public class CurrencyValidator extends Validator {
             return true;
 
         var pos = new ParsePosition(0);
-        var res = hasCurrency(text)
+        var res = hasCurrencyOrSeparator(text)
                 ? displayFormatter.parse(text, pos)
                 : editFormatter.parse(text, pos);
 
@@ -510,7 +510,7 @@ public class CurrencyValidator extends Validator {
     @Override
     protected String doFormatText(String text, TextFormat how) {
         try {
-            double value = hasCurrency(text)
+            double value = hasCurrencyOrSeparator(text)
                     ? displayFormatter.parse(text).doubleValue()
                     : editFormatter.parse(text).doubleValue();
 
@@ -522,9 +522,12 @@ public class CurrencyValidator extends Validator {
         }
     }
 
-    private boolean hasCurrency(String text) {
-        var symbol = ((DecimalFormat) NumberFormat.getCurrencyInstance(locale)).getDecimalFormatSymbols().getCurrencySymbol();
-        return text.contains(symbol);
+    private boolean hasCurrencyOrSeparator(String text) {
+        var instance = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+        var currency = instance.getDecimalFormatSymbols().getCurrencySymbol();
+        var seperator = instance.getDecimalFormatSymbols().getMonetaryGroupingSeparator();
+
+        return text.contains(currency) || text.indexOf(seperator) >= 0;
     }
 
     private DecimalFormat getEditFormatter() {
