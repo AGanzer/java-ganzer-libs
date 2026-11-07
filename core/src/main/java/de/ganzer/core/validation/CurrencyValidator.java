@@ -437,6 +437,9 @@ public class CurrencyValidator extends Validator {
         if (text.isEmpty())
             return true;
 
+        if (text.length() == 1 && text.charAt(0) == '-' && minValue < 0)
+            return true;
+
         var pos = new ParsePosition(0);
         var res = editFormatter.parse(text.toString(), pos);
 

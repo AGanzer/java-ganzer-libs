@@ -238,6 +238,7 @@ class CurrencyValidatorTest {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
+            "-;true",
             "0,4;true",
             "1000,04;true",
             "10,;true",
@@ -326,6 +327,7 @@ class CurrencyValidatorTest {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
+            "-;true",
             "0.4;true",
             "1000.04;true",
             "10.;true",
@@ -377,6 +379,7 @@ class CurrencyValidatorTest {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
+            "-;true",
             "4;true",
             "0.4;true",
             "1000.04;true",
@@ -429,6 +432,7 @@ class CurrencyValidatorTest {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
+            "-;true",
             "0,4;true",
             "1000,04;true",
             "10,;true",
@@ -480,6 +484,7 @@ class CurrencyValidatorTest {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
+            "-;true",
             "4;true",
             "0.4;true",
             "1000.04;true",
