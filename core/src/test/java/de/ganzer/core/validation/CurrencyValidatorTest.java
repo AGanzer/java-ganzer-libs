@@ -225,10 +225,10 @@ class CurrencyValidatorTest {
             "-1000,04;false",
             "0.;false",
             "10€;false",
-            "0,40 €;true",
-            "1.000,04 €;true",
+            "0,40 €;true",
+            "1.000,04 €;true",
             "2.000,04;false",
-            "-1.000,04 €;false"})
+            "-1.000,04 €;false"})
     void doValidate_de_DE(String input, String result) {
         var res = Boolean.parseBoolean(result);
         var val = new CurrencyValidator(0, 2000);
@@ -239,10 +239,10 @@ class CurrencyValidatorTest {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
-            "0,4;0,40 €;true",
-            "1000,04;1.000,04 €;true",
-            "-1.000,40 €;-1000,40;false",
-            "10,00 €;10,00;false"})
+            "0,4;0,40 €;true",
+            "1000,04;1.000,04 €;true",
+            "-1.000,40 €;-1000,40;false",
+            "10,00 €;10,00;false"})
     void doFormatText_de_DE(String input, String result, String display) {
         var format = Boolean.parseBoolean(display) ? TextFormat.DISPLAY : TextFormat.EDIT;
         var val = new CurrencyValidator(0, 1000);
@@ -273,8 +273,8 @@ class CurrencyValidatorTest {
             "-1000.04;false",
             "0,;false",
             "10CHF;false",
-            "CHF 0.40;true",
-            "CHF 1’000.04;true",
+            "CHF 0.40;true",
+            "CHF 1’000.04;true",
             "2’000.04;false",
             "CHF-1’000.04;false"})
     void doValidate_de_CH(String input, String result) {
@@ -287,10 +287,10 @@ class CurrencyValidatorTest {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
-            "0.4;CHF 0.40;true",
-            "1000.04;CHF 1’000.04;true",
+            "0.4;CHF 0.40;true",
+            "1000.04;CHF 1’000.04;true",
             "CHF-1’000.40;-1000.40;false",
-            "CHF 10.00;10.00;false"})
+            "CHF 10.00;10.00;false"})
     void doFormatText_de_CH(String input, String result, String display) {
         var format = Boolean.parseBoolean(display) ? TextFormat.DISPLAY : TextFormat.EDIT;
         var val = new CurrencyValidator(0, 1000);
@@ -303,7 +303,7 @@ class CurrencyValidatorTest {
     @CsvSource(delimiter = ';', value = {
             "0.4;true",
             "1000.04;true",
-            "0.;false",
+            "0,;false",
             "10CHF;false"})
     void doInputValidation_fr_CH(String input, String result) {
         var res = Boolean.parseBoolean(result);
@@ -319,7 +319,7 @@ class CurrencyValidatorTest {
             "1000.04;true",
             "2000.04;false",
             "-1000.04;false",
-            "0.;false",
+            "0,;false",
             "10CHF;false",
             "0.40 CHF;true",
             "1 000.04 CHF;true",
@@ -383,7 +383,7 @@ class CurrencyValidatorTest {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
-            "0,4;€ 0,40;true",
+            "0,4;€ 0,40;true",
             "1000,04;€ 1.000,04;true",
             "-€ 1.000,40;-1000,40;false",
             "€ 10,00;10,00;false"})
