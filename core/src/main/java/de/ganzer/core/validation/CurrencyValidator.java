@@ -3,14 +3,13 @@ package de.ganzer.core.validation;
 import de.ganzer.core.internals.CoreMessages;
 import de.ganzer.core.util.Strings;
 
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.time.format.DecimalStyle;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * The CurrencyValidator class defines a validator that validates the correct
@@ -39,8 +38,6 @@ public class CurrencyValidator extends Validator {
     private Locale locale;
     private boolean hideCurrencySymbol;
     private String currencySymbol;
-    private DecimalFormat editFormat;
-    private DecimalFormat displayFormat;
 
     /**
      * Creates a new instance of the validator.
@@ -130,8 +127,6 @@ public class CurrencyValidator extends Validator {
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.hideCurrencySymbol = hideCurrencySymbol;
-        this.editFormat = getEditFormat();
-        this.displayFormat = getDisplayFormat();
     }
 
     /**
@@ -258,11 +253,7 @@ public class CurrencyValidator extends Validator {
      * @see #setCurrencySymbol(String)
      */
     public void setHideCurrencySymbol(boolean hideCurrencySymbol) {
-        if (this.hideCurrencySymbol == hideCurrencySymbol)
-            return;
-
         this.hideCurrencySymbol = hideCurrencySymbol;
-        this.displayFormat = getDisplayFormat();
     }
 
     /**
@@ -270,7 +261,7 @@ public class CurrencyValidator extends Validator {
      * be used.
      *
      * @return The currency symbol to use or {@code null} to use the default
-     *          symbol.
+     *         symbol.
      *
      * @see #setHideCurrencySymbol(boolean)
      */
@@ -288,11 +279,7 @@ public class CurrencyValidator extends Validator {
      * @see #setHideCurrencySymbol(boolean)
      */
     public void setCurrencySymbol(String currencySymbol) {
-        if (Objects.equals(this.currencySymbol, currencySymbol))
-            return;
-
         this.currencySymbol = currencySymbol;
-        this.displayFormat = getDisplayFormat();
     }
 
     /**
@@ -332,12 +319,7 @@ public class CurrencyValidator extends Validator {
      * @see Locale#getDefault()
      */
     public void setLocale(Locale locale) {
-        if (Objects.equals(this.locale, locale))
-            return;
-
         this.locale = locale;
-        this.editFormat = getEditFormat();
-        this.displayFormat = getDisplayFormat();
     }
 
     /**
@@ -360,10 +342,17 @@ public class CurrencyValidator extends Validator {
         if (text.isEmpty())
             return true;
 
-        var pos = new ParsePosition(0);
-        var res = editFormat.parse(text.toString(), pos);
+        var loc = locale != null ? locale : Locale.getDefault();
+        var d = DecimalStyle.of(loc);
+        var t = text.toString();
 
-        return res != null && pos.getErrorIndex() < 0 && pos.getIndex() == text.length();
+        if (t.length() == 1 && t.charAt(0) == d.getNegativeSign())
+            return minValue < 0;
+
+        var pos = new ParsePosition(0);
+        var res = NumberFormat.getInstance(loc).parse(t, pos);
+
+        return res != null && pos.getErrorIndex() < 0 && pos.getIndex() == t.length();
     }
 
     /**
@@ -388,12 +377,42 @@ public class CurrencyValidator extends Validator {
         if (text.isEmpty())
             return true;
 
-        var pos = new ParsePosition(0);
-        var res = hasCurrency(text)
-                ? displayFormat.parse(text, pos)
-                : editFormat.parse(text, pos);
+        Locale loc = locale != null ? locale : Locale.getDefault();
+        String symbol = resolveCurrencySymbol(loc);
+        String numberPart = text;
 
-        if (res == null || pos.getErrorIndex() >= 0 || pos.getIndex() < text.length()) {
+        if (hasCurrency(text, loc)) {
+            boolean isPrefix = isCurrencyPrefix(loc);
+
+            if (isPrefix) {
+                if (numberPart.startsWith(symbol + " ") || numberPart.startsWith(symbol + "\u00A0") || numberPart.startsWith(symbol)) {
+                    numberPart = numberPart.substring(symbol.length()).trim();
+                } else {
+                    er.setException(new ValidatorException(getErrorMessage() != null
+                                                                   ? getErrorMessage()
+                                                                   : getNumberErrorMessage(),
+                                                           CurrencyValidator.class,
+                                                           this));
+                    return false;
+                }
+            } else {
+                if (numberPart.endsWith(" " + symbol) || numberPart.endsWith("\u00A0" + symbol)) {
+                    numberPart = numberPart.substring(0, numberPart.length() - symbol.length()).trim();
+                } else {
+                    er.setException(new ValidatorException(getErrorMessage() != null
+                                                                   ? getErrorMessage()
+                                                                   : getNumberErrorMessage(),
+                                                           CurrencyValidator.class,
+                                                           this));
+                    return false;
+                }
+            }
+        }
+
+        var pos = new ParsePosition(0);
+        var res = NumberFormat.getInstance(loc).parse(numberPart, pos);
+
+        if (res == null || pos.getErrorIndex() >= 0 || pos.getIndex() < numberPart.length()) {
             er.setException(new ValidatorException(getErrorMessage() != null
                                                            ? getErrorMessage()
                                                            : getNumberErrorMessage(),
@@ -413,8 +432,8 @@ public class CurrencyValidator extends Validator {
                                                    this));
         else {
             String message = String.format(getRangeErrorMessage(),
-                                           displayFormat.format(minValue),
-                                           displayFormat.format(maxValue));
+                                           formatDisplay(minValue, loc),
+                                           formatDisplay(maxValue, loc));
             er.setException(new ValidatorException(message,
                                                    CurrencyValidator.class,
                                                    this));
@@ -438,85 +457,140 @@ public class CurrencyValidator extends Validator {
     @Override
     protected String doFormatText(String text, TextFormat how) {
         try {
-            double value = hasCurrency(text)
-                    ? displayFormat.parse(text).doubleValue()
-                    : editFormat.parse(text).doubleValue();
+            Locale loc = locale != null ? locale : Locale.getDefault();
+            double value = parseNumber(text, loc);
 
             return how == TextFormat.DISPLAY
-                    ? displayFormat.format(value)
-                    : editFormat.format(value);
+                    ? formatDisplay(value, loc)
+                    : formatEdit(value, loc);
         } catch (ParseException e) {
             return text;
         }
     }
 
-    private boolean hasCurrency(String text) {
-        var symbol = displayFormat.getDecimalFormatSymbols().getCurrencySymbol();
-        return text.contains(symbol);
-    }
+    private double parseNumber(String text, Locale loc) throws ParseException {
+        if (text == null || text.isEmpty())
+            throw new ParseException("empty text", 0);
 
-    private DecimalFormat getEditFormat() {
-        return getFormat(locale != null ? locale : Locale.getDefault(), "", true);
-    }
+        String symbol = resolveCurrencySymbol(loc);
+        String numberPart = text;
 
-    private DecimalFormat getDisplayFormat() {
-        return getFormat(
-                locale != null ? locale : Locale.getDefault(),
-                hideCurrencySymbol ? "" : currencySymbol,
-                false);
-    }
+        if (hasCurrency(text, loc)) {
+            boolean isPrefix = isCurrencyPrefix(loc);
 
-    private static DecimalFormat getFormat(Locale locale, String currencySymbol, boolean removeSeparators) {
-        var f = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
-        var s = f.getDecimalFormatSymbols();
-
-        f.setRoundingMode(RoundingMode.HALF_UP);
-
-        if (!Strings.isNullOrEmpty(currencySymbol)) {
-            s.setCurrencySymbol(currencySymbol);
-            f.setDecimalFormatSymbols(s);
-        } else if (currencySymbol != null && currencySymbol.isEmpty()) {
-            String pattern = removeCurrency(f.toPattern());
-
-            if (removeSeparators)
-                pattern = pattern.replace(String.valueOf(s.getMonetaryGroupingSeparator()), "");
-
-            f.applyPattern(pattern);
-
-            // It seems that the monetary separators are not used after the
-            // currency symbol is removed, so we overwrite the defaults:
-            //
-            s.setDecimalSeparator(s.getMonetaryDecimalSeparator());
-            s.setGroupingSeparator(s.getMonetaryGroupingSeparator());
-            f.setDecimalFormatSymbols(s);
-        }
-
-        return f;
-    }
-
-    private static String removeCurrency(String pattern) {
-        StringBuilder result = new StringBuilder(pattern.length());
-
-        for (int i = 0; i < pattern.length(); i++) {
-            char c = pattern.charAt(i);
-
-            if (c == '\u00A4') { // ¤
-                // Remove whitespace before ¤:
-                while (!result.isEmpty() && isSpace(result.charAt(result.length() - 1)))
-                    result.deleteCharAt(result.length() - 1);
-
-                // Skip whitespace behind ¤:
-                while (i + 1 < pattern.length() && isSpace(pattern.charAt(i + 1)))
-                    i++;
+            if (isPrefix) {
+                if (numberPart.startsWith(symbol))
+                    numberPart = numberPart.substring(symbol.length()).trim();
             } else {
-                result.append(c);
+                if (numberPart.endsWith(symbol))
+                    numberPart = numberPart.substring(0, numberPart.length() - symbol.length()).trim();
             }
         }
 
-        return result.toString();
+        var pos = new ParsePosition(0);
+        var res = NumberFormat.getInstance(loc).parse(numberPart, pos);
+
+        if (res == null || pos.getErrorIndex() >= 0 || pos.getIndex() < numberPart.length())
+            throw new ParseException(text, pos.getErrorIndex() >= 0 ? pos.getErrorIndex() : pos.getIndex());
+
+        return res.doubleValue();
     }
 
-    private static boolean isSpace(char c) {
-        return Character.isWhitespace(c) || Character.isSpaceChar(c);
+    private String formatDisplay(double value, Locale loc) {
+        String numStr = String.format(loc, "%,.2f", value);
+
+        if (hideCurrencySymbol)
+            return numStr;
+
+        String symbol = resolveCurrencySymbol(loc);
+
+        return isCurrencyPrefix(loc)
+                ? symbol + numStr
+                : numStr + " " + symbol;
+    }
+
+    private String formatEdit(double value, Locale loc) {
+        return String.format(loc, "%.2f", value);
+    }
+
+    private boolean isCurrencyPrefix(Locale loc) {
+        Locale effectiveLocale = getLocaleWithCountry(loc);
+
+        if (effectiveLocale == null)
+            effectiveLocale = loc;
+
+        var df = (DecimalFormat) NumberFormat.getCurrencyInstance(effectiveLocale);
+
+        return df.toPattern().startsWith("\u00A4");
+    }
+
+    private boolean hasCurrency(String text, Locale loc) {
+        if (text == null || text.isEmpty())
+            return false;
+
+        if (!Strings.isNullOrEmpty(currencySymbol) && text.contains(currencySymbol))
+            return true;
+
+        String symbol = resolveCurrencySymbol(loc);
+
+        return !Strings.isNullOrEmpty(symbol) && !symbol.equals("\u00A4") && text.contains(symbol);
+    }
+
+    private String resolveCurrencySymbol(Locale loc) {
+        if (!Strings.isNullOrEmpty(currencySymbol))
+            return currencySymbol;
+
+        var symbols = DecimalFormatSymbols.getInstance(loc);
+        var symbol = symbols.getCurrencySymbol();
+
+        if (Strings.isNullOrEmpty(symbol) || symbol.equals("\u00A4")) {
+            Locale countryLocale = getLocaleWithCountry(loc);
+
+            if (countryLocale != null) {
+                var cs = DecimalFormatSymbols.getInstance(countryLocale);
+
+                if (!Strings.isNullOrEmpty(cs.getCurrencySymbol()) && !cs.getCurrencySymbol().equals("\u00A4"))
+                    return cs.getCurrencySymbol();
+            }
+        }
+
+        return symbol;
+    }
+
+    private static Locale getLocaleWithCountry(Locale loc) {
+        if (!loc.getCountry().isEmpty())
+            return loc;
+
+        String lang = loc.getLanguage();
+
+        switch (lang) {
+            case "de":
+                return Locale.GERMANY;
+
+            case "fr":
+                return Locale.FRANCE;
+
+            case "it":
+                return Locale.ITALY;
+
+            case "en":
+                return Locale.US;
+
+            case "es":
+                return Locale.forLanguageTag("es-ES");
+
+            case "ja":
+                return Locale.JAPAN;
+
+            case "zh":
+                return Locale.CHINA;
+        }
+
+        for (Locale available : Locale.getAvailableLocales()) {
+            if (available.getLanguage().equals(lang) && !available.getCountry().isEmpty())
+                return available;
+        }
+
+        return null;
     }
 }

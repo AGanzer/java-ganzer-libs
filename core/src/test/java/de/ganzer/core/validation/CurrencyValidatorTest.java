@@ -22,6 +22,19 @@ class CurrencyValidatorTest {
         assertEquals(CurrencyValidator.DEFAULT_RANGE_ERROR_MESSAGE, val.getRangeErrorMessage());
         assertEquals(CurrencyValidator.DEFAULT_NUMBER_ERROR_MESSAGE, val.getNumberErrorMessage());
     }
+    @Test
+    void createOption() {
+        var val = new CurrencyValidator(ValidatorOptions.NONE);
+
+        assertEquals(ValidatorOptions.NONE, val.getOptions());
+        assertNull(val.getCurrencySymbol());
+        assertNull(val.getLocale());
+        assertFalse(val.isHideCurrencySymbol());
+        assertEquals((double) Long.MIN_VALUE, val.getMinValue());
+        assertEquals((double) Long.MAX_VALUE, val.getMaxValue());
+        assertEquals(CurrencyValidator.DEFAULT_RANGE_ERROR_MESSAGE, val.getRangeErrorMessage());
+        assertEquals(CurrencyValidator.DEFAULT_NUMBER_ERROR_MESSAGE, val.getNumberErrorMessage());
+    }
 
     @Test
     void createRange() {
@@ -208,15 +221,17 @@ class CurrencyValidatorTest {
     @CsvSource(delimiter = ';', value = {
             "0,4;true",
             "1000,04;true",
+            "2000,04;false",
             "-1000,04;false",
             "0.;false",
             "10€;false",
             "0,40 €;true",
             "1.000,04 €;true",
+            "2.000,04;false",
             "-1.000,04 €;false"})
     void doValidate(String input, String result) {
         var res = Boolean.parseBoolean(result);
-        var val = new CurrencyValidator(0, 1000);
+        var val = new CurrencyValidator(0, 2000);
         val.setLocale(Locale.GERMAN);
 
         assertEquals(res, val.validate(input, new ValidatorExceptionRef()));
