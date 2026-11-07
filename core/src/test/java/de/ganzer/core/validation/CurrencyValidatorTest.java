@@ -209,7 +209,7 @@ class CurrencyValidatorTest {
             "1000,04;true",
             "0.;false",
             "10€;false"})
-    void doInputValidation(String input, String result) {
+    void doInputValidation_de_DE(String input, String result) {
         var res = Boolean.parseBoolean(result);
         var val = new CurrencyValidator();
         val.setLocale(Locale.GERMAN);
@@ -229,7 +229,7 @@ class CurrencyValidatorTest {
             "1.000,04 €;true",
             "2.000,04;false",
             "-1.000,04 €;false"})
-    void doValidate(String input, String result) {
+    void doValidate_de_DE(String input, String result) {
         var res = Boolean.parseBoolean(result);
         var val = new CurrencyValidator(0, 2000);
         val.setLocale(Locale.GERMAN);
@@ -243,7 +243,7 @@ class CurrencyValidatorTest {
             "1000,04;1.000,04 €;true",
             "-1.000,40 €;-1000,40;false",
             "10,00 €;10,00;false"})
-    void doFormatText(String input, String result, String display) {
+    void doFormatText_de_DE(String input, String result, String display) {
         var format = Boolean.parseBoolean(display) ? TextFormat.DISPLAY : TextFormat.EDIT;
         var val = new CurrencyValidator(0, 1000);
         val.setLocale(Locale.GERMAN);
