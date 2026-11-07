@@ -432,14 +432,19 @@ public class NumberValidator extends Validator {
      * @param text The text to convert. This should be the same text that is
      *         successfully passed to {@link #validate(String)}.
      *
-     * @return The converted value.
+     * @return The converted value or {@code null} if {@code text} is {@code null}
+     *          or empty.
      *
      * @throws ParseException If the text is not a valid number.
      *
      * @since 6.4.0
      */
-    public long asLong(String text) throws ParseException {
-        return (int) asDouble(text);
+    public Long asLong(String text) throws ParseException {
+        if (text == null || text.isEmpty())
+            return null;
+
+        Locale loc = locale != null ? locale : Locale.getDefault();
+        return NumberFormat.getInstance(loc).parse(text).longValue();
     }
 
     /**
@@ -448,13 +453,17 @@ public class NumberValidator extends Validator {
      * @param text The text to convert. This should be the same text that is
      *         successfully passed to {@link #validate(String)}.
      *
-     * @return The converted value.
+     * @return The converted value or {@code null} if {@code text} is {@code null}
+     *          or empty.
      *
      * @throws ParseException If the text is not a valid number.
      *
      * @since 6.4.0
      */
-    public double asDouble(String text) throws ParseException {
+    public Double asDouble(String text) throws ParseException {
+        if (text == null || text.isEmpty())
+            return null;
+
         Locale loc = locale != null ? locale : Locale.getDefault();
         return NumberFormat.getInstance(loc).parse(text).doubleValue();
     }

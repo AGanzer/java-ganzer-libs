@@ -405,13 +405,17 @@ public class CurrencyValidator extends Validator {
      * @param text The text to convert. This should be the same text that is
      *         successfully passed to {@link #validate(String)}.
      *
-     * @return The converted value.
+     * @return The converted value or {@code null} if {@code text} is {@code null}
+     *          or empty.
      *
      * @throws ParseException If the text is not a valid number.
      *
      * @since 6.4.0
      */
-    public double asDouble(String text) throws ParseException {
+    public Double asDouble(String text) throws ParseException {
+        if (text == null || text.isEmpty())
+            return null;
+
         return hasCurrencyOrSeparator(text)
                 ? displayFormatter.parse(text).doubleValue()
                 : editFormatter.parse(text).doubleValue();

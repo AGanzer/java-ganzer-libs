@@ -303,13 +303,17 @@ public class TimeValidator extends PxPicValidator {
      * @param text The text to convert. This should be the same text that is
      *         successfully passed to {@link #validate(String)}.
      *
-     * @return The converted text.
+     * @return The converted value or {@code null} if {@code text} is {@code null}
+     *          or empty.
      *
      * @throws DateTimeException If the text is not a valid time.
      *
      * @since 6.4.0
      */
     public LocalTime asLocalTime(String text) throws DateTimeException {
+        if (text == null || text.isEmpty())
+            return null;
+
         var loc = locale != null ? locale : Locale.getDefault();
         var formatter = patternString != null
                 ? DateTimeFormatter.ofPattern(patternString, loc)
