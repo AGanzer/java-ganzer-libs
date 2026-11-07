@@ -427,6 +427,39 @@ public class NumberValidator extends Validator {
     }
 
     /**
+     * Converts the given text into a {@code long} number.
+     *
+     * @param text The text to convert. This should be the same text that is
+     *         successfully passed to {@link #validate(String)}.
+     *
+     * @return The converted value.
+     *
+     * @throws ParseException If the text is not a valid number.
+     *
+     * @since 6.4.0
+     */
+    public long asLong(String text) throws ParseException {
+        return (int) asDouble(text);
+    }
+
+    /**
+     * Converts the given text into a {@code double} number.
+     *
+     * @param text The text to convert. This should be the same text that is
+     *         successfully passed to {@link #validate(String)}.
+     *
+     * @return The converted value.
+     *
+     * @throws ParseException If the text is not a valid number.
+     *
+     * @since 6.4.0
+     */
+    public double asDouble(String text) throws ParseException {
+        Locale loc = locale != null ? locale : Locale.getDefault();
+        return NumberFormat.getInstance(loc).parse(text).doubleValue();
+    }
+
+    /**
      * This implementation calls {@link Validator#doInputValidation} and checks
      * whether the input is a valid number in the range from {@link #getMinValue()}
      * to {@link #getMaxValue()}.

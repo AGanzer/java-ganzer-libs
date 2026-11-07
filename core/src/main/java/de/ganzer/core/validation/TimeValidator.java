@@ -298,6 +298,27 @@ public class TimeValidator extends PxPicValidator {
     }
 
     /**
+     * Converts the given text into a {@code LocalTime}.
+     *
+     * @param text The text to convert. This should be the same text that is
+     *         successfully passed to {@link #validate(String)}.
+     *
+     * @return The converted text.
+     *
+     * @throws DateTimeException If the text is not a valid time.
+     *
+     * @since 6.4.0
+     */
+    public LocalTime asLocalTime(String text) throws DateTimeException {
+        var loc = locale != null ? locale : Locale.getDefault();
+        var formatter = patternString != null
+                ? DateTimeFormatter.ofPattern(patternString, loc)
+                : DateTimeFormatter.ofLocalizedTime(formatStyle).withLocale(loc);
+
+        return LocalTime.from(formatter.parse(text));
+    }
+
+    /**
      * This implementation calls the {@link Validator#doValidate} and checks
      * whether the input is a valid number in the range from {@link #getMinTime()}
      * to {@link #getMaxTime()}.

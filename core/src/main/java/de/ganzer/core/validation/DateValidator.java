@@ -3,6 +3,8 @@ package de.ganzer.core.validation;
 import de.ganzer.core.internals.CoreMessages;
 import de.ganzer.core.util.Strings;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -333,6 +335,27 @@ public class DateValidator extends PxPicValidator {
                 : numberErrorMessage;
 
         setMatchErrorMessage(this.dateErrorMessage);
+    }
+
+    /**
+     * Converts the given text into a {@code LocalDate}.
+     *
+     * @param text The text to convert. This should be the same text that is
+     *         successfully passed to {@link #validate(String)}.
+     *
+     * @return The converted text.
+     *
+     * @throws DateTimeException If the text is not a valid date.
+     *
+     * @since 6.4.0
+     */
+    public LocalDate asLocalDate(String text) throws DateTimeException {
+        var loc = locale != null ? locale : Locale.getDefault();
+        var formatter = patternString != null
+                ? DateTimeFormatter.ofPattern(patternString, loc)
+                : DateTimeFormatter.ofLocalizedDate(formatStyle).withLocale(loc);
+
+        return LocalDate.from(formatter.parse(text));
     }
 
     /**

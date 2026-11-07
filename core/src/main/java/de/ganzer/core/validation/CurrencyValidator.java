@@ -3,6 +3,7 @@ package de.ganzer.core.validation;
 import de.ganzer.core.internals.CoreMessages;
 import de.ganzer.core.util.Strings;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -320,6 +321,36 @@ public class CurrencyValidator extends Validator {
      */
     public void setLocale(Locale locale) {
         this.locale = locale;
+    }
+
+    /**
+     * Converts the given text into a {@code double} number.
+     *
+     * @param text The text to convert. This should be the same text that is
+     *         successfully passed to {@link #validate(String)}.
+     *
+     * @return The converted value.
+     *
+     * @throws ParseException If the text is not a valid number.
+     */
+    public double asDouble(String text) throws ParseException {
+        Locale loc = locale != null ? locale : Locale.getDefault();
+        return parseNumber(text, loc);
+    }
+
+    /**
+     * Converts the given text into a {@link BigDecimal}.
+     *
+     * @param text The text to convert. This should be the same text that is
+     *         successfully passed to {@link #validate(String)}.
+     *
+     * @return The converted value.
+     *
+     * @throws ParseException If the text is not a valid number.
+     */
+    public BigDecimal asBigDecimal(String text) throws ParseException {
+        Locale loc = locale != null ? locale : Locale.getDefault();
+        return new BigDecimal(parseNumber(text, loc));
     }
 
     /**
