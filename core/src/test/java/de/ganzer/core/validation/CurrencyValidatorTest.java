@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,6 +17,8 @@ class CurrencyValidatorTest {
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertNull(val.getCurrencySymbol());
         assertNull(val.getLocale());
+        assertNull(val.getEditFormat());
+        assertNull(val.getDisplayFormat());
         assertFalse(val.isHideCurrencySymbol());
         assertEquals((double) Long.MIN_VALUE, val.getMinValue());
         assertEquals((double) Long.MAX_VALUE, val.getMaxValue());
@@ -28,6 +31,8 @@ class CurrencyValidatorTest {
 
         assertEquals(ValidatorOptions.NONE, val.getOptions());
         assertNull(val.getCurrencySymbol());
+        assertNull(val.getEditFormat());
+        assertNull(val.getDisplayFormat());
         assertNull(val.getLocale());
         assertFalse(val.isHideCurrencySymbol());
         assertEquals((double) Long.MIN_VALUE, val.getMinValue());
@@ -45,6 +50,8 @@ class CurrencyValidatorTest {
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertNull(val.getCurrencySymbol());
         assertNull(val.getLocale());
+        assertNull(val.getEditFormat());
+        assertNull(val.getDisplayFormat());
         assertFalse(val.isHideCurrencySymbol());
         assertEquals(min, val.getMinValue());
         assertEquals(max, val.getMaxValue());
@@ -69,6 +76,8 @@ class CurrencyValidatorTest {
         assertEquals(ValidatorOptions.NEEDS_INPUT, val.getOptions());
         assertNull(val.getCurrencySymbol());
         assertNull(val.getLocale());
+        assertNull(val.getEditFormat());
+        assertNull(val.getDisplayFormat());
         assertTrue(val.isHideCurrencySymbol());
         assertEquals(min, val.getMinValue());
         assertEquals(max, val.getMaxValue());
@@ -86,6 +95,8 @@ class CurrencyValidatorTest {
         assertEquals(ValidatorOptions.NONE, val.getOptions());
         assertNull(val.getCurrencySymbol());
         assertNull(val.getLocale());
+        assertNull(val.getEditFormat());
+        assertNull(val.getDisplayFormat());
         assertFalse(val.isHideCurrencySymbol());
         assertEquals(min, val.getMinValue());
         assertEquals(max, val.getMaxValue());
@@ -104,6 +115,8 @@ class CurrencyValidatorTest {
         assertNull(val.getCurrencySymbol());
         assertNull(val.getLocale());
         assertTrue(val.isHideCurrencySymbol());
+        assertNull(val.getEditFormat());
+        assertNull(val.getDisplayFormat());
         assertEquals(min, val.getMinValue());
         assertEquals(max, val.getMaxValue());
         assertEquals(CurrencyValidator.DEFAULT_RANGE_ERROR_MESSAGE, val.getRangeErrorMessage());
@@ -111,8 +124,28 @@ class CurrencyValidatorTest {
     }
 
     @Test
+    void setEditFormat() {
+        var val = new CurrencyValidator();
+        var format = new DecimalFormat();
+
+        val.setEditFormat(format);
+
+        assertEquals(format, val.getEditFormat());
+    }
+
+    @Test
+    void setDisplayFormat() {
+        var val = new CurrencyValidator();
+        var format = new DecimalFormat();
+
+        val.setDisplayFormat(format);
+
+        assertEquals(format, val.getDisplayFormat());
+    }
+
+    @Test
     void setRangeErrorMessage() {
-        var  val = new CurrencyValidator();
+        var val = new CurrencyValidator();
         String msg = "my message";
         val.setRangeErrorMessage(msg);
         assertEquals(msg, val.getRangeErrorMessage());

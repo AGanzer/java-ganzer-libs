@@ -37,6 +37,8 @@ public class CurrencyValidator extends Validator {
     private String currencySymbol;
     private DecimalFormat editFormat;
     private DecimalFormat displayFormat;
+    private DecimalFormat editFormatter;
+    private DecimalFormat displayFormatter;
 
     /**
      * Creates a new instance of the validator.
@@ -126,8 +128,8 @@ public class CurrencyValidator extends Validator {
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.hideCurrencySymbol = hideCurrencySymbol;
-        this.editFormat = getEditFormat();
-        this.displayFormat = getDisplayFormat();
+        this.editFormatter = getEditFormatter();
+        this.displayFormatter = getDisplayFormatter();
     }
 
     /**
@@ -258,7 +260,7 @@ public class CurrencyValidator extends Validator {
             return;
 
         this.hideCurrencySymbol = hideCurrencySymbol;
-        this.displayFormat = getDisplayFormat();
+        this.displayFormatter = getDisplayFormatter();
     }
 
     /**
@@ -288,7 +290,7 @@ public class CurrencyValidator extends Validator {
             return;
 
         this.currencySymbol = currencySymbol;
-        this.displayFormat = getDisplayFormat();
+        this.displayFormatter = getDisplayFormatter();
     }
 
     /**
@@ -332,8 +334,82 @@ public class CurrencyValidator extends Validator {
             return;
 
         this.locale = locale;
-        this.editFormat = getEditFormat();
-        this.displayFormat = getDisplayFormat();
+        this.editFormatter = getEditFormatter();
+        this.displayFormatter = getDisplayFormatter();
+    }
+
+    /**
+     * Gets the custom {@code DecimalFormat} to use to parse and format numbers
+     * for editing.
+     *
+     * @return The custom {@code DecimalFormat} to use or {@code null} to use
+     *          the default.
+     */
+    public DecimalFormat getEditFormat() {
+        return editFormat;
+    }
+
+    /**
+     * Sets the custom {@code DecimalFormat} to use to parse and format numbers
+     * for editing.
+     * <p>
+     * This is useful if the default format does not fit all requirements.
+     *
+     * @param editFormat The custom {@code DecimalFormat} to use or {@code null}
+     *          to use the default.
+     */
+    public void setEditFormat(DecimalFormat editFormat) {
+        if (this.editFormat == editFormat)
+            return;
+
+        this.editFormat = editFormat;
+        this.editFormatter = getEditFormatter();
+    }
+
+    /**
+     * Gets the custom {@code DecimalFormat} to use to parse and format numbers
+     * for display.
+     *
+     * @return The custom {@code DecimalFormat} to use or {@code null} to use
+     *          the default.
+     */
+    public DecimalFormat getDisplayFormat() {
+        return displayFormat;
+    }
+
+    /**
+     * Sets the custom {@code DecimalFormat} to use to parse and format numbers
+     * for display.
+     * <p>
+     * This is useful if the default format does not fit all requirements.
+     *
+     * @param displayFormat The custom {@code DecimalFormat} to use or {@code null}
+     *          to use the default.
+     */
+    public void setDisplayFormat(DecimalFormat displayFormat) {
+        if (this.displayFormat == displayFormat)
+            return;
+
+        this.displayFormat = displayFormat;
+        this.displayFormatter = getDisplayFormatter();
+    }
+
+    /**
+     * Converts the given text into a {@code double} number.
+     *
+     * @param text The text to convert. This should be the same text that is
+     *         successfully passed to {@link #validate(String)}.
+     *
+     * @return The converted value.
+     *
+     * @throws ParseException If the text is not a valid number.
+     *
+     * @since 6.4.0
+     */
+    public double asDouble(String text) throws ParseException {
+        return hasCurrency(text)
+                ? displayFormatter.parse(text).doubleValue()
+                : editFormatter.parse(text).doubleValue();
     }
 
     /**
@@ -357,7 +433,7 @@ public class CurrencyValidator extends Validator {
             return true;
 
         var pos = new ParsePosition(0);
-        var res = editFormat.parse(text.toString(), pos);
+        var res = editFormatter.parse(text.toString(), pos);
 
         return res != null && pos.getErrorIndex() < 0 && pos.getIndex() == text.length();
     }
@@ -386,8 +462,8 @@ public class CurrencyValidator extends Validator {
 
         var pos = new ParsePosition(0);
         var res = hasCurrency(text)
-                ? displayFormat.parse(text, pos)
-                : editFormat.parse(text, pos);
+                ? displayFormatter.parse(text, pos)
+                : editFormatter.parse(text, pos);
 
         if (res == null || pos.getErrorIndex() >= 0 || pos.getIndex() < text.length()) {
             er.setException(new ValidatorException(getErrorMessage() != null
@@ -409,8 +485,8 @@ public class CurrencyValidator extends Validator {
                                                    this));
         else {
             String message = String.format(getRangeErrorMessage(),
-                                           displayFormat.format(minValue),
-                                           displayFormat.format(maxValue));
+                                           displayFormatter.format(minValue),
+                                           displayFormatter.format(maxValue));
             er.setException(new ValidatorException(message,
                                                    CurrencyValidator.class,
                                                    this));
@@ -435,12 +511,12 @@ public class CurrencyValidator extends Validator {
     protected String doFormatText(String text, TextFormat how) {
         try {
             double value = hasCurrency(text)
-                    ? displayFormat.parse(text).doubleValue()
-                    : editFormat.parse(text).doubleValue();
+                    ? displayFormatter.parse(text).doubleValue()
+                    : editFormatter.parse(text).doubleValue();
 
             return how == TextFormat.DISPLAY
-                    ? displayFormat.format(value)
-                    : editFormat.format(value);
+                    ? displayFormatter.format(value)
+                    : editFormatter.format(value);
         } catch (ParseException e) {
             return text;
         }
@@ -451,15 +527,16 @@ public class CurrencyValidator extends Validator {
         return text.contains(symbol);
     }
 
-    private DecimalFormat getEditFormat() {
-        return getFormat(locale != null ? locale : Locale.getDefault(), "", true);
+    private DecimalFormat getEditFormatter() {
+        return editFormat != null
+                ? editFormat
+                : getFormat(locale != null ? locale : Locale.getDefault(), "", true);
     }
 
-    private DecimalFormat getDisplayFormat() {
-        return getFormat(
-                locale != null ? locale : Locale.getDefault(),
-                hideCurrencySymbol ? "" : currencySymbol,
-                false);
+    private DecimalFormat getDisplayFormatter() {
+        return displayFormat != null
+                ? displayFormat
+                : getFormat(locale != null ? locale : Locale.getDefault(), hideCurrencySymbol ? "" : currencySymbol, false);
     }
 
     private static DecimalFormat getFormat(Locale locale, String currencySymbol, boolean removeSeparators) {
