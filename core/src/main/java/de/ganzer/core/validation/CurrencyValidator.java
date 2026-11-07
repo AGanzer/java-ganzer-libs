@@ -30,8 +30,8 @@ public class CurrencyValidator extends Validator {
 
     private String rangeErrorMessage = DEFAULT_RANGE_ERROR_MESSAGE;
     private String numberErrorMessage = DEFAULT_NUMBER_ERROR_MESSAGE;
-    private double minValue = Long.MIN_VALUE;
-    private double maxValue = Long.MAX_VALUE;
+    private double minValue;
+    private double maxValue;
     private Locale locale;
     private boolean hideCurrencySymbol;
     private String currencySymbol;
@@ -48,6 +48,7 @@ public class CurrencyValidator extends Validator {
      * allowed value to {@link Long#MAX_VALUE}.
      */
     public CurrencyValidator() {
+        this(ValidatorOptions.NEEDS_INPUT, Long.MIN_VALUE, Long.MAX_VALUE, false);
     }
 
     /**
@@ -60,7 +61,7 @@ public class CurrencyValidator extends Validator {
      *         {@link ValidatorOptions} constants.
      */
     public CurrencyValidator(int options) {
-        super(options);
+        this(options, Long.MIN_VALUE, Long.MAX_VALUE, false);
     }
 
     /**
@@ -527,7 +528,7 @@ public class CurrencyValidator extends Validator {
     }
 
     private boolean hasCurrencyOrSeparator(String text) {
-        var instance = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+        var instance = (DecimalFormat) NumberFormat.getCurrencyInstance(locale != null ? locale : Locale.getDefault());
         var currency = instance.getDecimalFormatSymbols().getCurrencySymbol();
         var seperator = instance.getDecimalFormatSymbols().getMonetaryGroupingSeparator();
 
