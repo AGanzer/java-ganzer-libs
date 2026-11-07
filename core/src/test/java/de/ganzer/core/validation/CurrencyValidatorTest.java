@@ -250,4 +250,196 @@ class CurrencyValidatorTest {
 
         assertEquals(result, val.formatText(input, format));
     }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0.4;true",
+            "1000.04;true",
+            "0,;false",
+            "10CHF;false"})
+    void doInputValidation_de_CH(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator();
+        val.setLocale(Locale.forLanguageTag("de-CH"));
+
+        assertEquals(res, val.isValidInput(new StringBuilder(input), false));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0.4;true",
+            "1000.04;true",
+            "2000.04;false",
+            "-1000.04;false",
+            "0,;false",
+            "10CHF;false",
+            "CHF 0.40;true",
+            "CHF 1’000.04;true",
+            "2’000.04;false",
+            "CHF-1’000.04;false"})
+    void doValidate_de_CH(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator(0, 2000);
+        val.setLocale(Locale.forLanguageTag("de-CH"));
+
+        assertEquals(res, val.validate(input, new ValidatorExceptionRef()));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0.4;CHF 0.40;true",
+            "1000.04;CHF 1’000.04;true",
+            "CHF-1’000.40;-1000.40;false",
+            "CHF 10.00;10.00;false"})
+    void doFormatText_de_CH(String input, String result, String display) {
+        var format = Boolean.parseBoolean(display) ? TextFormat.DISPLAY : TextFormat.EDIT;
+        var val = new CurrencyValidator(0, 1000);
+        val.setLocale(Locale.forLanguageTag("de-CH"));
+
+        assertEquals(result, val.formatText(input, format));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0.4;true",
+            "1000.04;true",
+            "0.;false",
+            "10CHF;false"})
+    void doInputValidation_fr_CH(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator();
+        val.setLocale(Locale.forLanguageTag("fr-CH"));
+
+        assertEquals(res, val.isValidInput(new StringBuilder(input), false));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0.4;true",
+            "1000.04;true",
+            "2000.04;false",
+            "-1000.04;false",
+            "0.;false",
+            "10CHF;false",
+            "0.40 CHF;true",
+            "1 000.04 CHF;true",
+            "2 000.04;false",
+            "-1 000.04 CHF;false"})
+    void doValidate_fr_CH(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator(0, 2000);
+        val.setLocale(Locale.forLanguageTag("fr-CH"));
+
+        assertEquals(res, val.validate(input, new ValidatorExceptionRef()));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0.4;0.40 CHF;true",
+            "1000.04;1 000.04 CHF;true",
+            "-1 000.40 CHF;-1000.40;false",
+            "10.00 CHF;10.00;false"})
+    void doFormatText_fr_CH(String input, String result, String display) {
+        var format = Boolean.parseBoolean(display) ? TextFormat.DISPLAY : TextFormat.EDIT;
+        var val = new CurrencyValidator(0, 1000);
+        val.setLocale(Locale.forLanguageTag("fr-CH"));
+
+        assertEquals(result, val.formatText(input, format));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0,4;true",
+            "1000,04;true",
+            "0.;false",
+            "€10;false"})
+    void doInputValidation_de_AT(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator();
+        val.setLocale(Locale.forLanguageTag("de-AT"));
+
+        assertEquals(res, val.isValidInput(new StringBuilder(input), false));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0,4;true",
+            "1000,04;true",
+            "2000,04;false",
+            "-1000,04;false",
+            "0.;false",
+            "10€;false",
+            "€ 0,40;true",
+            "€ 1.000,04;true",
+            "2.000,04;false",
+            "-€ 1.000,04;false"})
+    void doValidate_de_AT(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator(0, 2000);
+        val.setLocale(Locale.forLanguageTag("de-AT"));
+
+        assertEquals(res, val.validate(input, new ValidatorExceptionRef()));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0,4;€ 0,40;true",
+            "1000,04;€ 1.000,04;true",
+            "-€ 1.000,40;-1000,40;false",
+            "€ 10,00;10,00;false"})
+    void doFormatText_de_AT(String input, String result, String display) {
+        var format = Boolean.parseBoolean(display) ? TextFormat.DISPLAY : TextFormat.EDIT;
+        var val = new CurrencyValidator(0, 1000);
+        val.setLocale(Locale.forLanguageTag("de-AT"));
+
+        assertEquals(result, val.formatText(input, format));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0.4;true",
+            "1000.04;true",
+            "0,;false",
+            "10$;false"})
+    void doInputValidation_en_US(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator();
+        val.setLocale(Locale.US);
+
+        assertEquals(res, val.isValidInput(new StringBuilder(input), false));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0.4;true",
+            "1000.04;true",
+            "2000.04;false",
+            "-1000.04;false",
+            "0,;false",
+            "10$;false",
+            "$0.40;true",
+            "$1,000.04;true",
+            "2,000.04;false",
+            "-$1,000.04;false"})
+    void doValidate_en_US(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator(0, 2000);
+        val.setLocale(Locale.US);
+
+        assertEquals(res, val.validate(input, new ValidatorExceptionRef()));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0.4;$0.40;true",
+            "1000.04;$1,000.04;true",
+            "-$1,000.40;-1000.40;false",
+            "$10.00;10.00;false"})
+    void doFormatText_en_US(String input, String result, String display) {
+        var format = Boolean.parseBoolean(display) ? TextFormat.DISPLAY : TextFormat.EDIT;
+        var val = new CurrencyValidator(0, 1000);
+        val.setLocale(Locale.US);
+
+        assertEquals(result, val.formatText(input, format));
+    }
 }
