@@ -209,6 +209,7 @@ class CurrencyValidatorTest {
             "1000,04;true",
             "10,;true",
             "0.;false",
+            "0 1;false",
             "10€;false"})
     void doInputValidation_de_DE(String input, String result) {
         var res = Boolean.parseBoolean(result);
@@ -258,6 +259,7 @@ class CurrencyValidatorTest {
             "1000.04;true",
             "10.;true",
             "0,;false",
+            "0 1;false",
             "10CHF;false"})
     void doInputValidation_de_CH(String input, String result) {
         var res = Boolean.parseBoolean(result);
@@ -307,6 +309,7 @@ class CurrencyValidatorTest {
             "1000.04;true",
             "10.;true",
             "0,;false",
+            "0 1;false",
             "10CHF;false"})
     void doInputValidation_fr_CH(String input, String result) {
         var res = Boolean.parseBoolean(result);
@@ -356,6 +359,7 @@ class CurrencyValidatorTest {
             "1000,04;true",
             "10,;true",
             "0.;false",
+            "0 1;false",
             "€10;false"})
     void doInputValidation_de_AT(String input, String result) {
         var res = Boolean.parseBoolean(result);
@@ -405,6 +409,7 @@ class CurrencyValidatorTest {
             "1000.04;true",
             "10.;true",
             "0,;false",
+            "0 1;false",
             "10$;false"})
     void doInputValidation_en_US(String input, String result) {
         var res = Boolean.parseBoolean(result);
