@@ -34,7 +34,7 @@ public class CurrencyValidator extends Validator {
 
     private String rangeErrorMessage = DEFAULT_RANGE_ERROR_MESSAGE;
     private String numberErrorMessage = DEFAULT_NUMBER_ERROR_MESSAGE;
-    private double minValue = Double.MIN_VALUE;
+    private double minValue = Long.MIN_VALUE;
     private double maxValue = Long.MAX_VALUE;
     private Locale locale;
     private boolean hideCurrencySymbol;
@@ -466,7 +466,7 @@ public class CurrencyValidator extends Validator {
         if (!Strings.isNullOrEmpty(currencySymbol)) {
             s.setCurrencySymbol(currencySymbol);
             f.setDecimalFormatSymbols(s);
-        } else if (currencySymbol.isEmpty()) {
+        } else if (currencySymbol != null && currencySymbol.isEmpty()) {
             f.applyPattern(removeCurrency(f.toPattern()));
 
             // It seems that the monetary separators are not used after the
