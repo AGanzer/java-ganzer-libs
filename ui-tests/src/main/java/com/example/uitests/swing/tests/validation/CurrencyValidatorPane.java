@@ -83,8 +83,8 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
 
         try {
             validator = new CurrencyValidator(options,
-                                              minMaxValidator.asDouble(minValue.getToolTipText()),
-                                              minMaxValidator.asDouble(maxValue.getToolTipText()),
+                                              minMaxValidator.asDouble(minValue.getText()),
+                                              minMaxValidator.asDouble(maxValue.getText()),
                                               hideCurrency.isSelected());
             validator.setLocale(locales.getSelectedItem());
             validator.setCurrencySymbol(currencySymbol.getText().isEmpty() ? null : currencySymbol.getText());
