@@ -1,6 +1,5 @@
 package com.example.uitests.swing.tests.validation;
 
-import de.ganzer.swing.dlgfw.AbstractDialog;
 import de.ganzer.swing.dlgfw.AbstractModifiableDataDialog;
 
 import javax.swing.AbstractButton;
