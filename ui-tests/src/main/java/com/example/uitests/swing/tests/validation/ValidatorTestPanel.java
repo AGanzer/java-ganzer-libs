@@ -35,11 +35,9 @@ public class ValidatorTestPanel extends AbstractModifiableDataPanel<Void> {
 
     @Override
     public void updateData(Void unused) {
-
     }
 
     @Override
     public void initControls(Void unused) {
-
     }
 }
