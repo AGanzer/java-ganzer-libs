@@ -69,6 +69,7 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
 
     @Override
     public boolean validateInput() {
+        updateValidationFilter();
         return currencyFilter.validate(ValidationBehavior.SHOW_MESSAGE_BOX);
     }
 
