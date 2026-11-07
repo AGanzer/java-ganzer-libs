@@ -349,8 +349,7 @@ public class CurrencyValidator extends Validator {
      * @throws ParseException If the text is not a valid number.
      */
     public BigDecimal asBigDecimal(String text) throws ParseException {
-        Locale loc = locale != null ? locale : Locale.getDefault();
-        return new BigDecimal(parseNumber(text, loc));
+        return new BigDecimal(asDouble(text));
     }
 
     /**
