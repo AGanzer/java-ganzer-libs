@@ -212,7 +212,7 @@ class CurrencyValidatorTest {
     void doInputValidation_de_DE(String input, String result) {
         var res = Boolean.parseBoolean(result);
         var val = new CurrencyValidator();
-        val.setLocale(Locale.GERMAN);
+        val.setLocale(Locale.GERMANY);
 
         assertEquals(res, val.isValidInput(new StringBuilder(input), false));
     }
@@ -232,7 +232,7 @@ class CurrencyValidatorTest {
     void doValidate_de_DE(String input, String result) {
         var res = Boolean.parseBoolean(result);
         var val = new CurrencyValidator(0, 2000);
-        val.setLocale(Locale.GERMAN);
+        val.setLocale(Locale.GERMANY);
 
         assertEquals(res, val.validate(input, new ValidatorExceptionRef()));
     }
@@ -246,7 +246,7 @@ class CurrencyValidatorTest {
     void doFormatText_de_DE(String input, String result, String display) {
         var format = Boolean.parseBoolean(display) ? TextFormat.DISPLAY : TextFormat.EDIT;
         var val = new CurrencyValidator(0, 1000);
-        val.setLocale(Locale.GERMAN);
+        val.setLocale(Locale.GERMANY);
 
         assertEquals(result, val.formatText(input, format));
     }
