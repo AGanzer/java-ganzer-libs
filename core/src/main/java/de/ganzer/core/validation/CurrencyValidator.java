@@ -353,7 +353,9 @@ public class CurrencyValidator extends Validator {
      * Sets the custom {@code DecimalFormat} to use to parse and format numbers
      * for editing.
      * <p>
-     * This is useful if the default format does not fit all requirements.
+     * This is useful if the default format does not fit all requirements. This
+     * may be the case if currencies should not be formatted with fixed spaces
+     * but with default space characters.
      *
      * @param editFormat The custom {@code DecimalFormat} to use or {@code null}
      *          to use the default.
@@ -381,7 +383,9 @@ public class CurrencyValidator extends Validator {
      * Sets the custom {@code DecimalFormat} to use to parse and format numbers
      * for display.
      * <p>
-     * This is useful if the default format does not fit all requirements.
+     * This is useful if the default format does not fit all requirements. This
+     * may be the case if currencies should not be formatted with fixed spaces
+     * but with default space characters.
      *
      * @param displayFormat The custom {@code DecimalFormat} to use or {@code null}
      *          to use the default.
