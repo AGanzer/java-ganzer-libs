@@ -389,7 +389,9 @@ public class CurrencyValidator extends Validator {
             return true;
 
         var pos = new ParsePosition(0);
-        var res = displayFormat.parse(text, pos);
+        var res = hasCurrency(text)
+                ? displayFormat.parse(text, pos)
+                : editFormat.parse(text, pos);
 
         if (res == null || pos.getErrorIndex() >= 0 || pos.getIndex() < text.length()) {
             er.setException(new ValidatorException(getErrorMessage() != null
@@ -436,9 +438,10 @@ public class CurrencyValidator extends Validator {
     @Override
     protected String doFormatText(String text, TextFormat how) {
         try {
-            double value = how == TextFormat.DISPLAY
+            double value = hasCurrency(text)
                     ? displayFormat.parse(text).doubleValue()
                     : editFormat.parse(text).doubleValue();
+
             return how == TextFormat.DISPLAY
                     ? displayFormat.format(value)
                     : editFormat.format(value);
@@ -447,17 +450,23 @@ public class CurrencyValidator extends Validator {
         }
     }
 
+    private boolean hasCurrency(String text) {
+        var symbol = displayFormat.getDecimalFormatSymbols().getCurrencySymbol();
+        return text.contains(symbol);
+    }
+
     private DecimalFormat getEditFormat() {
-        return getFormat(locale != null ? locale : Locale.getDefault(), "");
+        return getFormat(locale != null ? locale : Locale.getDefault(), "", true);
     }
 
     private DecimalFormat getDisplayFormat() {
         return getFormat(
                 locale != null ? locale : Locale.getDefault(),
-                hideCurrencySymbol ? "" : currencySymbol);
+                hideCurrencySymbol ? "" : currencySymbol,
+                false);
     }
 
-    private static DecimalFormat getFormat(Locale locale, String currencySymbol) {
+    private static DecimalFormat getFormat(Locale locale, String currencySymbol, boolean removeSeparators) {
         var f = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
         var s = f.getDecimalFormatSymbols();
 
@@ -467,7 +476,12 @@ public class CurrencyValidator extends Validator {
             s.setCurrencySymbol(currencySymbol);
             f.setDecimalFormatSymbols(s);
         } else if (currencySymbol != null && currencySymbol.isEmpty()) {
-            f.applyPattern(removeCurrency(f.toPattern()));
+            String pattern = removeCurrency(f.toPattern());
+
+            if (removeSeparators)
+                pattern = pattern.replace(String.valueOf(s.getMonetaryGroupingSeparator()), "");
+
+            f.applyPattern(pattern);
 
             // It seems that the monetary separators are not used after the
             // currency symbol is removed, so we overwrite the defaults:

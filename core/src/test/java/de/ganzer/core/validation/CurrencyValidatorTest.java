@@ -1,6 +1,8 @@
 package de.ganzer.core.validation;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.Locale;
 
@@ -186,5 +188,51 @@ class CurrencyValidatorTest {
         Locale locale = Locale.GERMAN;
         val.setLocale(locale);
         assertEquals(locale, val.getLocale());
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0,4;true",
+            "1000,04;true",
+            "0.;false",
+            "10€;false"})
+    void doInputValidation(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator();
+        val.setLocale(Locale.GERMAN);
+
+        assertEquals(res, val.isValidInput(new StringBuilder(input), false));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0,4;true",
+            "1000,04;true",
+            "-1000,04;false",
+            "0.;false",
+            "10€;false",
+            "0,40 €;true",
+            "1.000,04 €;true",
+            "-1.000,04 €;false"})
+    void doValidate(String input, String result) {
+        var res = Boolean.parseBoolean(result);
+        var val = new CurrencyValidator(0, 1000);
+        val.setLocale(Locale.GERMAN);
+
+        assertEquals(res, val.validate(input, new ValidatorExceptionRef()));
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = ';', value = {
+            "0,4;0,40 €;true",
+            "1000,04;1.000,04 €;true",
+            "-1.000,40 €;-1000,40;false",
+            "10,00 €;10,00;false"})
+    void doFormatText(String input, String result, String display) {
+        var format = Boolean.parseBoolean(display) ? TextFormat.DISPLAY : TextFormat.EDIT;
+        var val = new CurrencyValidator(0, 1000);
+        val.setLocale(Locale.GERMAN);
+
+        assertEquals(result, val.formatText(input, format));
     }
 }
