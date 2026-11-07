@@ -23,7 +23,7 @@ public class ValidatorExceptionRef {
      * Gets the encapsulated exception.
      *
      * @return The exception that describes the invalid input or {@code null}
-     * if the input was valid.
+     *         if the input was valid.
      */
     public ValidatorException getException() {
         return exception;
@@ -33,7 +33,7 @@ public class ValidatorExceptionRef {
      * Sets the exception.
      *
      * @param exception The exception to set. This should only be used within
-     *                  a validator.
+     *         a validator.
      */
     public void setException(ValidatorException exception) {
         this.exception = exception;

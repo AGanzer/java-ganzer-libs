@@ -61,7 +61,7 @@ public final class PxPicConverter {
      * @return Paradox picture
      *
      * @throws NullPointerException if {@code pattern} or {@code locale} is
-     *          {@code null}.
+     *         {@code null}.
      */
     public static String toPicture(String pattern, Locale locale) {
         Objects.requireNonNull(pattern, "pattern must not be null.");
@@ -124,9 +124,9 @@ public final class PxPicConverter {
      * @return Paradox picture
      *
      * @throws NullPointerException if {@code style} or {@code locale} is
-     *          {@code null}.
+     *         {@code null}.
      * @throws IllegalArgumentException if {@code style} is not
-     *          {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
+     *         {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
      */
     public static String toDatePicture(FormatStyle style, Locale locale) {
         Objects.requireNonNull(style, "style must not be null");
@@ -153,7 +153,7 @@ public final class PxPicConverter {
      *
      * @throws NullPointerException if {@code style} is {@code null}.
      * @throws IllegalArgumentException if {@code style} is not
-     *          {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
+     *         {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
      */
     public static String toDatePicture(FormatStyle style) {
         return toDatePicture(style, Locale.getDefault());
@@ -168,9 +168,9 @@ public final class PxPicConverter {
      * @return Paradox picture
      *
      * @throws NullPointerException if {@code style} or {@code locale} is
-     *          {@code null}.
+     *         {@code null}.
      * @throws IllegalArgumentException if {@code style} is not
-     *          {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
+     *         {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
      */
     public static String toTimePicture(FormatStyle style, Locale locale) {
         Objects.requireNonNull(style, "style must not be null");
@@ -197,7 +197,7 @@ public final class PxPicConverter {
      *
      * @throws NullPointerException if {@code style} is {@code null}.
      * @throws IllegalArgumentException if {@code style} is not
-     *          {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
+     *         {@link FormatStyle#SHORT} or {@link FormatStyle#MEDIUM}
      */
     public static String toTimePicture(FormatStyle style) {
         return toTimePicture(style, Locale.getDefault());
@@ -339,7 +339,7 @@ public final class PxPicConverter {
                                                            + field
                                                            + "' to a Paradox picture");
 
-            // Numeric nano/second fields:
+                // Numeric nano/second fields:
             case 'A':
             case 'n':
             case 'N':

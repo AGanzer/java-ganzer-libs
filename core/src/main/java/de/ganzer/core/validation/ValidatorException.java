@@ -15,10 +15,9 @@ public class ValidatorException extends RuntimeException {
      *
      * @param message The message to set.
      * @param sourceClass The class of the validator that has detected an invalid
-     *        input.
+     *         input.
      * @param source The validator instance that has detected an invalid
-     *        input.
-     *
+     *         input.
      * @param <V> Should extend {@link Validator}.
      *
      * @since 5.4.0

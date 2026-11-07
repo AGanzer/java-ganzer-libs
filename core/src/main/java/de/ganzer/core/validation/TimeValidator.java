@@ -15,14 +15,16 @@ import java.util.Locale;
  *
  * @since 6.0.0
  */
-public class TimeValidator extends PxPicValidator{
+public class TimeValidator extends PxPicValidator {
     /**
      * The default error message for input that is not in the allowed range.
+     *
      * @see #setRangeErrorMessage(String)
      */
     public final static String DEFAULT_RANGE_ERROR_MESSAGE = CoreMessages.get("inputOutOfRange");
     /**
      * The default error message for input that is not a number.
+     *
      * @see #setTimeErrorMessage(String)
      */
     public final static String DEFAULT_TIME_ERROR_MESSAGE = CoreMessages.get("inputIsNotDaytime");
@@ -53,7 +55,7 @@ public class TimeValidator extends PxPicValidator{
      * the greatest allowed value to {@code LocalTime#MAX}.
      *
      * @param options The options to set. This may be any combination of the
-     *                {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      */
     public TimeValidator(int options) {
         super(options);
@@ -66,9 +68,9 @@ public class TimeValidator extends PxPicValidator{
      * {@code ValidatorOptions#NEEDS_INPUT | ValidatorOptions#AUTO_FILL}.
      *
      * @param minTime The minimum allowed date. If this is {@code null},
-     *        {@link LocalTime#MIN} is used.
+     *         {@link LocalTime#MIN} is used.
      * @param maxTime The maximum allowed date. If this is {@code null},
-     *        {@link LocalTime#MAX} is used.
+     *         {@link LocalTime#MAX} is used.
      *
      * @throws IllegalArgumentException If {@code minDate} is greater than
      *         {@code maxDate}.
@@ -81,12 +83,11 @@ public class TimeValidator extends PxPicValidator{
      * Creates a new date validator.
      *
      * @param minTime The minimum allowed date. If this is {@code null},
-     *        {@link LocalTime#MIN} is used.
+     *         {@link LocalTime#MIN} is used.
      * @param maxTime The maximum allowed date. If this is {@code null},
-     *        {@link LocalTime#MAX} is used.
-     *
+     *         {@link LocalTime#MAX} is used.
      * @param options The options to set. This may be any combination of the
-     *                {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      *
      * @throws IllegalArgumentException If {@code minDate} is greater than
      *         {@code maxDate}.
@@ -117,9 +118,9 @@ public class TimeValidator extends PxPicValidator{
      * Sets the minimum allowed date.
      *
      * @param minTime The minimum allowed date. If this is {@code null},
-     *        {@link LocalTime#MIN} is used. If this is greater than
-     *        {@link #getMaxTime()}, the greatest allowed date ist set
-     *        to this value too.
+     *         {@link LocalTime#MIN} is used. If this is greater than
+     *         {@link #getMaxTime()}, the greatest allowed date ist set
+     *         to this value too.
      */
     public void setMinTime(LocalTime minTime) {
         this.minTime = minTime != null ? minTime : LocalTime.MIN;
@@ -141,9 +142,9 @@ public class TimeValidator extends PxPicValidator{
      * Sets the maximum allowed date.
      *
      * @param maxTime The maximum allowed date. If this is {@code null},
-     *        {@link LocalTime#MAX} is used. If this is less than
-     *        {@link #getMinTime()}, the minimum allowed date ist set
-     *        to this value too.
+     *         {@link LocalTime#MAX} is used. If this is less than
+     *         {@link #getMinTime()}, the minimum allowed date ist set
+     *         to this value too.
      */
     public void setMaxTime(LocalTime maxTime) {
         this.maxTime = maxTime != null ? maxTime : LocalTime.MAX;
@@ -156,9 +157,9 @@ public class TimeValidator extends PxPicValidator{
      * Sets the allowed range.
      *
      * @param minDate The minimum allowed date. If this is {@code null},
-     *        {@link LocalTime#MIN} is used.
+     *         {@link LocalTime#MIN} is used.
      * @param maxDate The maximum allowed date. If this is {@code null},
-     *        {@link LocalTime#MAX} is used.
+     *         {@link LocalTime#MAX} is used.
      *
      * @throws IllegalArgumentException If {@code minDate} is greater than
      *         {@code maxDate}.
@@ -211,8 +212,8 @@ public class TimeValidator extends PxPicValidator{
      * Sets the format string used to formatting dates.
      *
      * @param patternString The format string used to formatting dates or
-     *        {@code null} to use the default format of the locale gotten by
-     *        {@link getLocale()}.
+     *         {@code null} to use the default format of the locale gotten by
+     *         {@link getLocale()}.
      */
     public void setPatternString(String patternString) {
         this.patternString = patternString;
@@ -235,7 +236,7 @@ public class TimeValidator extends PxPicValidator{
      * Sets the locale to use to format dates.
      *
      * @param locale The locale to use to format dates or {@code null} to use
-     *               the default locale.
+     *         the default locale.
      *
      * @see Locale#getDefault()
      */
@@ -262,8 +263,8 @@ public class TimeValidator extends PxPicValidator{
      * maximum allowed number).
      *
      * @param rangeErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_RANGE_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_RANGE_ERROR_MESSAGE} is used.
      */
     public void setRangeErrorMessage(String rangeErrorMessage) {
         this.rangeErrorMessage = Strings.isNullOrBlank(rangeErrorMessage)
@@ -285,8 +286,8 @@ public class TimeValidator extends PxPicValidator{
      * Sets the message shown if the input is not a valid date.
      *
      * @param numberErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_TIME_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_TIME_ERROR_MESSAGE} is used.
      */
     public void setTimeErrorMessage(String numberErrorMessage) {
         this.timeErrorMessage = Strings.isNullOrBlank(numberErrorMessage)
@@ -302,10 +303,10 @@ public class TimeValidator extends PxPicValidator{
      * to {@link #getMaxTime()}.
      *
      * @param text The text to validate. This is never {@code null}.
-     * @param er   A reference to a possible exception. If this method returns
-     *             {@code false}, the encapsulated exception is set to an
-     *             instance of {@link ValidatorException}. This must not be
-     *             {@code null}.
+     * @param er A reference to a possible exception. If this method returns
+     *         {@code false}, the encapsulated exception is set to an
+     *         instance of {@link ValidatorException}. This must not be
+     *         {@code null}.
      *
      * @return {@code true} if text is valid; otherwise, {@code false} is
      *         returned.
@@ -337,12 +338,12 @@ public class TimeValidator extends PxPicValidator{
 
         if (value.isBefore(minTime) || value.isAfter(maxTime)) {
             er.setException(new ValidatorException(getErrorMessage() != null
-                                                       ? getErrorMessage()
-                                                       : String.format(loc, getRangeErrorMessage(),
-                                                                       formatter.format(minTime),
-                                                                       formatter.format(maxTime)),
-                                               TimeValidator.class,
-                                               this));
+                                                           ? getErrorMessage()
+                                                           : String.format(loc, getRangeErrorMessage(),
+                                                                           formatter.format(minTime),
+                                                                           formatter.format(maxTime)),
+                                                   TimeValidator.class,
+                                                   this));
             return false;
         }
 

@@ -16,18 +16,21 @@ import java.util.Locale;
 public class NumberValidator extends Validator {
     /**
      * The default error message for input that is not in the allowed range.
+     *
      * @see #setRangeErrorMessage(String)
      * @since 5.4.0
      */
     public final static String DEFAULT_RANGE_ERROR_MESSAGE = CoreMessages.get("inputOutOfRange");
     /**
      * The default error message for input that is not a number.
+     *
      * @see #setNumberErrorMessage(String)
      * @since 5.4.0
      */
     public final static String DEFAULT_NUMBER_ERROR_MESSAGE = CoreMessages.get("inputIsNotNumber");
     /**
      * The default error message for input that is not an integer.
+     *
      * @see #setIntegerErrorMessage(String)
      * @since 5.4.0
      */
@@ -62,7 +65,7 @@ public class NumberValidator extends Validator {
      * Input of {@link #getNumDecimals post decimal digits} is forbidden.
      *
      * @param options The options to set. This may be any combination of the
-     *                {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      */
     public NumberValidator(int options) {
         super(options);
@@ -88,8 +91,8 @@ public class NumberValidator extends Validator {
      * <p>
      * Input of {@link #getNumDecimals post decimal digits} is forbidden.
      *
-     * @param options  The options to set. This may be any combination of the
-     *                 {@link ValidatorOptions} constants.
+     * @param options The options to set. This may be any combination of the
+     *         {@link ValidatorOptions} constants.
      * @param minValue The smallest allowed value.
      * @param maxValue The greatest allowed value.
      *
@@ -120,8 +123,8 @@ public class NumberValidator extends Validator {
      * <p>
      * Input of {@link #getNumDecimals post decimal digits} is forbidden.
      *
-     * @param options  The options to set. This may be any combination of the
-     *                 {@link ValidatorOptions} constants.
+     * @param options The options to set. This may be any combination of the
+     *         {@link ValidatorOptions} constants.
      * @param minValue The smallest allowed value.
      * @param maxValue The greatest allowed value.
      * @param numDecimals The number of post-decimal digits to allow.
@@ -159,8 +162,8 @@ public class NumberValidator extends Validator {
      * maximum allowed number).
      *
      * @param rangeErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_RANGE_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_RANGE_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -186,8 +189,8 @@ public class NumberValidator extends Validator {
      * Sets the message shown if the input is not a number.
      *
      * @param numberErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_NUMBER_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_NUMBER_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -213,8 +216,8 @@ public class NumberValidator extends Validator {
      * Sets the message that is shown if the input is not an integer.
      *
      * @param integerErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_INTEGER_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_INTEGER_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -237,8 +240,8 @@ public class NumberValidator extends Validator {
      * Sets the smallest allowed value.
      *
      * @param minValue The smallest allowed value to set. If this is greater
-     *                 than {@link #getMaxValue()}, the greatest allowed value
-     *                 ist set to minValue.
+     *         than {@link #getMaxValue()}, the greatest allowed value
+     *         ist set to minValue.
      */
     public void setMinValue(double minValue) {
         this.minValue = minValue;
@@ -260,8 +263,8 @@ public class NumberValidator extends Validator {
      * Sets the greatest allowed value.
      *
      * @param maxValue The greatest allowed value to set. If this is less
-     *                 than {@link #getMinValue()}, the smallest allowed
-     *                 value ist set to maxValue.
+     *         than {@link #getMinValue()}, the smallest allowed
+     *         value ist set to maxValue.
      */
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
@@ -343,7 +346,7 @@ public class NumberValidator extends Validator {
      * Gets the format that is used for formatting the text in display mode.
      *
      * @return The format that is used for formatting the text in display mode
-     * or {@code null} to use default formatting.
+     *         or {@code null} to use default formatting.
      *
      * @see #doFormatText(String, TextFormat)
      */
@@ -355,8 +358,8 @@ public class NumberValidator extends Validator {
      * Sets the format to use for formatting the text in display mode.
      *
      * @param displayFormat The format to use or {@code null} to use default
-     *                      formatting. If this is an empty String, {@code null}
-     *                      is set.
+     *         formatting. If this is an empty String, {@code null}
+     *         is set.
      *
      * @see #doFormatText(String, TextFormat)
      */
@@ -371,7 +374,7 @@ public class NumberValidator extends Validator {
      * Gets the format that is used for formatting the text in edit mode.
      *
      * @return The format that is used for formatting the text in edit mode
-     * or {@code null} to use default formatting.
+     *         or {@code null} to use default formatting.
      *
      * @see #doFormatText(String, TextFormat)
      */
@@ -383,8 +386,8 @@ public class NumberValidator extends Validator {
      * Sets the format to use for formatting the text in edit mode.
      *
      * @param editFormat The format to use or {@code null} to use default
-     *                   formatting. If this is an empty String, {@code null}
-     *                   is set.
+     *         formatting. If this is an empty String, {@code null}
+     *         is set.
      *
      * @see #doFormatText(String, TextFormat)
      */
@@ -413,7 +416,7 @@ public class NumberValidator extends Validator {
      * Sets the locale to use to format numbers.
      *
      * @param locale The locale to use to format numbers or {@code null} to use
-     *               the default locale.
+     *         the default locale.
      *
      * @see Locale#getDefault()
      *
@@ -428,11 +431,12 @@ public class NumberValidator extends Validator {
      * whether the input is a valid number in the range from {@link #getMinValue()}
      * to {@link #getMaxValue()}.
      *
-     * @param text     The text to validate. This is never {@code null}. The text
-     *                 must not be modified if autoFill is {@code false}.
+     * @param text The text to validate. This is never {@code null}. The text
+     *         must not be modified if autoFill is {@code false}.
      * @param autoFill Indicates whether the text is allowed to be modified.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *         returned.
      */
     @Override
     protected boolean doInputValidation(StringBuilder text, boolean autoFill) {
@@ -466,10 +470,10 @@ public class NumberValidator extends Validator {
      * to {@link #getMaxValue()}.
      *
      * @param text The text to validate. This is never {@code null}.
-     * @param er   A reference to a possible exception. If this method returns
-     *             {@code false}, the encapsulated exception is set to an
-     *             instance of {@link ValidatorException}. This must not be
-     *             {@code null}.
+     * @param er A reference to a possible exception. If this method returns
+     *         {@code false}, the encapsulated exception is set to an
+     *         instance of {@link ValidatorException}. This must not be
+     *         {@code null}.
      *
      * @return {@code true} if text is valid; otherwise, {@code false} is
      *         returned.
@@ -532,11 +536,12 @@ public class NumberValidator extends Validator {
      * Called to reformat the specified text.
      *
      * @param text The text to reformat. This is never {@code null}
-     * @param how  How to format the text. Must be one of the {@link TextFormat}
-     *             values. If this is {@link TextFormat#DISPLAY}, the text is
-     *             formatted to be displayed in a fine format. If this is
-     *             {@link TextFormat#EDIT}, the text is formatted to be an easy
-     *             editable text.
+     * @param how How to format the text. Must be one of the {@link TextFormat}
+     *         values. If this is {@link TextFormat#DISPLAY}, the text is
+     *         formatted to be displayed in a fine format. If this is
+     *         {@link TextFormat#EDIT}, the text is formatted to be an easy
+     *         editable text.
+     *
      * @return The formatted string or input if the text cannot be formatted.
      */
     @Override
@@ -545,7 +550,7 @@ public class NumberValidator extends Validator {
             Locale loc = locale != null ? locale : Locale.getDefault();
             double value = NumberFormat.getInstance(loc).parse(text).doubleValue();
             String eFormat = editFormat == null
-                    ? numDecimals > 0 && value != (int)value ? String.format("%%.%df", numDecimals) : "%.0f"
+                    ? numDecimals > 0 && value != (int) value ? String.format("%%.%df", numDecimals) : "%.0f"
                     : editFormat;
             String dFormat = displayFormat == null
                     ? numDecimals > 0 ? String.format("%%,.%df", numDecimals) : "%,.0f"

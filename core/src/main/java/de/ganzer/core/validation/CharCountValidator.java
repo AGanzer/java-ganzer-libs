@@ -10,19 +10,21 @@ import de.ganzer.core.util.Strings;
 public class CharCountValidator extends Validator {
     /**
      * The default error message for input that is below the minimum length.
+     *
      * @see #setBelowMinErrorMessage(String)
      * @since 5.4.0
      */
     public final static String DEFAULT_BELOW_MIN_ERROR_MESSAGE = CoreMessages.get("inputBelowMinLength");
     /**
      * The default error message for input that is above the maximum length.
+     *
      * @see #setAboveMaxErrorMessage(String)
      * @since 5.4.0
      */
     public final static String DEFAULT_ABOVE_MAX_ERROR_MESSAGE = CoreMessages.get("inputExceedsMaxLength");
 
-    private String belowMinErrorMessage =  DEFAULT_BELOW_MIN_ERROR_MESSAGE;
-    private String aboveMaxErrorMessage =  DEFAULT_ABOVE_MAX_ERROR_MESSAGE;
+    private String belowMinErrorMessage = DEFAULT_BELOW_MIN_ERROR_MESSAGE;
+    private String aboveMaxErrorMessage = DEFAULT_ABOVE_MAX_ERROR_MESSAGE;
     private int maxLength;
     private int minLength;
 
@@ -38,12 +40,11 @@ public class CharCountValidator extends Validator {
      * Creates a new instance of the validator where no length is checked.
      *
      * @param options The options to set. This may be any combination of the
-     *                {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      */
     public CharCountValidator(int options) {
         super(options);
     }
-
 
     /**
      * Creates a new instance of the validator.
@@ -64,7 +65,7 @@ public class CharCountValidator extends Validator {
      * Creates a new instance of the validator.
      *
      * @param options The options to set. This may be any combination of the
-     *                {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      * @param minLength The minimum allowed length of the input.
      * @param maxLength The maximum allowed length of the input.
      *
@@ -75,7 +76,6 @@ public class CharCountValidator extends Validator {
         this.minLength = minLength;
         this.maxLength = maxLength;
     }
-
 
     /**
      * Gets the message that is shown if the input is below the minimum required
@@ -100,8 +100,8 @@ public class CharCountValidator extends Validator {
      * should be invoked after {@code setBelowMinErrorMessage()}.
      *
      * @param belowMinErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_BELOW_MIN_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_BELOW_MIN_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -131,8 +131,8 @@ public class CharCountValidator extends Validator {
      * length.
      *
      * @param aboveMaxErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_ABOVE_MAX_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_ABOVE_MAX_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -161,6 +161,7 @@ public class CharCountValidator extends Validator {
      * the minimum length is set to maxLength.
      *
      * @param maxLength The maximum length to set.
+     *
      * @throws IllegalArgumentException If maxLength is less than 0.
      */
     public void setMaxLength(int maxLength) {
@@ -198,6 +199,7 @@ public class CharCountValidator extends Validator {
      * greater than 0, {link #getMaxLength} length is set to minLength.
      *
      * @param minLength The minimum length to set.
+     *
      * @throws IllegalArgumentException If minLength is less than 0.
      */
     public void setMinLength(int minLength) {
@@ -215,11 +217,12 @@ public class CharCountValidator extends Validator {
      * and checks whether the text length is less than or equal to
      * {@link #getMaxLength()} if it is greater than 0.
      *
-     * @param text     The text to validate. This is never {@code null}. The
-     *                 text must not be modified if autoFill is {@code false}.
+     * @param text The text to validate. This is never {@code null}. The
+     *         text must not be modified if autoFill is {@code false}.
      * @param autoFill Indicates whether the text is allowed to be modified.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *         returned.
      */
     protected boolean doInputValidation(StringBuilder text, boolean autoFill) {
         if (!super.doInputValidation(text, autoFill))
@@ -233,14 +236,15 @@ public class CharCountValidator extends Validator {
      * checks whether the text length is in the range that is specified by
      * {@link #getMinLength()} and {@link #getMaxLength()}.
      *
-     * @param text   The text to validate. This is never {@code null}. The text
-     *               must not be modified if autoFill is {@code false}.
-     * @param er     A reference to a possible exception. If this method returns
-     *               {@code false}, the encapsulated exception is set to an
-     *               instance of {@link ValidatorException}. This must not be
-     *               {@code null}.
+     * @param text The text to validate. This is never {@code null}. The text
+     *         must not be modified if autoFill is {@code false}.
+     * @param er A reference to a possible exception. If this method returns
+     *         {@code false}, the encapsulated exception is set to an
+     *         instance of {@link ValidatorException}. This must not be
+     *         {@code null}.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *         returned.
      */
     protected boolean doValidate(String text, ValidatorExceptionRef er) {
         if (!super.doValidate(text, er))
@@ -263,7 +267,7 @@ public class CharCountValidator extends Validator {
                                                                  minLength),
                                                    CharCountValidator.class,
                                                    this));
-            }
+        }
 
         return er.getException() == null;
     }

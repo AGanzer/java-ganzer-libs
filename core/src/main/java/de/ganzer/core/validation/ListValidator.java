@@ -12,6 +12,7 @@ public class ListValidator extends Validator {
     /**
      * The default error message for input that is not found in the list of
      * allowed messages.
+     *
      * @see #setNotInListErrorMessage(String)
      * @since 5.4.0
      */
@@ -45,7 +46,7 @@ public class ListValidator extends Validator {
      * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
      * @param validInputs The list with the valid inputs or {@code null} or an
-     *        empty list to make all inputs valid.
+     *         empty list to make all inputs valid.
      */
     public ListValidator(List<String> validInputs) {
         this.validInputs = validInputs;
@@ -57,7 +58,7 @@ public class ListValidator extends Validator {
      * @param options The options to set. This may be any combination of the
      *         {@link ValidatorOptions} constants.
      * @param validInputs The list with the valid inputs or {@code null} or an
-     *        empty list to make all inputs valid.
+     *         empty list to make all inputs valid.
      */
     public ListValidator(int options, List<String> validInputs) {
         super(options);
@@ -70,7 +71,7 @@ public class ListValidator extends Validator {
      * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
      * @param validInputs The list with the valid inputs or {@code null} or an
-     *        empty list to make all inputs valid.
+     *         empty list to make all inputs valid.
      * @param ignoreCase {@code true} to ignore case sensitivity.
      */
     public ListValidator(List<String> validInputs, boolean ignoreCase) {
@@ -84,7 +85,7 @@ public class ListValidator extends Validator {
      * @param options The options to set. This may be any combination of the
      *         {@link ValidatorOptions} constants.
      * @param validInputs The list with the valid inputs or {@code null} or an
-     *        empty list to make all inputs valid.
+     *         empty list to make all inputs valid.
      * @param ignoreCase {@code true} to ignore case sensitivity.
      */
     public ListValidator(int options, List<String> validInputs, boolean ignoreCase) {
@@ -111,8 +112,8 @@ public class ListValidator extends Validator {
      * allowed messages.
      *
      * @param notInListErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_NOT_IN_LIST_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_NOT_IN_LIST_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -135,7 +136,7 @@ public class ListValidator extends Validator {
      * Sets the list of valid inputs.
      *
      * @param validInputs The list with the valid inputs or {@code null} or an
-     *        empty list to make all inputs valid.
+     *         empty list to make all inputs valid.
      */
     public void setValidInputs(List<String> validInputs) {
         this.validInputs = validInputs;

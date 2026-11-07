@@ -14,12 +14,14 @@ import java.util.Objects;
 public class Validator {
     /**
      * The default error message for required input.
+     *
      * @see #setRequiredErrorMessage(String)
      * @since 5.4.0
      */
     public final static String DEFAULT_REQUIRED_ERROR_MESSAGE = CoreMessages.get("inputRequired");
     /**
      * The default error message for blank input.
+     *
      * @see #setBlanksErrorMessage(String)
      * @since 5.4.0
      */
@@ -44,7 +46,7 @@ public class Validator {
      * Creates a new instance of the validator.
      *
      * @param options The options to set. This may be any combination of the
-     *                {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      */
     public Validator(int options) {
         this.options = options;
@@ -54,7 +56,7 @@ public class Validator {
      * Gets the options that are used by the validator.
      *
      * @return The used options. This may be any combination of the
-     * {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      */
     public int getOptions() {
         return options;
@@ -64,7 +66,7 @@ public class Validator {
      * Sets the options to use.
      *
      * @param validatorOptions The options to use. This may be any combination
-     *                         of the {@link ValidatorOptions} constants.
+     *         of the {@link ValidatorOptions} constants.
      */
     public void setOptions(int validatorOptions) {
         this.options = validatorOptions;
@@ -86,8 +88,8 @@ public class Validator {
      * Sets the message that is shown if the input is empty, but it is required.
      *
      * @param requiredErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_REQUIRED_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_REQUIRED_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -115,8 +117,8 @@ public class Validator {
      * this is not allowed.
      *
      * @param blanksErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_BLANKS_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_BLANKS_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -191,8 +193,8 @@ public class Validator {
      * @param validatorOption The option to query.
      *
      * @return {@code true} if the specified option is set. If validatorOption
-     * is a combination of multiply options, {@code true} is returned if at
-     * least one of the queried options is set.
+     *         is a combination of multiply options, {@code true} is returned if at
+     *         least one of the queried options is set.
      */
     public boolean hasOption(int validatorOption) {
         return (options & validatorOption) != 0;
@@ -206,13 +208,13 @@ public class Validator {
      * must be validated. If {@code isValidInput} returns {@code false},
      * the input character should be cockled.
      *
-     * @param text     The text to validate. This must not be {@code null}.
+     * @param text The text to validate. This must not be {@code null}.
      * @param autoFill If the {@link #getOptions() options} contain
-     *                 {@link ValidatorOptions#AUTO_FILL} and autoFill is
-     *                 {@code true}, text is filled with special
-     *                 characters if necessary. If this is {@code false},
-     *                 the text is not automatically filled, even if the option
-     *                 {@link ValidatorOptions#AUTO_FILL} is set.
+     *         {@link ValidatorOptions#AUTO_FILL} and autoFill is
+     *         {@code true}, text is filled with special
+     *         characters if necessary. If this is {@code false},
+     *         the text is not automatically filled, even if the option
+     *         {@link ValidatorOptions#AUTO_FILL} is set.
      *
      * @return The result of {@link #doInputValidation}.
      *
@@ -228,7 +230,7 @@ public class Validator {
      * <p>
      * This calls {@link #validate(String, ValidatorExceptionRef)}.
      *
-     * @param input  The text to validate. This must not be {@code null}.
+     * @param input The text to validate. This must not be {@code null}.
      *
      * @throws ValidatorException input is invalid.
      */
@@ -244,17 +246,16 @@ public class Validator {
      * <p>
      * This calls {@link #doValidate}.
      *
-     * @param input  The text to validate. This must not be {@code null}.
-     * @param er     A reference to a possible exception. If this method returns
-     *               {@code false}, the encapsulated exception is set to an
-     *               instance of {@link ValidatorException}. This must not be
-     *               {@code null}.
+     * @param input The text to validate. This must not be {@code null}.
+     * @param er A reference to a possible exception. If this method returns
+     *         {@code false}, the encapsulated exception is set to an
+     *         instance of {@link ValidatorException}. This must not be
+     *         {@code null}.
      *
      * @return {@code true} if input is valid; otherwise, {@code false}
-     * is returned.
+     *         is returned.
      *
      * @throws NullPointerException {@code input} or {@code er} is {@code null}.
-     *
      * @see ValidatorExceptionRef for an example.
      */
     public final boolean validate(String input, ValidatorExceptionRef er) {
@@ -270,12 +271,12 @@ public class Validator {
      * This function is useful if the displayed text is of a format that is
      * painful to edit.
      *
-     * @param input  The text to reformat. This must not be {@code null}.
-     * @param how    How to format the text. Must be one of the {@link TextFormat}
-     *               values. If this is {@link TextFormat#DISPLAY}, the text is
-     *               formatted to be displayed in a fine format. If this is
-     *               {@link TextFormat#EDIT}, the text is formatted to be an easy
-     *               editable text.
+     * @param input The text to reformat. This must not be {@code null}.
+     * @param how How to format the text. Must be one of the {@link TextFormat}
+     *         values. If this is {@link TextFormat#DISPLAY}, the text is
+     *         formatted to be displayed in a fine format. If this is
+     *         {@link TextFormat#EDIT}, the text is formatted to be an easy
+     *         editable text.
      *
      * @return The result of {@link #doFormatText}
      *
@@ -290,12 +291,12 @@ public class Validator {
      * This implementation does nothing and returns always {@code true}.
      * Inheritors should overwrite this to do a more complex validation.
      *
-     * @param text     The text to validate. This is never {@code null}. The text
-     *                 must not be modified if autoFill is {@code false}.
+     * @param text The text to validate. This is never {@code null}. The text
+     *         must not be modified if autoFill is {@code false}.
      * @param autoFill Indicates whether the text is allowed to be modified.
      *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *         returned.
      */
     protected boolean doInputValidation(StringBuilder text, boolean autoFill) {
         return true;
@@ -311,14 +312,14 @@ public class Validator {
      * Inheritors should overwrite this to do a more complex validation.
      *
      * @param text The text to validate. This is never {@code null}. The text
-     *             must not be modified if autoFill is {@code false}.
-     * @param er   A reference to a possible exception. If this method returns
-     *             {@code false}, the encapsulated exception is set to an
-     *             instance of {@link ValidatorException}. This must not be
-     *             {@code null}.
+     *         must not be modified if autoFill is {@code false}.
+     * @param er A reference to a possible exception. If this method returns
+     *         {@code false}, the encapsulated exception is set to an
+     *         instance of {@link ValidatorException}. This must not be
+     *         {@code null}.
      *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *         returned.
      */
     protected boolean doValidate(String text, ValidatorExceptionRef er) {
         er.setException(null);
@@ -346,14 +347,14 @@ public class Validator {
      * this to reformat the text.
      *
      * @param text The text to reformat. This is never {@code null}
-     * @param how  How to format the text. Must be one of the {@link TextFormat}
-     *             values. If this is {@link TextFormat#DISPLAY}, the text is
-     *             formatted to be displayed in a fine format. If this is
-     *             {@link TextFormat#EDIT}, the text is formatted to be an easy
-     *             editable text.
+     * @param how How to format the text. Must be one of the {@link TextFormat}
+     *         values. If this is {@link TextFormat#DISPLAY}, the text is
+     *         formatted to be displayed in a fine format. If this is
+     *         {@link TextFormat#EDIT}, the text is formatted to be an easy
+     *         editable text.
      *
      * @return This implementation does return text. Inheritors may return a modified
-     * text. However, the modified text should still be valid.
+     *         text. However, the modified text should still be valid.
      */
     protected String doFormatText(String text, TextFormat how) {
         return text;

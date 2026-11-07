@@ -33,6 +33,7 @@ import de.ganzer.core.util.Strings;
 public class FilterValidator extends CharCountValidator {
     /**
      * The default error message for input that contains invalid characters.
+     *
      * @see #setFilterErrorMessage(String)
      * @since 5.4.0
      */
@@ -56,7 +57,7 @@ public class FilterValidator extends CharCountValidator {
      * Creates a new instance of the validator where all characters are valid.
      *
      * @param options The options to set. This may be any combination of the
-     *                {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      */
     public FilterValidator(int options) {
         super(options);
@@ -68,9 +69,9 @@ public class FilterValidator extends CharCountValidator {
      * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
      * @param validMask The mask that specifies the valid characters. If this
-     *                  is empty, all characters are valid. See {@link FilterValidator}
-     *                  for an explanation of masks. If this is {@code null},
-     *                  an empty string is set.
+     *         is empty, all characters are valid. See {@link FilterValidator}
+     *         for an explanation of masks. If this is {@code null},
+     *         an empty string is set.
      */
     public FilterValidator(String validMask) {
         this.validMask = validMask == null ? "" : validMask;
@@ -80,12 +81,12 @@ public class FilterValidator extends CharCountValidator {
     /**
      * Creates a new instance of the validator where all characters are valid.
      *
-     * @param options   The options to set. This may be any combination of the
-     *                  {@link ValidatorOptions} constants.
+     * @param options The options to set. This may be any combination of the
+     *         {@link ValidatorOptions} constants.
      * @param validMask The mask that specifies the valid characters. If this
-     *                  is empty, all characters are valid. See {@link FilterValidator}
-     *                  for an explanation of masks. If this is {@code null},
-     *                  an empty string is set.
+     *         is empty, all characters are valid. See {@link FilterValidator}
+     *         for an explanation of masks. If this is {@code null},
+     *         an empty string is set.
      */
     public FilterValidator(int options, String validMask) {
         super(options);
@@ -99,14 +100,14 @@ public class FilterValidator extends CharCountValidator {
      * <p>
      * This sets the options to {@link ValidatorOptions#NEEDS_INPUT}.
      *
-     * @param validMask   The mask that specifies the valid characters. If this
-     *                    is empty, all characters are valid. See {@link FilterValidator}
-     *                    for an explanation of masks. If this is {@code null},
-     *                    an empty string is set.
+     * @param validMask The mask that specifies the valid characters. If this
+     *         is empty, all characters are valid. See {@link FilterValidator}
+     *         for an explanation of masks. If this is {@code null},
+     *         an empty string is set.
      * @param invalidMask The mask that specifies the invalid characters. If this
-     *                    is empty, all characters are valid. See {@link FilterValidator}
-     *                    for an explanation of masks. If this is {@code null},
-     *                    an empty string is set.
+     *         is empty, all characters are valid. See {@link FilterValidator}
+     *         for an explanation of masks. If this is {@code null},
+     *         an empty string is set.
      */
     public FilterValidator(String validMask, String invalidMask) {
         this.validMask = validMask == null ? "" : validMask;
@@ -119,16 +120,16 @@ public class FilterValidator extends CharCountValidator {
     /**
      * Creates a new instance of the validator where all characters are valid.
      *
-     * @param options     The options to set. This may be any combination of the
-     *                    {@link ValidatorOptions} constants.
-     * @param validMask   The mask that specifies the valid characters. If this
-     *                    is empty, all characters are valid. See {@link FilterValidator}
-     *                    for an explanation of masks. If this is {@code null},
-     *                    an empty string is set.
+     * @param options The options to set. This may be any combination of the
+     *         {@link ValidatorOptions} constants.
+     * @param validMask The mask that specifies the valid characters. If this
+     *         is empty, all characters are valid. See {@link FilterValidator}
+     *         for an explanation of masks. If this is {@code null},
+     *         an empty string is set.
      * @param invalidMask The mask that specifies the invalid characters. If this
-     *                    is empty, all characters are valid. See {@link FilterValidator}
-     *                    for an explanation of masks. If this is {@code null},
-     *                    an empty string is set.
+     *         is empty, all characters are valid. See {@link FilterValidator}
+     *         for an explanation of masks. If this is {@code null},
+     *         an empty string is set.
      */
     public FilterValidator(int options, String validMask, String invalidMask) {
         super(options);
@@ -158,8 +159,8 @@ public class FilterValidator extends CharCountValidator {
      * characters.
      *
      * @param filterErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_FILTER_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_FILTER_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -186,8 +187,8 @@ public class FilterValidator extends CharCountValidator {
      * See {@link FilterValidator} for an explanation of masks.
      *
      * @param validMask The mask that specifies the characters to use.
-     *                  If this is empty, all characters are valid. If
-     *                  this is {@code null}, an empty string is set.
+     *         If this is empty, all characters are valid. If
+     *         this is {@code null}, an empty string is set.
      */
     public void setValidMask(String validMask) {
         this.validMask = validMask == null ? "" : validMask;
@@ -211,8 +212,8 @@ public class FilterValidator extends CharCountValidator {
      * See {@link FilterValidator} for an explanation of masks.
      *
      * @param invalidMask The mask that specifies the characters to use.
-     *                    If this is empty, no characters are invalid. If
-     *                    this is {@code null}, an empty string is set.
+     *         If this is empty, no characters are invalid. If
+     *         this is {@code null}, an empty string is set.
      */
     public void setInvalidMask(String invalidMask) {
         this.invalidMask = invalidMask == null ? "" : invalidMask;
@@ -223,12 +224,12 @@ public class FilterValidator extends CharCountValidator {
      * This implementation calls the {@link CharCountValidator#doInputValidation}
      * and checks whether the input does contain only valid characters.
      *
-     * @param text     The text to validate. This is never {@code null}. The text
-     *                 must not be modified if autoFill is {@code false}.
+     * @param text The text to validate. This is never {@code null}. The text
+     *         must not be modified if autoFill is {@code false}.
      * @param autoFill Indicates whether the text is allowed to be modified.
      *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     *          returned.
+     *         returned.
      */
     @Override
     protected boolean doInputValidation(StringBuilder text, boolean autoFill) {
@@ -239,11 +240,11 @@ public class FilterValidator extends CharCountValidator {
      * This implementation calls the {@link CharCountValidator#doValidate} and
      * checks whether the input does contain only valid characters.
      *
-     * @param text   The text to validate. This is never {@code null}.
-     * @param er     A reference to a possible exception. If this method returns
-     *               {@code false}, the encapsulated exception is set to an
-     *               instance of {@link ValidatorException}. This must not be
-     *               {@code null}.
+     * @param text The text to validate. This is never {@code null}.
+     * @param er A reference to a possible exception. If this method returns
+     *         {@code false}, the encapsulated exception is set to an
+     *         instance of {@link ValidatorException}. This must not be
+     *         {@code null}.
      *
      * @return {@code true} if text is valid; otherwise, {@code false} is
      *         returned.
@@ -291,7 +292,7 @@ public class FilterValidator extends CharCountValidator {
                 ++m;
 
                 for (int c = mask.charAt(m - 2) + 1; c < mask.charAt(m); ++c)
-                    target.append((char)c);
+                    target.append((char) c);
             }
 
             // Add the character where m points to:

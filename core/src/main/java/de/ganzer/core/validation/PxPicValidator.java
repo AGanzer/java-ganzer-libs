@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
 public class PxPicValidator extends CharCountValidator {
     /**
      * The default error message for input that does not confirm to the picture.
+     *
      * @see #setMatchErrorMessage(String)
      * @since 5.4.0
      */
@@ -430,7 +431,7 @@ public class PxPicValidator extends CharCountValidator {
         }
 
         private int digitValue(char ch) {
-            return (int)ch - (int)'0';
+            return (int) ch - (int) '0';
         }
     }
 
@@ -451,7 +452,7 @@ public class PxPicValidator extends CharCountValidator {
      * Creates a new instance of the validator where every input is valid.
      *
      * @param options The options to set. This may be any combination of the
-     *                {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      */
     public PxPicValidator(int options) {
         super(options);
@@ -468,6 +469,7 @@ public class PxPicValidator extends CharCountValidator {
      * {@link #checkSyntax(String)}.
      *
      * @param picture The picture to set. An empty string makes every input valid.
+     *
      * @throws NullPointerException picture is {@code null}.
      * @throws IllegalArgumentException picture contains an invalid mask.
      */
@@ -484,8 +486,9 @@ public class PxPicValidator extends CharCountValidator {
      * {@link #checkSyntax(String)}.
      *
      * @param options The options to set. This may be any combination of the
-     *                {@link ValidatorOptions} constants.
+     *         {@link ValidatorOptions} constants.
      * @param picture The picture to set. An empty string makes every input valid.
+     *
      * @throws NullPointerException picture is {@code null}.
      * @throws IllegalArgumentException picture contains an invalid mask.
      */
@@ -515,8 +518,8 @@ public class PxPicValidator extends CharCountValidator {
      * exists, it will be replaced with the currently set picture mask.
      *
      * @param matchErrorMessage The message to use. If this is
-     *        {@code null}, empty or does contain white spaces only,
-     *        {@link #DEFAULT_MATCH_ERROR_MESSAGE} is used.
+     *         {@code null}, empty or does contain white spaces only,
+     *         {@link #DEFAULT_MATCH_ERROR_MESSAGE} is used.
      *
      * @since 5.4.0
      */
@@ -543,7 +546,8 @@ public class PxPicValidator extends CharCountValidator {
      * {@link #checkSyntax(String)}.
      *
      * @param picture The picture to set. An empty string or {@code null} makes
-     *               every input valid.
+     *         every input valid.
+     *
      * @throws IllegalArgumentException picture contains an invalid mask.
      */
     public void setPicture(String picture) {
@@ -614,11 +618,12 @@ public class PxPicValidator extends CharCountValidator {
      * This implementation calls {@link Validator#doInputValidation} and checks
      * whether the input does match the picture.
      *
-     * @param text     The text to validate. This is never {@code null}. The text
-     *                 may be modified if autoFill is {@code true}.
+     * @param text The text to validate. This is never {@code null}. The text
+     *         may be modified if autoFill is {@code true}.
      * @param autoFill Indicates whether the text is allowed to be modified.
+     *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     * returned.
+     *         returned.
      */
     @Override
     protected boolean doInputValidation(StringBuilder text, boolean autoFill) {
@@ -641,13 +646,13 @@ public class PxPicValidator extends CharCountValidator {
      * whether the input does match the picture.
      *
      * @param text The text to validate. This is never {@code null}.
-     * @param er   A reference to a possible exception. If this method returns
-     *             {@code false}, the encapsulated exception is set to an
-     *             instance of {@link ValidatorException}. This must not be
-     *             {@code null}.
+     * @param er A reference to a possible exception. If this method returns
+     *         {@code false}, the encapsulated exception is set to an
+     *         instance of {@link ValidatorException}. This must not be
+     *         {@code null}.
      *
      * @return {@code true} if text is valid; otherwise, {@code false} is
-     *          returned.
+     *         returned.
      */
     @Override
     protected boolean doValidate(String text, ValidatorExceptionRef er) {
