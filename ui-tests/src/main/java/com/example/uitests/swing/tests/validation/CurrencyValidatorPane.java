@@ -9,6 +9,7 @@ import de.ganzer.swing.dlgfw.messages.MessageDialog;
 import de.ganzer.swing.dlgfw.messages.MessageType;
 import de.ganzer.swing.validaton.ValidationBehavior;
 import de.ganzer.swing.validaton.ValidationFilter;
+import de.ganzer.swing.validaton.ValidationFilterList;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,7 +32,8 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
     private final JCheckBox hideCurrency;
     private final JCheckBox needsInput;
     private final GComboBox<Locale> locales;
-    private final ValidationFilter currencyFilter;
+    private final ValidationFilter inputFilter;
+    private final ValidationFilterList settingsFilter;
     private final NumberValidator minMaxValidator;
 
     public CurrencyValidatorPane() {
@@ -43,7 +45,8 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
         minMaxValidator = new NumberValidator();
 
         input = new GTextField();
-        currencyFilter = new ValidationFilter(validator, input);
+        inputFilter = new ValidationFilter(validator, input);
+        settingsFilter = new ValidationFilterList();
 
         currencySymbol = new GTextField();
         currencySymbol.getDocument().addDocumentListener(new DocumentListener() {
@@ -64,10 +67,10 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
         });
 
         minValue = new GTextField(format.format(validator.getMinValue()));
-        new ValidationFilter(minMaxValidator, minValue);
+        settingsFilter.addFilter(new ValidationFilter(minMaxValidator, minValue));
 
         maxValue = new GTextField(format.format(validator.getMaxValue()));
-        new ValidationFilter(minMaxValidator, maxValue);
+        settingsFilter.addFilter(new ValidationFilter(minMaxValidator, maxValue));
 
         needsInput = new JCheckBox("Needs Input");
         needsInput.setSelected(validator.hasOption(ValidatorOptions.NEEDS_INPUT));
@@ -89,11 +92,13 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
 
     @Override
     public boolean validateInput() {
-        updateValidationFilter();
-        return currencyFilter.validate(ValidationBehavior.SHOW_MESSAGE_BOX);
+        return updateInputFilter() && inputFilter.validate(ValidationBehavior.SHOW_MESSAGE_BOX);
     }
 
-    private void updateValidationFilter() {
+    private boolean updateInputFilter() {
+        if (!settingsFilter.validate(ValidationBehavior.SHOW_MESSAGE_BOX))
+            return false;
+
         int options = ValidatorOptions.NONE;
 
         if (needsInput.isSelected())
@@ -112,7 +117,9 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
             MessageDialog.show(SwingUtilities.getWindowAncestor(this), e.getLocalizedMessage(), MessageType.ERROR);
         }
 
-        currencyFilter.setValidator(validator);
+        inputFilter.setValidator(validator);
+
+        return true;
     }
 
     private void layoutControls() {
@@ -170,6 +177,7 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
         add(hideCurrency, c);
 
         c.gridy++;
+        c.weighty = 1;
         add(needsInput, c);
     }
 }
