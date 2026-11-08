@@ -159,6 +159,7 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
         c.gridx = 0;
         c.gridy++;
         c.weightx = 0;
+        c.anchor = GridBagConstraints.LINE_START;
         add(new JLabel("Locale:"), c);
 
         c.gridx++;
@@ -168,6 +169,7 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
         c.gridx = 0;
         c.gridy++;
         c.weightx = 0;
+        c.anchor = GridBagConstraints.BASELINE_LEADING;
         add(new JLabel("Currency Symbol:"), c);
 
         c.gridx++;

@@ -162,6 +162,7 @@ public class TimeValidatorPane extends JPanel implements ValidatorTestPane {
         c.gridx = 0;
         c.gridy++;
         c.weightx = 0;
+        c.anchor = GridBagConstraints.LINE_START;
         add(new JLabel("Locale:"), c);
 
         c.gridx++;
@@ -171,6 +172,7 @@ public class TimeValidatorPane extends JPanel implements ValidatorTestPane {
         c.gridx = 0;
         c.gridy++;
         c.weightx = 0;
+        c.anchor = GridBagConstraints.BASELINE_LEADING;
         add(new JLabel("Format Style:"), c);
 
         c.gridx++;
