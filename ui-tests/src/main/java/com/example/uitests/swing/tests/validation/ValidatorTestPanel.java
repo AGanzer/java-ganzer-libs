@@ -20,6 +20,7 @@ public class ValidatorTestPanel extends AbstractModifiableDataPanel<Void> {
 
         tabbedPane.addTab("CurrencyValidator", new CurrencyValidatorPane());
         tabbedPane.addTab("DateValidator", new DateValidatorPane());
+        tabbedPane.addTab("TimeValidator", new TimeValidatorPane());
         tabbedPane.addTab("NumberValidator", new NumberValidatorPane());
 
         return tabbedPane;
