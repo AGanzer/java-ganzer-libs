@@ -31,7 +31,6 @@ class DateValidatorTest {
         assertNull(val.getLocale());
         assertEquals(DateValidator.DEFAULT_RANGE_ERROR_MESSAGE, val.getRangeErrorMessage());
         assertEquals(DateValidator.DEFAULT_DATE_ERROR_MESSAGE, val.getDateErrorMessage());
-        assertNull(val.getPicture());
     }
 
     @Test

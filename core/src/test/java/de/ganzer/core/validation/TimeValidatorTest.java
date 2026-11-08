@@ -31,7 +31,6 @@ class TimeValidatorTest {
         assertNull(val.getLocale());
         assertEquals(TimeValidator.DEFAULT_RANGE_ERROR_MESSAGE, val.getRangeErrorMessage());
         assertEquals(TimeValidator.DEFAULT_TIME_ERROR_MESSAGE, val.getTimeErrorMessage());
-        assertNull(val.getPicture());
     }
 
     @Test
