@@ -881,7 +881,7 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
         else
             button = new GButton(this, hideImage, smallImage, shortName);
 
-        button.setFocusable(CreateOptions.isSet(options, CreateOptions.FOCUSABLE));
+        button.setFocusable(!CreateOptions.isSet(options, CreateOptions.NOT_FOCUSABLE));
         button.setHideActionText(shouldHideText(options));
         button.setVerticalTextPosition(getVerticalTextPosition(options));
         button.setHorizontalTextPosition(getHorizontalTextPosition(options));

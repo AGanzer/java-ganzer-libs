@@ -285,12 +285,12 @@ public class MainFrame extends JFrame {
     private void initToolBar() {
         toolBar = new JToolBar();
 
-        fileMenu.addButtons(toolBar, CreateOptions.NO_BORDER);// | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
+        fileMenu.addButtons(toolBar);
         toolBar.addSeparator();
-        buttonsMenu.addButtons(toolBar, CreateOptions.NO_BORDER);// | CreateOptions.SHOW_TEXT);// | CreateOptions.IMAGE_TRAILING);
+        buttonsMenu.addButtons(toolBar);
         toolBar.addSeparator();
-        toolBar.add(othersMenu.createButton(CreateOptions.NO_BORDER));// | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
-        toolBar.add(testMenu.createButton(CreateOptions.NO_BORDER));// | CreateOptions.SHOW_TEXT));// | CreateOptions.IMAGE_TRAILING));
+        toolBar.add(othersMenu.createButton());
+        toolBar.add(testMenu.createButton());
 
         getContentPane().add(toolBar, BorderLayout.PAGE_START);
     }
