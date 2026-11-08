@@ -12,6 +12,8 @@ import de.ganzer.swing.validaton.ValidationFilter;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -44,6 +46,22 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
         currencyFilter = new ValidationFilter(validator, input);
 
         currencySymbol = new GTextField();
+        currencySymbol.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                input.setText("");
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                input.setText("");
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                input.setText("");
+            }
+        });
 
         minValue = new GTextField(format.format(validator.getMinValue()));
         new ValidationFilter(minMaxValidator, minValue);
@@ -56,6 +74,7 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
 
         hideCurrency = new JCheckBox("Hide Currency Symbol");
         hideCurrency.setSelected(validator.isHideCurrencySymbol());
+        hideCurrency.addActionListener(e -> input.setText(""));
 
         locales = new GComboBox<>();
 
@@ -63,6 +82,7 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
             locales.addItem(loc);
 
         locales.setSelectedItem(Locale.getDefault());
+        locales.addActionListener(e -> input.setText(""));
 
         layoutControls();
     }
