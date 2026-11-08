@@ -46,6 +46,7 @@ public class TimeValidator extends PxPicValidator {
      */
     public TimeValidator() {
         setMatchErrorMessage(DEFAULT_TIME_ERROR_MESSAGE);
+        updatePicture();
     }
 
     /**
@@ -60,6 +61,7 @@ public class TimeValidator extends PxPicValidator {
     public TimeValidator(int options) {
         super(options);
         setMatchErrorMessage(DEFAULT_TIME_ERROR_MESSAGE);
+        updatePicture();
     }
 
     /**
@@ -192,6 +194,9 @@ public class TimeValidator extends PxPicValidator {
      * {@code null}.
      *
      * @param formatStyle The format style used to formatting dates.
+     *
+     * @throws IllegalArgumentException If {@code formatStyle} is
+     *         {@link FormatStyle#LONG} or {@link FormatStyle#FULL}.
      */
     public void setFormatStyle(FormatStyle formatStyle) {
         this.formatStyle = formatStyle;
