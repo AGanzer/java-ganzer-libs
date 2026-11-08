@@ -75,7 +75,7 @@ public class DateValidator extends PxPicValidator {
      *         {@code maxDate}.
      */
     public DateValidator(LocalDate minDate, LocalDate maxDate) {
-        this(ValidatorOptions.NEEDS_INPUT | ValidatorOptions.AUTO_FILL, minDate, maxDate, null);
+        this(ValidatorOptions.NEEDS_INPUT | ValidatorOptions.AUTO_FILL, minDate, maxDate, (String) null);
     }
 
     /**
@@ -99,6 +99,28 @@ public class DateValidator extends PxPicValidator {
 
     /**
      * Creates a new date validator.
+     * <p>
+     * {@code ValidatorOptions#NEEDS_INPUT | ValidatorOptions#AUTO_FILL}.
+     *
+     * @param minDate The minimum allowed date. If this is {@code null},
+     *         {@link LocalDate#MIN} is used.
+     * @param maxDate The maximum allowed date. If this is {@code null},
+     *         {@link LocalDate#MAX} is used.
+     * @param formatStyle The format style to use for formatting the date.
+     *         If this is {@code null}, {@link FormatStyle#SHORT} is used.
+     *
+     * @throws IllegalArgumentException If {@code minDate} is greater than
+     *         {@code maxDate} or {@code formatStyle} is {@link FormatStyle#LONG}
+     *         or {@link FormatStyle#FULL}.
+     *
+     * @since 6.5.0
+     */
+    public DateValidator(LocalDate minDate, LocalDate maxDate, FormatStyle formatStyle) {
+        this(ValidatorOptions.NEEDS_INPUT | ValidatorOptions.AUTO_FILL, minDate, maxDate, formatStyle);
+    }
+
+    /**
+     * Creates a new date validator.
      *
      * @param minDate The minimum allowed date. If this is {@code null},
      *         {@link LocalDate#MIN} is used.
@@ -111,7 +133,7 @@ public class DateValidator extends PxPicValidator {
      *         {@code maxDate}.
      */
     public DateValidator(int options, LocalDate minDate, LocalDate maxDate) {
-        this(options, minDate, maxDate, null);
+        this(options, minDate, maxDate, (String) null);
     }
 
     /**
@@ -136,6 +158,38 @@ public class DateValidator extends PxPicValidator {
         this.minDate = minDate != null ? minDate : LocalDate.MIN;
         this.maxDate = maxDate != null ? maxDate : LocalDate.MAX;
         this.patternString = patternString;
+
+        if (this.minDate.isAfter(this.maxDate))
+            throw new IllegalArgumentException("minDate/maxDate");
+
+        updatePicture();
+    }
+
+    /**
+     * Creates a new date validator.
+     *
+     * @param minDate The minimum allowed date. If this is {@code null},
+     *         {@link LocalDate#MIN} is used.
+     * @param maxDate The maximum allowed date. If this is {@code null},
+     *         {@link LocalDate#MAX} is used.
+     * @param options The options to set. This may be any combination of the
+     *         {@link ValidatorOptions} constants.
+     * @param formatStyle The format style to use for formatting the date.
+     *         If this is {@code null}, {@link FormatStyle#SHORT} is used.
+     *
+     * @throws IllegalArgumentException If {@code minDate} is greater than
+     *         {@code maxDate} or {@code formatStyle} is {@link FormatStyle#LONG}
+     *         or {@link FormatStyle#FULL}.
+     *
+     * @since 6.5.0
+     */
+    public DateValidator(int options, LocalDate minDate, LocalDate maxDate, FormatStyle formatStyle) {
+        super(options);
+        setMatchErrorMessage(DEFAULT_DATE_ERROR_MESSAGE);
+
+        this.minDate = minDate != null ? minDate : LocalDate.MIN;
+        this.maxDate = maxDate != null ? maxDate : LocalDate.MAX;
+        this.formatStyle = formatStyle != null ? formatStyle : FormatStyle.SHORT;
 
         if (this.minDate.isAfter(this.maxDate))
             throw new IllegalArgumentException("minDate/maxDate");
