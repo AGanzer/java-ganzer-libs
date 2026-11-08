@@ -18,18 +18,11 @@ public final class CreateOptions {
     /**
      * The created buttons are focusable.
      *
-     * @deprecated since 6.5.0. Buttons are focusable by default now. Use
-     *             {@link #NOT_FOCUSABLE} instead to make a button unfocusable.
+     * @deprecated This is ignored since 6.5.0. Buttons are focusable by default
+     *             now.
      */
     @Deprecated(since = "6.5.0", forRemoval = true)
     public static final int FOCUSABLE = 0x00;
-
-    /**
-     * The created buttons are not focusable.
-     *
-     * @since 6.5.0
-     */
-    public static final int NOT_FOCUSABLE = 0x01;
 
     /**
      * The text of the buttons are not hidden.
