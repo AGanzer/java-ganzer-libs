@@ -45,6 +45,7 @@ public class DateValidator extends PxPicValidator {
      */
     public DateValidator() {
         setMatchErrorMessage(DEFAULT_DATE_ERROR_MESSAGE);
+        updatePicture();
     }
 
     /**
@@ -59,6 +60,7 @@ public class DateValidator extends PxPicValidator {
     public DateValidator(int options) {
         super(options);
         setMatchErrorMessage(DEFAULT_DATE_ERROR_MESSAGE);
+        updatePicture();
     }
 
     /**
