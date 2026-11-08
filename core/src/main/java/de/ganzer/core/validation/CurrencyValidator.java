@@ -536,7 +536,7 @@ public class CurrencyValidator extends Validator {
 
     private boolean hasCurrencyOrSeparator(String text) {
         var instance = (DecimalFormat) NumberFormat.getCurrencyInstance(locale != null ? locale : Locale.getDefault());
-        var currency = instance.getDecimalFormatSymbols().getCurrencySymbol();
+        var currency = currencySymbol != null ? currencySymbol : instance.getDecimalFormatSymbols().getCurrencySymbol();
         var seperator = instance.getDecimalFormatSymbols().getMonetaryGroupingSeparator();
 
         return text.contains(currency) || text.indexOf(seperator) >= 0;
