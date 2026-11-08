@@ -284,6 +284,9 @@ public class DateValidator extends PxPicValidator {
      * {@code null}.
      *
      * @param formatStyle The format style used to formatting dates.
+     *
+     * @throws IllegalArgumentException If {@code formatStyle} is
+     *         {@link FormatStyle#LONG} or {@link FormatStyle#FULL}.
      */
     public void setFormatStyle(FormatStyle formatStyle) {
         this.formatStyle = formatStyle;
