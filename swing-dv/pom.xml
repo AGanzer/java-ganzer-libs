@@ -16,7 +16,19 @@
         <maven.compiler.target>17</maven.compiler.target>
         <junit.version>5.10.2</junit.version>
         <ganzer.version>6.6.0</ganzer.version>
+        <maven.compiler.debug>true</maven.compiler.debug>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <properties>
+                <maven.compiler.debug>false</maven.compiler.debug>
+                <maven.compiler.parameters>false</maven.compiler.parameters>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -73,6 +85,8 @@
                 <version>3.10.1</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
+                    <debug>${maven.compiler.debug}</debug>
+                    <parameters>${maven.compiler.parameters}</parameters>
                 </configuration>
             </plugin>
             <plugin>
