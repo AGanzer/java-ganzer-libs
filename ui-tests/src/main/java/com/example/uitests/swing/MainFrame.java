@@ -372,41 +372,18 @@ public class MainFrame extends JFrame {
         String image;
 
         switch (action.getName()) {
-            case "Exit":
-                image = "close";
-                break;
-
-            case "Any Option":
-                image = "stroller";
-                break;
-
-            case "Another Option":
-                image = "car_compact2";
-                break;
-
-            case "Choose 1":
-                image = "calendar_1";
-                break;
-
-            case "Choose 2":
-                image = "hand_count_three";
-                break;
-
-            case "Choose 3":
-                image = "calendar_3";
-                break;
-
-            case "Others":
-                image = "hamburger";
-                break;
-
-            case "Tests":
-                image = "multimeter_analog";
-                break;
-
-            default:
+            case "Exit" -> image = "close";
+            case "Any Option" -> image = "stroller";
+            case "Another Option" -> image = "car_compact2";
+            case "Choose 1" -> image = "calendar_1";
+            case "Choose 2" -> image = "hand_count_three";
+            case "Choose 3" -> image = "calendar_3";
+            case "Others" -> image = "hamburger";
+            case "Tests" -> image = "multimeter_analog";
+            default -> {
                 System.out.println("Unknown action: " + action.getName());
                 return;
+            }
         }
 
         action.largeIcon(SVGProvider.get(image, small ? 32 : 48));
