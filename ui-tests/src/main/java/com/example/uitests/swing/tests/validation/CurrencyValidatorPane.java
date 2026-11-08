@@ -18,6 +18,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -48,7 +50,15 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
         inputFilter = new ValidationFilter(validator, input);
         settingsFilter = new ValidationFilterList();
 
+        var focusListener = new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                updateInputFilter();
+            }
+        };
+
         currencySymbol = new GTextField();
+        currencySymbol.addFocusListener(focusListener);
         currencySymbol.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -66,18 +76,24 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
             }
         });
 
-        minValue = new GTextField(format.format(validator.getMinValue()));
+        minValue = new GTextField(format.format(minMaxValidator.getMinValue()));
+        minValue.addFocusListener(focusListener);
         settingsFilter.addFilter(new ValidationFilter(minMaxValidator, minValue));
 
-        maxValue = new GTextField(format.format(validator.getMaxValue()));
+        maxValue = new GTextField(format.format(minMaxValidator.getMaxValue()));
+        maxValue.addFocusListener(focusListener);
         settingsFilter.addFilter(new ValidationFilter(minMaxValidator, maxValue));
 
         needsInput = new JCheckBox("Needs Input");
         needsInput.setSelected(validator.hasOption(ValidatorOptions.NEEDS_INPUT));
+        needsInput.addActionListener(e -> updateInputFilter());
 
         hideCurrency = new JCheckBox("Hide Currency Symbol");
         hideCurrency.setSelected(validator.isHideCurrencySymbol());
-        hideCurrency.addActionListener(e -> input.setText(""));
+        hideCurrency.addActionListener(e -> {
+            input.setText("");
+            updateInputFilter();
+        });
 
         locales = new GComboBox<>();
 
@@ -85,7 +101,10 @@ public class CurrencyValidatorPane extends JPanel implements ValidatorTestPane {
             locales.addItem(loc);
 
         locales.setSelectedItem(Locale.getDefault());
-        locales.addActionListener(e -> input.setText(""));
+        locales.addActionListener(e -> {
+            input.setText("");
+            updateInputFilter();
+        });
 
         layoutControls();
     }

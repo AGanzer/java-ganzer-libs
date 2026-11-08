@@ -18,6 +18,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -45,21 +47,32 @@ public class NumberValidatorPane extends JPanel implements ValidatorTestPane {
         minMaxValidator = new NumberValidator();
         numDecimalsValidator = new NumberValidator(0, 6);
 
+        var focusListener = new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                updateInputFilter();
+            }
+        };
+
         input = new GTextField();
         inputFilter = new ValidationFilter(validator, input);
         settingsFilter = new ValidationFilterList();
 
         numDecimals = new GTextField(String.valueOf(validator.getNumDecimals()));
+        numDecimals.addFocusListener(focusListener);
         settingsFilter.addFilter(new ValidationFilter(numDecimalsValidator, numDecimals));
 
-        minValue = new GTextField(format.format(validator.getMinValue()));
+        minValue = new GTextField(format.format(minMaxValidator.getMinValue()));
+        minValue.addFocusListener(focusListener);
         settingsFilter.addFilter(new ValidationFilter(minMaxValidator, minValue));
 
-        maxValue = new GTextField(format.format(validator.getMaxValue()));
+        maxValue = new GTextField(format.format(minMaxValidator.getMaxValue()));
+        maxValue.addFocusListener(focusListener);
         settingsFilter.addFilter(new ValidationFilter(minMaxValidator, maxValue));
 
         needsInput = new JCheckBox("Needs Input");
         needsInput.setSelected(validator.hasOption(ValidatorOptions.NEEDS_INPUT));
+        needsInput.addActionListener(e -> updateInputFilter());
 
         locales = new GComboBox<>();
 
@@ -67,7 +80,10 @@ public class NumberValidatorPane extends JPanel implements ValidatorTestPane {
             locales.addItem(loc);
 
         locales.setSelectedItem(Locale.getDefault());
-        locales.addActionListener(e -> input.setText(""));
+        locales.addActionListener(e -> {
+            input.setText("");
+            updateInputFilter();
+        });
 
         layoutControls();
     }

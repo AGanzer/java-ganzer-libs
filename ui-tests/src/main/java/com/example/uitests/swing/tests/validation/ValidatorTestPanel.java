@@ -18,8 +18,9 @@ public class ValidatorTestPanel extends AbstractModifiableDataPanel<Void> {
     protected JComponent createCenterPanel() {
         tabbedPane = new JTabbedPane();
 
-        tabbedPane.addTab("Currency Validator", new CurrencyValidatorPane());
-        tabbedPane.addTab("Number Validator", new NumberValidatorPane());
+        tabbedPane.addTab("CurrencyValidator", new CurrencyValidatorPane());
+        tabbedPane.addTab("DateValidator", new DateValidatorPane());
+        tabbedPane.addTab("NumberValidator", new NumberValidatorPane());
 
         return tabbedPane;
     }
