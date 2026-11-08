@@ -427,7 +427,28 @@ public class NumberValidator extends Validator {
     }
 
     /**
-     * Converts the given text into a {@code long} number.
+     * Converts the given text into a {@link Integer} number.
+     *
+     * @param text The text to convert. This should be the same text that is
+     *         successfully passed to {@link #validate(String)}.
+     *
+     * @return The converted value or {@code null} if {@code text} is {@code null}
+     *          or empty.
+     *
+     * @throws ParseException If the text is not a valid number.
+     *
+     * @since 6.4.0
+     */
+    public Integer asInt(String text) throws ParseException {
+        if (text == null || text.isEmpty())
+            return null;
+
+        Locale loc = locale != null ? locale : Locale.getDefault();
+        return NumberFormat.getInstance(loc).parse(text).intValue();
+    }
+
+    /**
+     * Converts the given text into a {@link Long} number.
      *
      * @param text The text to convert. This should be the same text that is
      *         successfully passed to {@link #validate(String)}.
@@ -598,7 +619,7 @@ public class NumberValidator extends Validator {
                     ? numDecimals > 0 ? String.format("%%,.%df", numDecimals) : "%,.0f"
                     : displayFormat;
 
-            return String.format(how == TextFormat.DISPLAY ? dFormat : eFormat, value);
+            return String.format(loc, how == TextFormat.DISPLAY ? dFormat : eFormat, value);
         } catch (ParseException e) {
             return text;
         }
