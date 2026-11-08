@@ -61,6 +61,13 @@ import java.awt.Component;
  *         getContentPane().add(wizard, BorderLayout.CENTER);
  *         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
  *
+ *         getRootPane().setDefaultButton((JButton) nextButton);
+ *
+ *         wizard.getFinishAction().addPropertyChangeListener(e -> {
+ *             if (GAction.VISIBILITY_KEY.equals(e.getPropertyName()))
+ *                 getRootPane().setDefaultButton((JButton) ((Boolean)e.getNewValue() ? finishButton : nextButton));
+ *         });
+ *
  *         pack();
  *         setLocationRelativeTo(owner);
  *     }
@@ -112,6 +119,13 @@ import java.awt.Component;
  *         getContentPane().setLayout(new BorderLayout());
  *         getContentPane().add(wizard, BorderLayout.CENTER);
  *         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+ *
+ *         getRootPane().setDefaultButton((JButton) nextButton);
+ *
+ *         wizard.getFinishAction().addPropertyChangeListener(e -> {
+ *             if (GAction.VISIBILITY_KEY.equals(e.getPropertyName()))
+ *                 getRootPane().setDefaultButton((JButton) ((Boolean)e.getNewValue() ? finishButton : nextButton));
+ *         });
  *
  *         pack();
  *         setLocationRelativeTo(owner);

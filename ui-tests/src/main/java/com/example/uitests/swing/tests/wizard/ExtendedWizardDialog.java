@@ -5,6 +5,7 @@ import de.ganzer.swing.controls.DefaultWizardModel;
 import de.ganzer.swing.controls.WizardPage;
 import de.ganzer.swing.controls.WizardPane;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -53,6 +54,13 @@ public class ExtendedWizardDialog extends JDialog {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(wizard, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+        getRootPane().setDefaultButton((JButton) nextButton);
+
+        wizard.getFinishAction().addPropertyChangeListener(e -> {
+            if (GAction.VISIBILITY_KEY.equals(e.getPropertyName()))
+                getRootPane().setDefaultButton((JButton) ((Boolean)e.getNewValue() ? finishButton : nextButton));
+        });
 
         pack();
         setLocationRelativeTo(owner);
