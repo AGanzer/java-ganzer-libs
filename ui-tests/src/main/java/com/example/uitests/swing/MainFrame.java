@@ -300,7 +300,7 @@ public class MainFrame extends JFrame {
 
         for (int i = 0; i < 5; ++i) {
             var content = new JPanel();
-            content.setBackground(Color.WHITE);
+            content.setBackground(content.getBackground().brighter());
             content.setPreferredSize(new Dimension(200, 200));
 
             accordion.add(new TogglePanel("Panel " + (i + 1), content));

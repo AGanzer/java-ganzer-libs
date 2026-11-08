@@ -13,11 +13,14 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import de.ganzer.swing.validaton.ValidationFilter;
 
 import javax.swing.UIManager;
+import java.util.Locale;
 
 public class CommandLineParser {
     public static void parse(final String[] args) {
         for (var arg: args) {
-            if (arg.startsWith("--theme=")) {
+            if (arg.startsWith("--locale=")) {
+                Locale.setDefault(Locale.forLanguageTag(arg.substring(9)));
+            } else if (arg.startsWith("--theme=")) {
                 adjustLaf(arg.substring(8));
             } else if (arg.equals("--version")) {
                 System.out.println("Swing Test Application");
