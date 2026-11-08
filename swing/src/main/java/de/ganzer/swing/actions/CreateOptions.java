@@ -49,8 +49,27 @@ public final class CreateOptions {
      * This sets the paint border property of a button and might not have any
      * effect. See {@link AbstractButton#setBorderPainted(boolean)} for more
      * details.
+     *
+     * @deprecated since 6.5.0. Use {@link #TOOL_BUTTON} instead.
      */
+    @Deprecated(since = "6.5.0", forRemoval = true)
     public static final int NO_BORDER = 0x10;
+
+    /**
+     * The created buttons are like toolbar buttons.
+     * <p>
+     * Tool-buttons does not have a border and are not focusable. They also
+     * reacts on a mouse hover to repaint its status.
+     * <p>
+     * If a button is created to put it into a {@link JToolBar}, this option
+     * is not needed to be set. It is useful to create a toolbar-like button
+     * that shall be inserted into a panel other than a {@link JToolBar}.
+     * <p>
+     * This Options deprecates {@link #NO_BORDER}.
+     *
+     * @since 6.5.0
+     */
+    public static final int TOOL_BUTTON = 0x10;
 
     /**
      * The small image shall be used even if there is a large image available.

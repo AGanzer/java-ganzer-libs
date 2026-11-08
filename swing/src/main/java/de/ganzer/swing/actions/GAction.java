@@ -884,7 +884,12 @@ public class GAction extends AbstractAction implements GActionItemBuilder {
         button.setHideActionText(shouldHideText(options));
         button.setVerticalTextPosition(getVerticalTextPosition(options));
         button.setHorizontalTextPosition(getHorizontalTextPosition(options));
-        button.setBorderPainted(!CreateOptions.isSet(options, CreateOptions.NO_BORDER));
+
+        if (CreateOptions.isSet(options, CreateOptions.TOOL_BUTTON)) {
+            button.setBorderPainted(false);
+            button.setFocusable(false);
+            button.setRolloverEnabled(true);
+        }
 
         return button;
     }
