@@ -13,6 +13,7 @@ import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.ClosableTabsPane;
 import de.ganzer.swing.controls.TogglePanel;
 import de.ganzer.swing.dlgfw.messages.*;
+import org.jdesktop.swingx.JXFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JXFrame {
     private static final String UI_KEY_FRAME = "MainFrame.frame";
 
     private GActionGroup mainMenu;
@@ -119,14 +120,12 @@ public class MainFrame extends JFrame {
                         .addAll(
                                 new GActionGroup("Sub Menu 1").addAll(
                                         new GAction("Sub Dummy 1"),
-                                        new GAction("Sub Dummy 2")
-                                ),
+                                        new GAction("Sub Dummy 2")),
                                 new GActionGroup("Sub Menu 2").addAll(
                                         new GAction("Sub Dummy 1"),
                                         new GAction("Sub Dummy 2"),
                                         new GAction("Sub Dummy 3"),
-                                        new GAction("Sub Dummy 4")
-                                ),
+                                        new GAction("Sub Dummy 4")),
                                 new GSeparatorAction(),
                                 new GToggleActionGroup().addAll(
                                         new GAction("Dummy 1")
@@ -139,8 +138,7 @@ public class MainFrame extends JFrame {
                                 new GAction("Dummy 3"),
                                 new GAction("Dummy 4"),
                                 new GAction("Dummy 5"),
-                                new GAction("Dummy 6")
-                        ),
+                                new GAction("Dummy 6")),
                 testMenu = new GActionGroup("Tests")
                         .largeIcon(SVGProvider.get("multimeter_analog", 48))
                         .shortDescription("Several Tests.")
