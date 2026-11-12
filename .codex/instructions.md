@@ -13,6 +13,8 @@ Always read and respect the primary guidelines in `AGENTS.md`.
   - Enforce single-line block unbracketed formatting for `if`/`for`/`while` unless nested or mixed with braced branches.
   - Hard-wrap all JavaDoc and comments at **80 columns**.
   - Wrap method/constructor parameters exceeding **120 characters** onto subsequent indented lines while keeping the first parameter on the first line.
+- **Resource Bundle Externalization:**
+  - Never hardcode user-facing texts in generated code. Outsource all user communication strings into the module's `messages.properties` / `messages_de.properties` and resolve them via the module's internal `*Messages` class.
 
 ---
 

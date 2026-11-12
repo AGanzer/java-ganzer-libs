@@ -23,6 +23,7 @@ Always reference `AGENTS.md` at the project root for universal coding, JavaDoc, 
   - JavaDoc and in-code comments must be strictly wrapped at column **80**.
   - Follow the 120-character parameter wrapping rule (first parameter inline, subsequent parameters on new indented lines).
 - **Swing Threading:** Ensure GUI state changes remain strictly on the Event Dispatch Thread (EDT).
+- **String Externalization (i18n):** All user-facing strings must be externalized into `messages.properties` / `messages_de.properties` rather than hardcoded in source files.
 
 ---
 

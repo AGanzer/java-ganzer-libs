@@ -14,6 +14,8 @@ Always adhere to the base standards defined in `AGENTS.md` at the project root.
 - **Imports & Formatting:**
   - Use `mcp_idea_optimize_imports` to ensure clean, unused-import-free headers.
   - Follow project formatting conventions (see `AGENTS.md`) without reformatting entire untouched files.
+- **Resource Bundles & i18n:**
+  - Ensure all user-facing strings (UI labels, dialogs, error messages) are externalized into the corresponding `messages.properties` / `messages_de.properties` files and accessed via module message helpers (`CoreMessages`, `SwingMessages`, etc.).
 - **Build & Compilation:**
   - Validate edits with `mcp_idea_build_project` or targeted Maven builds before finishing tasks.
 

@@ -80,6 +80,13 @@ public CustomDialog(Frame owner,
 }
 ```
 
+### 2.5 Localization & User-Facing Strings (i18n)
+- **Externalize User Strings:** Never hardcode text or string literals intended for user communication (e.g. labels, button titles, tooltips, dialog messages, error descriptions, confirmation prompts) directly into Java source code.
+- **Resource Bundle Files:** All user-facing strings MUST be placed in the respective module's resource bundle files:
+  - Default/fallback messages: `src/main/resources/.../messages.properties`
+  - German localization: `src/main/resources/.../messages_de.properties`
+- **Internal Message Accessors:** Access localized strings through the module's dedicated internal message helper (e.g., `CoreMessages`, `SwingMessages`, `SwingDialogsMessages`, `SwingDVMessages`, `DVMessages`, `FXMessages`) rather than embedding raw strings in UI classes.
+
 ---
 
 ## 3. JavaDoc & Commenting Standards

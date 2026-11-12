@@ -23,6 +23,8 @@ Refer to `AGENTS.md` at the project root for project-wide coding and documentati
   - Strict 80-character margin wrap.
   - Wrap technical identifiers in `{@code ...}` and class references in `{@link ...}`.
   - Continuation lines in tag sections (`@param`, `@return`, `@throws`) must be indented.
+- **Resource Bundle Externalization:**
+  - Place all strings intended for communication with users into the module's `messages.properties` / `messages_de.properties` resource files and access them using the module's message utility class.
 
 ---
 
