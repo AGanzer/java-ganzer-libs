@@ -28,6 +28,7 @@ Follow the official **Java Code Conventions** with project-specific refinements:
 - All identifiers (class, interface, record, method, variable, package names) MUST be written in **US-English**.
 - Use descriptive, intention-revealing names without cryptic abbreviations.
 - Boolean getters should follow `isProperty()` or `hasProperty()` conventions.
+  - Except: Boolean properties that starts with a verb like `useColors` (`setUseColors(boolean)`), `initAtStartup` (`setInitAtStartup(boolen)`); in this case the `shouldProperty()` convention shall be used: `shouldUseColors()`, `shouldInitAtStartup()`.
 
 ### 2.2 Methods & Responsibilities
 - Keep methods compact with a single, clearly defined responsibility (**Single Responsibility Principle**).
