@@ -104,11 +104,12 @@ public CustomDialog(Frame owner,
 
 ### 3.3 Column Width & Indentation
 - Break JavaDoc descriptions and code comments at column **80** (strict 80-character margin).
-- Indent continuation lines in JavaDoc tags (`@param`, `@return`, `@throws`, `@see`) so that the text aligns neatly, matching `de.ganzer.swing.controls`.
+- Indent continuation lines in JavaDoc tags (`@param`, `@return`, `@throws`, `@see`) so that the text aligns neatly, matching below example.
+- Put a single empty line between logical sections of JavaDoc descriptions. Thsi sections are the description, the parameters, the return value, the exception or other different tags.
 
 ```java
 /**
- * Creates a new GButton associated with the specified action and visual
+ * Creates a new button associated with the specified action and visual
  * configuration parameters.
  * <p>
  * If {@code hideImage} is set to {@code true}, any icon attached to the
@@ -116,9 +117,19 @@ public CustomDialog(Frame owner,
  *
  * @param action The action triggering button events.
  * @param hideImage Flag indicating whether action icons should be
- *                  suppressed during rendering.
+ *         suppressed during rendering.
+ *
+ * @return A new {@link AbstractButton} instance. This may be inserted into
+ *          a toolbar, a menu, or any other container that supports buttons.
+ *
+ * @throws IllegalArgumentException if {@code action} is {@code null} or if
+ *          {@link action#isInitialized()} returns {@code false}.
+ * @throws IllegalStateException if {@link #isClosed()} return {@code false}. 
+ *
  * @since 6.3.0
  */
+
+import javax.swing.AbstractButton;
 ```
 
 ### 3.4 Documentation Scope
