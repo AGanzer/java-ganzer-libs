@@ -1,8 +1,0 @@
-- JavaDoc in US-English.
-- Schlüsselwörter und Parameter in {@code } einfassen, Verweise in {@link }.
-- Kommentare innerhalb des Codes (Nicht-JavaDoc-Kommentare), nicht als Block-, sondern als Zeilenkommentare einfügen.
-- Kommentare und Javadoc bei der 80. Spalte umbrechen (entsprechend den Stilen der anderen Java-Doc-Kommentare, wie in anderen Klassen in `de.ganzer.swing.controls` und  `de.ganzer.swing.dlgfw` gemacht).
-- Folgezeilen in Kommentare zu Parametern, Rückgabewerten und Exceptions einrücken, wie in anderen Klassen in `de.ganzer.swing.controls` gemacht.
-- Dokumentiere alle öffentlichen Schnittstellen.
-- Dokumentiere nicht offensichtliche Geschäftslogik.
-- Aktualisiere relevante technische Dokumentation.
