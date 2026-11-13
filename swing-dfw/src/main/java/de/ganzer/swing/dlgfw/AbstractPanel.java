@@ -518,7 +518,6 @@ public abstract class AbstractPanel extends JPanel implements Disposable {
         JPanel title = new JPanel(null);
         title.setLayout(new BoxLayout(title, BoxLayout.X_AXIS));
         title.setBackground(titleBackground);
-        title.setForeground(titleForeground);
         title.setOpaque(true);
 
         fillTitlePanel(title);
