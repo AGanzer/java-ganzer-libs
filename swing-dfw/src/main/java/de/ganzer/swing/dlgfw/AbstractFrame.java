@@ -477,6 +477,7 @@ public abstract class AbstractFrame extends JFrame {
         JPanel title = new JPanel(null);
         title.setLayout(new BoxLayout(title, BoxLayout.X_AXIS));
         title.setBackground(AbstractPanel.getTitleBackground());
+        title.setForeground(AbstractPanel.getTitleForeground());
         title.setOpaque(true);
 
         fillTitlePanel(title);
