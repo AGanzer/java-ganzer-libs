@@ -245,8 +245,10 @@ public class ClosableTabsPane extends JTabbedPane {
 
         var tab = getTabComponentAt(index);
 
-        if (tab != null)
-            ((TabHeaderPanel)tab).setClosable(closable);
+        if (tab != null) {
+            ((TabHeaderPanel) tab).setClosable(closable);
+            fireStateChanged();
+        }
     }
 
     /**
