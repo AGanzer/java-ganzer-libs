@@ -4,6 +4,7 @@ import com.example.uitests.swingdv.doc.thumbnail.ThumbnailPanel;
 import com.example.uitests.swingdv.doc.thumbnail.ThumbnailView;
 import de.ganzer.dv.View;
 import de.ganzer.swing.controls.ClosableTabsPane;
+import de.ganzer.swing.controls.GToolBar;
 import de.ganzer.swing.dv.ClosableTabsPaneDVMSupport;
 import de.ganzer.swing.dv.DVManager;
 import org.jdesktop.swingx.JXFrame;
@@ -89,8 +90,8 @@ public class MainWindow extends JXFrame {
     }
 
     private void initToolBar() {
-        JToolBar toolBar = new JToolBar();
-        toolBar.setFloatable(false);
+        JToolBar toolBar = new GToolBar();
+        toolBar.setFloatable(true);
         setToolBar(toolBar);
 
         toolBar.add(Actions.newAction.createButton());
