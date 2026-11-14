@@ -11,6 +11,7 @@ import com.example.uitests.swing.tests.wizard.WizardData;
 import de.ganzer.swing.actions.*;
 import de.ganzer.swing.controls.Accordion;
 import de.ganzer.swing.controls.ClosableTabsPane;
+import de.ganzer.swing.controls.GToolBar;
 import de.ganzer.swing.controls.TogglePanel;
 import de.ganzer.swing.dlgfw.messages.*;
 import org.jdesktop.swingx.JXFrame;
@@ -281,7 +282,7 @@ public class MainFrame extends JXFrame {
     }
 
     private void initToolBar() {
-        toolBar = new JToolBar();
+        toolBar = new GToolBar();
 
         fileMenu.addButtons(toolBar);
         toolBar.addSeparator();
