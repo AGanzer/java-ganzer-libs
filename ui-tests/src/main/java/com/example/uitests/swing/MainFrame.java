@@ -283,6 +283,7 @@ public class MainFrame extends JXFrame {
 
     private void initToolBar() {
         toolBar = new GToolBar();
+        toolBar.setFloatable(true);
 
         fileMenu.addButtons(toolBar);
         toolBar.addSeparator();
@@ -291,7 +292,7 @@ public class MainFrame extends JXFrame {
         toolBar.add(othersMenu.createButton());
         toolBar.add(testMenu.createButton());
 
-        getContentPane().add(toolBar, BorderLayout.PAGE_START);
+        setToolBar(toolBar);
     }
 
     private void initAccordion() {
